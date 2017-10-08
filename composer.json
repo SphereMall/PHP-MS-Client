@@ -1,0 +1,22 @@
+{
+  "name": "spheremall/ms-client",
+  "description": "SphereMall API client for SphereMall GateWay",
+  "type": "library",
+  "config": {
+    "vendor-dir": "vendor"
+  },
+  "autoload": {
+    "psr-4": {
+      "SphereMall\\MS\\": "src/"
+    }
+  },
+  "require": {
+    "guzzlehttp/guzzle": "~6.0"
+  },
+  "authors": [
+    {
+      "name": "Sergey Kondratovec",
+      "email": "sergey@spheremall.com"
+    }
+  ]
+}
