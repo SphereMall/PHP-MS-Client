@@ -33,4 +33,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('API_SECRET_KEY', $client->getSecretKey());
         $this->assertEquals('API_VERSION', $client->getVersion());
     }
+
+    public function testClientCallEntity()
+    {
+
+    }
 }
