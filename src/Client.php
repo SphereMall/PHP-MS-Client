@@ -12,6 +12,6 @@ class Client
 {
     public function getName()
     {
-        return "Hello API Client";
+        return "Hello New API Client";
     }
 }
