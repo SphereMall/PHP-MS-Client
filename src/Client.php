@@ -30,6 +30,16 @@ class Client
      * @var string
      */
     protected $version = 'v1';
+
+    /**
+     * @var array
+     */
+    protected $services;
+
+    /**
+     * @var array
+     */
+    protected $calledService;
     #endregion
 
     #region [Constructor]
@@ -54,7 +64,7 @@ class Client
     }
     #endregion
 
-    #region [Public methods]
+    #region [Getters methods]
     /**
      * @return string
      */
@@ -86,5 +96,23 @@ class Client
     {
         return $this->version;
     }
+    #endregion
+
+    #region [Public methods]
+    public function execute($entity)
+    {
+        $client = new \GuzzleHttp\Client();
+
+        $url = $this->gatewayUrl . '/' .
+            $this->version . '/' .
+            $entity;
+
+        //base url should end without slash
+        $url = rtrim($url, '/');
+        $url = str_replace('/?', '?', $url);
+
+        return new Response($client->request("GET", $url));
+    }
+
     #endregion
 }

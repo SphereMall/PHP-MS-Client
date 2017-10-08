@@ -1,6 +1,9 @@
 <?php
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Services\BaseService;
+use SphereMall\MS\Services\ProductService;
 
 /**
  * Created by PHPStorm.
@@ -34,8 +37,17 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('API_VERSION', $client->getVersion());
     }
 
-    public function testClientCallEntity()
+    public function testClientCallService()
     {
+        $client = new Client([
+            'gatewayUrl' => 'API_URL',
+            'clientId'   => 'API_CLIENT_ID',
+            'secretKey'  => 'API_SECRET_KEY',
+            'version'    => 'API_VERSION',
+        ]);
 
+        $productService = new ProductService($client, Product::class);
+        $this->assertInstanceOf(BaseService::class, $productService);
+        $this->assertInstanceOf(ProductService::class, $productService);
     }
 }
