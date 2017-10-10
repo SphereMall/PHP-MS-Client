@@ -11,10 +11,12 @@
 namespace SphereMall\MS\Services;
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Registry;
+use SphereMall\MS\Services\Products\Entities\Product;
 
 abstract class BaseService
 {
-    #refion [Properties]
+    #region [Properties]
     /**
      * @var Client
      */
@@ -38,13 +40,25 @@ abstract class BaseService
     }
     #endregion
 
+    #region [Abstract methods]
+    abstract static function registry();
+    #endregion
+
     #region [CRUD]
     public function getList()
     {
-        $class = $this->entityName;
-        $result = $this->client->execute($class::getEntityName());
+        $result = $this->client->execute($this->entityName::getEntityName());
+        return [new Product(), new Product()];
+    }
+    #endregion
 
-        return [new $class(), new $class()];
+    #region [Protected methods]
+    /**
+     * @param string $entityName
+     */
+    protected static function registryEntity(string $entityName)
+    {
+        Registry::set($entityName, static::class);
     }
     #endregion
 }

@@ -7,7 +7,9 @@
  * Time: 21:37
  */
 
-namespace SphereMall\MS\Entities;
+namespace SphereMall\MS\Services\Products\Entities;
+
+use SphereMall\MS\Entity;
 
 class Product extends Entity
 {

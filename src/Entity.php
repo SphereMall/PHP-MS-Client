@@ -7,7 +7,7 @@
  * Time: 21:37
  */
 
-namespace SphereMall\MS\Entities;
+namespace SphereMall\MS;
 
 abstract class Entity
 {

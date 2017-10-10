@@ -1,8 +1,8 @@
 <?php
 
 use SphereMall\MS\Client;
-use SphereMall\MS\Entities\Product;
-use SphereMall\MS\Services\ProductService;
+use SphereMall\MS\Services\Products\Entities\Product;
+use SphereMall\MS\Services\Products\ProductService;
 
 /**
  * Created by PHPStorm.
