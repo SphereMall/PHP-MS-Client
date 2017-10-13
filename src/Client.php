@@ -10,11 +10,11 @@
 namespace SphereMall\MS;
 
 use SphereMall\MS\Exceptions\ConfigurationException;
-use SphereMall\MS\Services\BaseService;
-use SphereMall\MS\Services\Products\ProductService;
 
 class Client
 {
+    use ServiceInjector;
+
     #region [Properties]
     /**
      * @var string
@@ -63,9 +63,6 @@ class Client
         if (!$this->gatewayUrl || !$this->clientId || !$this->secretKey) {
             throw new ConfigurationException("API connection data not set");
         }
-
-        //Registry all available services
-        $this->registryServices();
     }
     #endregion
 
@@ -100,40 +97,6 @@ class Client
     public function getVersion()
     {
         return $this->version;
-    }
-    #endregion
-
-    #region [Public methods]
-    /**
-     * @param string $entityClass
-     * @return BaseService
-     */
-    public function call(string $entityClass)
-    {
-        $serviceClass = Registry::get($entityClass);
-        return new $serviceClass($this, $entityClass);
-    }
-
-    public function execute($entity)
-    {
-        $client = new \GuzzleHttp\Client();
-
-        $url = $this->gatewayUrl . '/' .
-            $this->version . '/' .
-            $entity;
-
-        //base url should end without slash
-        $url = rtrim($url, '/');
-        $url = str_replace('/?', '?', $url);
-
-        return new Response($client->request("GET", $url));
-    }
-    #endregion
-
-    #region [Private methods]
-    private function registryServices()
-    {
-        ProductService::registry();
     }
     #endregion
 }

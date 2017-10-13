@@ -1,9 +1,8 @@
 <?php
 
 use SphereMall\MS\Client;
-use SphereMall\MS\Services\BaseService;
-use SphereMall\MS\Services\Products\Entities\Product;
-use SphereMall\MS\Services\Products\ProductService;
+use SphereMall\MS\Resources\ProductsResource;
+use SphereMall\MS\Resources\Resource;
 
 /**
  * Created by PHPStorm.
@@ -46,9 +45,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             'version'    => 'API_VERSION',
         ]);
 
-        $productService = $client->call(Product::class);
+        $productService = $client->products();
 
-        $this->assertInstanceOf(BaseService::class, $productService);
-        $this->assertInstanceOf(ProductService::class, $productService);
+        $this->assertInstanceOf(Resource::class, $productService);
+        $this->assertInstanceOf(ProductsResource::class, $productService);
     }
 }
