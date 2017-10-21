@@ -9,10 +9,9 @@
 
 namespace SphereMall\MS;
 
+use SphereMall\MS\Resources\Resource as ServiceResource;
 
-use SphereMall\MS\Resources\Resource;
-
-class RequestHandler
+class Request
 {
     #region [Properties]
     /**
@@ -20,7 +19,7 @@ class RequestHandler
      */
     private $client;
     /**
-     * @var Resource
+     * @var ServiceResource
      */
     private $resource;
     #endregion
@@ -29,17 +28,24 @@ class RequestHandler
     /**
      * RequestHandler constructor.
      * @param Client $client
-     * @param Resource $resource
+     * @param ServiceResource $resource
      */
-    public function __construct(Client $client, Resource $resource)
+    public function __construct(Client $client, ServiceResource $resource)
     {
-
         $this->client = $client;
         $this->resource = $resource;
     }
+
     #endregion
 
-    public function handle(string $method, array $queryParams = [])
+    /**
+     * @param string $method
+     * @param bool $body
+     * @param bool $uriAppend
+     * @param array $queryParams
+     * @return Response
+     */
+    public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {
         $client = new \GuzzleHttp\Client();
 
@@ -48,11 +54,15 @@ class RequestHandler
             $this->resource->getURI();
 
         //base url should end without slash
+        $url = str_replace('?', '', $url);
         $url = rtrim($url, '/');
-        $url = str_replace('/?', '?', $url);
 
-        if($queryParams) {
-            $url.= '?' . http_build_query($queryParams);
+        if ($uriAppend) {
+            $url = $url . '/' . $uriAppend;
+        }
+
+        if ($queryParams) {
+            $url = $url . '?' . http_build_query($queryParams);
         }
 
         return new Response($client->request($method, $url));

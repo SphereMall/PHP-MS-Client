@@ -11,8 +11,12 @@ namespace SphereMall\MS\Resources;
 
 use PHPUnit\Runner\Exception;
 use SphereMall\MS\Client;
+use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Entities\Products;
-use SphereMall\MS\RequestHandler;
+use SphereMall\MS\Exceptions\EntityNotFoundException;
+use SphereMall\MS\Lib\Makers\Maker;
+use SphereMall\MS\Lib\Makers\ObjectMaker;
+use SphereMall\MS\Request;
 use SphereMall\MS\Response;
 
 abstract class Resource
@@ -23,9 +27,13 @@ abstract class Resource
      */
     protected $client;
     /**
-     * @var RequestHandler
+     * @var Request
      */
     private $handler;
+    /**
+     * @var Maker
+     */
+    private $maker;
     /**
      * @var int
      */
@@ -38,6 +46,10 @@ abstract class Resource
      * @var array
      */
     private $ids = [];
+    /**
+     * @var array
+     */
+    private $fields = [];
     #endregion
 
     #region [Constructor]
@@ -50,7 +62,9 @@ abstract class Resource
         $this->client = $client;
 
         /** @var Resource $this */
-        $this->handler = new RequestHandler($this->client, $this);
+        $this->handler = new Request($this->client, $this);
+
+        $this->maker = new ObjectMaker();
     }
     #endregion
 
@@ -64,7 +78,7 @@ abstract class Resource
      * @param $limit
      * @return $this
      */
-    public function limit($offset, $limit)
+    public function limit($limit = 10, $offset = 0)
     {
         $this->limit = $limit;
         $this->offset = $offset;
@@ -81,12 +95,43 @@ abstract class Resource
         $this->ids = $ids;
         return $this;
     }
+
+    /**
+     * @param array $fields
+     * @return $this
+     */
+    public function fields(array $fields)
+    {
+        $this->fields = $fields;
+        return $this;
+    }
     #endregion
 
     #region [CRUD]
     /**
+     * Get entity by id
+     * @param int $id
+     * @return Entity
+     * @throws EntityNotFoundException
+     */
+    public function get(int $id)
+    {
+        $params = [];
+
+        if ($this->fields) {
+            $params['fields'] = implode(',', $this->fields);
+        }
+
+        $response = $this->handler->handle('get', false, $id, $params);
+        $result = $this->make($response);
+        //TODO: Add additional wrapper or check for one element
+        return $result[0];
+    }
+
+    /**
      * Get list of entities
      * @return array
+     * @throws EntityNotFoundException
      */
     public function all()
     {
@@ -95,44 +140,38 @@ abstract class Resource
             'limit'  => $this->limit,
         ];
 
-        if($this->ids) {
+        if ($this->ids) {
             $params['ids'] = implode(',', $this->ids);
         }
 
-        $response = $this->handler->handle('get', $params);
-        if (!$response->getSuccess()) {
-            return [];
+        if ($this->fields) {
+            $params['fields'] = implode(',', $this->fields);
         }
 
+        $response = $this->handler->handle('get', false, false, $params);
         return $this->make($response);
     }
     #endregion
 
     #region [Private methods]
+    /**
+     * @param Response $response
+     * @return array
+     * @throws EntityNotFoundException
+     */
     private function make(Response $response)
     {
-        $result = [];
-        foreach ($response->getData() as $item) {
-            if ($entityClass = $this->getEntityClass($item['type'])) {
-                $result[] = new $entityClass($item);
-
-                continue;
-            }
-
-            throw new Exception("Entity class was not found");
-        }
-
-        return $result;
+        $this->clearExtraDataForCall();
+        return $this->maker->make($response);
     }
 
-    private function getEntityClass($type)
+    private function clearExtraDataForCall()
     {
-        $potentialEndpointClass = 'SphereMall\\MS\\Entities\\' . ucfirst($type);
-        if (class_exists($potentialEndpointClass)) {
-            return $potentialEndpointClass;
-        }
+        $this->limit = 10;
+        $this->offset = 0;
 
-        return false;
+        $this->ids = [];
+        $this->fields = [];
     }
     #endregion
 }

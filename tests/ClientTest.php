@@ -1,9 +1,4 @@
 <?php
-
-use SphereMall\MS\Client;
-use SphereMall\MS\Resources\ProductsResource;
-use SphereMall\MS\Resources\Resource;
-
 /**
  * Created by PHPStorm.
  * User: Serhii Kondratovec
@@ -11,10 +6,16 @@ use SphereMall\MS\Resources\Resource;
  * Date: 10/8/2017
  * Time: 4:52 PM
  */
+namespace SphereMall\MS\Tests;
+
+use SphereMall\MS\Client;
+use SphereMall\MS\Resources\ProductsResource;
+use SphereMall\MS\Resources\Resource;
+
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testClientObjectCreatedNotConfigured()
     {

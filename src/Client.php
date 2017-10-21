@@ -6,10 +6,10 @@
  * Date: 10/8/2017
  * Time: 2:52 PM
  */
-
 namespace SphereMall\MS;
 
 use SphereMall\MS\Exceptions\ConfigurationException;
+use SphereMall\MS\Lib\ServiceInjector;
 
 class Client
 {

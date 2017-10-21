@@ -6,8 +6,6 @@
  * Date: 13.10.2017
  * Time: 19:37
  */
-
-
 namespace SphereMall\MS\Entities;
 
 class Entity

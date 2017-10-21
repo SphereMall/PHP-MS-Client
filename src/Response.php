@@ -11,14 +11,38 @@ namespace SphereMall\MS;
 
 class Response
 {
+    #region [Properties]
+    /**
+     * @var int
+     */
     private $statusCode;
+    /**
+     * @var array
+     */
     private $headers;
+    /**
+     * @var
+     */
     private $data;
+    /**
+     * @var bool
+     */
     private $success;
+    /**
+     * @var
+     */
     private $version;
+    /**
+     * @var string
+     */
     private $error;
+    /**
+     * @var array
+     */
     private $included;
+    #endregion
 
+    #region [Constructor]
     /**
      * Response constructor.
      * @param \GuzzleHttp\Psr7\Response $response
@@ -44,14 +68,55 @@ class Response
             throw new \Exception($ex->getMessage());
         }
     }
+    #endregion
 
+    #region [Getters]
+    /**
+     * @return bool
+     */
     public function getSuccess()
     {
         return $this->success;
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         return $this->data;
     }
+
+    /**
+     * @return string:array
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIncluded()
+    {
+        return $this->included;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+    #endregion
 }

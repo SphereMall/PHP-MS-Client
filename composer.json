@@ -10,6 +10,11 @@
       "SphereMall\\MS\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "SphereMall\\MS\\Tests\\": "tests/"
+    }
+  },
   "require": {
     "guzzlehttp/guzzle": "~6.0"
   },

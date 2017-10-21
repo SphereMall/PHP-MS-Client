@@ -7,9 +7,9 @@
  * Time: 18:37
  */
 
-namespace SphereMall\MS;
+namespace SphereMall\MS\Lib;
 
-use SphereMall\MS\Entities\Products;
+use SphereMall\MS\Client;
 use SphereMall\MS\Resources\ProductsResource;
 
 trait ServiceInjector
@@ -20,6 +20,6 @@ trait ServiceInjector
     public function products()
     {
         /** @var Client $this */
-        return new ProductsResource($this, Products::class);
+        return new ProductsResource($this);
     }
 }
