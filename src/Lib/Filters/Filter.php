@@ -21,6 +21,11 @@ class Filter
         FilterOperators::LIKE_RIGHT,
         FilterOperators::EQUAL,
         FilterOperators::NOT_EQUAL,
+        FilterOperators::GREATER_THAN,
+        FilterOperators::LESS_THAN,
+        FilterOperators::GREATER_THAN_OR_EQUAL,
+        FilterOperators::LESS_THAN_OR_EQUAL,
+        FilterOperators::IS_NULL,
     ];
 
     /**

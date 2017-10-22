@@ -16,4 +16,9 @@ class FilterOperators
     const LIKE_RIGHT = 'lr';
     const EQUAL = 'e';
     const NOT_EQUAL = 'ne';
+    const GREATER_THAN = 'gt';
+    const LESS_THAN = 'lt';
+    const GREATER_THAN_OR_EQUAL = 'gte';
+    const LESS_THAN_OR_EQUAL = 'lte';
+    const IS_NULL = 'is';
 }

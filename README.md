@@ -113,3 +113,49 @@ $client->products()
        ->limit(1)
        ->all();
 ```
+`Greater than` filter with product price (price > 60000):
+```php
+$client->products()
+       ->filter([
+            'price' => [FilterOperators::GREATER_THAN => 60000],
+            ])
+       ->limit(1)
+       ->all();
+```
+`Less than` filter with product price (price < 60000):
+```php
+$client->products()
+       ->filter([
+            'price' => [FilterOperators::LESS_THAN => 60000],
+            ])
+       ->limit(1)
+       ->all();
+```
+`Greater or equal than` filter with product price (price >= 60000):
+```php
+$client->products()
+       ->filter([
+            'price' => [FilterOperators::GREATER_THAN_OR_EQUAL => 60000],
+            ])
+       ->limit(1)
+       ->all();
+```
+`Less or equal than` filter with product price (price <= 60000):
+```php
+$client->products()
+       ->filter([
+            'price' => [FilterOperators::LESS_THAN_OR_EQUAL => 60000],
+            ])
+       ->limit(1)
+       ->all();
+```
+
+`Is null` filter with product titleMask (titleMask == null):
+```php
+$client->products()
+       ->filter([
+            'titleMask' => [FilterOperators::IS_NULL => 'null'],
+            ])
+       ->limit(1)
+       ->all();
+```

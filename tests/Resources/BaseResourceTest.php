@@ -178,5 +178,75 @@ class BaseResourceTest extends SetUpResourceTest
 
         $this->assertNotEquals($titleLike, $productTest[0]->title);
     }
+
+    public function testFilterGreaterThan()
+    {
+        $products = $this->client->products();
+
+        $productTest = $products
+            ->filter([
+                'price' => [FilterOperators::GREATER_THAN => 60000],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertGreaterThan(60000, $productTest[0]->price);
+    }
+
+    public function testFilterLessThan()
+    {
+        $products = $this->client->products();
+
+        $productTest = $products
+            ->filter([
+                'price' => [FilterOperators::LESS_THAN => 60000],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertLessThan(60000, $productTest[0]->price);
+    }
+
+    public function testFilterGreaterOrEqualThan()
+    {
+        $products = $this->client->products();
+
+        $productTest = $products
+            ->filter([
+                'price' => [FilterOperators::GREATER_THAN_OR_EQUAL => 60000],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertGreaterThanOrEqual(60000, $productTest[0]->price);
+    }
+
+    public function testFilterLessOrEqualThan()
+    {
+        $products = $this->client->products();
+
+        $productTest = $products
+            ->filter([
+                'price' => [FilterOperators::LESS_THAN_OR_EQUAL => 60000],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertLessThanOrEqual(60000, $productTest[0]->price);
+    }
+
+    public function testFilterIsNull()
+    {
+        $products = $this->client->products();
+
+        $productTest = $products
+            ->filter([
+                'titleMask' => [FilterOperators::IS_NULL => 'null'],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertNull($productTest[0]->titleMask);
+    }
     #endregion
 }
