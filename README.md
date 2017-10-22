@@ -12,7 +12,7 @@ You can install the package manually or by adding it to your `composer.json`:
 ```
 {
   "require": {
-      "spheremall/php-ms-client": "1.0.1"
+      "spheremall/ms-client": "1.0.1"
   }
 }
 ```
