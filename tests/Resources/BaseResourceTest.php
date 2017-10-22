@@ -24,7 +24,7 @@ class BaseResourceTest extends SetUpResourceTest
         parent::setUp();
         $products = $this->client->products();
         $product = $products->limit(10)->all();
-        $this->entityId = $product[9]->id;
+        $this->entityId = $product->getByIndex(9)->id;
 
     }
     #endregion
@@ -35,7 +35,7 @@ class BaseResourceTest extends SetUpResourceTest
         $products = $this->client->products();
         $productList = $products->all();
 
-        $this->assertEquals(10, count($productList));
+        $this->assertEquals(10, $productList->count());
 
         foreach ($productList as $product) {
             $this->assertInstanceOf(Products::class, $product);
@@ -56,14 +56,14 @@ class BaseResourceTest extends SetUpResourceTest
 
         //Check limit functionality
         $productList = $products->limit(3, 0)->all();
-        $this->assertEquals(3, count($productList));
+        $this->assertEquals(3, $productList->count());
 
         $productList = $products->limit(5, 0)->all();
-        $this->assertEquals(5, count($productList));
+        $this->assertEquals(5, $productList->count());
 
         $productListOffset1 = $products->limit(2, 0)->all();
         $productListOffset2 = $products->limit(1, 1)->all();
-        $this->assertEquals($productListOffset1[1]->id, $productListOffset2[0]->id);
+        $this->assertEquals($productListOffset1->getByIndex(1)->id, $productListOffset2->getByIndex(0)->id);
     }
 
     public function testFields()
@@ -76,9 +76,9 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertObjectNotHasAttribute('price', $product);
 
         $products = $products->fields(['id', 'price'])->limit(2)->all();
-        $this->assertObjectHasAttribute('id', $products[0]);
-        $this->assertObjectHasAttribute('price', $products[0]);
-        $this->assertObjectNotHasAttribute('title', $products[0]);
+        $this->assertObjectHasAttribute('id', $products->current());
+        $this->assertObjectHasAttribute('price', $products->current());
+        $this->assertObjectNotHasAttribute('title', $products->current());
     }
 
     /* public function testFilterFullLike()
@@ -93,7 +93,7 @@ class BaseResourceTest extends SetUpResourceTest
              ->limit(1)
              ->all();
 
-         $this->assertContains($titleLike, $productTest[0]->title);
+         $this->assertContains($titleLike, $productTest->current()->title);
      }*/
 
     public function testFilterLike()
@@ -110,7 +110,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertContains($titleLike, $productTest[0]->title);
+        $this->assertContains($titleLike, $productTest->current()->title);
     }
 
     public function testFilterLikeLeft()
@@ -127,7 +127,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertContains($titleLike, $productTest[0]->title);
+        $this->assertContains($titleLike, $productTest->current()->title);
     }
 
     public function testFilterLikeRight()
@@ -144,7 +144,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertContains($titleLike, $productTest[0]->title);
+        $this->assertContains($titleLike, $productTest->current()->title);
     }
 
     public function testFilterEqual()
@@ -161,7 +161,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertEquals($titleLike, $productTest[0]->title);
+        $this->assertEquals($titleLike, $productTest->current()->title);
     }
 
     public function testFilterNotEqual()
@@ -176,7 +176,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertNotEquals($titleLike, $productTest[0]->title);
+        $this->assertNotEquals($titleLike, $productTest->current()->title);
     }
 
     public function testFilterGreaterThan()
@@ -190,7 +190,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertGreaterThan(60000, $productTest[0]->price);
+        $this->assertGreaterThan(60000, $productTest->current()->price);
     }
 
     public function testFilterLessThan()
@@ -204,7 +204,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertLessThan(60000, $productTest[0]->price);
+        $this->assertLessThan(60000, $productTest->current()->price);
     }
 
     public function testFilterGreaterOrEqualThan()
@@ -218,7 +218,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertGreaterThanOrEqual(60000, $productTest[0]->price);
+        $this->assertGreaterThanOrEqual(60000, $productTest->current()->price);
     }
 
     public function testFilterLessOrEqualThan()
@@ -232,7 +232,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertLessThanOrEqual(60000, $productTest[0]->price);
+        $this->assertLessThanOrEqual(60000, $productTest->current()->price);
     }
 
     public function testFilterIsNull()
@@ -246,7 +246,24 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertNull($productTest[0]->titleMask);
+        $this->assertNull($productTest->current()->titleMask);
+    }
+
+    public function testIn()
+    {
+        $products = $this->client->products();
+        $productList = $products->limit(2)->all();
+
+        $productsTest = $products
+            ->in('title', [$productList->current()->title, $productList->getByIndex(1)->title])
+            ->all();
+
+        $this->assertCount(2, $productsTest);
+
+        $this->assertEquals($productList->current()->title, $productsTest->current()->title);
+        $productList->next();
+        $productsTest->next();
+        $this->assertEquals($productList->current()->title, $productsTest->current()->title);
     }
     #endregion
 }

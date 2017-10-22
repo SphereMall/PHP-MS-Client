@@ -9,9 +9,14 @@
 
 namespace SphereMall\MS\Lib\Makers;
 
-use SphereMall\MS\Response;
+use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Lib\Http\Response;
 
 interface Maker
 {
+    /**
+     * @param Response $response
+     * @return Collection
+     */
     function make(Response $response);
 }

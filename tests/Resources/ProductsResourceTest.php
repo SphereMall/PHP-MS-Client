@@ -13,23 +13,20 @@ use SphereMall\MS\Entities\Products;
 class ProductsResourceTest extends SetUpResourceTest
 {
     #region [Test methods]
-    /**
-     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
-     */
     public function testProductServiceGetList()
     {
         $products = $this->client->products();
         $productList = $products->all();
 
-        $this->assertEquals(10, count($productList));
+        $this->assertEquals(10, $productList->count());
+
+        $ids[] = $productList->current()->id;
+        $productList = $products->ids($ids)->all();
+        $this->assertEquals(1, $productList->count());
 
         foreach ($productList as $product) {
             $this->assertInstanceOf(Products::class, $product);
         }
-
-        $ids[] = $productList[0]->id;
-        $productList = $products->ids($ids)->all();
-        $this->assertEquals(1, count($productList));
     }
     #endregion
 }

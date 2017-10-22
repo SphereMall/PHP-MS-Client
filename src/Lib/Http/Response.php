@@ -7,7 +7,7 @@
  * Time: 22:32
  */
 
-namespace SphereMall\MS;
+namespace SphereMall\MS\Lib\Http;
 
 class Response
 {

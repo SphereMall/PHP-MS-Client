@@ -10,14 +10,15 @@
 namespace SphereMall\MS\Lib\Makers;
 
 use SphereMall\MS\Exceptions\EntityNotFoundException;
-use SphereMall\MS\Response;
+use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Lib\Http\Response;
 
 class ObjectMaker implements Maker
 {
     #region [Public methods]
     /**
      * @param Response $response
-     * @return array
+     * @return Collection
      * @throws EntityNotFoundException
      */
     public function make(Response $response)
@@ -25,7 +26,7 @@ class ObjectMaker implements Maker
         $result = [];
 
         if (!$response->getSuccess()) {
-            return $result;
+            return new Collection($result);
         }
 
         foreach ($response->getData() as $element) {
@@ -39,7 +40,7 @@ class ObjectMaker implements Maker
             throw new EntityNotFoundException("Entity class was not found");
         }
 
-        return $result;
+        return new Collection($result);
     }
     #endregion
 

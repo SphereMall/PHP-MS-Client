@@ -7,8 +7,9 @@
  * Time: 19:18
  */
 
-namespace SphereMall\MS;
+namespace SphereMall\MS\Lib\Http;
 
+use SphereMall\MS\Client;
 use SphereMall\MS\Resources\Resource as ServiceResource;
 
 class Request

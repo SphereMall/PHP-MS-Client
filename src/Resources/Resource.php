@@ -11,11 +11,12 @@ namespace SphereMall\MS\Resources;
 
 use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Lib\Makers\Maker;
 use SphereMall\MS\Lib\Makers\ObjectMaker;
-use SphereMall\MS\Request;
-use SphereMall\MS\Response;
+use SphereMall\MS\Lib\Http\Request;
+use SphereMall\MS\Lib\Http\Response;
 
 abstract class Resource
 {
@@ -59,6 +60,11 @@ abstract class Resource
      * @var array
      */
     private $filter = [];
+
+    /**
+     * @var array
+     */
+    private $in = [];
     #endregion
 
     #region [Constructor]
@@ -129,6 +135,18 @@ abstract class Resource
 
         return $this;
     }
+
+    /**
+     * @param $field
+     * @param $values
+     * @return $this
+     */
+    public function in($field, $values)
+    {
+        $this->in = [$field => $values];
+
+        return $this;
+    }
     #endregion
 
     #region [CRUD]
@@ -148,12 +166,12 @@ abstract class Resource
         $response = $this->handler->handle('get', false, $id, $params);
         $result = $this->make($response);
         //TODO: Add additional wrapper or check for one element
-        return $result[0];
+        return $result->current();
     }
 
     /**
      * Get list of entities
-     * @return array
+     * @return Collection
      */
     public function all()
     {
@@ -174,6 +192,10 @@ abstract class Resource
             $params['where'] = (string)$this->filter;
         }
 
+        if ($this->in) {
+            $params['in'] = json_encode($this->in);
+        }
+
         $response = $this->handler->handle('get', false, 'by', $params);
         return $this->make($response);
     }
@@ -182,7 +204,7 @@ abstract class Resource
     #region [Private methods]
     /**
      * @param Response $response
-     * @return array
+     * @return Collection
      */
     private function make(Response $response)
     {
@@ -198,6 +220,7 @@ abstract class Resource
         $this->ids = [];
         $this->fields = [];
         $this->filter = [];
+        $this->in = [];
     }
     #endregion
 }
