@@ -81,17 +81,17 @@ class BaseResourceTest extends SetUpResourceTest
         $products1 = $this->client->products();
 
         $product = $products1->fields(['id', 'title'])->get($this->entityId);
-        $this->assertObjectHasAttribute('id', $product);
-        $this->assertObjectHasAttribute('title', $product);
-        $this->assertObjectNotHasAttribute('price', $product);
+        $this->assertNotNull($product->id);
+        $this->assertNotNull($product->title);
+        $this->assertNull($product->price);
 
         $this->assertEquals(['id', 'title'], $products1->getFields());
 
         $products2 = $this->client->products();
         $products = $products2->fields(['id', 'price'])->limit(2)->all();
-        $this->assertObjectHasAttribute('id', $products->current());
-        $this->assertObjectHasAttribute('price', $products->current());
-        $this->assertObjectNotHasAttribute('title', $products->current());
+        $this->assertNotNull($products->current()->id);
+        $this->assertNotNull($products->current()->price);
+        $this->assertNull($products->current()->title);
         $this->assertEquals(['id', 'price'], $products2->getFields());
     }
 

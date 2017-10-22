@@ -12,19 +12,19 @@ namespace SphereMall\MS\Entities;
 class Product extends Entity
 {
     #region [Properties]
-    protected $id;
-    protected $urlCode;
-    protected $title;
-    protected $shortDescription;
-    protected $fullDescription;
-    protected $seoTitle;
-    protected $seoDescription;
-    protected $seoKeywords;
-    protected $visible;
-    protected $purchasePrice;
-    protected $price;
-    protected $oldPrice;
-    protected $importedId;
-    protected $variantsCompound;
+    public $id;
+    public $urlCode;
+    public $title;
+    public $shortDescription;
+    public $fullDescription;
+    public $seoTitle;
+    public $seoDescription;
+    public $seoKeywords;
+    public $visible;
+    public $purchasePrice;
+    public $price;
+    public $oldPrice;
+    public $importedId;
+    public $variantsCompound;
     #endregion
 }
