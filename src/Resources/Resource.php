@@ -29,47 +29,47 @@ abstract class Resource
     /**
      * @var Request
      */
-    private $handler;
+    protected $handler;
 
     /**
      * @var Maker
      */
-    private $maker;
+    protected $maker;
 
     /**
      * @var int
      */
-    private $offset = 0;
+    protected $offset = 0;
 
     /**
      * @var int
      */
-    private $limit = 10;
+    protected $limit = 10;
 
     /**
      * @var array
      */
-    private $ids = [];
+    protected $ids = [];
 
     /**
      * @var array
      */
-    private $fields = [];
+    protected $fields = [];
 
     /**
      * @var Filter
      */
-    private $filter;
+    protected $filter;
 
     /**
      * @var array
      */
-    private $in = [];
+    protected $in = [];
 
     /**
      * @var array
      */
-    private $sort = [];
+    protected $sort = [];
     #endregion
 
     #region [Constructor]
@@ -203,6 +203,7 @@ abstract class Resource
     }
 
     /**
+     * Set field for sorting
      * @param $field
      * @return $this
      */
@@ -211,6 +212,15 @@ abstract class Resource
         $this->sort[] = $field;
 
         return $this;
+    }
+
+    /**
+     * Get fields for sorting
+     * @return array
+     */
+    public function getSort()
+    {
+        return $this->sort;
     }
     #endregion
 
@@ -228,7 +238,7 @@ abstract class Resource
             $params['fields'] = implode(',', $this->fields);
         }
 
-        $response = $this->handler->handle('get', false, $id, $params);
+        $response = $this->handler->handle('GET', false, $id, $params);
         $result = $this->make($response);
         //TODO: Add additional wrapper or check for one element
         return $result->current();
@@ -239,6 +249,59 @@ abstract class Resource
      * @return Collection
      */
     public function all()
+    {
+        $params = $this->getQueryParams();
+
+        $response = $this->handler->handle('GET', false, 'by', $params);
+        return $this->make($response);
+    }
+
+    /**
+     * @param $data
+     * @return Entity
+     */
+    public function create($data)
+    {
+        $response = $this->handler->handle('POST', $data);
+        $result = $this->make($response);
+        return $result->current();
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return Entity
+     */
+    public function update($id, $data)
+    {
+        $response = $this->handler->handle('PUT', $data, $id);
+        $result = $this->make($response);
+        return $result->current();
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function delete($id)
+    {
+        $response = $this->handler->handle('DELETE', false, $id);
+        return $response->getSuccess();
+    }
+    #endregion
+
+    #region [Protected methods]
+    /**
+     * @param Response $response
+     * @return Collection
+     */
+    protected function make(Response $response)
+    {
+        $this->clearExtraDataForCall();
+        return $this->maker->make($response);
+    }
+
+    protected function getQueryParams()
     {
         $params = [
             'offset' => $this->offset,
@@ -265,20 +328,7 @@ abstract class Resource
             $params['sort'] = implode(',', $this->sort);
         }
 
-        $response = $this->handler->handle('get', false, 'by', $params);
-        return $this->make($response);
-    }
-    #endregion
-
-    #region [Private methods]
-    /**
-     * @param Response $response
-     * @return Collection
-     */
-    private function make(Response $response)
-    {
-        $this->clearExtraDataForCall();
-        return $this->maker->make($response);
+        return $params;
     }
 
     private function clearExtraDataForCall()

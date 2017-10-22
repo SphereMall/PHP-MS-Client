@@ -12,6 +12,7 @@ namespace SphereMall\MS\Lib\Makers;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\Response;
+use SphereMall\MS\Lib\Mappers\Mapper;
 
 class ObjectMaker implements Maker
 {
@@ -29,10 +30,20 @@ class ObjectMaker implements Maker
             return new Collection($result);
         }
 
+        $included = $this->getIncludedArray($response->getIncluded());
+
         foreach ($response->getData() as $element) {
-            if ($entityClass = $this->getEntityClass($element['type'])) {
+            if ($mapperClass = $this->getMapperClass($element['type'])) {
+
                 $item = $this->getAttributes($element);
-                $result[] = new $entityClass($item);
+                $relations = $this->getRelationships($element, $included);
+
+                $item = array_merge($item, $relations);
+                /**
+                 * @var Mapper $mapper
+                 */
+                $mapper = new $mapperClass();
+                $result[] = $mapper->createObject($item);
 
                 continue;
             }
@@ -49,9 +60,9 @@ class ObjectMaker implements Maker
      * @param $type
      * @return bool|string
      */
-    private function getEntityClass($type)
+    private function getMapperClass($type)
     {
-        $potentialEndpointClass = 'SphereMall\\MS\\Entities\\' . ucfirst($type);
+        $potentialEndpointClass = 'SphereMall\\MS\\Lib\\Mappers\\' . ucfirst($type) . 'Mapper';
         if (class_exists($potentialEndpointClass)) {
             return $potentialEndpointClass;
         }
@@ -69,6 +80,45 @@ class ObjectMaker implements Maker
             return $item['attributes'];
         }
         return [];
+    }
+
+    /**
+     * Get relationships from array
+     * @param array $item
+     * @param array $included
+     * @return array
+     */
+    private function getRelationships(array $item, array $included)
+    {
+        $relations = [];
+        if (isset($item['relationships']) && is_array($item['relationships'])) {
+            $relations = $item['relationships'];
+        }
+
+        $result = [];
+        foreach ($relations as $relationKey => $relationValue) {
+            foreach ($relationValue['data'] as $relationData) {
+                $result[$relationKey][] = $included[$relationData['type']][$relationData['id']];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Prepare array of included data, we walk through ONCE
+     * result example: ['brands'][706] = {attributes}
+     * @param array $included
+     * @return array
+     */
+    private function getIncludedArray(array $included)
+    {
+        $result = [];
+        foreach ($included as $include) {
+            $result[$include['type']][$include['id']] = $include['attributes'];
+        }
+
+        return $result;
     }
     #endregion
 }

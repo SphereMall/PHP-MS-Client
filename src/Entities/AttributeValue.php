@@ -9,7 +9,12 @@
 
 namespace SphereMall\MS\Entities;
 
-class Products extends Entity
+class AttributeValue extends Entity
 {
-
+    #region [Properties]
+    protected $id;
+    protected $value;
+    protected $title;
+    protected $cssClass;
+    #endregion
 }

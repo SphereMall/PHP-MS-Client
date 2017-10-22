@@ -9,7 +9,7 @@
 
 namespace SphereMall\MS\Tests\Resources;
 
-use SphereMall\MS\Entities\Products;
+use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\Filters\FilterOperators;
 
 class BaseResourceTest extends SetUpResourceTest
@@ -38,7 +38,7 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals(10, $productList->count());
 
         foreach ($productList as $product) {
-            $this->assertInstanceOf(Products::class, $product);
+            $this->assertInstanceOf(Product::class, $product);
         }
     }
 
@@ -282,9 +282,13 @@ class BaseResourceTest extends SetUpResourceTest
 
     public function testSort()
     {
-        $products = $this->client->products();
-        $productList1 = $products->limit(2)->sort('title')->all();
-        $productList2 = $products->limit(2)->sort('-title')->all();
+        $products1 = $this->client->products();
+        $productList1 = $products1->limit(2)->sort('title')->all();
+        $this->assertEquals(['title'], $products1->getSort());
+
+        $products2 = $this->client->products();
+        $productList2 = $products2->limit(2)->sort('-title')->all();
+        $this->assertEquals(['-title'], $products2->getSort());
 
         $this->assertCount(2, $productList1);
         $this->assertCount(2, $productList2);

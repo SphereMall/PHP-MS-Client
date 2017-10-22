@@ -66,6 +66,12 @@ class Request
             $url = $url . '?' . http_build_query($queryParams);
         }
 
+        $options = [];
+        if($body) {
+            $options['content-type'] = 'application/x-www-form-urlencoded';
+            $options['form_params'] = $body;
+        }
+
         return new Response($client->request($method, $url));
     }
 }

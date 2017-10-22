@@ -6,9 +6,10 @@
  * Date: 13.10.2017
  * Time: 20:02
  */
+
 namespace SphereMall\MS\Tests\Resources;
 
-use SphereMall\MS\Entities\Products;
+use SphereMall\MS\Entities\Product;
 
 class ProductsResourceTest extends SetUpResourceTest
 {
@@ -26,8 +27,32 @@ class ProductsResourceTest extends SetUpResourceTest
         $this->assertEquals($ids, $products->getIds());
 
         foreach ($productList as $product) {
-            $this->assertInstanceOf(Products::class, $product);
+            $this->assertInstanceOf(Product::class, $product);
         }
+    }
+
+    public function testProductFull()
+    {
+        $products = $this->client
+            ->products()
+            ->limit(2)
+            ->full();
+
+        $this->assertEquals(2, $products->count());
+
+        $products = $this->client
+            ->products()
+            ->limit(1)
+            ->ids([6351])
+            ->full();
+
+        $this->assertEquals(6351, $products->current()->id);
+
+        $products = $this->client
+            ->products()
+            ->full(6351);
+
+        $this->assertEquals(6351, $products->current()->id);
     }
     #endregion
 }

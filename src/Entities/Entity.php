@@ -13,7 +13,9 @@ class Entity
     public function __construct($data)
     {
         foreach ($data as $optionKey => $optionValue) {
-            $this->{$optionKey} = $optionValue;
+            if(property_exists($this, $optionKey)) {
+                $this->{$optionKey} = $optionValue;
+            }
         }
     }
 }
