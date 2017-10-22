@@ -2,7 +2,7 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
-### Version 1.0.1
+### Version 1.0.2
 #### Supported microservices
 * Gateway 1.1.0
 * Product 1.0.0
@@ -12,7 +12,7 @@ You can install the package manually or by adding it to your `composer.json`:
 ```
 {
   "require": {
-      "spheremall/ms-client": "1.0.1"
+      "spheremall/ms-client": "1.0.2"
   }
 }
 ```
