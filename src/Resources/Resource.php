@@ -57,14 +57,19 @@ abstract class Resource
     private $fields = [];
 
     /**
-     * @var array
+     * @var Filter
      */
-    private $filter = [];
+    private $filter;
 
     /**
      * @var array
      */
     private $in = [];
+
+    /**
+     * @var array
+     */
+    private $sort = [];
     #endregion
 
     #region [Constructor]
@@ -89,6 +94,7 @@ abstract class Resource
 
     #region [Query methods]
     /**
+     * Set a limit on the number of resource and offset for skipping the number of resource
      * @param $offset
      * @param $limit
      * @return $this
@@ -102,6 +108,25 @@ abstract class Resource
     }
 
     /**
+     * Get the resource limit
+     * @return int
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    /**
+     * Get the resource offset
+     * @return int
+     */
+    public function getOffset()
+    {
+        return $this->offset;
+    }
+
+    /**
+     * Set list of ids for selecting list of resources
      * @param array $ids
      * @return $this
      */
@@ -112,6 +137,16 @@ abstract class Resource
     }
 
     /**
+     * Get list of ids for selecting list of resources
+     * @return array
+     */
+    public function getIds()
+    {
+        return $this->ids;
+    }
+
+    /**
+     * Set list of fields for selecting the resource
      * @param array $fields
      * @return $this
      */
@@ -122,6 +157,16 @@ abstract class Resource
     }
 
     /**
+     * Get list of fields for selecting the resources
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Set filter to the resource selecting
      * @param array|Filter $filter
      * @return $this
      */
@@ -137,6 +182,15 @@ abstract class Resource
     }
 
     /**
+     * Get current filter
+     * @return Filter
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
      * @param $field
      * @param $values
      * @return $this
@@ -144,6 +198,17 @@ abstract class Resource
     public function in($field, $values)
     {
         $this->in = [$field => $values];
+
+        return $this;
+    }
+
+    /**
+     * @param $field
+     * @return $this
+     */
+    public function sort($field)
+    {
+        $this->sort[] = $field;
 
         return $this;
     }
@@ -196,6 +261,10 @@ abstract class Resource
             $params['in'] = json_encode($this->in);
         }
 
+        if ($this->sort) {
+            $params['sort'] = implode(',', $this->sort);
+        }
+
         $response = $this->handler->handle('get', false, 'by', $params);
         return $this->make($response);
     }
@@ -214,13 +283,14 @@ abstract class Resource
 
     private function clearExtraDataForCall()
     {
-        $this->limit = 10;
+        /*$this->limit = 10;
         $this->offset = 0;
 
         $this->ids = [];
         $this->fields = [];
         $this->filter = [];
         $this->in = [];
+        $this->sort = [];*/
     }
     #endregion
 }

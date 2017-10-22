@@ -57,28 +57,42 @@ class BaseResourceTest extends SetUpResourceTest
         //Check limit functionality
         $productList = $products->limit(3, 0)->all();
         $this->assertEquals(3, $productList->count());
+        $this->assertEquals(3, $products->getLimit());
+        $this->assertEquals(0, $products->getOffset());
 
         $productList = $products->limit(5, 0)->all();
         $this->assertEquals(5, $productList->count());
+        $this->assertEquals(5, $products->getLimit());
+        $this->assertEquals(0, $products->getOffset());
 
         $productListOffset1 = $products->limit(2, 0)->all();
+        $this->assertEquals(2, $products->getLimit());
+        $this->assertEquals(0, $products->getOffset());
+
         $productListOffset2 = $products->limit(1, 1)->all();
+        $this->assertEquals(1, $products->getLimit());
+        $this->assertEquals(1, $products->getOffset());
+
         $this->assertEquals($productListOffset1->getByIndex(1)->id, $productListOffset2->getByIndex(0)->id);
     }
 
     public function testFields()
     {
-        $products = $this->client->products();
+        $products1 = $this->client->products();
 
-        $product = $products->fields(['id', 'title'])->get($this->entityId);
+        $product = $products1->fields(['id', 'title'])->get($this->entityId);
         $this->assertObjectHasAttribute('id', $product);
         $this->assertObjectHasAttribute('title', $product);
         $this->assertObjectNotHasAttribute('price', $product);
 
-        $products = $products->fields(['id', 'price'])->limit(2)->all();
+        $this->assertEquals(['id', 'title'], $products1->getFields());
+
+        $products2 = $this->client->products();
+        $products = $products2->fields(['id', 'price'])->limit(2)->all();
         $this->assertObjectHasAttribute('id', $products->current());
         $this->assertObjectHasAttribute('price', $products->current());
         $this->assertObjectNotHasAttribute('title', $products->current());
+        $this->assertEquals(['id', 'price'], $products2->getFields());
     }
 
     /* public function testFilterFullLike()
@@ -264,6 +278,17 @@ class BaseResourceTest extends SetUpResourceTest
         $productList->next();
         $productsTest->next();
         $this->assertEquals($productList->current()->title, $productsTest->current()->title);
+    }
+
+    public function testSort()
+    {
+        $products = $this->client->products();
+        $productList1 = $products->limit(2)->sort('title')->all();
+        $productList2 = $products->limit(2)->sort('-title')->all();
+
+        $this->assertCount(2, $productList1);
+        $this->assertCount(2, $productList2);
+
     }
     #endregion
 }

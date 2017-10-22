@@ -23,6 +23,7 @@ class ProductsResourceTest extends SetUpResourceTest
         $ids[] = $productList->current()->id;
         $productList = $products->ids($ids)->all();
         $this->assertEquals(1, $productList->count());
+        $this->assertEquals($ids, $products->getIds());
 
         foreach ($productList as $product) {
             $this->assertInstanceOf(Products::class, $product);
