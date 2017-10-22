@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Tests\Resources;
 
 use SphereMall\MS\Entities\Products;
+use SphereMall\MS\Lib\Filters\FilterOperators;
 
 class BaseResourceTest extends SetUpResourceTest
 {
@@ -18,23 +19,17 @@ class BaseResourceTest extends SetUpResourceTest
     #endregion
 
     #region [Set Up]
-    /**
-     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
-     */
     protected function setUp()
     {
         parent::setUp();
         $products = $this->client->products();
-        $product = $products->limit(1)->all();
-        $this->entityId = $product[0]->id;
+        $product = $products->limit(10)->all();
+        $this->entityId = $product[9]->id;
 
     }
     #endregion
 
     #region [Test methods]
-    /**
-     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
-     */
     public function testGetList()
     {
         $products = $this->client->products();
@@ -47,9 +42,6 @@ class BaseResourceTest extends SetUpResourceTest
         }
     }
 
-    /**
-     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
-     */
     public function testGetSingle()
     {
         $products = $this->client->products();
@@ -58,9 +50,6 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals($this->entityId, $product->id);
     }
 
-    /**
-     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
-     */
     public function testLimitOffset()
     {
         $products = $this->client->products();
@@ -76,9 +65,7 @@ class BaseResourceTest extends SetUpResourceTest
         $productListOffset2 = $products->limit(1, 1)->all();
         $this->assertEquals($productListOffset1[1]->id, $productListOffset2[0]->id);
     }
-    /**
-     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
-     */
+
     public function testFields()
     {
         $products = $this->client->products();
@@ -92,6 +79,104 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertObjectHasAttribute('id', $products[0]);
         $this->assertObjectHasAttribute('price', $products[0]);
         $this->assertObjectNotHasAttribute('title', $products[0]);
+    }
+
+    /* public function testFilterFullLike()
+     {
+         $products = $this->client->products();
+
+         $product = $products->get($this->entityId);
+         $titleLike = substr($product->title, 2, 5);
+
+         $productTest = $products
+             ->filter(['fullSearch' => $titleLike])
+             ->limit(1)
+             ->all();
+
+         $this->assertContains($titleLike, $productTest[0]->title);
+     }*/
+
+    public function testFilterLike()
+    {
+        $products = $this->client->products();
+
+        $product = $products->get($this->entityId);
+        $titleLike = substr($product->title, 2, 5);
+
+        $productTest = $products
+            ->filter([
+                'title' => [FilterOperators::LIKE => $titleLike],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertContains($titleLike, $productTest[0]->title);
+    }
+
+    public function testFilterLikeLeft()
+    {
+        $products = $this->client->products();
+
+        $product = $products->get($this->entityId);
+        $titleLike = substr($product->title, 5, strlen($product->title) - 1);
+
+        $productTest = $products
+            ->filter([
+                'title' => [FilterOperators::LIKE_LEFT => $titleLike],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertContains($titleLike, $productTest[0]->title);
+    }
+
+    public function testFilterLikeRight()
+    {
+        $products = $this->client->products();
+
+        $product = $products->get($this->entityId);
+        $titleLike = substr($product->title, 0, 5);
+
+        $productTest = $products
+            ->filter([
+                'title' => [FilterOperators::LIKE_RIGHT => $titleLike],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertContains($titleLike, $productTest[0]->title);
+    }
+
+    public function testFilterEqual()
+    {
+        $products = $this->client->products();
+
+        $product = $products->get($this->entityId);
+        $titleLike = $product->title;
+
+        $productTest = $products
+            ->filter([
+                'title' => [FilterOperators::EQUAL => $titleLike],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertEquals($titleLike, $productTest[0]->title);
+    }
+
+    public function testFilterNotEqual()
+    {
+        $products = $this->client->products();
+        $titleLike = 'test';
+
+        $productTest = $products
+            ->filter([
+                'title' => [FilterOperators::NOT_EQUAL => $titleLike],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertNotEquals($titleLike, $productTest[0]->title);
     }
     #endregion
 }

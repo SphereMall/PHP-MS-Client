@@ -29,3 +29,87 @@ $client = new Client([
 ```
 ## Using the client
 ### Multiple Resources
+To return a list of your resources
+```php
+// return a list of your products 
+$client->products()->all();
+```
+
+### Single Resource by ID
+Fetch a Resource by ID:
+```php
+$client->products->get($productId);
+```
+### Limiting and Offsetting Results
+
+```php
+// limit the number of resources returned:
+$client->products()
+       ->limit(5)
+       ->all();
+
+// offset the results (page 2):
+$client->products
+       ->limit(10, 10)
+       ->all();
+```
+### Filtering result with specific fields
+
+```php
+// Get resource by id with specific fields:
+$client->products()
+       ->fields(['id', 'title'])
+       ->get($productId);
+       
+// Get list of resources with specific fields:
+$client->products()
+       ->fields(['id', 'title'])
+       ->limit(10)
+       ->all();
+```
+### Filtering Results
+`Equal` filter with product title:
+```php
+$client->products()
+       ->filter([
+            'title' => [FilterOperators::EQUAL => 'product title'],
+            ])
+       ->limit(1)
+       ->all();
+```
+`Not equal` filter with product title:
+```php
+$client->products()
+       ->filter([
+            'title' => [FilterOperators::NOT_EQUAL => 'product title'],
+            ])
+       ->limit(1)
+       ->all();
+```
+`Like` filter with product title (%product title%):
+```php
+$client->products()
+       ->filter([
+            'title' => [FilterOperators::LIKE => 'product title'],
+            ])
+       ->limit(1)
+       ->all();
+```
+Left `like` filter with product title (%product title):
+```php
+$client->products()
+       ->filter([
+            'title' => [FilterOperators::LIKE_LEFT => 'product title'],
+            ])
+       ->limit(1)
+       ->all();
+```
+Right `like` filter with product title (product title%):
+```php
+$client->products()
+       ->filter([
+            'title' => [FilterOperators::LIKE_RIGHT => 'product title'],
+            ])
+       ->limit(1)
+       ->all();
+```

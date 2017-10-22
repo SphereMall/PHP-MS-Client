@@ -9,11 +9,9 @@
 
 namespace SphereMall\MS\Resources;
 
-use PHPUnit\Runner\Exception;
 use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
-use SphereMall\MS\Entities\Products;
-use SphereMall\MS\Exceptions\EntityNotFoundException;
+use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Lib\Makers\Maker;
 use SphereMall\MS\Lib\Makers\ObjectMaker;
 use SphereMall\MS\Request;
@@ -26,30 +24,41 @@ abstract class Resource
      * @var Client
      */
     protected $client;
+
     /**
      * @var Request
      */
     private $handler;
+
     /**
      * @var Maker
      */
     private $maker;
+
     /**
      * @var int
      */
     private $offset = 0;
+
     /**
      * @var int
      */
     private $limit = 10;
+
     /**
      * @var array
      */
     private $ids = [];
+
     /**
      * @var array
      */
     private $fields = [];
+
+    /**
+     * @var array
+     */
+    private $filter = [];
     #endregion
 
     #region [Constructor]
@@ -105,6 +114,21 @@ abstract class Resource
         $this->fields = $fields;
         return $this;
     }
+
+    /**
+     * @param array|Filter $filter
+     * @return $this
+     */
+    public function filter($filter)
+    {
+        if (is_array($filter)) {
+            $filter = new Filter($filter);
+        }
+
+        $this->filter = $filter;
+
+        return $this;
+    }
     #endregion
 
     #region [CRUD]
@@ -112,7 +136,6 @@ abstract class Resource
      * Get entity by id
      * @param int $id
      * @return Entity
-     * @throws EntityNotFoundException
      */
     public function get(int $id)
     {
@@ -131,7 +154,6 @@ abstract class Resource
     /**
      * Get list of entities
      * @return array
-     * @throws EntityNotFoundException
      */
     public function all()
     {
@@ -148,7 +170,11 @@ abstract class Resource
             $params['fields'] = implode(',', $this->fields);
         }
 
-        $response = $this->handler->handle('get', false, false, $params);
+        if ($this->filter) {
+            $params['where'] = (string)$this->filter;
+        }
+
+        $response = $this->handler->handle('get', false, 'by', $params);
         return $this->make($response);
     }
     #endregion
@@ -157,7 +183,6 @@ abstract class Resource
     /**
      * @param Response $response
      * @return array
-     * @throws EntityNotFoundException
      */
     private function make(Response $response)
     {
@@ -172,6 +197,7 @@ abstract class Resource
 
         $this->ids = [];
         $this->fields = [];
+        $this->filter = [];
     }
     #endregion
 }
