@@ -9,6 +9,7 @@
 
 namespace SphereMall\MS\Resources;
 
+use GuzzleHttp\Promise\Promise;
 use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Lib\Collection;
@@ -107,6 +108,7 @@ abstract class Resource
     public function ids(array $ids)
     {
         $this->ids = $ids;
+
         return $this;
     }
 
@@ -127,6 +129,7 @@ abstract class Resource
     public function fields(array $fields)
     {
         $this->fields = $fields;
+
         return $this;
     }
 
@@ -214,6 +217,7 @@ abstract class Resource
 
         $response = $this->handler->handle('GET', false, $id, $params);
         $result = $this->make($response);
+
         //TODO: Add additional wrapper or check for one element
         return $result->current();
     }
@@ -227,6 +231,7 @@ abstract class Resource
         $params = $this->getQueryParams();
 
         $response = $this->handler->handle('GET', false, 'by', $params);
+
         return $this->make($response);
     }
 
@@ -236,6 +241,7 @@ abstract class Resource
 
         $response = $this->handler->handle('GET', false, 'count', $params);
         $maker = new CountMaker();
+
         return $maker->make($response);
     }
 
@@ -247,6 +253,7 @@ abstract class Resource
     {
         $response = $this->handler->handle('POST', $data);
         $result = $this->make($response);
+
         return $result->current();
     }
 
@@ -259,6 +266,7 @@ abstract class Resource
     {
         $response = $this->handler->handle('PUT', $data, $id);
         $result = $this->make($response);
+
         return $result->current();
     }
 
@@ -269,19 +277,24 @@ abstract class Resource
     public function delete($id)
     {
         $response = $this->handler->handle('DELETE', false, $id);
+
         return $response->getSuccess();
     }
     #endregion
 
     #region [Protected methods]
     /**
-     * @param Response $response
-     * @return Collection
+     * @param Promise|Response $response
+     * @return array|Collection
      */
-    protected function make(Response $response)
+    protected function make($response)
     {
         $this->clearExtraDataForCall();
-        return $this->maker->make($response);
+        if ($response instanceof Response) {
+            return $this->maker->make($response);
+        }
+
+        return ['promise' => $response, 'maker' => $this->maker];
     }
 
     protected function getQueryParams()

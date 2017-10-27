@@ -18,6 +18,7 @@ use SphereMall\MS\Lib\ServiceInjector;
  * @property string $version
  * @property array $services
  * @property array $calledService
+ * @property bool $async
  */
 class Client
 {
@@ -30,6 +31,9 @@ class Client
     protected $version = 'v1';
     protected $services;
     protected $calledService;
+
+    protected $async = false;
+    protected $promises = [];
     #endregion
 
     #region [Constructor]
@@ -85,6 +89,33 @@ class Client
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * @param $async
+     * @return void
+     */
+    public function setAsync($async)
+    {
+        $this->async = $async;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAsync()
+    {
+        return $this->async;
+    }
+
+    public function setPromise($promise)
+    {
+        $this->promises[] = $promise;
+    }
+
+    public function getPromises()
+    {
+        return $this->promises;
     }
     #endregion
 }

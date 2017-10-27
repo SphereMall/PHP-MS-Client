@@ -9,6 +9,7 @@
 
 namespace SphereMall\MS\Lib\Http;
 
+use GuzzleHttp\Promise;
 use SphereMall\MS\Client;
 use SphereMall\MS\Resources\Resource as ServiceResource;
 
@@ -19,8 +20,8 @@ use SphereMall\MS\Resources\Resource as ServiceResource;
 class Request
 {
     #region [Properties]
-    private $client;
-    private $resource;
+    protected $client;
+    protected $resource;
     #endregion
 
     #region [Constructor]
@@ -43,7 +44,7 @@ class Request
      * @param bool $body
      * @param bool $uriAppend
      * @param array $queryParams
-     * @return Response
+     * @return Promise\PromiseInterface|Response
      */
     public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {
@@ -66,9 +67,16 @@ class Request
         }
 
         $options = [];
-        if($body) {
+        if ($body) {
             $options['content-type'] = 'application/x-www-form-urlencoded';
             $options['form_params'] = $body;
+        }
+
+        $async = $this->client->getAsync();
+        if ($async) {
+            $promise = $client->requestAsync($method, $url);
+
+            return $promise;
         }
 
         return new Response($client->request($method, $url));
