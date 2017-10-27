@@ -294,5 +294,12 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertCount(2, $productList2);
 
     }
+
+    public function testCount()
+    {
+        $products1 = $this->client->products();
+        $productCount = $products1->limit(2)->sort('title')->count();
+        $this->assertEquals(98, $productCount);
+    }
     #endregion
 }

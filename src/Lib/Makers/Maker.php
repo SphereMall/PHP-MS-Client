@@ -16,7 +16,7 @@ interface Maker
 {
     /**
      * @param Response $response
-     * @return Collection
+     * @return mixed|Collection
      */
     function make(Response $response);
 }

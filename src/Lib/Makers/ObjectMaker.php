@@ -55,12 +55,12 @@ class ObjectMaker implements Maker
     }
     #endregion
 
-    #region [Private methods]
+    #region [Protected methods]
     /**
      * @param $type
      * @return bool|string
      */
-    private function getMapperClass($type)
+    protected function getMapperClass($type)
     {
         $potentialEndpointClass = 'SphereMall\\MS\\Lib\\Mappers\\' . ucfirst($type) . 'Mapper';
         if (class_exists($potentialEndpointClass)) {
@@ -74,7 +74,7 @@ class ObjectMaker implements Maker
      * @param array $item
      * @return array|mixed
      */
-    private function getAttributes(array $item)
+    protected function getAttributes(array $item)
     {
         if (isset($item['attributes']) && is_array($item['attributes'])) {
             return $item['attributes'];
@@ -88,7 +88,7 @@ class ObjectMaker implements Maker
      * @param array $included
      * @return array
      */
-    private function getRelationships(array $item, array $included)
+    protected function getRelationships(array $item, array $included)
     {
         $relations = [];
         if (isset($item['relationships']) && is_array($item['relationships'])) {
@@ -111,7 +111,7 @@ class ObjectMaker implements Maker
      * @param array $included
      * @return array
      */
-    private function getIncludedArray(array $included)
+    protected function getIncludedArray(array $included)
     {
         $result = [];
         foreach ($included as $include) {

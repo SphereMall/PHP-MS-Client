@@ -13,6 +13,7 @@ use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Filters\Filter;
+use SphereMall\MS\Lib\Makers\CountMaker;
 use SphereMall\MS\Lib\Makers\Maker;
 use SphereMall\MS\Lib\Makers\ObjectMaker;
 use SphereMall\MS\Lib\Http\Request;
@@ -227,6 +228,15 @@ abstract class Resource
 
         $response = $this->handler->handle('GET', false, 'by', $params);
         return $this->make($response);
+    }
+
+    public function count()
+    {
+        $params = $this->getQueryParams();
+
+        $response = $this->handler->handle('GET', false, 'count', $params);
+        $maker = new CountMaker();
+        return $maker->make($response);
     }
 
     /**
