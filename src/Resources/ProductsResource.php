@@ -23,19 +23,22 @@ class ProductsResource extends Resource
     #region [Public methods]
     /**
      * Get list of entities
-     * @param null|int $id
+     * @param null|int|string $param
      * @return Collection
      */
-    public function full($id = null)
+    public function full($param = null)
     {
         $uriAppend = 'full';
         $params = $this->getQueryParams();
 
-        if (!is_null($id)) {
-            $uriAppend = $uriAppend . "/$id";
+        if (!is_null($param)) {
+            $uriAppend = is_int($param)
+                ? $uriAppend . "/$param"
+                : "url/$param";
         }
 
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
+
         return $this->make($response);
     }
     #endregion

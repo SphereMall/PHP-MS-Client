@@ -53,6 +53,12 @@ class ProductsResourceTest extends SetUpResourceTest
             ->full(6351);
 
         $this->assertEquals(6351, $products->current()->id);
+
+        $products = $this->client
+            ->products()
+            ->full('limoen-komkommer-fruitwater');
+
+        $this->assertEquals('limoen-komkommer-fruitwater', $products->current()->urlCode);
     }
     #endregion
 }
