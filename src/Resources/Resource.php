@@ -18,57 +18,30 @@ use SphereMall\MS\Lib\Makers\ObjectMaker;
 use SphereMall\MS\Lib\Http\Request;
 use SphereMall\MS\Lib\Http\Response;
 
+/**
+ * @property Client $client
+ * @property Request $handler
+ * @property Maker $maker
+ * @property int $offset
+ * @property int $limit
+ * @property array $ids
+ * @property array $fields
+ * @property Filter $filter
+ * @property array $in
+ * @property array $sort
+ */
 abstract class Resource
 {
     #region [Properties]
-    /**
-     * @var Client
-     */
     protected $client;
-
-    /**
-     * @var Request
-     */
     protected $handler;
-
-    /**
-     * @var Maker
-     */
     protected $maker;
-
-    /**
-     * @var int
-     */
     protected $offset = 0;
-
-    /**
-     * @var int
-     */
     protected $limit = 10;
-
-    /**
-     * @var array
-     */
     protected $ids = [];
-
-    /**
-     * @var array
-     */
     protected $fields = [];
-
-    /**
-     * @var Filter
-     */
     protected $filter;
-
-    /**
-     * @var array
-     */
     protected $in = [];
-
-    /**
-     * @var array
-     */
     protected $sort = [];
     #endregion
 

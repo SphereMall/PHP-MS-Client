@@ -9,12 +9,13 @@
 
 namespace SphereMall\MS\Lib\Filters;
 
+/**
+ * @property array $availableFilters
+ * @property array $filters
+ */
 class Filter
 {
-    #region [Constructor]
-    /**
-     * @var array
-     */
+    #region [Properties]
     private $availableFilters = [
         FilterOperators::LIKE,
         FilterOperators::LIKE_LEFT,
@@ -28,11 +29,10 @@ class Filter
         FilterOperators::IS_NULL,
     ];
 
-    /**
-     * @var array
-     */
     private $filters;
+    #endregion
 
+    #region [Constructor]
     public function __construct($filters = [])
     {
         if (!empty($filters)) {

@@ -12,16 +12,14 @@ namespace SphereMall\MS\Lib\Http;
 use SphereMall\MS\Client;
 use SphereMall\MS\Resources\Resource as ServiceResource;
 
+/**
+ * @property Client $client
+ * @property ServiceResource $resource
+ */
 class Request
 {
     #region [Properties]
-    /**
-     * @var Client
-     */
     private $client;
-    /**
-     * @var ServiceResource
-     */
     private $resource;
     #endregion
 
@@ -39,6 +37,7 @@ class Request
 
     #endregion
 
+    #region [Public methods]
     /**
      * @param string $method
      * @param bool $body
@@ -74,4 +73,5 @@ class Request
 
         return new Response($client->request($method, $url));
     }
+    #endregion
 }

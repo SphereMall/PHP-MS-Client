@@ -10,7 +10,11 @@
 namespace SphereMall\MS\Lib;
 
 use Iterator;
-
+/**
+ * @property int $total
+ * @property array $raw
+ * @property array $objects
+ */
 class Collection implements Iterator
 {
     #region [Properties]

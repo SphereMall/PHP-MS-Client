@@ -11,36 +11,24 @@ namespace SphereMall\MS;
 use SphereMall\MS\Exceptions\ConfigurationException;
 use SphereMall\MS\Lib\ServiceInjector;
 
+/**
+ * @property string $gatewayUrl
+ * @property string $clientId
+ * @property string $secretKey
+ * @property string $version
+ * @property array $services
+ * @property array $calledService
+ */
 class Client
 {
     use ServiceInjector;
 
     #region [Properties]
-    /**
-     * @var string
-     */
     protected $gatewayUrl;
-    /**
-     * @var string
-     */
     protected $clientId;
-    /**
-     * @var string
-     */
     protected $secretKey;
-    /**
-     * @var string
-     */
     protected $version = 'v1';
-
-    /**
-     * @var array
-     */
     protected $services;
-
-    /**
-     * @var array
-     */
     protected $calledService;
     #endregion
 

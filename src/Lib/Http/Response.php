@@ -9,36 +9,24 @@
 
 namespace SphereMall\MS\Lib\Http;
 
+/**
+ * @property int $statusCode
+ * @property array $headers
+ * @property array $data
+ * @property bool $success
+ * @property string $version
+ * @property string $error
+ * @property array $included
+ */
 class Response
 {
     #region [Properties]
-    /**
-     * @var int
-     */
     private $statusCode;
-    /**
-     * @var array
-     */
     private $headers;
-    /**
-     * @var
-     */
     private $data;
-    /**
-     * @var bool
-     */
     private $success;
-    /**
-     * @var
-     */
     private $version;
-    /**
-     * @var string
-     */
     private $error;
-    /**
-     * @var array
-     */
     private $included;
     #endregion
 
