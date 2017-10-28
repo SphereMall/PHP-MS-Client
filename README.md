@@ -27,12 +27,18 @@ $client = new Client([
             'secretKey'  => 'API_SECRET_KEY'
         ]);
 ```
-## Using the client
+## Using the client with base Resource functionality
 ### Multiple Resources
 To return a list of your resources
 ```php
 // return a list of your products 
 $client->products()->all();
+
+// return a list of your brands 
+$client->brands()->all();
+
+// return a list of your functional names
+$client->functionalNames()->all();
 ```
 
 ### Single Resource by ID
@@ -158,4 +164,53 @@ $client->products()
             ])
        ->limit(1)
        ->all();
+```
+
+`In` filter with list if values for field (title IN ('title1', 'title2')):
+```php
+$client->products()
+       ->in('title', ['title1', 'title2'])
+       ->all();
+```
+
+### Sorting Results 
+```php
+// order by `title` ASC:
+$client->products()
+       ->sort('title')
+       ->all();
+       
+// order by `title` DESC:
+$client->products()
+        ->sort('-title')
+        ->all();
+```
+
+### Counting Results 
+```php
+// Return integer with amount of entities base on filter and ignored limit:
+$client->products()
+       ->filter([
+        'price' => [FilterOperators::LESS_THAN_OR_EQUAL => 60000],
+        ])
+       ->limit(2)
+       ->sort('title')
+       ->count();
+```
+
+## Product Resource
+### Get full 
+```php
+// get list of products with full included data:
+$client->products()       
+       ->limit(2)
+       ->full();
+       
+// get full product data by id:
+$client->products()
+       ->full(1);
+       
+// get full product data by urlCode:
+$client->products()
+       ->full('url-code');
 ```
