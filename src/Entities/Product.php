@@ -15,9 +15,10 @@ use SphereMall\MS\Lib\Collection;
  * Class Product
  * @package SphereMall\MS\Entities
  * @property Collection $attributes
- * @property Collection $media
  * @property Brand $brand
  * @property FunctionalName $functionalName
+ * @property Collection $media
+ * @property Media $mainMedia
  */
 class Product extends Entity
 {
@@ -38,22 +39,10 @@ class Product extends Entity
     public $variantsCompound;
 
     public $attributes;
-    public $media;
     public $brand;
     public $functionalName;
-    #endregion
 
-    #region [Public methods]
-    /**
-     * @return Media|null
-     */
-    public function getMainMedia()
-    {
-        if ($this->media && $this->media->count()) {
-            return $this->media->current();
-        }
-
-        return null;
-    }
+    public $media;
+    public $mainMedia;
     #endregion
 }

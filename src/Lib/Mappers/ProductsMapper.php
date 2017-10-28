@@ -32,6 +32,11 @@ class ProductsMapper extends Mapper
                 $media[] = $mapper->createObject($image);
             }
             $product->media = new Collection($media);
+
+
+            if ($product->media && $product->media->count()) {
+                $product->mainMedia = $product->media->current();
+            }
         }
 
         if (isset($array['brands'][0])) {
