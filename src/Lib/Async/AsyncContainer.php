@@ -56,10 +56,13 @@ class AsyncContainer
         $asyncKeys = [];
         foreach ($returns as $key => $return) {
             $asyncKeys[] = $key;
-            call_user_func($this->client->beforeAPICall,
-                $return['response']['method'],
-                $return['response']['url'],
-                $return['response']['options']);
+
+            if ($this->client->beforeAPICall) {
+                call_user_func($this->client->beforeAPICall,
+                    $return['response']['method'],
+                    $return['response']['url'],
+                    $return['response']['options']);
+            }
         }
 
         $requests = function () use ($returns) {
@@ -79,7 +82,10 @@ class AsyncContainer
                     $return = $returns[$key];
 
                     $resp = new Response($response);
-                    call_user_func($this->client->afterAPICall, $resp);
+                    if ($this->client->afterAPICall) {
+                        call_user_func($this->client->afterAPICall, $resp);
+                    }
+
                     $result[$key] = $return['maker']->make($resp);
 
                 }

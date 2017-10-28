@@ -292,7 +292,9 @@ abstract class Resource
         $this->clearExtraDataForCall();
         if ($response instanceof Response) {
 
-            call_user_func($this->client->afterAPICall, $response);
+            if ($this->client->afterAPICall) {
+                call_user_func($this->client->afterAPICall, $response);
+            }
 
             return $this->maker->make($response);
         }
