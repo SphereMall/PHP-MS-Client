@@ -75,18 +75,20 @@ class AsyncContainer
 
         $pool = new Pool(new \GuzzleHttp\Client(), $requests(), [
             'concurrency' => 5,
-            'fulfilled'   => function (\GuzzleHttp\Psr7\Response $response, $index)
+            'fulfilled'   => function (\GuzzleHttp\Psr7\Response $guzzleResponse, $index)
             use ($returns, $asyncKeys, &$result) {
                 $key = $asyncKeys[$index];
                 if ($returns[$key]) {
                     $return = $returns[$key];
 
-                    $resp = new Response($response);
+                    $response = new Response($guzzleResponse);
                     if ($this->client->afterAPICall) {
-                        call_user_func($this->client->afterAPICall, $resp);
+                        call_user_func($this->client->afterAPICall, $response);
                     }
 
-                    $result[$key] = $return['maker']->make($resp);
+                    $this->client->setCallStatistic($response);
+
+                    $result[$key] = $return['maker']->make($response);
 
                 }
             },

@@ -50,7 +50,7 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals($this->entityId, $product->id);
     }
 
-    public function testLimitOffset()
+    public function testLimitOffsetAndAmountOfCalls()
     {
         $products = $this->client->products();
 
@@ -74,6 +74,9 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals(1, $products->getOffset());
 
         $this->assertEquals($productListOffset1->getByIndex(1)->id, $productListOffset2->getByIndex(0)->id);
+
+        $stat = $this->client->getCallsStatistic();
+        $this->assertEquals(5, $stat['amount']);
     }
 
     public function testFields()
@@ -304,7 +307,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(2)
             ->sort('title')
             ->count();
-        $this->assertEquals(97, $productCount);
+        $this->assertEquals(103, $productCount);
     }
     #endregion
 }

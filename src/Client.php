@@ -10,6 +10,7 @@
 namespace SphereMall\MS;
 
 use SphereMall\MS\Exceptions\ConfigurationException;
+use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\ServiceInjector;
 
 /**
@@ -22,6 +23,8 @@ use SphereMall\MS\Lib\ServiceInjector;
  * @property bool $async
  * @property callable|null $beforeAPICall
  * @property callable|null $afterAPICall
+ * @property int $amountOfCalls
+ * @property array $responseHistory
  */
 class Client
 {
@@ -34,6 +37,9 @@ class Client
     protected $version = 'v1';
     protected $services;
     protected $calledService;
+
+    protected $amountOfCalls = 0;
+    protected $responseHistory = [];
 
     protected $async = false;
     protected $promises = [];
@@ -118,14 +124,22 @@ class Client
         return $this->async;
     }
 
-    public function setPromise($promise)
+    /**
+     * Set call statistic
+     * @param Response $response
+     */
+    public function setCallStatistic(Response $response)
     {
-        $this->promises[] = $promise;
+        $this->amountOfCalls++;
+        $this->responseHistory[] = $response;
     }
 
-    public function getPromises()
+    public function getCallsStatistic()
     {
-        return $this->promises;
+        return [
+            'amount'  => $this->amountOfCalls,
+            'history' => $this->responseHistory,
+        ];
     }
     #endregion
 }
