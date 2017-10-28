@@ -294,7 +294,7 @@ abstract class Resource
             return $this->maker->make($response);
         }
 
-        return ['promise' => $response, 'maker' => $this->maker];
+        return ['response' => $response, 'maker' => $this->maker];
     }
 
     protected function getQueryParams()
@@ -327,7 +327,7 @@ abstract class Resource
         return $params;
     }
 
-    private function clearExtraDataForCall()
+    protected function clearExtraDataForCall()
     {
         /*$this->limit = 10;
         $this->offset = 0;

@@ -9,38 +9,82 @@
 
 namespace SphereMall\MS\Lib\Async;
 
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request;
 use SphereMall\MS\Client;
-use GuzzleHttp\Promise;
 use SphereMall\MS\Lib\Http\Response;
 
+/**
+ * Class AsyncContainer
+ * @package SphereMall\MS\Lib\Async
+ * @property array $responses
+ * @property Client $client
+ */
 class AsyncContainer
 {
-    protected $returns = [];
-    /**
-     * @var Client
-     */
-    private $client;
+    #region [Properties]
+    protected $responses = [];
+    protected $client;
+    #endregion
 
+    #region [Constructor]
     public function __construct(Client $client)
     {
         $this->client = $client;
-        $this->client->setAsync(true);
     }
+    #endregion
 
-    public function setCall(callable $function)
+    #region [Public methods]
+    /**
+     * @param string $name
+     * @param callable $function
+     */
+    public function setCall(string $name, callable $function)
     {
-        $this->returns[] = $function($this->client);
+        $this->client->setAsync(true);
+        $this->responses[$name] = $function($this->client);
     }
 
+    /**
+     * @return array
+     */
     public function call()
     {
         $result = [];
 
-        foreach ($this->returns as $return) {
-            $promise = Promise\settle($return['promise'])->wait();
-            $result[] = $return['maker']->make(new Response($promise[0]['value']));
+        $returns = $this->responses;
+        $asyncKeys = [];
+        foreach ($returns as $key => $return) {
+            $asyncKeys[] = $key;
         }
 
+        $requests = function () use ($returns) {
+            foreach ($returns as $key => $return) {
+                yield new Request($return['response']['method'],
+                    $return['response']['url'],
+                    $return['response']['options']);
+            }
+        };
+
+        $pool = new Pool(new \GuzzleHttp\Client(), $requests(), [
+            'concurrency' => 5,
+            'fulfilled'   => function (\GuzzleHttp\Psr7\Response $response, $index)
+            use ($returns, $asyncKeys, &$result) {
+                $key = $asyncKeys[$index];
+                if ($returns[$key]) {
+                    $return = $returns[$key];
+                    $result[$key] = $return['maker']->make(new Response($response));
+
+                }
+            },
+            'rejected'    => function ($reason, $index) {
+            },
+        ]);
+        $promise = $pool->promise();
+        $promise->wait();
+
+        $this->client->setAsync(false);
         return $result;
     }
+    #endregion
 }

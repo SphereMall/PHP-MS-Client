@@ -298,8 +298,13 @@ class BaseResourceTest extends SetUpResourceTest
     public function testCount()
     {
         $products1 = $this->client->products();
-        $productCount = $products1->limit(2)->sort('title')->count();
-        $this->assertEquals(98, $productCount);
+        $productCount = $products1->filter([
+            'price' => [FilterOperators::LESS_THAN_OR_EQUAL => 60000],
+        ])
+            ->limit(2)
+            ->sort('title')
+            ->count();
+        $this->assertEquals(97, $productCount);
     }
     #endregion
 }

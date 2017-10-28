@@ -48,7 +48,7 @@ class ObjectMaker implements Maker
                 continue;
             }
 
-            throw new EntityNotFoundException("Entity class was not found");
+            throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
         }
 
         return new Collection($result);

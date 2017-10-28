@@ -74,12 +74,10 @@ class Request
 
         $async = $this->client->getAsync();
         if ($async) {
-            $promise = $client->requestAsync($method, $url);
-
-            return $promise;
+            return compact('method', 'url', 'options');
         }
 
-        return new Response($client->request($method, $url));
+        return new Response($client->request($method, $url, $options));
     }
     #endregion
 }

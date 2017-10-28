@@ -9,56 +9,35 @@
 
 namespace SphereMall\MS\Tests\Resources;
 
-use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Entities\Brand;
 
-class ProductsResourceTest extends SetUpResourceTest
+class BrandsResourceTest extends SetUpResourceTest
 {
     #region [Test methods]
-    public function testProductServiceGetList()
+    public function testBrandsServiceGetList()
     {
-        $products = $this->client->products();
-        $productList = $products->all();
+        //Get all brands - limit 10
+        $brands = $this->client->brands();
+        $brandList = $brands->all();
 
-        $this->assertEquals(10, $productList->count());
+        //Check amount
+        $this->assertEquals(10, $brandList->count());
 
-        $ids[] = $productList->current()->id;
-        $productList = $products->ids($ids)->all();
-        $this->assertEquals(1, $productList->count());
-        $this->assertEquals($ids, $products->getIds());
+        //Get id for first brand
+        $ids[] = $brandList->current()->id;
+        //Get brand by ids
+        $brandList = $brands->ids($ids)->all();
+        //Check amount
+        $this->assertEquals(1, $brandList->count());
 
-        foreach ($productList as $product) {
-            $this->assertInstanceOf(Product::class, $product);
+        //Check is brands equal
+        $this->assertEquals($ids, $brands->getIds());
+
+        //Check instanceof brand class
+        foreach ($brandList as $brand) {
+            $this->assertInstanceOf(Brand::class, $brand);
         }
     }
 
-    public function testProductFull()
-    {
-        $products = $this->client
-            ->products()
-            ->limit(2)
-            ->full();
-
-        $this->assertEquals(2, $products->count());
-
-        $products = $this->client
-            ->products()
-            ->limit(1)
-            ->ids([6351])
-            ->full();
-
-        $this->assertEquals(6351, $products->current()->id);
-
-        $products = $this->client
-            ->products()
-            ->full(6351);
-
-        $this->assertEquals(6351, $products->current()->id);
-
-        $products = $this->client
-            ->products()
-            ->full('limoen-komkommer-fruitwater');
-
-        $this->assertEquals('limoen-komkommer-fruitwater', $products->current()->urlCode);
-    }
     #endregion
 }

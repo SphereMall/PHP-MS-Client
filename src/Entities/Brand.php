@@ -9,22 +9,10 @@
 
 namespace SphereMall\MS\Entities;
 
-class Product extends Entity
+class Brand extends Entity
 {
     #region [Properties]
     public $id;
-    public $urlCode;
     public $title;
-    public $shortDescription;
-    public $fullDescription;
-    public $seoTitle;
-    public $seoDescription;
-    public $seoKeywords;
-    public $visible;
-    public $purchasePrice;
-    public $price;
-    public $oldPrice;
-    public $importedId;
-    public $variantsCompound;
     #endregion
 }

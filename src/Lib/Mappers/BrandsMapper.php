@@ -9,23 +9,15 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
-use SphereMall\MS\Entities\Product;
-use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Entities\Brand;
 
-class ProductsMapper extends Mapper
+class BrandsMapper extends Mapper
 {
     #region [Protected methods]
     protected function doCreateObject(array $array)
     {
-        $product = new Product($array);
-
-        if (isset($array['productAttributeValues'])) {
-            $mapper = new ProductAttributeValuesMapper();
-            $attributes = $mapper->createObject($array['productAttributeValues']);
-            $product->attributes = new Collection($attributes);
-        }
-
-        return $product;
+        $brand = new Brand($array);
+        return $brand;
     }
     #endregion
 }
