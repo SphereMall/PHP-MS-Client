@@ -77,6 +77,7 @@ class Request
             return compact('method', 'url', 'options');
         }
 
+        call_user_func($this->client->beforeAPICall, $method, $url, $options);
         return new Response($client->request($method, $url, $options));
     }
     #endregion

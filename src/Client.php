@@ -6,6 +6,7 @@
  * Date: 10/8/2017
  * Time: 2:52 PM
  */
+
 namespace SphereMall\MS;
 
 use SphereMall\MS\Exceptions\ConfigurationException;
@@ -19,6 +20,8 @@ use SphereMall\MS\Lib\ServiceInjector;
  * @property array $services
  * @property array $calledService
  * @property bool $async
+ * @property callable|null $beforeAPICall
+ * @property callable|null $afterAPICall
  */
 class Client
 {
@@ -34,15 +37,20 @@ class Client
 
     protected $async = false;
     protected $promises = [];
+
+    public $beforeAPICall;
+    public $afterAPICall;
     #endregion
 
     #region [Constructor]
     /**
      * Client constructor.
      * @param array $options
+     * @param callable|null $beforeAPICall
+     * @param callable|null $afterAPICall
      * @throws ConfigurationException
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = [], callable $beforeAPICall = null, callable $afterAPICall = null)
     {
         //Set all options from client side
         foreach ($options as $optionKey => $optionValue) {
@@ -55,6 +63,8 @@ class Client
         if (!$this->gatewayUrl || !$this->clientId || !$this->secretKey) {
             throw new ConfigurationException("API connection data not set");
         }
+        $this->beforeAPICall = $beforeAPICall;
+        $this->afterAPICall = $afterAPICall;
     }
     #endregion
 
