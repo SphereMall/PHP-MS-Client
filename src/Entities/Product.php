@@ -49,7 +49,7 @@ class Product extends Entity
      */
     public function getMainMedia()
     {
-        if ($this->media->count()) {
+        if ($this->media && $this->media->count()) {
             return $this->media->current();
         }
 
