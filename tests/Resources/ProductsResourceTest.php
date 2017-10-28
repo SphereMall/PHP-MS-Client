@@ -59,6 +59,13 @@ class ProductsResourceTest extends SetUpResourceTest
             ->full('limoen-komkommer-fruitwater');
 
         $this->assertEquals('limoen-komkommer-fruitwater', $products->current()->urlCode);
+        $this->assertCount(1, $products);
+
+        $this->assertNotNull($products->current()->attributes);
+        $this->assertNotNull($products->current()->media);
+        $this->assertNotNull($products->current()->brand);
+        $this->assertNotNull($products->current()->functionalName);
+
     }
     #endregion
 }

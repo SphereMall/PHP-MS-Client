@@ -26,5 +26,10 @@ class Product extends Entity
     public $oldPrice;
     public $importedId;
     public $variantsCompound;
+
+    public $attributes;
+    public $media;
+    public $brand;
+    public $functionalName;
     #endregion
 }
