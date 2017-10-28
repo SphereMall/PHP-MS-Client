@@ -9,6 +9,16 @@
 
 namespace SphereMall\MS\Entities;
 
+use SphereMall\MS\Lib\Collection;
+
+/**
+ * Class Product
+ * @package SphereMall\MS\Entities
+ * @property Collection $attributes
+ * @property Collection $media
+ * @property Brand $brand
+ * @property FunctionalName $functionalName
+ */
 class Product extends Entity
 {
     #region [Properties]
@@ -31,5 +41,19 @@ class Product extends Entity
     public $media;
     public $brand;
     public $functionalName;
+    #endregion
+
+    #region [Public methods]
+    /**
+     * @return Media|null
+     */
+    public function getMainMedia()
+    {
+        if ($this->media->count()) {
+            return $this->media->current();
+        }
+
+        return null;
+    }
     #endregion
 }
