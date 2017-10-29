@@ -7,7 +7,7 @@
  * Time: 20:02
  */
 
-namespace SphereMall\MS\Tests\Async;
+namespace SphereMall\MS\Tests\Lib\Async;
 
 use SphereMall\MS\Client;
 use SphereMall\MS\Lib\Async\AsyncContainer;

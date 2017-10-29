@@ -6,6 +6,7 @@ Official PHP SDK for integrating with **SphereMall Product**.
 #### Supported microservices
 * Gateway 1.1.0
 * Product 1.1.0
+* Shop 1.1.0
 
 ## Installation
 You can install the package manually or by adding it to your `composer.json`:
@@ -213,4 +214,54 @@ $client->products()
 // get full product data by urlCode:
 $client->products()
        ->full('url-code');
+```
+
+## Shop
+### Get basket by id
+```php
+$basketId = 1;
+$basket = $client->basket($basketId);
+
+//Get basket items:
+$items = $basket->getItems();
+
+//Get basket id:
+$basketId = $basket->getId();
+```
+
+### Add products to empty basket
+```php
+$basket = $client->basket();
+
+//Add product with id 1 and 2 and amount 1
+$basket->add([
+            [
+                'id'        => 1,
+                'amount'    => 1,
+            ],
+            [
+                'id'        => 2,
+                'amount'    => 1,
+            ],
+        ]);
+
+//Get basket items:
+$items = $basket->getItems();
+```
+
+### Add products to existing basket
+```php
+$basketId = 1;
+$basket = $client->basket($basketId);
+
+//Add product with id 1 and amount 1
+$basket->add([
+            [
+                'id'        => 1,
+                'amount'    => 1,
+            ],
+        ]);
+
+//Get basket items:
+$items = $basket->getItems();
 ```

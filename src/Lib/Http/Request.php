@@ -68,8 +68,16 @@ class Request
 
         $options = [];
         if ($body) {
-            $options['content-type'] = 'application/x-www-form-urlencoded';
-            $options['form_params'] = $body;
+            switch (strtolower($method)) {
+                case 'put':
+                    $options['body'] = http_build_query($body);
+                    break;
+
+                case 'post':
+                    $options['content-type'] = 'application/x-www-form-urlencoded';
+                    $options['form_params'] = $body;
+                    break;
+            }
         }
 
         $async = $this->client->getAsync();

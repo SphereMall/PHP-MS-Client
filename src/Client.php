@@ -142,4 +142,21 @@ class Client
         ];
     }
     #endregion
+
+    #region [Setters methods]
+    /**
+     * @param $version
+     */
+    public function setVersion(string $version)
+    {
+        $this->version = $version;
+    }
+    #endregion
+
+    #region [Override methods]
+    public function __clone()
+    {
+        static::$basket = null;
+    }
+    #endregion
 }
