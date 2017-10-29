@@ -21,6 +21,17 @@ class OrderItem extends Entity
     #region [Properties]
     public $id;
     public $orderId;
+    public $amount;
+    public $promotionId;
+    public $compound;
+    public $itemPrice;
+    public $itemDiscountPrice;
+    public $itemPriceWithDiscount;
+    public $vatId;
+    public $itemVatPrice;
+    public $itemVatExcludedPrice;
+    public $totalPrice;
+
     public $product;
     #endregion
 }
