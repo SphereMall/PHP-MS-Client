@@ -309,5 +309,15 @@ class BaseResourceTest extends SetUpResourceTest
             ->count();
         $this->assertEquals(103, $productCount);
     }
+
+    public function testCollectionAsArray()
+    {
+        $products1 = $this->client->products();
+        $products = $products1
+            ->limit(2)
+            ->all();
+
+        $this->assertTrue(is_array($products->asArray()));
+    }
     #endregion
 }

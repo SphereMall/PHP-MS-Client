@@ -67,6 +67,16 @@ class Collection implements Iterator
     {
         return $this->total;
     }
+
+    /**
+     * @return array
+     */
+    public function asArray()
+    {
+        //TODO: Iterate with other approach
+        foreach ($this as $item) {}
+        return $this->objects;
+    }
     #endregion
 
     #region [Protected methods]
