@@ -9,7 +9,9 @@
 
 namespace SphereMall\MS\Tests\Lib\Basket;
 
+use SphereMall\MS\Entities\DeliveryProvider;
 use SphereMall\MS\Lib\Basket\Basket;
+use SphereMall\MS\Lib\Basket\Delivery;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class BasketTest extends SetUpResourceTest
@@ -82,10 +84,12 @@ class BasketTest extends SetUpResourceTest
         $this->assertEquals(1, $item->amount);
         $this->assertCount(1, $basket->getItems());
 
-        $itemParams = [[
-            'id' => $item->product->id,
-            'amount' => 3,
-        ]];
+        $itemParams = [
+            [
+                'id'     => $item->product->id,
+                'amount' => 3,
+            ],
+        ];
 
         $basket->update($itemParams);
 
@@ -93,16 +97,30 @@ class BasketTest extends SetUpResourceTest
         $this->assertEquals(3, $item->amount);
         $this->assertCount(1, $basket->getItems());
 
-        $itemParams = [[
-            'id' => $item->product->id,
-            'amount' => 2,
-        ]];
+        $itemParams = [
+            [
+                'id'     => $item->product->id,
+                'amount' => 2,
+            ],
+        ];
 
         $basket->update($itemParams);
 
         $item = $basket->getItems()->current();
         $this->assertEquals(2, $item->amount);
         $this->assertCount(1, $basket->getItems());
+    }
+
+    public function testDeliveryMethod()
+    {
+        $basket = $this->client->basket(570);
+        $this->assertInstanceOf(Basket::class, $basket);
+
+        $deliveryProviders = $this->client->deliveryProviders()->limit(1)->all();
+        $basket->setDelivery(new Delivery($deliveryProviders->current()));
+
+        $this->assertInstanceOf(Delivery::class, $basket->getDelivery());
+        $this->assertEquals($deliveryProviders->current()->id, $basket->getDelivery()->id);
     }
     #endregion
 }

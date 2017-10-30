@@ -21,6 +21,7 @@ use SphereMall\MS\Lib\Collection;
  * @property Client $client
  * @property int $id
  * @property Collection $items
+ * @property Delivery $delivery
  */
 class Basket
 {
@@ -29,6 +30,7 @@ class Basket
 
     protected $id;
     protected $items;
+    protected $delivery;
     #endregion
 
     #region [Constructor]
@@ -115,6 +117,13 @@ class Basket
     }
     #endregion
 
+    #region [Setters]
+    public function setDelivery(Delivery $delivery)
+    {
+        $this->delivery = $delivery;
+    }
+    #endregion
+
     #region [Getters]
     /**
      * @return int|null
@@ -130,6 +139,14 @@ class Basket
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * @return Delivery
+     */
+    public function getDelivery()
+    {
+        return $this->delivery;
     }
     #endregion
 

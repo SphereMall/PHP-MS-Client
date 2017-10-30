@@ -6,6 +6,7 @@
  * Date: 13.10.2017
  * Time: 18:37
  */
+
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
@@ -14,6 +15,7 @@ use SphereMall\MS\Resources\AttributesResource;
 use SphereMall\MS\Resources\AttributeValuesResource;
 use SphereMall\MS\Resources\BasketResource;
 use SphereMall\MS\Resources\BrandsResource;
+use SphereMall\MS\Resources\DeliveryProvidersResource;
 use SphereMall\MS\Resources\FunctionalNamesResource;
 use SphereMall\MS\Resources\ImagesResource;
 use SphereMall\MS\Resources\ProductAttributeValuesResource;
@@ -114,12 +116,21 @@ trait ServiceInjector
      */
     public function basket(int $id = null)
     {
-        if(is_null(static::$basket)) {
+        if (is_null(static::$basket)) {
             /** @var Client $this */
             static::$basket = new Basket($this, $id);
         }
 
         return static::$basket;
+    }
+
+    /**
+     * @return DeliveryProvidersResource
+     */
+    public function deliveryProviders()
+    {
+        /** @var Client $this */
+        return new DeliveryProvidersResource($this);
     }
     #endregion
 }
