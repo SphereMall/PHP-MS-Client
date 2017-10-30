@@ -302,12 +302,12 @@ class BaseResourceTest extends SetUpResourceTest
     {
         $products1 = $this->client->products();
         $productCount = $products1->filter([
-            'price' => [FilterOperators::LESS_THAN_OR_EQUAL => 60000],
+            'price' => [FilterOperators::GREATER_THAN_OR_EQUAL=> 60000],
         ])
             ->limit(2)
             ->sort('title')
             ->count();
-        $this->assertEquals(103, $productCount);
+        $this->assertEquals(2, $productCount);
     }
 
     public function testCollectionAsArray()

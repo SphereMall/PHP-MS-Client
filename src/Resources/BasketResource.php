@@ -53,5 +53,30 @@ class BasketResource extends Resource
 
         return $result->current();
     }
+
+    /**
+     * @param array $params
+     * @return bool
+     */
+    public function removeItems(array $params)
+    {
+        $response = $this->handler->handle('DELETE', $params);
+        $result = $this->make($response);
+
+        return $result->current();
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return Entity
+     */
+    public function update($id, $data)
+    {
+        $response = $this->handler->handle('PUT', $data);
+        $result = $this->make($response);
+
+        return $result->current();
+    }
     #endregion
 }

@@ -9,15 +9,18 @@
 
 namespace SphereMall\MS\Lib\Basket;
 
+use InvalidArgumentException;
 use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
+use SphereMall\MS\Lib\Collection;
+
 /**
  * Class Basket
  * @package SphereMall\MS\Lib\Basket
  * @property Client $client
  * @property int $id
- * @property array $items
+ * @property Collection $items
  */
 class Basket
 {
@@ -25,7 +28,7 @@ class Basket
     protected $client;
 
     protected $id;
-    protected $items = [];
+    protected $items;
     #endregion
 
     #region [Constructor]
@@ -56,17 +59,7 @@ class Basket
             $this->createBasket();
         }
 
-        $params = [
-            'products' => json_encode(array_map(function ($product) {
-                return [
-                    'id'     => $product['id'],
-                    'amount' => isset($product['amount']) ? $product['amount'] : 1,
-                ];
-            }, $products)),
-        ];
-
-        $basketId = $this->getId();
-        $params['basketId'] = $basketId;
+        $params = $this->getProductParams($products);
 
         /**
          * @var Order $order
@@ -74,6 +67,49 @@ class Basket
         $order = $this->client
             ->basketResource()
             ->create($params);
+
+        $this->setProperties($order);
+    }
+
+    /**
+     * @param array $products
+     */
+    public function remove(array $products)
+    {
+        if (is_null($this->getId())) {
+            throw new InvalidArgumentException("Can not delete items. Basket is not created.");
+        }
+
+        $params = $this->getProductParams($products);
+
+        /**
+         * @var Order $order
+         */
+        $order = $this->client
+            ->basketResource()
+            ->removeItems($params);
+
+        $this->setProperties($order);
+
+    }
+
+    /**
+     * @param array $products
+     */
+    public function update(array $products)
+    {
+        if (is_null($this->getId())) {
+            throw new InvalidArgumentException("Can not update items. Basket is not created.");
+        }
+
+        $params = $this->getProductParams($products);
+
+        /**
+         * @var Order $order
+         */
+        $order = $this->client
+            ->basketResource()
+            ->update($this->getId(), $params);
 
         $this->setProperties($order);
     }
@@ -89,7 +125,7 @@ class Basket
     }
 
     /**
-     * @return array
+     * @return Collection
      */
     public function getItems()
     {
@@ -136,6 +172,25 @@ class Basket
     protected function setProperties(Order $order)
     {
         $this->items = $order->items;
+    }
+    #endregion
+
+    #region [Private functions]
+    private function getProductParams(array $products)
+    {
+        $params = [
+            'products' => json_encode(array_map(function ($product) {
+                return [
+                    'id'     => $product['id'],
+                    'amount' => $product['amount'],
+                ];
+            }, $products)),
+        ];
+
+        $basketId = $this->getId();
+        $params['basketId'] = $basketId;
+
+        return $params;
     }
     #endregion
 }

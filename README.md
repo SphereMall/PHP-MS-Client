@@ -261,7 +261,28 @@ $basket->add([
                 'amount'    => 1,
             ],
         ]);
+```
+### Remove product from basket
+```php
+$basketId = 1;
+$basket = $client->basket($basketId);
 
-//Get basket items:
-$items = $basket->getItems();
+$basket->remove([
+            [
+                'id'    => 1
+            ],
+        ]);
+```
+
+### Update product amount in the basket for product id 1
+```php
+$basketId = 1;
+$basket = $client->basket($basketId);
+
+$basket->update([
+            [
+                'id'     => 1,
+                'amount' => 3,
+            ],
+        ]);
 ```

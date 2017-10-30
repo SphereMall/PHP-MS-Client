@@ -77,6 +77,11 @@ class Request
                     $options['content-type'] = 'application/x-www-form-urlencoded';
                     $options['form_params'] = $body;
                     break;
+
+                case 'delete':
+                    $options['body'] = http_build_query($body);
+                    break;
+
             }
         }
 

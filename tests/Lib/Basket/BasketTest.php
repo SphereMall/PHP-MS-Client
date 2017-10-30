@@ -23,8 +23,8 @@ class BasketTest extends SetUpResourceTest
         $product = $this->client->products()->limit(1)->all()->current();
         $basket->add([
             [
-                'id' => $product->id,
-                'amount'    => 1,
+                'id'     => $product->id,
+                'amount' => 1,
             ],
         ]);
 
@@ -38,7 +38,71 @@ class BasketTest extends SetUpResourceTest
         $this->assertInstanceOf(Basket::class, $basket);
 
         $this->assertCount(1, $basket->getItems());
-        $this->assertEquals(1, $basket->getId());
+        $this->assertEquals(570, $basket->getId());
+    }
+
+    public function testItemRemoveFromBasket()
+    {
+        $basket = $this->client->basket();
+        $this->assertInstanceOf(Basket::class, $basket);
+
+        $products = $this->client->products()->limit(2)->all();
+        $params = array_map(function ($product) {
+            return [
+                'id'     => $product->id,
+                'amount' => 1,
+            ];
+        }, $products->asArray());
+
+        $basket->add($params);
+
+        $this->assertCount(2, $basket->getItems());
+
+        $deleteParams = [['id' => $products->current()->id]];
+        $basket->remove($deleteParams);
+        $this->assertCount(1, $basket->getItems());
+    }
+
+    public function testChangeAmount()
+    {
+        $basket = $this->client->basket();
+        $this->assertInstanceOf(Basket::class, $basket);
+
+        $products = $this->client->products()->limit(1)->all();
+        $params = array_map(function ($product) {
+            return [
+                'id'     => $product->id,
+                'amount' => 1,
+            ];
+        }, $products->asArray());
+
+        $basket->add($params);
+
+        $item = $basket->getItems()->current();
+        $this->assertEquals(1, $item->amount);
+        $this->assertCount(1, $basket->getItems());
+
+        $itemParams = [[
+            'id' => $item->product->id,
+            'amount' => 3,
+        ]];
+
+        $basket->update($itemParams);
+
+        $item = $basket->getItems()->current();
+        $this->assertEquals(3, $item->amount);
+        $this->assertCount(1, $basket->getItems());
+
+        $itemParams = [[
+            'id' => $item->product->id,
+            'amount' => 2,
+        ]];
+
+        $basket->update($itemParams);
+
+        $item = $basket->getItems()->current();
+        $this->assertEquals(2, $item->amount);
+        $this->assertCount(1, $basket->getItems());
     }
     #endregion
 }

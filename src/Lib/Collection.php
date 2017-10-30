@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Lib;
 
 use Iterator;
+
 /**
  * @property int $total
  * @property array $raw
@@ -74,7 +75,8 @@ class Collection implements Iterator
     public function asArray()
     {
         //TODO: Iterate with other approach
-        foreach ($this as $item) {}
+        foreach ($this as $item) {
+        }
         return $this->objects;
     }
     #endregion
@@ -146,7 +148,12 @@ class Collection implements Iterator
      */
     public function valid()
     {
-        return (!is_null($this->current()));
+        $isValid = (!is_null($this->current()));
+        if (!$isValid) {
+            $this->pointer = 0;
+        }
+
+        return $isValid;
     }
 
     /**
