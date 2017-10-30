@@ -182,7 +182,7 @@ class Basket
             'products' => json_encode(array_map(function ($product) {
                 return [
                     'id'     => $product['id'],
-                    'amount' => $product['amount'],
+                    'amount' => $product['amount'] ?? 1,
                 ];
             }, $products)),
         ];
