@@ -188,8 +188,8 @@ class Basket
         }
 
         $params = [
-            'shippingAddressId' => $this->{$addressKey}->id,
-            'basketId'          => $this->getId(),
+            "{$addressKey}Id" => $this->{$addressKey}->id,
+            'basketId'        => $this->getId(),
         ];
 
         $this->client
