@@ -140,5 +140,16 @@ class BasketTest extends SetUpResourceTest
         $this->assertEquals($basket->getShippingAddress()->name, $address->name);
         $this->assertEquals($basket->getShippingAddress()->surname, $address->surname);
     }
+
+    public function testSetPaymentMethod()
+    {
+        $basket = $this->client->basket(570);
+        $this->assertInstanceOf(Basket::class, $basket);
+
+        $paymentCollection = $this->client->paymentMethods()->limit(1)->all();
+        $basket->setPaymentMethod($paymentCollection->current()->id);
+
+        $this->assertEquals($basket->getPaymentMethod(), $paymentCollection->current()->id);
+    }
     #endregion
 }

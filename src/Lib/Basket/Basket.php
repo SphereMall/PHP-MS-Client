@@ -27,6 +27,7 @@ use SphereMall\MS\Lib\Collection;
  * @property Delivery $delivery
  * @property Address $shippingAddress
  * @property Address $billingAddress
+ * @property INT $paymentMethod
  * @property int $subTotalVatPrice
  * @property int $totalVatPrice
  * @property int $subTotalPrice
@@ -42,6 +43,8 @@ class Basket
 
     protected $shippingAddress;
     protected $billingAddress;
+
+    protected $paymentMethod;
 
     public $items;
     public $subTotalVatPrice;
@@ -128,6 +131,21 @@ class Basket
     #endregion
 
     #region [Setters]
+
+    public function setPaymentMethod($paymentMethod)
+    {
+        $params = [
+            'paymentMethodId' => $paymentMethod,
+            'basketId'        => $this->getId(),
+        ];
+
+        $this->client
+            ->basketResource()
+            ->update($this->getId(), $params);
+
+        $this->paymentMethod = $paymentMethod;
+    }
+
     /**
      * @param Delivery $delivery
      */
@@ -218,6 +236,14 @@ class Basket
     public function getBillingAddress()
     {
         return $this->billingAddress;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
     }
     #endregion
 
