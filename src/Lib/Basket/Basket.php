@@ -81,14 +81,11 @@ class Basket
 
         $params = $this->getProductParams($products);
 
-        /**
-         * @var Order $order
-         */
-        $order = $this->client
+        $orderCollection = $this->client
             ->basketResource()
             ->create($params);
 
-        $this->setProperties($order);
+        $this->setProperties($orderCollection->current());
     }
 
     /**
@@ -102,14 +99,11 @@ class Basket
 
         $params = $this->getProductParams($products);
 
-        /**
-         * @var Order $order
-         */
-        $order = $this->client
+        $orderCollection = $this->client
             ->basketResource()
             ->removeItems($params);
 
-        $this->setProperties($order);
+        $this->setProperties($orderCollection->current());
 
     }
 
@@ -124,14 +118,12 @@ class Basket
 
         $params = $this->getProductParams($products);
 
-        /**
-         * @var Order $order
-         */
-        $order = $this->client
+
+        $orderCollection = $this->client
             ->basketResource()
             ->update($this->getId(), $params);
 
-        $this->setProperties($order);
+        $this->setProperties($orderCollection->current());
     }
     #endregion
 

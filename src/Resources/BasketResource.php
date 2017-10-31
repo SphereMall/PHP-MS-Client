@@ -56,27 +56,24 @@ class BasketResource extends Resource
 
     /**
      * @param array $params
-     * @return bool
+     * @return array|\SphereMall\MS\Lib\Collection
      */
     public function removeItems(array $params)
     {
         $response = $this->handler->handle('DELETE', $params);
-        $result = $this->make($response);
 
-        return $result->current();
+        return $this->make($response);
     }
 
     /**
      * @param $id
      * @param $data
-     * @return Entity
+     * @return array|\SphereMall\MS\Lib\Collection
      */
     public function update($id, $data)
     {
         $response = $this->handler->handle('PUT', $data);
-        $result = $this->make($response);
-
-        return $result->current();
+        return $this->make($response);
     }
     #endregion
 }
