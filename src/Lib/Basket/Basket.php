@@ -307,14 +307,14 @@ class Basket
         $this->paymentMethod = $order->paymentMethodId;
 
         //Get all existing data for basket by async request
-        if ($order->deliveryProviderId) {
-            $this->delivery = new Delivery(new DeliveryProvider([
-                'id'   => $order->deliveryProviderId,
-                'cost' => $order->deliveryCost,
-            ]));
+        $ac = new AsyncContainer($this->client);
+
+        if ($deliveryProviderId = $order->deliveryProviderId) {
+            $ac->setCall('deliveryProvider', function (Client $client) use ($deliveryProviderId) {
+                return $client->deliveryProviders()->get($deliveryProviderId);
+            });
         }
 
-        $ac = new AsyncContainer($this->client);
         if ($shippingAddressId = $order->shippingAddressId) {
             $ac->setCall('shippingAddress', function (Client $client) use ($shippingAddressId) {
                 return $client->addresses()->get($shippingAddressId);
@@ -328,6 +328,15 @@ class Basket
         }
 
         $asyncResult = $ac->call();
+
+        if (isset($asyncResult['deliveryProvider']) && $asyncResult['deliveryProvider']->count()) {
+            $provider = $asyncResult['deliveryProvider']->current();
+            $this->delivery = new Delivery(new DeliveryProvider([
+                'id'   => $provider->id,
+                'cost' => $order->deliveryCost,
+                'name' => $provider->name,
+            ]));
+        }
 
         if (isset($asyncResult['shippingAddress']) && $asyncResult['shippingAddress']->count()) {
             $this->shippingAddress = $asyncResult['shippingAddress']->current();
