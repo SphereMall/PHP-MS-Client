@@ -216,6 +216,14 @@ class Basket
     }
 
     /**
+     * @return string|null
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
      * @return Delivery
      */
     public function getDelivery()
