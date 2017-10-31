@@ -293,6 +293,8 @@ class Basket
         $this->totalPrice = $order->totalPrice;
         $this->totalPriceWithoutDelivery = $order->totalPrice;
 
+        $this->paymentMethod = $order->paymentMethodId;
+
         //Get all existing data for basket by async request
         if ($order->deliveryProviderId) {
             $this->delivery = new Delivery(new DeliveryProvider([
