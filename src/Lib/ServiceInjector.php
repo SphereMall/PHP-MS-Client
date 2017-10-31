@@ -17,6 +17,7 @@ use SphereMall\MS\Resources\AttributesResource;
 use SphereMall\MS\Resources\AttributeValuesResource;
 use SphereMall\MS\Resources\BasketResource;
 use SphereMall\MS\Resources\BrandsResource;
+use SphereMall\MS\Resources\DeliveryPaymentsResource;
 use SphereMall\MS\Resources\DeliveryProvidersResource;
 use SphereMall\MS\Resources\FunctionalNamesResource;
 use SphereMall\MS\Resources\ImagesResource;
@@ -153,6 +154,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new PaymentMethodsResource($this);
+    }
+
+    /**
+     * @return DeliveryPaymentsResource
+     */
+    public function deliveryPayments()
+    {
+        /** @var Client $this */
+        return new DeliveryPaymentsResource($this);
     }
     #endregion
 
