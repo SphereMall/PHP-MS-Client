@@ -32,9 +32,20 @@ class Delivery
     #endregion
 
     #region [Public methods]
+    /**
+     * @return mixed
+     */
     public function getCost()
     {
         return $this->deliveryProvider->cost;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->deliveryProvider->name;
     }
     #endregion
 }
