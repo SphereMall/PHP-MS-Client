@@ -205,7 +205,7 @@ abstract class Resource
     /**
      * Get entity by id
      * @param int $id
-     * @return Entity
+     * @return Collection
      */
     public function get(int $id)
     {
@@ -216,10 +216,8 @@ abstract class Resource
         }
 
         $response = $this->handler->handle('GET', false, $id, $params);
-        $result = $this->make($response);
 
-        //TODO: Add additional wrapper or check for one element
-        return $result->current();
+        return $this->make($response);
     }
 
     /**

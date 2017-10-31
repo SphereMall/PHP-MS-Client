@@ -30,4 +30,11 @@ class Delivery
         $this->id = $deliveryProvider->id;
     }
     #endregion
+
+    #region [Public methods]
+    public function getCost()
+    {
+        return $this->deliveryProvider->cost;
+    }
+    #endregion
 }

@@ -17,5 +17,4 @@ class OrdersResource extends Resource
         return "orders";
     }
     #endregion
-
 }

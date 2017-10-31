@@ -45,7 +45,7 @@ class BaseResourceTest extends SetUpResourceTest
     public function testGetSingle()
     {
         $products = $this->client->products();
-        $product = $products->get($this->entityId);
+        $product = $products->get($this->entityId)->current();
 
         $this->assertEquals($this->entityId, $product->id);
     }
@@ -83,7 +83,7 @@ class BaseResourceTest extends SetUpResourceTest
     {
         $products1 = $this->client->products();
 
-        $product = $products1->fields(['id', 'title'])->get($this->entityId);
+        $product = $products1->fields(['id', 'title'])->get($this->entityId)->current();
         $this->assertNotNull($product->id);
         $this->assertNotNull($product->title);
         $this->assertNull($product->price);
@@ -117,7 +117,7 @@ class BaseResourceTest extends SetUpResourceTest
     {
         $products = $this->client->products();
 
-        $product = $products->get($this->entityId);
+        $product = $products->get($this->entityId)->current();
         $titleLike = substr($product->title, 2, 5);
 
         $productTest = $products
@@ -134,7 +134,7 @@ class BaseResourceTest extends SetUpResourceTest
     {
         $products = $this->client->products();
 
-        $product = $products->get($this->entityId);
+        $product = $products->get($this->entityId)->current();
         $titleLike = substr($product->title, 5, strlen($product->title) - 1);
 
         $productTest = $products
@@ -151,7 +151,7 @@ class BaseResourceTest extends SetUpResourceTest
     {
         $products = $this->client->products();
 
-        $product = $products->get($this->entityId);
+        $product = $products->get($this->entityId)->current();
         $titleLike = substr($product->title, 0, 5);
 
         $productTest = $products
@@ -168,7 +168,7 @@ class BaseResourceTest extends SetUpResourceTest
     {
         $products = $this->client->products();
 
-        $product = $products->get($this->entityId);
+        $product = $products->get($this->entityId)->current();
         $titleLike = $product->title;
 
         $productTest = $products

@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Lib\Basket\Basket;
 use SphereMall\MS\Resources\AttributesResource;
 use SphereMall\MS\Resources\AttributeValuesResource;
@@ -18,6 +19,7 @@ use SphereMall\MS\Resources\BrandsResource;
 use SphereMall\MS\Resources\DeliveryProvidersResource;
 use SphereMall\MS\Resources\FunctionalNamesResource;
 use SphereMall\MS\Resources\ImagesResource;
+use SphereMall\MS\Resources\OrdersResource;
 use SphereMall\MS\Resources\ProductAttributeValuesResource;
 use SphereMall\MS\Resources\ProductsResource;
 
@@ -98,6 +100,14 @@ trait ServiceInjector
     #endregion
 
     #region [Shop service]
+    /**
+     * @return OrdersResource
+     */
+    public function orders()
+    {
+        /** @var Client $this */
+        return new OrdersResource($this);
+    }
     /**
      * @return BasketResource
      */

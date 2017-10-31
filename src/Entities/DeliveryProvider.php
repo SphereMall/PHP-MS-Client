@@ -14,5 +14,6 @@ class DeliveryProvider extends Entity
     #region [Properties]
     public $id;
     public $name;
+    public $cost;
     #endregion
 }

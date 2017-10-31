@@ -11,6 +11,7 @@ namespace SphereMall\MS\Lib\Basket;
 
 use InvalidArgumentException;
 use SphereMall\MS\Client;
+use SphereMall\MS\Entities\DeliveryProvider;
 use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
@@ -22,15 +23,25 @@ use SphereMall\MS\Lib\Collection;
  * @property int $id
  * @property Collection $items
  * @property Delivery $delivery
+ * @property int $subTotalVatPrice
+ * @property int $totalVatPrice
+ * @property int $subTotalPrice
+ * @property int $totalPrice
+ * @property int $totalPriceWithoutDelivery
  */
 class Basket
 {
     #region [Properties]
     protected $client;
-
     protected $id;
-    protected $items;
     protected $delivery;
+
+    public $items;
+    public $subTotalVatPrice;
+    public $totalVatPrice;
+    public $subTotalPrice;
+    public $totalPrice;
+    public $totalPriceWithoutDelivery;
     #endregion
 
     #region [Constructor]
@@ -118,9 +129,29 @@ class Basket
     #endregion
 
     #region [Setters]
+    /**
+     * @param Delivery $delivery
+     * @throws EntityNotFoundException
+     */
     public function setDelivery(Delivery $delivery)
     {
+        if (!$delivery->id) {
+            throw new InvalidArgumentException("Can set delivery. Delivery id is empty.");
+        }
+
         $this->delivery = $delivery;
+
+        $params = [
+            'deliveryProviderId' => $this->delivery->id,
+            'deliveryCost'       => $this->delivery->getCost(),
+        ];
+
+        //TODO: Should be one update method for basket
+        $this->client
+            ->orders()
+            ->update($this->getId(), $params);
+
+        $this->get($this->id);
     }
     #endregion
 
@@ -131,14 +162,6 @@ class Basket
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getItems()
-    {
-        return $this->items;
     }
 
     /**
@@ -189,6 +212,33 @@ class Basket
     protected function setProperties(Order $order)
     {
         $this->items = $order->items;
+
+        $this->subTotalVatPrice = $order->subTotalVatPrice;
+        $this->totalVatPrice = $order->totalVatPrice;
+        $this->subTotalPrice = $order->subTotalPrice;
+        $this->totalPrice = $order->totalPrice;
+        $this->totalPriceWithoutDelivery = $order->totalPrice;
+
+        //Get all existing data for basket by async request
+        if ($order->deliveryProviderId) {
+            $this->delivery = new Delivery(new DeliveryProvider([
+                'id'   => $order->deliveryProviderId,
+                'cost' => $order->deliveryCost,
+            ]));
+        }
+
+        /* $ac = new AsyncContainer($this->client);
+         if ($deliveryProviderId = $order->deliveryProviderId) {
+             $ac->setCall('delivery', function (Client $client) use ($deliveryProviderId) {
+                 return $client->deliveryProviders()->get($deliveryProviderId);
+             });
+         }
+
+         $asyncResult = $ac->call();
+
+         if (isset($asyncResult['delivery']) && $asyncResult['delivery']->count()) {
+             $this->delivery = $asyncResult['delivery']->current();
+         }*/
     }
     #endregion
 
