@@ -39,6 +39,7 @@ class Basket
     #region [Properties]
     protected $client;
     protected $id;
+    protected $orderId;
     protected $delivery;
 
     protected $shippingAddress;
@@ -285,6 +286,8 @@ class Basket
      */
     protected function setProperties(Order $order)
     {
+        $this->orderId = $order->orderId;
+
         $this->items = $order->items;
 
         $this->subTotalVatPrice = $order->subTotalVatPrice;
