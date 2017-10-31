@@ -9,6 +9,7 @@
 
 namespace SphereMall\MS\Tests\Lib\Basket;
 
+use SphereMall\MS\Entities\Address;
 use SphereMall\MS\Entities\DeliveryProvider;
 use SphereMall\MS\Lib\Basket\Basket;
 use SphereMall\MS\Lib\Basket\Delivery;
@@ -123,6 +124,21 @@ class BasketTest extends SetUpResourceTest
         $basket = $client->basket(570);
         $this->assertInstanceOf(Delivery::class, $basket->getDelivery());
         $this->assertEquals($deliveryProviders->current()->id, $basket->getDelivery()->id);
+    }
+
+    public function testSetShipping()
+    {
+        $basket = $this->client->basket(570);
+        $this->assertInstanceOf(Basket::class, $basket);
+
+        $address = new Address([
+            'name'    => 'test',
+            'surname' => 'test',
+        ]);
+        $basket->setShippingAddress($address);
+
+        $this->assertEquals($basket->getShippingAddress()->name, $address->name);
+        $this->assertEquals($basket->getShippingAddress()->surname, $address->surname);
     }
     #endregion
 }

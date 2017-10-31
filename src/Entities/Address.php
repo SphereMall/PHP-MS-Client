@@ -18,5 +18,16 @@ class Address extends Entity
 {
     #region [Properties]
     public $id;
+    public $userId;
+    public $name;
+    public $surname;
+    public $email;
+    public $countryName;
+    public $cityName;
+    public $street;
+    public $zipCode;
+    public $phoneNumber;
+    public $companyName;
+    public $state;
     #endregion
 }

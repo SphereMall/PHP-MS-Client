@@ -14,7 +14,7 @@ class AddressResource extends Resource
     #region [Override methods]
     public function getURI()
     {
-        return "address";
+        return "addresses";
     }
     #endregion
 }

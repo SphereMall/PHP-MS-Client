@@ -245,14 +245,12 @@ abstract class Resource
 
     /**
      * @param $data
-     * @return Entity
+     * @return array|Collection
      */
     public function create($data)
     {
         $response = $this->handler->handle('POST', $data);
-        $result = $this->make($response);
-
-        return $result->current();
+        return $this->make($response);
     }
 
     /**

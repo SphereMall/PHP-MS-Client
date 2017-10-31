@@ -15,6 +15,7 @@ use SphereMall\MS\Entities\Address;
 use SphereMall\MS\Entities\DeliveryProvider;
 use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
+use SphereMall\MS\Lib\Async\AsyncContainer;
 use SphereMall\MS\Lib\Collection;
 
 /**
@@ -137,7 +138,6 @@ class Basket
     #region [Setters]
     /**
      * @param Delivery $delivery
-     * @throws EntityNotFoundException
      */
     public function setDelivery(Delivery $delivery)
     {
@@ -150,24 +150,48 @@ class Basket
         $params = [
             'deliveryProviderId' => $this->delivery->id,
             'deliveryCost'       => $this->delivery->getCost(),
+            'basketId'           => $this->getId(),
         ];
 
-        //TODO: Should be one update method for basket
         $this->client
-            ->orders()
+            ->basketResource()
             ->update($this->getId(), $params);
-
-        $this->get($this->id);
     }
 
-    public function setShippingAddress()
+    /**
+     * @param Address $address
+     * @param string $addressKey
+     */
+    public function setShippingAddress(Address $address, $addressKey = 'shippingAddress')
     {
+        if (!$address->id) {
+            $addressResource = $this->client
+                ->addresses()
+                ->create($address->asArray());
 
+            if ($addressResource->count()) {
+                $this->{$addressKey} = $addressResource->current();
+            }
+        } else {
+            $this->{$addressKey} = $address;
+        }
+
+        $params = [
+            'shippingAddressId' => $this->{$addressKey}->id,
+            'basketId'          => $this->getId(),
+        ];
+
+        $this->client
+            ->basketResource()
+            ->update($this->getId(), $params);
     }
 
-    public function setBillingAddress()
+    /**
+     * @param Address $address
+     */
+    public function setBillingAddress(Address $address)
     {
-
+        $this->setShippingAddress($address, 'billingAddress');
     }
     #endregion
 
@@ -259,18 +283,28 @@ class Basket
             ]));
         }
 
-        /* $ac = new AsyncContainer($this->client);
-         if ($deliveryProviderId = $order->deliveryProviderId) {
-             $ac->setCall('delivery', function (Client $client) use ($deliveryProviderId) {
-                 return $client->deliveryProviders()->get($deliveryProviderId);
-             });
-         }
+        $ac = new AsyncContainer($this->client);
+        if ($shippingAddressId = $order->shippingAddressId) {
+            $ac->setCall('shippingAddress', function (Client $client) use ($shippingAddressId) {
+                return $client->addresses()->get($shippingAddressId);
+            });
+        }
 
-         $asyncResult = $ac->call();
+        if ($billingAddressId = $order->billingAddressId) {
+            $ac->setCall('billingAddress', function (Client $client) use ($billingAddressId) {
+                return $client->addresses()->get($billingAddressId);
+            });
+        }
 
-         if (isset($asyncResult['delivery']) && $asyncResult['delivery']->count()) {
-             $this->delivery = $asyncResult['delivery']->current();
-         }*/
+        $asyncResult = $ac->call();
+
+        if (isset($asyncResult['shippingAddress']) && $asyncResult['shippingAddress']->count()) {
+            $this->shippingAddress = $asyncResult['shippingAddress']->current();
+        }
+
+        if (isset($asyncResult['billingAddress']) && $asyncResult['billingAddress']->count()) {
+            $this->billingAddress = $asyncResult['billingAddress']->current();
+        }
     }
     #endregion
 
