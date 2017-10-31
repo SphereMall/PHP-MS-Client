@@ -11,6 +11,7 @@ namespace SphereMall\MS\Lib\Basket;
 
 use InvalidArgumentException;
 use SphereMall\MS\Client;
+use SphereMall\MS\Entities\Address;
 use SphereMall\MS\Entities\DeliveryProvider;
 use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
@@ -23,6 +24,8 @@ use SphereMall\MS\Lib\Collection;
  * @property int $id
  * @property Collection $items
  * @property Delivery $delivery
+ * @property Address $shippingAddress
+ * @property Address $billingAddress
  * @property int $subTotalVatPrice
  * @property int $totalVatPrice
  * @property int $subTotalPrice
@@ -35,6 +38,9 @@ class Basket
     protected $client;
     protected $id;
     protected $delivery;
+
+    protected $shippingAddress;
+    protected $billingAddress;
 
     public $items;
     public $subTotalVatPrice;
@@ -153,6 +159,16 @@ class Basket
 
         $this->get($this->id);
     }
+
+    public function setShippingAddress()
+    {
+
+    }
+
+    public function setBillingAddress()
+    {
+
+    }
     #endregion
 
     #region [Getters]
@@ -170,6 +186,22 @@ class Basket
     public function getDelivery()
     {
         return $this->delivery;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getShippingAddress()
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
     }
     #endregion
 

@@ -12,6 +12,7 @@ namespace SphereMall\MS\Lib;
 use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Lib\Basket\Basket;
+use SphereMall\MS\Resources\AddressResource;
 use SphereMall\MS\Resources\AttributesResource;
 use SphereMall\MS\Resources\AttributeValuesResource;
 use SphereMall\MS\Resources\BasketResource;
@@ -108,6 +109,7 @@ trait ServiceInjector
         /** @var Client $this */
         return new OrdersResource($this);
     }
+
     /**
      * @return BasketResource
      */
@@ -141,6 +143,17 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new DeliveryProvidersResource($this);
+    }
+    #endregion
+
+    #region [Users service]
+    /**
+     * @return AddressResource
+     */
+    public function addresses()
+    {
+        /** @var Client $this */
+        return new AddressResource($this);
     }
     #endregion
 }
