@@ -118,28 +118,9 @@ class Basket
     }
 
     /**
-     * @param array $products
-     */
-    public function update(array $products)
-    {
-        if (is_null($this->getId())) {
-            throw new InvalidArgumentException("Can not update items. Basket is not created.");
-        }
-
-        $params = $this->getProductParams($products);
-
-
-        $orderCollection = $this->client
-            ->basketResource()
-            ->update($this->getId(), $params);
-
-        $this->setProperties($orderCollection->current());
-    }
-
-    /**
      * @param array $params
      */
-    public function updateParams(array $params)
+    public function update(array $params)
     {
         if (is_null($this->getId())) {
             throw new InvalidArgumentException("Can not update items. Basket is not created.");
@@ -153,6 +134,7 @@ class Basket
 
         $this->setProperties($orderCollection->current());
     }
+
     #endregion
 
     #region [Setters]
@@ -163,7 +145,7 @@ class Basket
             'paymentMethodId' => $paymentMethod
         ];
 
-        $this->updateParams($params);
+        $this->update($params);
 
         $this->paymentMethod = $paymentMethod;
     }
@@ -184,7 +166,7 @@ class Basket
             'deliveryCost'       => $this->delivery->getCost()
         ];
 
-        $this->updateParams($params);
+        $this->update($params);
     }
 
     /**
@@ -209,7 +191,7 @@ class Basket
             "{$addressKey}Id" => $this->{$addressKey}->id
         ];
 
-        $this->updateParams($params);
+        $this->update($params);
     }
 
     /**

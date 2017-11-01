@@ -86,9 +86,11 @@ class BasketTest extends SetUpResourceTest
         $this->assertCount(1, $basket->items);
 
         $itemParams = [
-            [
-                'id'     => $item->product->id,
-                'amount' => 3,
+            'products' => [
+                [
+                    'id'     => $item->product->id,
+                    'amount' => 3,
+                ],
             ],
         ];
 
@@ -99,9 +101,11 @@ class BasketTest extends SetUpResourceTest
         $this->assertCount(1, $basket->items);
 
         $itemParams = [
-            [
-                'id'     => $item->product->id,
-                'amount' => 2,
+            'products' => [
+                [
+                    'id'     => $item->product->id,
+                    'amount' => 2,
+                ],
             ],
         ];
 
