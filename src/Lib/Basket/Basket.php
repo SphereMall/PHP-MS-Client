@@ -135,6 +135,24 @@ class Basket
 
         $this->setProperties($orderCollection->current());
     }
+
+    /**
+     * @param array $params
+     */
+    public function updateParams(array $params)
+    {
+        if (is_null($this->getId())) {
+            throw new InvalidArgumentException("Can not update items. Basket is not created.");
+        }
+
+        $params['basketId'] = $this->getId();
+
+        $orderCollection = $this->client
+            ->basketResource()
+            ->update($this->getId(), $params);
+
+        $this->setProperties($orderCollection->current());
+    }
     #endregion
 
     #region [Setters]
