@@ -30,6 +30,7 @@ use SphereMall\MS\Lib\Collection;
  * @property Address $billingAddress
  * @property int $paymentMethod
  * @property int $statusId
+ * @property int $paymentStatusId
  * @property int $subTotalVatPrice
  * @property int $totalVatPrice
  * @property int $subTotalPrice
@@ -50,6 +51,7 @@ class Basket
     protected $paymentMethod;
 
     protected $statusId;
+    protected $paymentStatusId;
 
     public $items;
     public $subTotalVatPrice;
@@ -266,6 +268,14 @@ class Basket
     {
         return $this->statusId;
     }
+
+    /**
+     * @return int
+     */
+    public function getPaymentStatusId()
+    {
+        return $this->paymentStatusId;
+    }
     #endregion
 
     #region [Protected methods]
@@ -308,6 +318,7 @@ class Basket
     {
         $this->orderId = $order->orderId;
         $this->statusId = $order->statusId;
+        $this->paymentStatusId = $order->paymentStatusId;
 
         $this->items = $order->items;
 
