@@ -160,13 +160,10 @@ class Basket
     public function setPaymentMethod($paymentMethod)
     {
         $params = [
-            'paymentMethodId' => $paymentMethod,
-            'basketId'        => $this->getId(),
+            'paymentMethodId' => $paymentMethod
         ];
 
-        $this->client
-            ->basketResource()
-            ->update($this->getId(), $params);
+        $this->updateParams($params);
 
         $this->paymentMethod = $paymentMethod;
     }
@@ -184,13 +181,10 @@ class Basket
 
         $params = [
             'deliveryProviderId' => $this->delivery->id,
-            'deliveryCost'       => $this->delivery->getCost(),
-            'basketId'           => $this->getId(),
+            'deliveryCost'       => $this->delivery->getCost()
         ];
 
-        $this->client
-            ->basketResource()
-            ->update($this->getId(), $params);
+        $this->updateParams($params);
     }
 
     /**
@@ -212,13 +206,10 @@ class Basket
         }
 
         $params = [
-            "{$addressKey}Id" => $this->{$addressKey}->id,
-            'basketId'        => $this->getId(),
+            "{$addressKey}Id" => $this->{$addressKey}->id
         ];
 
-        $this->client
-            ->basketResource()
-            ->update($this->getId(), $params);
+        $this->updateParams($params);
     }
 
     /**
