@@ -23,11 +23,13 @@ use SphereMall\MS\Lib\Collection;
  * @package SphereMall\MS\Lib\Basket
  * @property Client $client
  * @property int $id
+ * @property string $orderId
  * @property Collection $items
  * @property Delivery $delivery
  * @property Address $shippingAddress
  * @property Address $billingAddress
- * @property INT $paymentMethod
+ * @property int $paymentMethod
+ * @property int $statusId
  * @property int $subTotalVatPrice
  * @property int $totalVatPrice
  * @property int $subTotalPrice
@@ -46,6 +48,8 @@ class Basket
     protected $billingAddress;
 
     protected $paymentMethod;
+
+    protected $statusId;
 
     public $items;
     public $subTotalVatPrice;
@@ -254,6 +258,14 @@ class Basket
     {
         return $this->paymentMethod;
     }
+
+    /**
+     * @return int
+     */
+    public function getStatusId()
+    {
+        return $this->statusId;
+    }
     #endregion
 
     #region [Protected methods]
@@ -295,6 +307,7 @@ class Basket
     protected function setProperties(Order $order)
     {
         $this->orderId = $order->orderId;
+        $this->statusId = $order->statusId;
 
         $this->items = $order->items;
 
