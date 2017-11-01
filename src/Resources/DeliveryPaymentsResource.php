@@ -14,7 +14,7 @@ class DeliveryPaymentsResource extends Resource
     #region [Override methods]
     public function getURI()
     {
-        return "deliverypayments";
+        return "deliverypaymentrelations";
     }
     #endregion
 }
