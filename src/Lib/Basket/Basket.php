@@ -14,6 +14,7 @@ use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Address;
 use SphereMall\MS\Entities\DeliveryProvider;
 use SphereMall\MS\Entities\Order;
+use SphereMall\MS\Entities\User;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Async\AsyncContainer;
 use SphereMall\MS\Lib\Collection;
@@ -29,6 +30,7 @@ use SphereMall\MS\Lib\Collection;
  * @property Address $shippingAddress
  * @property Address $billingAddress
  * @property int $paymentMethod
+ * @property User $user
  * @property int $statusId
  * @property int $paymentStatusId
  * @property int $subTotalVatPrice
@@ -49,6 +51,8 @@ class Basket
     protected $billingAddress;
 
     protected $paymentMethod;
+
+    protected $user;
 
     protected $statusId;
     protected $paymentStatusId;
@@ -138,7 +142,6 @@ class Basket
     #endregion
 
     #region [Setters]
-
     public function setPaymentMethod($paymentMethod)
     {
         $params = [
@@ -250,6 +253,14 @@ class Basket
     {
         return $this->paymentStatusId;
     }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
     #endregion
 
     #region [Protected methods]
@@ -325,6 +336,15 @@ class Basket
             });
         }
 
+        if ($userId = $order->userId) {
+            $ac->setCall('user', function (Client $client) use ($userId) {
+                return $client->users()->get($userId);
+            });
+        }
+
+        /**
+         * @var $asyncResult array[Collection]
+         */
         $asyncResult = $ac->call();
 
         if (isset($asyncResult['deliveryProvider']) && $asyncResult['deliveryProvider']->count()) {
@@ -342,6 +362,10 @@ class Basket
 
         if (isset($asyncResult['billingAddress']) && $asyncResult['billingAddress']->count()) {
             $this->billingAddress = $asyncResult['billingAddress']->current();
+        }
+
+        if (isset($asyncResult['user']) && $asyncResult['user']->count()) {
+            $this->user = $asyncResult['user']->current();
         }
     }
     #endregion

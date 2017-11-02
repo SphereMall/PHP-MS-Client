@@ -15,6 +15,7 @@ use SphereMall\MS\Lib\Collection;
  * @package SphereMall\MS\Entities
  * @property int $id
  * @property string $orderId
+ * @property int $userId
  * @property int $statusId
  * @property Collection $items
  */
@@ -23,6 +24,7 @@ class Order extends Entity
     #region [Properties]
     public $id;
     public $orderId;
+    public $userId;
     public $statusId;
     public $paymentStatusId;
     public $paymentId;

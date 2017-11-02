@@ -25,6 +25,7 @@ use SphereMall\MS\Resources\OrdersResource;
 use SphereMall\MS\Resources\PaymentMethodsResource;
 use SphereMall\MS\Resources\ProductAttributeValuesResource;
 use SphereMall\MS\Resources\ProductsResource;
+use SphereMall\MS\Resources\UsersResource;
 
 /**
  * Trait ServiceInjector
@@ -174,6 +175,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new AddressResource($this);
+    }
+
+    /**
+     * @return UsersResource
+     */
+    public function users()
+    {
+        /** @var Client $this */
+        return new UsersResource($this);
     }
     #endregion
 }
