@@ -219,7 +219,7 @@ $client->products()
 ## Shop
 ### Get basket by id
 ```php
-$basketId = 1;
+// Get basket by id
 $basket = $client->basket($basketId);
 
 //Get basket items:
@@ -251,7 +251,7 @@ $items = $basket->getItems();
 
 ### Add products to existing basket
 ```php
-$basketId = 1;
+// Get basket by id
 $basket = $client->basket($basketId);
 
 //Add product with id 1 and amount 1
@@ -264,7 +264,7 @@ $basket->add([
 ```
 ### Remove product from basket
 ```php
-$basketId = 1;
+// Get basket by id
 $basket = $client->basket($basketId);
 
 $basket->remove([
@@ -276,7 +276,7 @@ $basket->remove([
 
 ### Update product amount in the basket for product id 1
 ```php
-$basketId = 1;
+// Get basket by id
 $basket = $client->basket($basketId);
 
 $basket->update([
@@ -285,4 +285,53 @@ $basket->update([
                 'amount' => 3,
             ],
         ]);
+```
+
+### Set basket delivery method
+```php
+// Get basket by id
+$basket = $client->basket($basketId);
+
+// Get delivery provider
+$deliveryProviders = $client->deliveryProviders()
+                            ->limit(1)
+                            ->all();
+
+// Set Delivery object with delivery provider injection
+$delivery = new Delivery($deliveryProviders->current());
+
+// Set delivery to basket                            
+$basket->setDelivery();
+```
+
+### Set basket shipping and billing addresses
+```php
+// Get basket by id
+$basket = $client->basket($basketId);
+
+// Set address object
+$address = new Address([
+            'name'    => 'test',
+            'surname' => 'test',
+        ]);
+
+// Set basket shipping address
+$basket->setShippingAddress($address);
+
+// Set basket billing address
+$basket->setBillingAddress($address);
+```
+
+### Set basket payment method
+```php
+// Get basket by id
+$basket = $client->basket($basketId);
+
+// Get payment method
+$paymentCollection = $client->paymentMethods()
+                            ->limit(1)
+                            ->all();
+                            
+// Set payment method id to basket
+$basket->setPaymentMethod($paymentCollection->current()->id);
 ```

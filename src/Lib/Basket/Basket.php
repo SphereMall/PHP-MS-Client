@@ -142,7 +142,7 @@ class Basket
     public function setPaymentMethod($paymentMethod)
     {
         $params = [
-            'paymentMethodId' => $paymentMethod
+            'paymentMethodId' => $paymentMethod,
         ];
 
         $this->update($params);
@@ -163,7 +163,7 @@ class Basket
 
         $params = [
             'deliveryProviderId' => $this->delivery->id,
-            'deliveryCost'       => $this->delivery->getCost()
+            'deliveryCost'       => $this->delivery->getCost(),
         ];
 
         $this->update($params);
@@ -171,27 +171,10 @@ class Basket
 
     /**
      * @param Address $address
-     * @param string $addressKey
      */
-    public function setShippingAddress(Address $address, $addressKey = 'shippingAddress')
+    public function setShippingAddress(Address $address)
     {
-        if (!$address->id) {
-            $addressResource = $this->client
-                ->addresses()
-                ->create($address->asArray());
-
-            if ($addressResource->count()) {
-                $this->{$addressKey} = $addressResource->current();
-            }
-        } else {
-            $this->{$addressKey} = $address;
-        }
-
-        $params = [
-            "{$addressKey}Id" => $this->{$addressKey}->id
-        ];
-
-        $this->update($params);
+        $this->setAddress($address, 'shippingAddress');
     }
 
     /**
@@ -199,7 +182,7 @@ class Basket
      */
     public function setBillingAddress(Address $address)
     {
-        $this->setShippingAddress($address, 'billingAddress');
+        $this->setAddress($address, 'billingAddress');
     }
     #endregion
 
@@ -364,6 +347,35 @@ class Basket
     #endregion
 
     #region [Private functions]
+    /**
+     * @param Address $address
+     * @param string $addressKey
+     */
+    private function setAddress(Address $address, $addressKey)
+    {
+        if (!$address->id) {
+            $addressResource = $this->client
+                ->addresses()
+                ->create($address->asArray());
+
+            if ($addressResource->count()) {
+                $this->{$addressKey} = $addressResource->current();
+            }
+        } else {
+            $this->{$addressKey} = $address;
+        }
+
+        $params = [
+            "{$addressKey}Id" => $this->{$addressKey}->id,
+        ];
+
+        $this->update($params);
+    }
+
+    /**
+     * @param array $products
+     * @return array
+     */
     private function getProductParams(array $products)
     {
         $params = [
