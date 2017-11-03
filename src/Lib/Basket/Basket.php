@@ -93,13 +93,11 @@ class Basket
             $this->createBasket();
         }
 
-        $params = $this->getProductParams($products);
-
-        $orderCollection = $this->client
-            ->basketResource()
-            ->create($params);
-
-        $this->setProperties($orderCollection->current());
+        $this->callResourceAction(function ($params) {
+            return $this->client
+                ->basketResource()
+                ->create($params);
+        }, $products);
     }
 
     /**
@@ -111,14 +109,11 @@ class Basket
             throw new InvalidArgumentException("Can not delete items. Basket is not created.");
         }
 
-        $params = $this->getProductParams($products);
-
-        $orderCollection = $this->client
-            ->basketResource()
-            ->removeItems($params);
-
-        $this->setProperties($orderCollection->current());
-
+        $this->callResourceAction(function ($params) {
+            return $this->client
+                ->basketResource()
+                ->removeItems($params);
+        }, $products);
     }
 
     /**
@@ -415,6 +410,19 @@ class Basket
         $params['basketId'] = $basketId;
 
         return $params;
+    }
+
+    /**
+     * @param callable $action
+     * @param array $products
+     */
+    private function callResourceAction(callable $action, array $products)
+    {
+        $params = $this->getProductParams($products);
+
+        $orderCollection = call_user_func($action, $params);
+
+        $this->setProperties($orderCollection->current());
     }
     #endregion
 }
