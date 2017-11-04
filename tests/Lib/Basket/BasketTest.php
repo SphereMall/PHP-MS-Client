@@ -125,6 +125,16 @@ class BasketTest extends SetUpResourceTest
         $basket = $client->basket();
         $this->assertInstanceOf(Basket::class, $basket);
 
+        $products = $this->client->products()->limit(1)->all();
+        $params = array_map(function ($product) {
+            return [
+                'id'     => $product->id,
+                'amount' => 1,
+            ];
+        }, $products->asArray());
+
+        $basket->add(['products' => $params]);
+
         $deliveryProviders = $this->client->deliveryProviders()->limit(1)->all();
         $basket->setDelivery(new Delivery($deliveryProviders->current()))
             ->update();
