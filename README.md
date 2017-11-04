@@ -29,8 +29,8 @@ $client = new Client([
             'secretKey'  => 'API_SECRET_KEY'
         ]);
 ```
-## Using the client with base Resource functionality
-#### [Multiple Resources](https://github.com/SphereMall/PHP-MS-Client/wiki/Multiple-Resources)
+## Using the client with base Resources functionality
+#### <a href="https://github.com/SphereMall/PHP-MS-Client/wiki/Multiple-Resources" target="_blank">Multiple Resources</a>
 
 ### Single Resource by ID
 Fetch a Resource by ID:
