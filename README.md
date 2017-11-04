@@ -7,6 +7,7 @@ Official PHP SDK for integrating with **SphereMall Product**.
 * Gateway 1.1.1
 * Product 1.1.0
 * Shop 1.0.1
+* Users 1.0.0
 
 ## Installation
 You can install the package manually or by adding it to your `composer.json`:
@@ -301,7 +302,8 @@ $deliveryProviders = $client->deliveryProviders()
 $delivery = new Delivery($deliveryProviders->current());
 
 // Set delivery to basket                            
-$basket->setDelivery();
+$basket->setDelivery()
+       ->update();
 ```
 
 ### Set basket shipping and billing addresses
@@ -316,10 +318,12 @@ $address = new Address([
         ]);
 
 // Set basket shipping address
-$basket->setShippingAddress($address);
+$basket->setShippingAddress($address)
+       ->update();
 
 // Set basket billing address
-$basket->setBillingAddress($address);
+$basket->setBillingAddress($address)
+       ->update();
 ```
 
 ### Set basket payment method
@@ -333,5 +337,6 @@ $paymentCollection = $client->paymentMethods()
                             ->all();
                             
 // Set payment method id to basket
-$basket->setPaymentMethod($paymentCollection->current()->id);
+$basket->setPaymentMethod($paymentCollection->current()->id)
+       ->update();
 ```

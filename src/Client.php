@@ -126,12 +126,12 @@ class Client
 
     /**
      * Set call statistic
-     * @param Response $response
+     * @param $callData
      */
-    public function setCallStatistic(Response $response)
+    public function setCallStatistic($callData)
     {
         $this->amountOfCalls++;
-        $this->responseHistory[] = $response;
+        $this->responseHistory[] = $callData;
     }
 
     public function getCallsStatistic()

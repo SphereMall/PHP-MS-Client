@@ -305,8 +305,6 @@ abstract class Resource
                 call_user_func($this->client->afterAPICall, $response);
             }
 
-            $this->client->setCallStatistic($response);
-
             return $this->maker->make($response);
         }
 

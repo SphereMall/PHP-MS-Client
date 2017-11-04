@@ -84,6 +84,7 @@ class Request
 
             }
         }
+        $this->client->setCallStatistic(compact('method', 'url', 'options'));
 
         $async = $this->client->getAsync();
         if ($async) {
