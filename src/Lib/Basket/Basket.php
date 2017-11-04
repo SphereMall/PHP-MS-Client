@@ -375,7 +375,7 @@ class Basket
             });
         }
 
-        if ($billingAddressId = $order->billingAddressId) {
+        if (($order->billingAddressId != $order->shippingAddressId) && $billingAddressId = $order->billingAddressId) {
             $ac->setCall('billingAddress', function (Client $client) use ($billingAddressId) {
                 return $client->addresses()->get($billingAddressId);
             });
@@ -405,8 +405,12 @@ class Basket
             $this->shippingAddress = $asyncResult['shippingAddress']->current();
         }
 
-        if (isset($asyncResult['billingAddress']) && $asyncResult['billingAddress']->count()) {
-            $this->billingAddress = $asyncResult['billingAddress']->current();
+        if ($order->billingAddressId == $order->shippingAddressId) {
+            $this->billingAddress = $this->shippingAddress;
+        } else {
+            if (isset($asyncResult['billingAddress']) && $asyncResult['billingAddress']->count()) {
+                $this->billingAddress = $asyncResult['billingAddress']->current();
+            }
         }
 
         if (isset($asyncResult['user']) && $asyncResult['user']->count()) {

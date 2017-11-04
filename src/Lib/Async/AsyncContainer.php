@@ -86,8 +86,6 @@ class AsyncContainer
                         call_user_func($this->client->afterAPICall, $response);
                     }
 
-                    $this->client->setCallStatistic($response);
-
                     $result[$key] = $return['maker']->make($response);
 
                 }
