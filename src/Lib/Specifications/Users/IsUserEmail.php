@@ -7,11 +7,11 @@
  * Time: 1:44 PM
  */
 
-namespace SphereMall\MS\Lib\Specifications\Basic;
+namespace SphereMall\MS\Lib\Specifications\Users;
 
 use SphereMall\MS\Entities\User;
 use SphereMall\MS\Lib\Filters\FilterOperators;
-use SphereMall\MS\Lib\Specifications\Users\UserSpecification;
+use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
 
 /**
  * Class IsActive
