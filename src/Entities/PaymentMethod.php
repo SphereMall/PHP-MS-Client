@@ -16,5 +16,6 @@ class PaymentMethod extends Entity
     public $title;
     public $code;
     public $icon;
+    public $active;
     #endregion
 }

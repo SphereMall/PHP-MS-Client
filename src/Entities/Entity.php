@@ -9,6 +9,10 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class Entity
+ * @package SphereMall\MS\Entities
+ */
 class Entity
 {
     public function __construct($data)

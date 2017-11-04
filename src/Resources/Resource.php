@@ -19,6 +19,7 @@ use SphereMall\MS\Lib\Makers\Maker;
 use SphereMall\MS\Lib\Makers\ObjectMaker;
 use SphereMall\MS\Lib\Http\Request;
 use SphereMall\MS\Lib\Http\Response;
+use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
 
 /**
  * @property Client $client
@@ -148,7 +149,7 @@ abstract class Resource
 
     /**
      * Set filter to the resource selecting
-     * @param array|Filter $filter
+     * @param array|Filter|FilterSpecification $filter
      * @return $this
      */
     public function filter($filter)
@@ -157,8 +158,11 @@ abstract class Resource
             $filter = new Filter($filter);
         }
 
-        $this->filter = $filter;
+        if ($filter instanceof FilterSpecification) {
+            $filter = new Filter($filter->asFilter());
+        }
 
+        $this->filter = $filter;
         return $this;
     }
 

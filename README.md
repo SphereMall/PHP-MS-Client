@@ -30,18 +30,7 @@ $client = new Client([
         ]);
 ```
 ## Using the client with base Resource functionality
-### Multiple Resources
-To return a list of your resources
-```php
-// return a list of your products 
-$client->products()->all();
-
-// return a list of your brands 
-$client->brands()->all();
-
-// return a list of your functional names
-$client->functionalNames()->all();
-```
+#### [Multiple Resources](https://github.com/SphereMall/PHP-MS-Client/wiki/Multiple-Resources)
 
 ### Single Resource by ID
 Fetch a Resource by ID:
