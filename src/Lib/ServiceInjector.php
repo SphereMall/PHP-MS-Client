@@ -119,10 +119,7 @@ trait ServiceInjector
     public function basketResource()
     {
         /** @var Client $this */
-        $client = clone $this;
-        $client->setVersion('v2');
-
-        return new BasketResource($client);
+        return new BasketResource($this, "v2");
     }
 
     /**

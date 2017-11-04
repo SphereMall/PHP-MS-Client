@@ -42,6 +42,13 @@ use SphereMall\MS\Lib\Collection;
 class Basket
 {
     #region [Properties]
+    public $items;
+    public $subTotalVatPrice;
+    public $totalVatPrice;
+    public $subTotalPrice;
+    public $totalPrice;
+    public $totalPriceWithoutDelivery;
+
     protected $client;
     protected $id;
     protected $orderId;
@@ -57,12 +64,7 @@ class Basket
     protected $statusId;
     protected $paymentStatusId;
 
-    public $items;
-    public $subTotalVatPrice;
-    public $totalVatPrice;
-    public $subTotalPrice;
-    public $totalPrice;
-    public $totalPriceWithoutDelivery;
+    private $updateParams = [];
     #endregion
 
     #region [Constructor]
@@ -85,9 +87,9 @@ class Basket
 
     #region [Public methods]
     /**
-     * @param array $products
+     * @param array $params
      */
-    public function add(array $products)
+    public function add(array $params)
     {
         if (is_null($this->getId())) {
             $this->createBasket();
@@ -97,13 +99,13 @@ class Basket
             return $this->client
                 ->basketResource()
                 ->create($params);
-        }, $products);
+        }, $params);
     }
 
     /**
-     * @param array $products
+     * @param array $params
      */
-    public function remove(array $products)
+    public function remove(array $params)
     {
         if (is_null($this->getId())) {
             throw new InvalidArgumentException("Can not delete items. Basket is not created.");
@@ -113,43 +115,45 @@ class Basket
             return $this->client
                 ->basketResource()
                 ->removeItems($params);
-        }, $products);
+        }, $params);
     }
 
     /**
      * @param array $params
      */
-    public function update(array $params)
+    public function update(array $params = [])
     {
         if (is_null($this->getId())) {
-            throw new InvalidArgumentException("Can not update items. Basket is not created.");
+            $this->createBasket();
         }
 
-        $params['basketId'] = $this->getId();
+        $params = array_merge($params, $this->updateParams);
 
-        $orderCollection = $this->client
-            ->basketResource()
-            ->update($this->getId(), $params);
+        $this->callResourceAction(function ($params) {
+            return $this->client
+                ->basketResource()
+                ->update($this->getId(), $params);
+        }, $params);
 
-        $this->setProperties($orderCollection->current());
+        $this->updateParams = [];
     }
 
     #endregion
 
     #region [Setters]
+    /**
+     * @param $paymentMethod
+     * @return $this
+     */
     public function setPaymentMethod($paymentMethod)
     {
-        $params = [
-            'paymentMethodId' => $paymentMethod,
-        ];
-
-        $this->update($params);
-
-        $this->paymentMethod = $paymentMethod;
+        $this->updateParams['paymentMethodId'] = $paymentMethod;
+        return $this;
     }
 
     /**
      * @param Delivery $delivery
+     * @return $this
      */
     public function setDelivery(Delivery $delivery)
     {
@@ -157,30 +161,30 @@ class Basket
             throw new InvalidArgumentException("Can set delivery. Delivery id is empty.");
         }
 
-        $this->delivery = $delivery;
+        $this->updateParams['deliveryProviderId'] = $delivery->id;
+        $this->updateParams['deliveryCost'] = $delivery->getCost();
 
-        $params = [
-            'deliveryProviderId' => $this->delivery->id,
-            'deliveryCost'       => $this->delivery->getCost(),
-        ];
-
-        $this->update($params);
+        return $this;
     }
 
     /**
      * @param Address $address
+     * @return $this
      */
     public function setShippingAddress(Address $address)
     {
         $this->setAddress($address, 'shippingAddress');
+        return $this;
     }
 
     /**
      * @param Address $address
+     * @return $this
      */
     public function setBillingAddress(Address $address)
     {
         $this->setAddress($address, 'billingAddress');
+        return $this;
     }
     #endregion
 
@@ -311,6 +315,52 @@ class Basket
         $this->paymentMethod = $order->paymentMethodId;
 
         //Get all existing data for basket by async request
+        $this->setAsyncProperties($order);
+    }
+    #endregion
+
+    #region [Private functions]
+    /**
+     * @param Address $address
+     * @param string $addressKey
+     */
+    private function setAddress(Address $address, $addressKey)
+    {
+        if (!$address->id) {
+            $addressResource = $this->client
+                ->addresses()
+                ->create($address->asArray());
+
+            if ($addressResource->count()) {
+                $address = $addressResource->current();
+            }
+        }
+
+        $this->updateParams["{$addressKey}Id"] = $address->id;
+    }
+
+    /**
+     * @param callable $action
+     * @param array $params
+     */
+    private function callResourceAction(callable $action, array $params)
+    {
+        $params['basketId'] = $this->getId();
+
+        if (isset($params['products'])) {
+            $params['products'] = json_encode($params['products']);
+        }
+
+        $orderCollection = call_user_func($action, $params);
+
+        $this->setProperties($orderCollection->current());
+    }
+
+    /**
+     * @param Order $order
+     */
+    private function setAsyncProperties(Order $order)
+    {
         $ac = new AsyncContainer($this->client);
 
         if ($deliveryProviderId = $order->deliveryProviderId) {
@@ -362,67 +412,6 @@ class Basket
         if (isset($asyncResult['user']) && $asyncResult['user']->count()) {
             $this->user = $asyncResult['user']->current();
         }
-    }
-    #endregion
-
-    #region [Private functions]
-    /**
-     * @param Address $address
-     * @param string $addressKey
-     */
-    private function setAddress(Address $address, $addressKey)
-    {
-        if (!$address->id) {
-            $addressResource = $this->client
-                ->addresses()
-                ->create($address->asArray());
-
-            if ($addressResource->count()) {
-                $this->{$addressKey} = $addressResource->current();
-            }
-        } else {
-            $this->{$addressKey} = $address;
-        }
-
-        $params = [
-            "{$addressKey}Id" => $this->{$addressKey}->id,
-        ];
-
-        $this->update($params);
-    }
-
-    /**
-     * @param array $products
-     * @return array
-     */
-    private function getProductParams(array $products)
-    {
-        $params = [
-            'products' => json_encode(array_map(function ($product) {
-                return [
-                    'id'     => $product['id'],
-                    'amount' => $product['amount'] ?? 1,
-                ];
-            }, $products)),
-        ];
-
-        $basketId = $this->getId();
-        $params['basketId'] = $basketId;
-
-        return $params;
-    }
-
-    /**
-     * @param callable $action
-     * @param array $products
-     */
-    private function callResourceAction(callable $action, array $products)
-    {
-        $params = $this->getProductParams($products);
-
-        $orderCollection = call_user_func($action, $params);
-
-        $this->setProperties($orderCollection->current());
     }
     #endregion
 }

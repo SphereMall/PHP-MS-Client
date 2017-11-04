@@ -51,7 +51,7 @@ class Request
         $client = new \GuzzleHttp\Client();
 
         $url = $this->client->getGatewayUrl() . '/' .
-            $this->client->getVersion() . '/' .
+            $this->resource->getVersion() . '/' .
             $this->resource->getURI();
 
         //base url should end without slash

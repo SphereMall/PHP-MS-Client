@@ -22,6 +22,7 @@ use SphereMall\MS\Lib\Http\Response;
 
 /**
  * @property Client $client
+ * @property string $version
  * @property Request $handler
  * @property Maker $maker
  * @property int $offset
@@ -36,6 +37,7 @@ abstract class Resource
 {
     #region [Properties]
     protected $client;
+    protected $version;
     protected $handler;
     protected $maker;
     protected $offset = 0;
@@ -51,10 +53,12 @@ abstract class Resource
     /**
      * BaseService constructor.
      * @param Client $client
+     * @param null $version
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client, $version = null)
     {
         $this->client = $client;
+        $this->version = is_null($version) ? $client->getVersion() : $version;
 
         /** @var Resource $this */
         $this->handler = new Request($this->client, $this);
@@ -198,6 +202,15 @@ abstract class Resource
     public function getSort()
     {
         return $this->sort;
+    }
+
+    /**
+     * Get resource version
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
     #endregion
 

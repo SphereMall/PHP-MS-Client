@@ -25,9 +25,11 @@ class BasketTest extends SetUpResourceTest
 
         $product = $this->client->products()->limit(1)->all()->current();
         $basket->add([
-            [
-                'id'     => $product->id,
-                'amount' => 1,
+            'products' => [
+                [
+                    'id'     => $product->id,
+                    'amount' => 1,
+                ],
             ],
         ]);
 
@@ -57,18 +59,19 @@ class BasketTest extends SetUpResourceTest
             ];
         }, $products->asArray());
 
-        $basket->add($params);
+        $basket->add(['products' => $params]);
 
         $this->assertCount(2, $basket->items);
 
-        $deleteParams = [['id' => $products->current()->id]];
+        $deleteParams = ['products' => [['id' => $products->current()->id]]];
         $basket->remove($deleteParams);
         $this->assertCount(1, $basket->items);
     }
 
     public function testChangeAmount()
     {
-        $basket = $this->client->basket();
+        $client = clone $this->client;
+        $basket = $client->basket();
         $this->assertInstanceOf(Basket::class, $basket);
 
         $products = $this->client->products()->limit(1)->all();
@@ -79,7 +82,7 @@ class BasketTest extends SetUpResourceTest
             ];
         }, $products->asArray());
 
-        $basket->add($params);
+        $basket->add(['products' => $params]);
 
         $item = $basket->items->current();
         $this->assertEquals(1, $item->amount);
@@ -118,40 +121,63 @@ class BasketTest extends SetUpResourceTest
 
     public function testDeliveryMethod()
     {
-        $basket = $this->client->basket(570);
+        $client = clone $this->client;
+        $basket = $client->basket();
         $this->assertInstanceOf(Basket::class, $basket);
 
         $deliveryProviders = $this->client->deliveryProviders()->limit(1)->all();
-        $basket->setDelivery(new Delivery($deliveryProviders->current()));
+        $basket->setDelivery(new Delivery($deliveryProviders->current()))
+            ->update();
 
         $client = clone $this->client;
-        $basket = $client->basket(570);
+        $basket = $client->basket($basket->getId());
         $this->assertInstanceOf(Delivery::class, $basket->getDelivery());
         $this->assertEquals($deliveryProviders->current()->id, $basket->getDelivery()->id);
     }
 
     public function testSetShipping()
     {
-        $basket = $this->client->basket(570);
+        $client = clone $this->client;
+        $basket = $client->basket();
         $this->assertInstanceOf(Basket::class, $basket);
 
         $address = new Address([
             'name'    => 'test',
             'surname' => 'test',
         ]);
-        $basket->setShippingAddress($address);
+        $basket->setShippingAddress($address)
+            ->update();
 
         $this->assertEquals($basket->getShippingAddress()->name, $address->name);
         $this->assertEquals($basket->getShippingAddress()->surname, $address->surname);
     }
 
+    public function testSetBilling()
+    {
+        $client = clone $this->client;
+        $basket = $client->basket();
+        $this->assertInstanceOf(Basket::class, $basket);
+
+        $address = new Address([
+            'name'    => 'test1',
+            'surname' => 'test1',
+        ]);
+        $basket->setBillingAddress($address)
+            ->update();
+
+        $this->assertEquals($basket->getBillingAddress()->name, $address->name);
+        $this->assertEquals($basket->getBillingAddress()->surname, $address->surname);
+    }
+
     public function testSetPaymentMethod()
     {
-        $basket = $this->client->basket(570);
+        $client = clone $this->client;
+        $basket = $client->basket();
         $this->assertInstanceOf(Basket::class, $basket);
 
         $paymentCollection = $this->client->paymentMethods()->limit(1)->all();
-        $basket->setPaymentMethod($paymentCollection->current()->id);
+        $basket->setPaymentMethod($paymentCollection->current()->id)
+            ->update();
 
         $this->assertEquals($basket->getPaymentMethod(), $paymentCollection->current()->id);
     }
