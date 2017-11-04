@@ -25,25 +25,25 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     public function testClientObjectCreatedWithConfiguration()
     {
         $client = new Client([
-            'gatewayUrl' => 'API_URL',
-            'clientId'   => 'API_CLIENT_ID',
-            'secretKey'  => 'API_SECRET_KEY',
-            'version'    => 'API_VERSION',
+            'gatewayUrl' => API_GATEWAY_URL,
+            'clientId'   => API_CLIENT_ID,
+            'secretKey'  => API_SECRET_KEY,
+            'version'    => API_VERSION,
         ]);
 
-        $this->assertEquals('API_URL', $client->getGatewayUrl());
-        $this->assertEquals('API_CLIENT_ID', $client->getClientId());
-        $this->assertEquals('API_SECRET_KEY', $client->getSecretKey());
-        $this->assertEquals('API_VERSION', $client->getVersion());
+        $this->assertEquals(API_GATEWAY_URL, $client->getGatewayUrl());
+        $this->assertEquals(API_CLIENT_ID, $client->getClientId());
+        $this->assertEquals(API_SECRET_KEY, $client->getSecretKey());
+        $this->assertEquals(API_VERSION, $client->getVersion());
     }
 
     public function testClientCallService()
     {
         $client = new Client([
-            'gatewayUrl' => 'API_URL',
-            'clientId'   => 'API_CLIENT_ID',
-            'secretKey'  => 'API_SECRET_KEY',
-            'version'    => 'API_VERSION',
+            'gatewayUrl' => API_GATEWAY_URL,
+            'clientId'   => API_CLIENT_ID,
+            'secretKey'  => API_SECRET_KEY,
+            'version'    => API_VERSION,
         ]);
 
         $productService = $client->products();

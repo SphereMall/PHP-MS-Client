@@ -31,6 +31,9 @@ class Client
     use ServiceInjector;
 
     #region [Properties]
+    public $beforeAPICall;
+    public $afterAPICall;
+
     protected $gatewayUrl;
     protected $clientId;
     protected $secretKey;
@@ -44,8 +47,7 @@ class Client
     protected $async = false;
     protected $promises = [];
 
-    public $beforeAPICall;
-    public $afterAPICall;
+    public static $userAgent = "SM_SDK_PHP_CLIENT";
     #endregion
 
     #region [Constructor]

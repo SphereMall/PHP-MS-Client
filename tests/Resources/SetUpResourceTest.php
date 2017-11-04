@@ -13,7 +13,6 @@ use SphereMall\MS\Client;
 class SetUpResourceTest extends \PHPUnit\Framework\TestCase
 {
     #region [Properties]
-    protected static $gatewayURL = 'http://gateway-main.alpha.spheremall.net:8082';
 
     /**
      * @var Client
@@ -27,9 +26,9 @@ class SetUpResourceTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->client = new Client([
-            'gatewayUrl' => static::$gatewayURL,
-            'clientId'   => 'API_CLIENT_ID',
-            'secretKey'  => 'API_SECRET_KEY'
+            'gatewayUrl' => API_GATEWAY_URL,
+            'clientId'   => API_CLIENT_ID,
+            'secretKey'  => API_SECRET_KEY
         ]);
     }
     #endregion
