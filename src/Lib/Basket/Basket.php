@@ -186,6 +186,21 @@ class Basket
         $this->setAddress($address, 'billingAddress');
         return $this;
     }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function setUser(User $user)
+    {
+        if (!$user->id) {
+            throw new InvalidArgumentException("Can set user. User id is empty.");
+        }
+
+        $this->updateParams['userId'] = $user->id;
+
+        return $this;
+    }
     #endregion
 
     #region [Getters]
