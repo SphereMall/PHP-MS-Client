@@ -11,7 +11,7 @@ namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Order;
-use SphereMall\MS\Lib\Basket\Basket;
+use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\AddressResource;
 use SphereMall\MS\Resources\AttributesResource;
 use SphereMall\MS\Resources\AttributeValuesResource;
@@ -30,7 +30,7 @@ use SphereMall\MS\Resources\UsersResource;
 /**
  * Trait ServiceInjector
  * @package SphereMall\MS\Lib
- * @static Basket $basket
+ * @static Shop $basket
  */
 trait ServiceInjector
 {

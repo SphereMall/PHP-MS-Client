@@ -7,13 +7,13 @@
  * Time: 5:15 PM
  */
 
-namespace SphereMall\MS\Lib\Basket;
+namespace SphereMall\MS\Lib\Shop;
 
 use SphereMall\MS\Entities\DeliveryProvider;
 
 /**
  * Class Delivery
- * @package SphereMall\MS\Lib\Basket
+ * @package SphereMall\MS\Lib\Shop
  * @property DeliveryProvider $deliveryProvider
  */
 class Delivery

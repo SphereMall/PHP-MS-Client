@@ -7,12 +7,11 @@
  * Time: 5:16 PM
  */
 
-namespace SphereMall\MS\Tests\Lib\Basket;
+namespace SphereMall\MS\Tests\Lib\Shop;
 
 use SphereMall\MS\Entities\Address;
-use SphereMall\MS\Entities\DeliveryProvider;
-use SphereMall\MS\Lib\Basket\Basket;
-use SphereMall\MS\Lib\Basket\Delivery;
+use SphereMall\MS\Lib\Shop\Basket;
+use SphereMall\MS\Lib\Shop\Delivery;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class BasketTest extends SetUpResourceTest
