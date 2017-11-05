@@ -52,8 +52,8 @@ class Request
         $client = new \GuzzleHttp\Client();
 
         //Set user authorization
-        //$options = $this->setAuthorization();
-        $options = [];
+        $options = $this->setAuthorization();
+        //$options = [];
 
         //Generate request URL
         $url = $this->client->getGatewayUrl() . '/' .
@@ -113,35 +113,13 @@ class Request
     #region [Private methods]
     private function setAuthorization()
     {
-        $token = null;
-
-        $options['content-type'] = 'application/x-www-form-urlencoded';
-        $options['form_params']['client_id'] = $this->client->getClientId();
-        $options['form_params']['client_secret'] = $this->client->getSecretKey();
-
-        $options['headers']['User-Agent'] = $_SERVER['SERVER_NAME'] . '_AGENT_' . Client::$userAgent;
-
-
-        //Generate request URL
-        $url = $this->client->getGatewayUrl() . '/' .
-            $this->client->getVersion() . '/' .
-            '/oauth/token';
-
-        try {
-            $client = new \GuzzleHttp\Client();
-            $response = new Response($client->request('POST', $url, $options));
-            if ($response->getSuccess()) {
-                $token = $response->getData()[0]['token'] ?? false;
-            }
-
-        } catch (TransferException $e) {
-            return false;
-        }
-
+        $authToken = new AuthToken($this->client);
+        list($token, $userAgent) = $authToken->getTokenData();
+        
         return [
             'headers' => [
                 'Authorization' => "Bearer $token",
-                'User-Agent'    => $options['headers']['User-Agent'],
+                'User-Agent'    => $userAgent,
             ],
         ];
     }
