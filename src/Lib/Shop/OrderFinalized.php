@@ -86,6 +86,25 @@ class OrderFinalized
     }
     #endregion
 
+    #region [Public methods]
+    /**
+     * @param array $params
+     */
+    public function update(array $params = [])
+    {
+        $params = array_intersect_key($params, array_flip(['statusId', 'orderId', 'paymentStatusId']));
+
+        /**
+         * @var Order $order
+         */
+        $order = $this->client
+            ->orders()
+            ->update($this->getId(), $params);
+
+        $this->setOrderData($order);
+    }
+    #endregion
+
     #region [Getters]
     /**
      * @return int|null
