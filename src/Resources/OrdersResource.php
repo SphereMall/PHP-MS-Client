@@ -28,7 +28,7 @@ class OrdersResource extends Resource
      */
     public function byOrderId($orderId)
     {
-        $uriAppend = "byOrderId/$orderId";
+        $uriAppend = "byorderid/$orderId";
         $params = $this->getQueryParams();
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
 
