@@ -12,12 +12,12 @@ namespace SphereMall\MS\Entities;
 class Attribute extends Entity
 {
     #region [Properties]
-    protected $id;
-    protected $code;
-    protected $title;
-    protected $showInSpecList;
-    protected $description;
-    protected $attributeGroupId;
-    protected $cssClass;
+    public $id;
+    public $code;
+    public $title;
+    public $showInSpecList;
+    public $description;
+    public $attributeGroupId;
+    public $cssClass;
     #endregion
 }

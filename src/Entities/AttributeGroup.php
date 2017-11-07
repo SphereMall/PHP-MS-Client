@@ -12,10 +12,10 @@ namespace SphereMall\MS\Entities;
 class AttributeGroup extends Entity
 {
     #region [Properties]
-    protected $id;
-    protected $title;
-    protected $visible;
-    protected $orderNumber;
-    protected $lastUpdate;
+    public $id;
+    public $title;
+    public $visible;
+    public $orderNumber;
+    public $lastUpdate;
     #endregion
 }

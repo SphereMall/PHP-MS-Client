@@ -12,9 +12,9 @@ namespace SphereMall\MS\Entities;
 class AttributeValue extends Entity
 {
     #region [Properties]
-    protected $id;
-    protected $value;
-    protected $title;
-    protected $cssClass;
+    public $id;
+    public $value;
+    public $title;
+    public $cssClass;
     #endregion
 }

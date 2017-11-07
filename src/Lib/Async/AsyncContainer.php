@@ -46,7 +46,7 @@ class AsyncContainer
     }
 
     /**
-     * @return array
+     * @return array[Collection]
      */
     public function call()
     {
