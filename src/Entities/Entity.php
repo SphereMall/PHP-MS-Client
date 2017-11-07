@@ -15,17 +15,27 @@ namespace SphereMall\MS\Entities;
  */
 class Entity
 {
-    public function __construct($data)
+    /**
+     * Entity constructor.
+     * @param array $data
+     */
+    public function __construct(array $data)
     {
+        if (empty($data)) {
+            return $this;
+        }
+
         foreach ($data as $optionKey => $optionValue) {
             if (property_exists($this, $optionKey)) {
                 $this->{$optionKey} = $optionValue;
             }
         }
+
+        return $this;
     }
 
     public function asArray()
     {
-       return get_object_vars($this);
+        return get_object_vars($this);
     }
 }

@@ -13,6 +13,7 @@ use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\AddressResource;
+use SphereMall\MS\Resources\AttributeGroupsResource;
 use SphereMall\MS\Resources\AttributesResource;
 use SphereMall\MS\Resources\AttributeValuesResource;
 use SphereMall\MS\Resources\BasketResource;
@@ -55,6 +56,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new AttributesResource($this);
+    }
+
+    /**
+     * @return AttributeGroupsResource
+     */
+    public function attributeGroups()
+    {
+        /** @var Client $this */
+        return new AttributeGroupsResource($this);
     }
 
     /**

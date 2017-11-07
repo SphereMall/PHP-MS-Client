@@ -28,6 +28,7 @@ class Address extends Entity
     public $zipCode;
     public $phoneNumber;
     public $companyName;
+    public $clientNumber;
     public $state;
     #endregion
 }
