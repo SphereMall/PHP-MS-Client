@@ -7,9 +7,10 @@
  * Time: 19:10
  */
 
-namespace SphereMall\MS\Resources;
+namespace SphereMall\MS\Resources\Products;
 
 use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Resources\Resource;
 
 class ProductsResource extends Resource
 {

@@ -7,9 +7,10 @@
  * Time: 19:10
  */
 
-namespace SphereMall\MS\Resources;
+namespace SphereMall\MS\Resources\Shop;
 
 use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Resources\Resource;
 
 class BasketResource extends Resource
 {

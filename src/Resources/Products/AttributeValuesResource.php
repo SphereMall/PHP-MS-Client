@@ -7,13 +7,15 @@
  * Time: 19:10
  */
 
-namespace SphereMall\MS\Resources;
+namespace SphereMall\MS\Resources\Products;
 
-class AttributesResource extends Resource
+use SphereMall\MS\Resources\Resource;
+
+class AttributeValuesResource extends Resource
 {
     public function getURI()
     {
-        return "attributes";
+        return "attributevalues";
     }
 
 }

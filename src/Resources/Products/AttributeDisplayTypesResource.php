@@ -7,13 +7,15 @@
  * Time: 19:10
  */
 
-namespace SphereMall\MS\Resources;
+namespace SphereMall\MS\Resources\Products;
 
-class FunctionalNamesResource extends Resource
+use SphereMall\MS\Resources\Resource;
+
+class AttributeDisplayTypesResource extends Resource
 {
     public function getURI()
     {
-        return "functionalnames";
+        return "attributedisplaytypes";
     }
 
 }

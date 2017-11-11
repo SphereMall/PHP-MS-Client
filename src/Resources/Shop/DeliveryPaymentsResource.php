@@ -7,7 +7,9 @@
  * Time: 19:10
  */
 
-namespace SphereMall\MS\Resources;
+namespace SphereMall\MS\Resources\Shop;
+
+use SphereMall\MS\Resources\Resource;
 
 class DeliveryPaymentsResource extends Resource
 {

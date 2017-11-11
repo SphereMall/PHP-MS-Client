@@ -7,7 +7,9 @@
  * Time: 19:10
  */
 
-namespace SphereMall\MS\Resources;
+namespace SphereMall\MS\Resources\Products;
+
+use SphereMall\MS\Resources\Resource;
 
 class ProductAttributeValuesResource extends Resource
 {

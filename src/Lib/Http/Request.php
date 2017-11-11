@@ -111,11 +111,14 @@ class Request
     #endregion
 
     #region [Private methods]
+    /**
+     * @return array
+     */
     private function setAuthorization()
     {
         $authToken = new AuthToken($this->client);
         list($token, $userAgent) = $authToken->getTokenData();
-        
+
         return [
             'headers' => [
                 'Authorization' => "Bearer $token",

@@ -9,7 +9,7 @@
 namespace SphereMall\MS\Tests;
 
 use SphereMall\MS\Client;
-use SphereMall\MS\Resources\ProductsResource;
+use SphereMall\MS\Resources\Products\ProductsResource;
 use SphereMall\MS\Resources\Resource;
 
 class ClientTest extends \PHPUnit\Framework\TestCase

@@ -7,14 +7,17 @@
  * Time: 19:10
  */
 
-namespace SphereMall\MS\Resources;
+namespace SphereMall\MS\Resources\Products;
 
-class AddressResource extends Resource
+use SphereMall\MS\Resources\Resource;
+
+class BrandsResource extends Resource
 {
     #region [Override methods]
     public function getURI()
     {
-        return "addresses";
+        return "brands";
     }
     #endregion
+
 }

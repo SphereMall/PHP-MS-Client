@@ -10,23 +10,24 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
-use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Lib\Shop\Basket;
-use SphereMall\MS\Resources\AddressResource;
-use SphereMall\MS\Resources\AttributeGroupsResource;
-use SphereMall\MS\Resources\AttributesResource;
-use SphereMall\MS\Resources\AttributeValuesResource;
-use SphereMall\MS\Resources\BasketResource;
-use SphereMall\MS\Resources\BrandsResource;
-use SphereMall\MS\Resources\DeliveryPaymentsResource;
-use SphereMall\MS\Resources\DeliveryProvidersResource;
-use SphereMall\MS\Resources\FunctionalNamesResource;
-use SphereMall\MS\Resources\ImagesResource;
-use SphereMall\MS\Resources\OrdersResource;
-use SphereMall\MS\Resources\PaymentMethodsResource;
-use SphereMall\MS\Resources\ProductAttributeValuesResource;
-use SphereMall\MS\Resources\ProductsResource;
-use SphereMall\MS\Resources\UsersResource;
+use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
+use SphereMall\MS\Resources\Products\AttributeTypesResource;
+use SphereMall\MS\Resources\Users\AddressResource;
+use SphereMall\MS\Resources\Products\AttributeGroupsResource;
+use SphereMall\MS\Resources\Products\AttributesResource;
+use SphereMall\MS\Resources\Products\AttributeValuesResource;
+use SphereMall\MS\Resources\Shop\BasketResource;
+use SphereMall\MS\Resources\Products\BrandsResource;
+use SphereMall\MS\Resources\Shop\DeliveryPaymentsResource;
+use SphereMall\MS\Resources\Shop\DeliveryProvidersResource;
+use SphereMall\MS\Resources\Products\FunctionalNamesResource;
+use SphereMall\MS\Resources\Products\ImagesResource;
+use SphereMall\MS\Resources\Shop\OrdersResource;
+use SphereMall\MS\Resources\Shop\PaymentMethodsResource;
+use SphereMall\MS\Resources\Products\ProductAttributeValuesResource;
+use SphereMall\MS\Resources\Products\ProductsResource;
+use SphereMall\MS\Resources\Users\UsersResource;
 
 /**
  * Trait ServiceInjector
@@ -40,6 +41,24 @@ trait ServiceInjector
     #endregion
 
     #region [Products service]
+    /**
+     * @return AttributeDisplayTypesResource
+     */
+    public function attributeDisplayTypes()
+    {
+        /** @var Client $this */
+        return new AttributeDisplayTypesResource($this);
+    }
+    /**
+     * @return AttributeTypesResource
+     */
+    public function attributeTypes()
+    {
+        /** @var Client $this */
+        return new AttributeTypesResource($this);
+    }
+
+
     /**
      * @return ProductsResource
      */

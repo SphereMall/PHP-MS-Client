@@ -7,14 +7,15 @@
  * Time: 19:10
  */
 
-namespace SphereMall\MS\Resources;
+namespace SphereMall\MS\Resources\Products;
 
-class PaymentMethodsResource extends Resource
+use SphereMall\MS\Resources\Resource;
+
+class FunctionalNamesResource extends Resource
 {
-    #region [Override methods]
     public function getURI()
     {
-        return "paymentmethods";
+        return "functionalnames";
     }
-    #endregion
+
 }
