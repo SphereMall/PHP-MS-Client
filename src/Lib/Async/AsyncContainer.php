@@ -12,6 +12,7 @@ namespace SphereMall\MS\Lib\Async;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use SphereMall\MS\Client;
+use SphereMall\MS\Lib\Http\AuthToken;
 use SphereMall\MS\Lib\Http\Response;
 
 /**
@@ -52,6 +53,16 @@ class AsyncContainer
     {
         $result = [];
 
+        $authToken = new AuthToken($this->client);
+        list($token, $userAgent) = $authToken->getTokenData();
+
+        $options = [
+            'headers' => [
+                'Authorization' => "Bearer $token",
+                'User-Agent'    => $userAgent,
+            ],
+        ];
+
         $returns = $this->responses;
         $asyncKeys = [];
         foreach ($returns as $key => $return) {
@@ -61,15 +72,16 @@ class AsyncContainer
                 call_user_func($this->client->beforeAPICall,
                     $return['response']['method'],
                     $return['response']['url'],
-                    $return['response']['options']);
+                    array_merge($options, $return['response']['options'])
+                );
             }
         }
 
-        $requests = function () use ($returns) {
+        $requests = function () use ($returns, $options) {
             foreach ($returns as $key => $return) {
                 yield new Request($return['response']['method'],
                     $return['response']['url'],
-                    $return['response']['options']);
+                    array_merge($options, $return['response']['options']));
             }
         };
 
@@ -91,7 +103,9 @@ class AsyncContainer
                 }
             },
             'rejected'    => function ($reason, $index) {
+                $a = '';
             },
+            'options'     => $options,
         ]);
         $promise = $pool->promise();
         $promise->wait();

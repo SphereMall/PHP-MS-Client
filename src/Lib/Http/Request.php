@@ -50,10 +50,13 @@ class Request
     public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {
         $client = new \GuzzleHttp\Client();
+        $async = $this->client->getAsync();
 
         //Set user authorization
-        $options = $this->setAuthorization();
-        //$options = [];
+        $options = [];
+        if (!$async) {
+            $options = $this->setAuthorization();
+        }
 
         //Generate request URL
         $url = $this->client->getGatewayUrl() . '/' .
@@ -95,7 +98,6 @@ class Request
         $this->client->setCallStatistic(compact('method', 'url', 'options'));
 
         //Check and generate async request if needed
-        $async = $this->client->getAsync();
         if ($async) {
             return compact('method', 'url', 'options');
         }
