@@ -53,6 +53,7 @@ class AsyncContainer
     {
         $result = [];
 
+        //Get authorization token for all async requests
         $authToken = new AuthToken($this->client);
         list($token, $userAgent) = $authToken->getTokenData();
 
@@ -85,6 +86,7 @@ class AsyncContainer
             }
         };
 
+        //Call pool with async requests
         $pool = new Pool(new \GuzzleHttp\Client(), $requests(), [
             'concurrency' => 5,
             'fulfilled'   => function (\GuzzleHttp\Psr7\Response $guzzleResponse, $index)
