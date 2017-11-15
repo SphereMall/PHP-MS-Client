@@ -10,7 +10,6 @@
 namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\Order;
-use SphereMall\MS\Lib\Collection;
 
 /**
  * Class BasketMapper
@@ -19,15 +18,19 @@ use SphereMall\MS\Lib\Collection;
 class OrdersMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return Order
+     */
     protected function doCreateObject(array $array)
     {
         $order = new Order($array);
 
         if (isset($array['items'])) {
             $orderItemMapper = new OrderItemsMapper();
-            $order->items = new Collection(array_map(function ($item) use ($orderItemMapper) {
+            $order->items = array_map(function ($item) use ($orderItemMapper) {
                 return $orderItemMapper->createObject($item);
-            }, $array['items']));
+            }, $array['items']);
         }
 
         return $order;

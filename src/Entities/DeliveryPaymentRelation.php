@@ -9,6 +9,13 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class DeliveryPaymentRelation
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property int $deliveryProviderId
+ * @property int $paymentMethodId
+ */
 class DeliveryPaymentRelation extends Entity
 {
     #region [Properties]

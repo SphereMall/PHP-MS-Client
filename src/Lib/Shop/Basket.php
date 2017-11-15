@@ -208,8 +208,8 @@ class Basket extends OrderFinalized
                 ->addresses()
                 ->create($address->asArray());
 
-            if ($addressResource->count()) {
-                $address = $addressResource->current();
+            if ($addressResource) {
+                $address = $addressResource;
             }
         }
 
@@ -228,9 +228,9 @@ class Basket extends OrderFinalized
             $params['products'] = json_encode($params['products']);
         }
 
-        $orderCollection = call_user_func($action, $params);
+        $order = call_user_func($action, $params);
 
-        $this->setProperties($orderCollection->current());
+        $this->setProperties($order);
     }
     #endregion
 }

@@ -9,9 +9,17 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
+/**
+ * Class ProductAttributeValuesMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class ProductAttributeValuesMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return array
+     */
     protected function doCreateObject(array $array)
     {
         $raw = [];
@@ -24,7 +32,7 @@ class ProductAttributeValuesMapper extends Mapper
             $raw[$item['attributeId']]['attributeGroupId'] = $item['attributeGroupId'];
             $raw[$item['attributeId']]['cssClass'] = $item['cssClass'];
 
-            $raw[$item['attributeId']]['values'][] = [
+            $raw[$item['attributeId']]['attributeValues'][] = [
                 'id'       => $item['id'],
                 'value'    => $item['value'],
                 'title'    => $item['valueTitle'],

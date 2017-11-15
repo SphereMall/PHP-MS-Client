@@ -7,14 +7,15 @@
  * Time: 20:02
  */
 
-namespace SphereMall\MS\Tests\Resources;
+namespace SphereMall\MS\Tests\Resources\Products;
 
 use SphereMall\MS\Entities\AttributeDisplayType;
+use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class AttributeDisplayTypesResourceTest extends SetUpResourceTest
 {
     #region [Test methods]
-    public function testBrandsServiceGetList()
+    public function testServiceGetList()
     {
         $attributeDisplayTypes = $this->client->attributeDisplayTypes();
         $list = $attributeDisplayTypes->all();

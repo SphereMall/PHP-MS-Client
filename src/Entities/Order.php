@@ -8,8 +8,6 @@
  */
 namespace SphereMall\MS\Entities;
 
-use SphereMall\MS\Lib\Collection;
-
 /**
  * Class Order
  * @package SphereMall\MS\Entities
@@ -17,7 +15,27 @@ use SphereMall\MS\Lib\Collection;
  * @property string $orderId
  * @property int $userId
  * @property int $statusId
- * @property Collection $items
+ * @property int $paymentStatusId
+ * @property int $paymentId
+ * @property int $itemsAmount
+ * @property int $deliveryProviderId
+ * @property int $paymentMethodId
+ * @property int $shippingAddressId
+ * @property int $billingAddressId
+ * @property string $deliveryTime
+ * @property int $deliveryStatusId
+ * @property int $currency
+ * @property array $additionalInfo
+ * @property string $orderComment
+ * @property int $deliveryCost
+ * @property int $subTotalVatPrice
+ * @property int $totalVatPrice
+ * @property int $subTotalPrice
+ * @property int $totalPrice
+ * @property int $totalPriceWithoutDelivery
+ * @property array $items
+ * @property string $createdDate
+ * @property array $updateDate
  */
 class Order extends Entity
 {

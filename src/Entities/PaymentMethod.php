@@ -9,6 +9,15 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class PaymentMethod
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property string $title
+ * @property string $code
+ * @property string $icon
+ * @property int $active
+ */
 class PaymentMethod extends Entity
 {
     #region [Properties]

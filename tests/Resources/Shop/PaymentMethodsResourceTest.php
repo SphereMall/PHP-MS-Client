@@ -7,14 +7,15 @@
  * Time: 20:02
  */
 
-namespace SphereMall\MS\Tests\Resources;
+namespace SphereMall\MS\Tests\Resources\Shop;
 
 use SphereMall\MS\Entities\PaymentMethod;
+use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class PaymentMethodsResourceTest extends SetUpResourceTest
 {
     #region [Test methods]
-    public function testBrandsServiceGetList()
+    public function testServiceGetList()
     {
         $paymentMethods = $this->client->paymentMethods();
         $methods = $paymentMethods->all();

@@ -18,11 +18,18 @@ class BaseAsyncTest extends SetUpResourceTest
     #region [Test methods]
     public function testAsyncCalls()
     {
+        $products = $this->client->products();
+        $product = $products->limit(1)->all();
+
         $time1 = microtime(true);
         $ac = new AsyncContainer($this->client);
 
         $ac->setCall('oneProduct', function (Client $client) {
             return $client->products()->limit(1)->all();
+        });
+
+        $ac->setCall('singleProduct', function (Client $client) use ($product) {
+            return $client->products()->get($product[0]->id);
         });
 
         $ac->setCall('list1', function (Client $client) {
@@ -42,6 +49,7 @@ class BaseAsyncTest extends SetUpResourceTest
 
         $resTime = round((microtime(true) - $time1), 3);
         $this->assertCount(1, $data['oneProduct']);
+        $this->assertEquals($product[0]->id, $data['singleProduct']->id);
         $this->assertCount(2, $data['list1']);
         $this->assertCount(10, $data['list2']);
         $this->assertCount(15, $data['list3']);

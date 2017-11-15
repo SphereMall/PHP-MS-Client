@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Lib;
 
 use Iterator;
+use SphereMall\MS\Entities\Entity;
 
 /**
  * @property int $total

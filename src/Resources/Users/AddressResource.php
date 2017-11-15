@@ -9,8 +9,17 @@
 
 namespace SphereMall\MS\Resources\Users;
 
+use SphereMall\MS\Entities\Address;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class AddressResource
+ * @package SphereMall\MS\Resources\Users
+ * @method Address get(int $id)
+ * @method Address[] all()
+ * @method Address update()
+ * @method Address create()
+ */
 class AddressResource extends Resource
 {
     #region [Override methods]

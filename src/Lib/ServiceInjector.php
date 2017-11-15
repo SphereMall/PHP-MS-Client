@@ -12,7 +12,12 @@ namespace SphereMall\MS\Lib;
 use SphereMall\MS\Client;
 use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
+use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
 use SphereMall\MS\Resources\Products\AttributeTypesResource;
+use SphereMall\MS\Resources\Products\EntitiesResource;
+use SphereMall\MS\Resources\Products\EntityAttributesResource;
+use SphereMall\MS\Resources\Products\MediaTypesResource;
+use SphereMall\MS\Resources\Products\OptionsResource;
 use SphereMall\MS\Resources\Users\AddressResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsResource;
 use SphereMall\MS\Resources\Products\AttributesResource;
@@ -22,7 +27,7 @@ use SphereMall\MS\Resources\Products\BrandsResource;
 use SphereMall\MS\Resources\Shop\DeliveryPaymentsResource;
 use SphereMall\MS\Resources\Shop\DeliveryProvidersResource;
 use SphereMall\MS\Resources\Products\FunctionalNamesResource;
-use SphereMall\MS\Resources\Products\ImagesResource;
+use SphereMall\MS\Resources\Products\MediaResource;
 use SphereMall\MS\Resources\Shop\OrdersResource;
 use SphereMall\MS\Resources\Shop\PaymentMethodsResource;
 use SphereMall\MS\Resources\Products\ProductAttributeValuesResource;
@@ -49,6 +54,7 @@ trait ServiceInjector
         /** @var Client $this */
         return new AttributeDisplayTypesResource($this);
     }
+
     /**
      * @return AttributeTypesResource
      */
@@ -58,6 +64,14 @@ trait ServiceInjector
         return new AttributeTypesResource($this);
     }
 
+    /**
+     * @return AttributeGroupsEntitiesResource
+     */
+    public function attributeGroupsEntities()
+    {
+        /** @var Client $this */
+        return new AttributeGroupsEntitiesResource($this);
+    }
 
     /**
      * @return ProductsResource
@@ -114,12 +128,21 @@ trait ServiceInjector
     }
 
     /**
-     * @return ImagesResource
+     * @return MediaResource
      */
-    public function images()
+    public function media()
     {
         /** @var Client $this */
-        return new ImagesResource($this);
+        return new MediaResource($this);
+    }
+
+    /**
+     * @return MediaTypesResource
+     */
+    public function mediaTypes()
+    {
+        /** @var Client $this */
+        return new MediaTypesResource($this);
     }
 
     /**
@@ -129,6 +152,33 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new ProductAttributeValuesResource($this);
+    }
+
+    /**
+     * @return EntitiesResource
+     */
+    public function entities()
+    {
+        /** @var Client $this */
+        return new EntitiesResource($this);
+    }
+
+    /**
+     * @return EntityAttributesResource
+     */
+    public function entityAttributes()
+    {
+        /** @var Client $this */
+        return new EntityAttributesResource($this);
+    }
+
+    /**
+     * @return OptionsResource
+     */
+    public function options()
+    {
+        /** @var Client $this */
+        return new OptionsResource($this);
     }
     #endregion
 

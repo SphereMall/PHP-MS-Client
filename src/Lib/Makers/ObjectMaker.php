@@ -9,6 +9,7 @@
 
 namespace SphereMall\MS\Lib\Makers;
 
+use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\Response;
@@ -19,15 +20,16 @@ class ObjectMaker implements Maker
     #region [Public methods]
     /**
      * @param Response $response
-     * @return Collection
+     * @param bool $returnArray
+     * @return array|Entity
      * @throws EntityNotFoundException
      */
-    public function make(Response $response)
+    public function make(Response $response, $returnArray = true)
     {
         $result = [];
 
         if (!$response->getSuccess()) {
-            return new Collection($result);
+            return $result;
         }
 
         $included = $this->getIncludedArray($response->getIncluded());
@@ -51,7 +53,7 @@ class ObjectMaker implements Maker
             throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
         }
 
-        return new Collection($result);
+        return $returnArray ? $result : $result[0] ?? null;
     }
     #endregion
 

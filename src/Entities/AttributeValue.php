@@ -9,6 +9,14 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class AttributeValue
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property string $value
+ * @property string $title
+ * @property string $cssClass
+ */
 class AttributeValue extends Entity
 {
     #region [Properties]

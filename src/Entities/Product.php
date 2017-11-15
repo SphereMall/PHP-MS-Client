@@ -9,15 +9,26 @@
 
 namespace SphereMall\MS\Entities;
 
-use SphereMall\MS\Lib\Collection;
-
 /**
  * Class Product
  * @package SphereMall\MS\Entities
- * @property Collection $attributes
+ * @property int $id
+ * @property string $urlCode
+ * @property string $title
+ * @property string $shortDescription
+ * @property string $fullDescription
+ * @property string $seoDescription
+ * @property string $seoKeywords
+ * @property int $visible
+ * @property int $purchasePrice
+ * @property int $price
+ * @property int $oldPrice
+ * @property string $importedId
+ * @property string $variantsCompound
+ * @property Attribute[] $attributes
  * @property Brand $brand
  * @property FunctionalName $functionalName
- * @property Collection $media
+ * @property Media[] $media
  * @property Media $mainMedia
  */
 class Product extends Entity

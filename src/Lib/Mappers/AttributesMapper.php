@@ -12,21 +12,32 @@ namespace SphereMall\MS\Lib\Mappers;
 use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Lib\Collection;
 
+/**
+ * Class AttributesMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class AttributesMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return Attribute
+     */
     protected function doCreateObject(array $array)
     {
         $attribute = new Attribute($array);
-        if (isset($array['values'])) {
+        if (isset($array['attributeValues'])) {
             $mapper = new AttributeValuesMapper();
-            $values = [];
-            foreach ($array['values'] as $item) {
-                $values[] = $mapper->createObject($item);
+            foreach ($array['attributeValues'] as $item) {
+                $attribute->values[] = $mapper->createObject($item);
             }
-
-            $attribute->values = new Collection($values);
         }
+
+        if (isset($array['attributeGroups'])) {
+            $mapper = new AttributeGroupsMapper();
+            $attribute->group = $mapper->createObject($array['attributeGroups']);
+        }
+
 
         return $attribute;
     }

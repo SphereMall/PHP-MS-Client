@@ -12,6 +12,10 @@ namespace SphereMall\MS\Resources\Shop;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class BasketResource
+ * @package SphereMall\MS\Resources\Shop
+ */
 class BasketResource extends Resource
 {
     #region [Override methods]
@@ -37,10 +41,8 @@ class BasketResource extends Resource
 
         $uriAppend = 'byId/' . $id;
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
-        $result = $this->make($response);
 
-        //TODO: Add additional wrapper or check for one element
-        return $result->current();
+        return $this->make($response, false);
     }
 
     /**
@@ -50,31 +52,30 @@ class BasketResource extends Resource
     public function new($data)
     {
         $response = $this->handler->handle('POST', $data, 'new');
-        $result = $this->make($response);
 
-        return $result->current();
+        return $this->make($response, false);
     }
 
     /**
      * @param array $params
-     * @return array|\SphereMall\MS\Lib\Collection
+     * @return Entity
      */
     public function removeItems(array $params)
     {
         $response = $this->handler->handle('DELETE', $params);
 
-        return $this->make($response);
+        return $this->make($response, false);
     }
 
     /**
      * @param $id
      * @param $data
-     * @return array|\SphereMall\MS\Lib\Collection
+     * @return Entity
      */
     public function update($id, $data)
     {
         $response = $this->handler->handle('PUT', $data);
-        return $this->make($response);
+        return $this->make($response, false);
     }
     #endregion
 }

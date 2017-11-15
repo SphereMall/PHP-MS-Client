@@ -9,8 +9,17 @@
 
 namespace SphereMall\MS\Resources\Products;
 
+use SphereMall\MS\Entities\AttributeDisplayType;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class AttributeDisplayTypesResource
+ * @package SphereMall\MS\Resources\Products
+ * @method AttributeDisplayType get(int $id)
+ * @method AttributeDisplayType[] all()
+ * @method AttributeDisplayType update()
+ * @method AttributeDisplayType create()
+ */
 class AttributeDisplayTypesResource extends Resource
 {
     public function getURI()

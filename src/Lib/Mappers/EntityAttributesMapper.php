@@ -9,15 +9,22 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
-use SphereMall\MS\Entities\Media;
+use SphereMall\MS\Entities\EntityAttribute;
 
-class MediaMapper extends Mapper
+/**
+ * Class EntityAttributesMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
+class EntityAttributesMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return EntityAttribute
+     */
     protected function doCreateObject(array $array)
     {
-        $media = new Media($array);
-        return $media;
+        return new EntityAttribute($array);
     }
     #endregion
 }

@@ -9,8 +9,17 @@
 
 namespace SphereMall\MS\Resources\Products;
 
+use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class AttributesResource
+ * @package SphereMall\MS\Resources\Products
+ * @method Attribute get(int $id)
+ * @method Attribute[] all()
+ * @method Attribute update()
+ * @method Attribute create()
+ */
 class AttributesResource extends Resource
 {
     public function getURI()
@@ -18,4 +27,25 @@ class AttributesResource extends Resource
         return "attributes";
     }
 
+    /**
+     * @param string $entityClass class name like Entity::class
+     * @param int|null $attributeGroupId
+     * @param int|null $attributeId
+     * @return array|\SphereMall\MS\Lib\Collection
+     */
+    public function belong(string $entityClass, int $attributeGroupId = null, int $attributeId = null)
+    {
+        $uriAppend = '/belong/' . strtolower((new \ReflectionClass($entityClass))->getShortName()) . "s";
+        $params = $this->getQueryParams();
+        if (!is_null($attributeGroupId)) {
+            $uriAppend .= "/$attributeGroupId";
+            if (!is_null($attributeId)) {
+                $uriAppend .= "/$attributeId";
+            }
+        }
+
+        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+
+        return $this->make($response);
+    }
 }

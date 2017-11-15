@@ -9,8 +9,17 @@
 
 namespace SphereMall\MS\Resources\Shop;
 
+use SphereMall\MS\Entities\DeliveryProvider;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class DeliveryProvidersResource
+ * @package SphereMall\MS\Resources\Shop
+ * @method DeliveryProvider get(int $id)
+ * @method DeliveryProvider[] all()
+ * @method DeliveryProvider update()
+ * @method DeliveryProvider create()
+ */
 class DeliveryProvidersResource extends Resource
 {
     #region [Override methods]

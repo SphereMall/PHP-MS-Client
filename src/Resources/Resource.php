@@ -222,7 +222,7 @@ abstract class Resource
     /**
      * Get entity by id
      * @param int $id
-     * @return Collection
+     * @return array|Entity
      */
     public function get(int $id)
     {
@@ -233,13 +233,12 @@ abstract class Resource
         }
 
         $response = $this->handler->handle('GET', false, $id, $params);
-
-        return $this->make($response);
+        return $this->make($response, false);
     }
 
     /**
      * Get list of entities
-     * @return Collection
+     * @return array
      */
     public function all()
     {
@@ -250,6 +249,9 @@ abstract class Resource
         return $this->make($response);
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         $params = $this->getQueryParams();
@@ -262,12 +264,12 @@ abstract class Resource
 
     /**
      * @param $data
-     * @return array|Collection
+     * @return Entity
      */
     public function create($data)
     {
         $response = $this->handler->handle('POST', $data);
-        return $this->make($response);
+        return $this->make($response, false);
     }
 
     /**
@@ -278,9 +280,8 @@ abstract class Resource
     public function update($id, $data)
     {
         $response = $this->handler->handle('PUT', $data, $id);
-        $result = $this->make($response);
 
-        return $result->current();
+        return $this->make($response, false);
     }
 
     /**
@@ -298,9 +299,10 @@ abstract class Resource
     #region [Protected methods]
     /**
      * @param Promise|Response $response
-     * @return array|Collection
+     * @param bool $returnArray
+     * @return array|Collection|Entity
      */
-    protected function make($response)
+    protected function make($response, $returnArray = true)
     {
         $this->clearExtraDataForCall();
         if ($response instanceof Response) {
@@ -309,10 +311,10 @@ abstract class Resource
                 call_user_func($this->client->afterAPICall, $response);
             }
 
-            return $this->maker->make($response);
+            return $this->maker->make($response, $returnArray);
         }
 
-        return ['response' => $response, 'maker' => $this->maker];
+        return ['response' => $response, 'maker' => $this->maker, 'returnArray' => $returnArray];
     }
 
     protected function getQueryParams()

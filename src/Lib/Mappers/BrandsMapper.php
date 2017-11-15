@@ -11,13 +11,20 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\Brand;
 
+/**
+ * Class BrandsMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class BrandsMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return Brand
+     */
     protected function doCreateObject(array $array)
     {
-        $brand = new Brand($array);
-        return $brand;
+        return new Brand($array);
     }
     #endregion
 }

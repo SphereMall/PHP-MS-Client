@@ -239,8 +239,8 @@ class OrderFinalized
          */
         $asyncResult = $ac->call();
 
-        if (isset($asyncResult['deliveryProvider']) && $asyncResult['deliveryProvider']->count()) {
-            $provider = $asyncResult['deliveryProvider']->current();
+        if (!empty($asyncResult['deliveryProvider'])) {
+            $provider = $asyncResult['deliveryProvider'];
             $this->delivery = new Delivery(new DeliveryProvider([
                 'id'   => $provider->id,
                 'cost' => $order->deliveryCost,
@@ -248,20 +248,20 @@ class OrderFinalized
             ]));
         }
 
-        if (isset($asyncResult['shippingAddress']) && $asyncResult['shippingAddress']->count()) {
-            $this->shippingAddress = $asyncResult['shippingAddress']->current();
+        if (!empty($asyncResult['shippingAddress'])) {
+            $this->shippingAddress = $asyncResult['shippingAddress'];
         }
 
         if ($order->billingAddressId == $order->shippingAddressId) {
             $this->billingAddress = $this->shippingAddress;
         } else {
-            if (isset($asyncResult['billingAddress']) && $asyncResult['billingAddress']->count()) {
-                $this->billingAddress = $asyncResult['billingAddress']->current();
+            if (!empty($asyncResult['billingAddress'])) {
+                $this->billingAddress = $asyncResult['billingAddress'];
             }
         }
 
-        if (isset($asyncResult['user']) && $asyncResult['user']->count()) {
-            $this->user = $asyncResult['user']->current();
+        if (!empty($asyncResult['user'])) {
+            $this->user = $asyncResult['user'];
         }
     }
     #endregion

@@ -10,32 +10,36 @@
 namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\Product;
-use SphereMall\MS\Lib\Collection;
 
+/**
+ * Class ProductsMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class ProductsMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return Product
+     */
     protected function doCreateObject(array $array)
     {
         $product = new Product($array);
 
         if (isset($array['productAttributeValues'])) {
             $mapper = new ProductAttributeValuesMapper();
-            $attributes = $mapper->createObject($array['productAttributeValues']);
-            $product->attributes = new Collection($attributes);
+            $product->attributes = $mapper->createObject($array['productAttributeValues']);
         }
 
         if (isset($array['images'])) {
-            $mapper = new MediaMapper();
-            $media = [];
+            $mapper = new ImagesMapper();
             foreach ($array['images'] as $image) {
-                $media[] = $mapper->createObject($image);
+                $product->media[] = $mapper->createObject($image);
             }
-            $product->media = new Collection($media);
 
 
-            if ($product->media && $product->media->count()) {
-                $product->mainMedia = $product->media->current();
+            if (!empty($product->media[0])) {
+                $product->mainMedia = $product->media[0];
             }
         }
 

@@ -9,8 +9,17 @@
 
 namespace SphereMall\MS\Resources\Shop;
 
+use SphereMall\MS\Entities\DeliveryPaymentRelation;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class DeliveryPaymentsResource
+ * @package SphereMall\MS\Resources\Shop
+ * @method DeliveryPaymentRelation get(int $id)
+ * @method DeliveryPaymentRelation[] all()
+ * @method DeliveryPaymentRelation update()
+ * @method DeliveryPaymentRelation create()
+ */
 class DeliveryPaymentsResource extends Resource
 {
     #region [Override methods]

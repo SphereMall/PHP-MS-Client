@@ -22,7 +22,9 @@ class BasketTest extends SetUpResourceTest
         $basket = $this->client->basket();
         $this->assertInstanceOf(Basket::class, $basket);
 
-        $product = $this->client->products()->limit(1)->all()->current();
+        $products = $this->client->products()->limit(1)->all();
+        $product = $products[0];
+
         $basket->add([
             'products' => [
                 [
@@ -56,13 +58,13 @@ class BasketTest extends SetUpResourceTest
                 'id'     => $product->id,
                 'amount' => 1,
             ];
-        }, $products->asArray());
+        }, $products);
 
         $basket->add(['products' => $params]);
 
         $this->assertCount(2, $basket->items);
 
-        $deleteParams = ['products' => [['id' => $products->current()->id]]];
+        $deleteParams = ['products' => [['id' => $products[0]->id]]];
         $basket->remove($deleteParams);
         $this->assertCount(1, $basket->items);
     }
@@ -79,11 +81,11 @@ class BasketTest extends SetUpResourceTest
                 'id'     => $product->id,
                 'amount' => 1,
             ];
-        }, $products->asArray());
+        }, $products);
 
         $basket->add(['products' => $params]);
 
-        $item = $basket->items->current();
+        $item = $basket->items[0];
         $this->assertEquals(1, $item->amount);
         $this->assertCount(1, $basket->items);
 
@@ -98,7 +100,7 @@ class BasketTest extends SetUpResourceTest
 
         $basket->update($itemParams);
 
-        $item = $basket->items->current();
+        $item = $basket->items[0];
         $this->assertEquals(3, $item->amount);
         $this->assertCount(1, $basket->items);
 
@@ -113,7 +115,7 @@ class BasketTest extends SetUpResourceTest
 
         $basket->update($itemParams);
 
-        $item = $basket->items->current();
+        $item = $basket->items[0];
         $this->assertEquals(2, $item->amount);
         $this->assertCount(1, $basket->items);
     }
@@ -130,18 +132,18 @@ class BasketTest extends SetUpResourceTest
                 'id'     => $product->id,
                 'amount' => 1,
             ];
-        }, $products->asArray());
+        }, $products);
 
         $basket->add(['products' => $params]);
 
         $deliveryProviders = $this->client->deliveryProviders()->limit(1)->all();
-        $basket->setDelivery(new Delivery($deliveryProviders->current()))
+        $basket->setDelivery(new Delivery($deliveryProviders[0]))
             ->update();
 
         $client = clone $this->client;
         $basket = $client->basket($basket->getId());
         $this->assertInstanceOf(Delivery::class, $basket->getDelivery());
-        $this->assertEquals($deliveryProviders->current()->id, $basket->getDelivery()->id);
+        $this->assertEquals($deliveryProviders[0]->id, $basket->getDelivery()->id);
     }
 
     public function testSetShipping()
@@ -185,10 +187,10 @@ class BasketTest extends SetUpResourceTest
         $this->assertInstanceOf(Basket::class, $basket);
 
         $paymentCollection = $this->client->paymentMethods()->limit(1)->all();
-        $basket->setPaymentMethod($paymentCollection->current()->id)
+        $basket->setPaymentMethod($paymentCollection[0]->id)
             ->update();
 
-        $this->assertEquals($basket->getPaymentMethod(), $paymentCollection->current()->id);
+        $this->assertEquals($basket->getPaymentMethod(), $paymentCollection[0]->id);
     }
     #endregion
 }

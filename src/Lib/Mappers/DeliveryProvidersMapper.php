@@ -11,13 +11,20 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\DeliveryProvider;
 
+/**
+ * Class DeliveryProvidersMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class DeliveryProvidersMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return DeliveryProvider
+     */
     protected function doCreateObject(array $array)
     {
-        $deliveryProvider = new DeliveryProvider($array);
-        return $deliveryProvider;
+        return new DeliveryProvider($array);
     }
     #endregion
 }

@@ -56,6 +56,7 @@ class Entity
 
         return null;
     }
+
     /**
      * @return array
      */

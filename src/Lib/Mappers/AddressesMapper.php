@@ -11,9 +11,17 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\Address;
 
+/**
+ * Class AddressesMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class AddressesMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return Address
+     */
     protected function doCreateObject(array $array)
     {
         $address = new Address($array);

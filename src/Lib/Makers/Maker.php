@@ -16,7 +16,8 @@ interface Maker
 {
     /**
      * @param Response $response
-     * @return mixed|Collection
+     * @param bool $returnArray
+     * @return array|Collection
      */
-    function make(Response $response);
+    function make(Response $response, $returnArray = true);
 }

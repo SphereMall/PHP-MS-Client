@@ -26,8 +26,8 @@ class BasicSpecificationTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertEquals(1, $products->current()->visible);
-        $this->assertTrue($isVisible->isSatisfiedBy($products->current()));
+        $this->assertEquals(1, $products[0]->visible);
+        $this->assertTrue($isVisible->isSatisfiedBy($products[0]));
     }
 
     public function testIsActiveSpecification()
@@ -40,8 +40,8 @@ class BasicSpecificationTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertEquals(1, $paymentMethods->current()->active);
-        $this->assertTrue($isActive->isSatisfiedBy($paymentMethods->current()));
+        $this->assertEquals(1, $paymentMethods[0]->active);
+        $this->assertTrue($isActive->isSatisfiedBy($paymentMethods[0]));
     }
     #endregion
 }

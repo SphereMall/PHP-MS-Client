@@ -19,9 +19,10 @@ class CountMaker extends ObjectMaker
     #region [Public methods]
     /**
      * @param Response $response
+     * @param bool $returnArray
      * @return int
      */
-    public function make(Response $response)
+    public function make(Response $response, $returnArray = true)
     {
         if (!$response->getSuccess()) {
             return 0;

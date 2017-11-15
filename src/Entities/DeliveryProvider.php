@@ -9,6 +9,13 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class DeliveryProvider
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property string $name
+ * @property int $cost
+ */
 class DeliveryProvider extends Entity
 {
     #region [Properties]

@@ -9,6 +9,14 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class AttributeType
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property string $code
+ * @property int $visible
+ * @property string $lastUpdate
+ */
 class AttributeType extends Entity
 {
     #region [Properties]

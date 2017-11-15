@@ -17,6 +17,10 @@ use SphereMall\MS\Entities\OrderItem;
 class OrderItemsMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return OrderItem
+     */
     protected function doCreateObject(array $array)
     {
         $orderItem = new OrderItem($array);

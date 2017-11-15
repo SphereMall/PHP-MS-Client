@@ -13,6 +13,18 @@ namespace SphereMall\MS\Entities;
  * Class Address
  * @package SphereMall\MS\Entities
  * @property int $id
+ * @property int $userId
+ * @property string $name
+ * @property string $surname
+ * @property string $email
+ * @property string $countryName
+ * @property string $cityName
+ * @property string $street
+ * @property string $zipCode
+ * @property string $phoneNumber
+ * @property string $companyName
+ * @property string $clientNumber
+ * @property string $state
  */
 class Address extends Entity
 {

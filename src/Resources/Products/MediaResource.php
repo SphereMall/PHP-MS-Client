@@ -9,9 +9,18 @@
 
 namespace SphereMall\MS\Resources\Products;
 
+use SphereMall\MS\Entities\Media;
 use SphereMall\MS\Resources\Resource;
 
-class ImagesResource extends Resource
+/**
+ * Class ImagesResource
+ * @package SphereMall\MS\Resources\Products
+ * @method Media get(int $id)
+ * @method Media[] all()
+ * @method Media update()
+ * @method Media create()
+ */
+class MediaResource extends Resource
 {
     public function getURI()
     {

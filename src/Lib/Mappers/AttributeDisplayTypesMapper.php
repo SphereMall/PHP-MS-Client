@@ -11,6 +11,10 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\AttributeDisplayType;
 
+/**
+ * Class AttributeDisplayTypesMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class AttributeDisplayTypesMapper extends Mapper
 {
     #region [Protected methods]

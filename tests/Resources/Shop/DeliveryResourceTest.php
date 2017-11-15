@@ -7,9 +7,10 @@
  * Time: 20:02
  */
 
-namespace SphereMall\MS\Tests\Resources;
+namespace SphereMall\MS\Tests\Resources\Shop;
 
 use SphereMall\MS\Entities\DeliveryProvider;
+use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class DeliveryResourceTest extends SetUpResourceTest
 {
@@ -17,7 +18,7 @@ class DeliveryResourceTest extends SetUpResourceTest
     public function testDeliveryGetList()
     {
         $deliveryProviders = $this->client->deliveryProviders()->all();
-        $this->assertInstanceOf(DeliveryProvider::class, $deliveryProviders->current());
+        $this->assertInstanceOf(DeliveryProvider::class, $deliveryProviders[0]);
     }
     #endregion
 }

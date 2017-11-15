@@ -24,7 +24,7 @@ class BaseResourceTest extends SetUpResourceTest
         parent::setUp();
         $products = $this->client->products();
         $product = $products->limit(10)->all();
-        $this->entityId = $product->getByIndex(9)->id;
+        $this->entityId = $product[9]->id;
 
     }
     #endregion
@@ -35,7 +35,7 @@ class BaseResourceTest extends SetUpResourceTest
         $products = $this->client->products();
         $productList = $products->all();
 
-        $this->assertEquals(10, $productList->count());
+        $this->assertEquals(10, count($productList));
 
         foreach ($productList as $product) {
             $this->assertInstanceOf(Product::class, $product);
@@ -45,7 +45,7 @@ class BaseResourceTest extends SetUpResourceTest
     public function testGetSingle()
     {
         $products = $this->client->products();
-        $product = $products->get($this->entityId)->current();
+        $product = $products->get($this->entityId);
 
         $this->assertEquals($this->entityId, $product->id);
     }
@@ -56,12 +56,12 @@ class BaseResourceTest extends SetUpResourceTest
 
         //Check limit functionality
         $productList = $products->limit(3, 0)->all();
-        $this->assertEquals(3, $productList->count());
+        $this->assertEquals(3, count($productList));
         $this->assertEquals(3, $products->getLimit());
         $this->assertEquals(0, $products->getOffset());
 
         $productList = $products->limit(5, 0)->all();
-        $this->assertEquals(5, $productList->count());
+        $this->assertEquals(5, count($productList));
         $this->assertEquals(5, $products->getLimit());
         $this->assertEquals(0, $products->getOffset());
 
@@ -73,7 +73,7 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals(1, $products->getLimit());
         $this->assertEquals(1, $products->getOffset());
 
-        $this->assertEquals($productListOffset1->getByIndex(1)->id, $productListOffset2->getByIndex(0)->id);
+        $this->assertEquals($productListOffset1[1]->id, $productListOffset2[0]->id);
 
         $stat = $this->client->getCallsStatistic();
         $this->assertEquals(5, $stat['amount']);
@@ -83,7 +83,7 @@ class BaseResourceTest extends SetUpResourceTest
     {
         $products1 = $this->client->products();
 
-        $product = $products1->fields(['id', 'title'])->get($this->entityId)->current();
+        $product = $products1->fields(['id', 'title'])->get($this->entityId);
         $this->assertNotNull($product->id);
         $this->assertNotNull($product->title);
         $this->assertNull($product->price);
@@ -92,32 +92,17 @@ class BaseResourceTest extends SetUpResourceTest
 
         $products2 = $this->client->products();
         $products = $products2->fields(['id', 'price'])->limit(2)->all();
-        $this->assertNotNull($products->current()->id);
-        $this->assertNotNull($products->current()->price);
-        $this->assertNull($products->current()->title);
+        $this->assertNotNull($products[0]->id);
+        $this->assertNotNull($products[0]->price);
+        $this->assertNull($products[0]->title);
         $this->assertEquals(['id', 'price'], $products2->getFields());
     }
-
-    /* public function testFilterFullLike()
-     {
-         $products = $this->client->products();
-
-         $product = $products->get($this->entityId);
-         $titleLike = substr($product->title, 2, 5);
-
-         $productTest = $products
-             ->filter(['fullSearch' => $titleLike])
-             ->limit(1)
-             ->all();
-
-         $this->assertContains($titleLike, $productTest->current()->title);
-     }*/
 
     public function testFilterLike()
     {
         $products = $this->client->products();
 
-        $product = $products->get($this->entityId)->current();
+        $product = $products->get($this->entityId);
         $titleLike = substr($product->title, 2, 5);
 
         $productTest = $products
@@ -127,14 +112,14 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertContains($titleLike, $productTest->current()->title);
+        $this->assertContains($titleLike, $productTest[0]->title);
     }
 
     public function testFilterLikeLeft()
     {
         $products = $this->client->products();
 
-        $product = $products->get($this->entityId)->current();
+        $product = $products->get($this->entityId);
         $titleLike = substr($product->title, 5, strlen($product->title) - 1);
 
         $productTest = $products
@@ -144,14 +129,14 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertContains($titleLike, $productTest->current()->title);
+        $this->assertContains($titleLike, $productTest[0]->title);
     }
 
     public function testFilterLikeRight()
     {
         $products = $this->client->products();
 
-        $product = $products->get($this->entityId)->current();
+        $product = $products->get($this->entityId);
         $titleLike = substr($product->title, 0, 5);
 
         $productTest = $products
@@ -161,14 +146,14 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertContains($titleLike, $productTest->current()->title);
+        $this->assertContains($titleLike, $productTest[0]->title);
     }
 
     public function testFilterEqual()
     {
         $products = $this->client->products();
 
-        $product = $products->get($this->entityId)->current();
+        $product = $products->get($this->entityId);
         $titleLike = $product->title;
 
         $productTest = $products
@@ -178,7 +163,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertEquals($titleLike, $productTest->current()->title);
+        $this->assertEquals($titleLike, $productTest[0]->title);
     }
 
     public function testFilterNotEqual()
@@ -193,7 +178,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertNotEquals($titleLike, $productTest->current()->title);
+        $this->assertNotEquals($titleLike, $productTest[0]->title);
     }
 
     public function testFilterGreaterThan()
@@ -207,7 +192,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertGreaterThan(60000, $productTest->current()->price);
+        $this->assertGreaterThan(60000, $productTest[0]->price);
     }
 
     public function testFilterLessThan()
@@ -221,7 +206,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertLessThan(60000, $productTest->current()->price);
+        $this->assertLessThan(60000, $productTest[0]->price);
     }
 
     public function testFilterGreaterOrEqualThan()
@@ -235,7 +220,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertGreaterThanOrEqual(60000, $productTest->current()->price);
+        $this->assertGreaterThanOrEqual(60000, $productTest[0]->price);
     }
 
     public function testFilterLessOrEqualThan()
@@ -249,7 +234,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertLessThanOrEqual(60000, $productTest->current()->price);
+        $this->assertLessThanOrEqual(60000, $productTest[0]->price);
     }
 
     public function testFilterIsNull()
@@ -263,7 +248,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(1)
             ->all();
 
-        $this->assertNull($productTest->current()->titleMask);
+        $this->assertNull($productTest[0]->titleMask);
     }
 
     public function testIn()
@@ -272,15 +257,13 @@ class BaseResourceTest extends SetUpResourceTest
         $productList = $products->limit(2)->all();
 
         $productsTest = $products
-            ->in('title', [$productList->current()->title, $productList->getByIndex(1)->title])
+            ->in('title', [$productList[0]->title, $productList[1]->title])
             ->all();
 
         $this->assertCount(2, $productsTest);
 
-        $this->assertEquals($productList->current()->title, $productsTest->current()->title);
-        $productList->next();
-        $productsTest->next();
-        $this->assertEquals($productList->current()->title, $productsTest->current()->title);
+        $this->assertEquals($productList[0]->title, $productsTest[0]->title);
+        $this->assertEquals($productList[1]->title, $productsTest[1]->title);
     }
 
     public function testSort()
@@ -317,7 +300,7 @@ class BaseResourceTest extends SetUpResourceTest
             ->limit(2)
             ->all();
 
-        $this->assertTrue(is_array($products->asArray()));
+        $this->assertTrue(is_array($products));
     }
     #endregion
 }

@@ -12,6 +12,14 @@ namespace SphereMall\MS\Resources\Shop;
 use SphereMall\MS\Lib\Shop\OrderFinalized;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class OrdersResource
+ * @package SphereMall\MS\Resources\Shop
+ * @method OrderFinalized get(int $id)
+ * @method OrderFinalized[] all()
+ * @method OrderFinalized update()
+ * @method OrderFinalized create()
+ */
 class OrdersResource extends Resource
 {
     #region [Override methods]
@@ -34,9 +42,9 @@ class OrdersResource extends Resource
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
 
         $orderCollection = $this->make($response);
-        if ($orderCollection->count()) {
+        if ($orderCollection) {
             $orderFinalized = new OrderFinalized($this->client);
-            $orderFinalized->setOrderData($orderCollection->current());
+            $orderFinalized->setOrderData($orderCollection[0]);
             return $orderFinalized;
         }
 

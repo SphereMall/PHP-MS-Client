@@ -9,6 +9,13 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class FunctionalName
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property string $code
+ * @property string $title
+ */
 class FunctionalName extends Entity
 {
     #region [Properties]

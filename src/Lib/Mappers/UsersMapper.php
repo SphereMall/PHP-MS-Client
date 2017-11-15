@@ -11,13 +11,20 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\User;
 
+/**
+ * Class UsersMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class UsersMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return User
+     */
     protected function doCreateObject(array $array)
     {
-        $user = new User($array);
-        return $user;
+        return new User($array);
     }
     #endregion
 }

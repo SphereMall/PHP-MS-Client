@@ -7,14 +7,15 @@
  * Time: 20:02
  */
 
-namespace SphereMall\MS\Tests\Resources;
+namespace SphereMall\MS\Tests\Resources\Products;
 
 use SphereMall\MS\Entities\AttributeGroup;
+use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class AttributeGroupsResourceTest extends SetUpResourceTest
 {
     #region [Test methods]
-    public function testBrandsServiceGetList()
+    public function testServiceGetList()
     {
         $attributeGroups = $this->client->attributeGroups();
         $list = $attributeGroups->all();

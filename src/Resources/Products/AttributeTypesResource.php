@@ -9,8 +9,17 @@
 
 namespace SphereMall\MS\Resources\Products;
 
+use SphereMall\MS\Entities\AttributeType;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class AttributeTypesResource
+ * @package SphereMall\MS\Resources\Products
+ * @method AttributeType get(int $id)
+ * @method AttributeType[] all()
+ * @method AttributeType update()
+ * @method AttributeType create()
+ */
 class AttributeTypesResource extends Resource
 {
     public function getURI()

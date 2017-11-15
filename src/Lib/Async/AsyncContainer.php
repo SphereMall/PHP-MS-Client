@@ -100,7 +100,7 @@ class AsyncContainer
                         call_user_func($this->client->afterAPICall, $response);
                     }
 
-                    $result[$key] = $return['maker']->make($response);
+                    $result[$key] = $return['maker']->make($response, $return['returnArray']);
 
                 }
             },

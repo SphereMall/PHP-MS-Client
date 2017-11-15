@@ -9,6 +9,21 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class User
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property string $email
+ * @property string $password
+ * @property string $name
+ * @property string $surname
+ * @property int $active
+ * @property string $guid
+ * @property string $avatar
+ * @property int $defaultAddressId
+ * @property int $langId
+ * @property int $basketId
+ */
 class User extends Entity
 {
     #region [Properties]

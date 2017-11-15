@@ -9,6 +9,12 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class AttributeDisplayType
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property string $name
+ */
 class AttributeDisplayType extends Entity
 {
     #region [Properties]

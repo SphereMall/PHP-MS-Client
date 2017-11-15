@@ -11,6 +11,10 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\AttributeType;
 
+/**
+ * Class AttributeTypesMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class AttributeTypesMapper extends Mapper
 {
     #region [Protected methods]
@@ -20,8 +24,7 @@ class AttributeTypesMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        $attributeType = new AttributeType($array);
-        return $attributeType;
+        return new AttributeType($array);
     }
     #endregion
 }

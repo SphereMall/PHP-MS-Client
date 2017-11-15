@@ -9,8 +9,17 @@
 
 namespace SphereMall\MS\Resources\Shop;
 
+use SphereMall\MS\Entities\PaymentMethod;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class PaymentMethodsResource
+ * @package SphereMall\MS\Resources\Shop
+ * @method PaymentMethod get(int $id)
+ * @method PaymentMethod[] all()
+ * @method PaymentMethod update()
+ * @method PaymentMethod create()
+ */
 class PaymentMethodsResource extends Resource
 {
     #region [Override methods]

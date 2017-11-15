@@ -11,13 +11,20 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\FunctionalName;
 
+/**
+ * Class FunctionalNamesMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class FunctionalNamesMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return FunctionalName
+     */
     protected function doCreateObject(array $array)
     {
-        $media = new FunctionalName($array);
-        return $media;
+        return new FunctionalName($array);
     }
     #endregion
 }

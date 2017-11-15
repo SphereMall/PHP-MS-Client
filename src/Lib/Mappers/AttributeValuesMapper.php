@@ -11,13 +11,20 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\AttributeValue;
 
+/**
+ * Class AttributeValuesMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class AttributeValuesMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return AttributeValue
+     */
     protected function doCreateObject(array $array)
     {
-        $attributeValue = new AttributeValue($array);
-        return $attributeValue;
+        return new AttributeValue($array);
     }
     #endregion
 }

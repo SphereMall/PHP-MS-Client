@@ -23,11 +23,11 @@ class OrderTest extends SetUpResourceTest
         $basket = $this->client->basket();
         $this->assertInstanceOf(Basket::class, $basket);
 
-        $product = $this->client->products()->limit(1)->all()->current();
+        $product = $this->client->products()->limit(1)->all();
         $basket->add([
             'products' => [
                 [
-                    'id'     => $product->id,
+                    'id'     => $product[0]->id,
                     'amount' => 1,
                 ],
             ],

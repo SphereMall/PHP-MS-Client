@@ -9,6 +9,12 @@
 
 namespace SphereMall\MS\Entities;
 
+/**
+ * Class Media
+ * @package SphereMall\MS\Entities
+ * @property int $id
+ * @property string $path
+ */
 class Media extends Entity
 {
     #region [Properties]

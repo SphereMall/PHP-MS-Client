@@ -9,9 +9,17 @@
 
 namespace SphereMall\MS\Resources\Products;
 
-use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class ProductsResource
+ * @package SphereMall\MS\Resources\Products
+ * @method Product get(int $id)
+ * @method Product[] all()
+ * @method Product update()
+ * @method Product create()
+ */
 class ProductsResource extends Resource
 {
     #region [Override methods]
@@ -25,7 +33,7 @@ class ProductsResource extends Resource
     /**
      * Get list of entities
      * @param null|int|string $param
-     * @return Collection
+     * @return Product[]
      */
     public function full($param = null)
     {

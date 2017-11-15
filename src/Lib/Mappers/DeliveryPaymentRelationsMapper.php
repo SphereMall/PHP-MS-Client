@@ -11,13 +11,20 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\DeliveryPaymentRelation;
 
+/**
+ * Class DeliveryPaymentRelationsMapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 class DeliveryPaymentRelationsMapper extends Mapper
 {
     #region [Protected methods]
+    /**
+     * @param array $array
+     * @return DeliveryPaymentRelation
+     */
     protected function doCreateObject(array $array)
     {
-        $paymentMethod = new DeliveryPaymentRelation($array);
-        return $paymentMethod;
+        return new DeliveryPaymentRelation($array);
     }
     #endregion
 }

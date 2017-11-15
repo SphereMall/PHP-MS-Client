@@ -14,6 +14,16 @@ namespace SphereMall\MS\Entities;
  * @package SphereMall\MS\Entities
  * @property int $id
  * @property int $orderId
+ * @property int $amount
+ * @property int $promotionId
+ * @property string $compound
+ * @property int $itemPrice
+ * @property int $itemDiscountPrice
+ * @property int $itemPriceWithDiscount
+ * @property int $vatId
+ * @property int $itemVatPrice
+ * @property int $itemVatExcludedPrice
+ * @property int $totalPrice
  * @property Product $product
  */
 class OrderItem extends Entity

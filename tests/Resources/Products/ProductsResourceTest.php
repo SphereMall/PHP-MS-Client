@@ -7,22 +7,27 @@
  * Time: 20:02
  */
 
-namespace SphereMall\MS\Tests\Resources;
+namespace SphereMall\MS\Tests\Resources\Products;
 
 use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class ProductsResourceTest extends SetUpResourceTest
 {
     #region [Test methods]
-    public function testProductServiceGetList()
+    public function testServiceGetList()
     {
         $products = $this->client->products();
-        $productList = $products->all();
+        $productArray = $products->all();
+        $productList = new Collection($productArray);
 
         $this->assertEquals(10, $productList->count());
 
         $ids[] = $productList->current()->id;
-        $productList = $products->ids($ids)->all();
+        $productArray = $products->ids($ids)->all();
+        $productList = new Collection($productArray);
+
         $this->assertEquals(1, $productList->count());
         $this->assertEquals($ids, $products->getIds());
 
@@ -38,7 +43,7 @@ class ProductsResourceTest extends SetUpResourceTest
             ->limit(2)
             ->full();
 
-        $this->assertEquals(2, $products->count());
+        $this->assertEquals(2, count($products));
 
         $products = $this->client
             ->products()
@@ -46,25 +51,25 @@ class ProductsResourceTest extends SetUpResourceTest
             ->ids([6351])
             ->full();
 
-        $this->assertEquals(6351, $products->current()->id);
+        $this->assertEquals(6351, $products[0]->id);
 
         $products = $this->client
             ->products()
             ->full(6351);
 
-        $this->assertEquals(6351, $products->current()->id);
+        $this->assertEquals(6351, $products[0]->id);
 
         $products = $this->client
             ->products()
             ->full('limoen-komkommer-fruitwater');
 
-        $this->assertEquals('limoen-komkommer-fruitwater', $products->current()->urlCode);
+        $this->assertEquals('limoen-komkommer-fruitwater', $products[0]->urlCode);
         $this->assertCount(1, $products);
 
-        $this->assertNotNull($products->current()->attributes);
-        $this->assertNotNull($products->current()->media);
-        $this->assertNotNull($products->current()->brand);
-        $this->assertNotNull($products->current()->functionalName);
+        $this->assertNotNull($products[0]->attributes);
+        $this->assertNotNull($products[0]->media);
+        $this->assertNotNull($products[0]->brand);
+        $this->assertNotNull($products[0]->functionalName);
 
     }
     #endregion
