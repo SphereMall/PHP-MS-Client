@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Users
  * @method Address get(int $id)
  * @method Address[] all()
- * @method Address update()
- * @method Address create()
+ * @method Address update($id, $data)
+ * @method Address create($data)
  */
 class AddressResource extends Resource
 {

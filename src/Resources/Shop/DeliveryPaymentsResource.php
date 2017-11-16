@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Shop
  * @method DeliveryPaymentRelation get(int $id)
  * @method DeliveryPaymentRelation[] all()
- * @method DeliveryPaymentRelation update()
- * @method DeliveryPaymentRelation create()
+ * @method DeliveryPaymentRelation update($id, $data)
+ * @method DeliveryPaymentRelation create($data)
  */
 class DeliveryPaymentsResource extends Resource
 {

@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Products
  * @method EntityAttribute get(int $id)
  * @method EntityAttribute[] all()
- * @method EntityAttribute update()
- * @method EntityAttribute create()
+ * @method EntityAttribute update($id, $data)
+ * @method EntityAttribute create($data)
  */
 class EntityAttributesResource extends Resource
 {

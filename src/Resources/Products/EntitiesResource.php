@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Products
  * @method SMEntity get(int $id)
  * @method SMEntity[] all()
- * @method SMEntity update()
- * @method SMEntity create()
+ * @method SMEntity update($id, $data)
+ * @method SMEntity create($data)
  */
 class EntitiesResource extends Resource
 {

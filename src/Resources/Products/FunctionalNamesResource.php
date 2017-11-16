@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Products
  * @method FunctionalName get(int $id)
  * @method FunctionalName[] all()
- * @method FunctionalName update()
- * @method FunctionalName create()
+ * @method FunctionalName update($id, $data)
+ * @method FunctionalName create($data)
  */
 class FunctionalNamesResource extends Resource
 {

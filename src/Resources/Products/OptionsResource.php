@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Products
  * @method Option get(int $id)
  * @method Option[] all()
- * @method Option update()
- * @method Option create()
+ * @method Option update($id, $data)
+ * @method Option create($data)
  */
 class OptionsResource extends Resource
 {

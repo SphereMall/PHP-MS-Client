@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Shop
  * @method OrderFinalized get(int $id)
  * @method OrderFinalized[] all()
- * @method OrderFinalized update()
- * @method OrderFinalized create()
+ * @method OrderFinalized update($id, $data)
+ * @method OrderFinalized create($data)
  */
 class OrdersResource extends Resource
 {

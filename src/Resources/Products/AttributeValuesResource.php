@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Products
  * @method AttributeValue get(int $id)
  * @method AttributeValue[] all()
- * @method AttributeValue update()
- * @method AttributeValue create()
+ * @method AttributeValue update($id, $data)
+ * @method AttributeValue create($data)
  */
 class AttributeValuesResource extends Resource
 {

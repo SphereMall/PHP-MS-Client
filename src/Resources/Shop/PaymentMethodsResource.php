@@ -17,8 +17,8 @@ use SphereMall\MS\Resources\Resource;
  * @package SphereMall\MS\Resources\Shop
  * @method PaymentMethod get(int $id)
  * @method PaymentMethod[] all()
- * @method PaymentMethod update()
- * @method PaymentMethod create()
+ * @method PaymentMethod update($id, $data)
+ * @method PaymentMethod create($data)
  */
 class PaymentMethodsResource extends Resource
 {
