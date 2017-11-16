@@ -5,7 +5,7 @@ Official PHP SDK for integrating with **SphereMall Product**.
 ### Version 1.0.2
 #### Supported microservices
 * Gateway 1.1.1
-* Product 1.1.0
+* Products 1.1.0
 * Shop 1.0.1
 * Users 1.0.0
 
