@@ -69,8 +69,8 @@ class UsersResource extends Resource
     public function unsubscribe(string $guid)
     {
         $userList = $this->fields(['isSubscriber'])
-                     ->filter(['guid' => [FilterOperators::EQUAL => $guid]])
-                     ->all();
+                         ->filter(['guid' => [FilterOperators::EQUAL => $guid]])
+                         ->all();
 
         if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
             return false;

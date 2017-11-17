@@ -78,7 +78,7 @@ class UsersResourceTest extends SetUpResourceTest
 
         $user = $users->create([
             'email'        => $email,
-            "guid"=> Guid::Generate(),
+            "guid"         => Guid::Generate(),
             'isSubscriber' => 1
         ]);
 
