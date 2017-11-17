@@ -10,6 +10,8 @@
 namespace SphereMall\MS\Resources\Users;
 
 use SphereMall\MS\Entities\User;
+use SphereMall\MS\Lib\Specifications\Users\IsUserEmail;
+use SphereMall\MS\Lib\Specifications\Users\IsUserSubscriber;
 use SphereMall\MS\Resources\Resource;
 
 /**
@@ -26,6 +28,35 @@ class UsersResource extends Resource
     public function getURI()
     {
         return "users";
+    }
+
+    /**
+     * Subscribe user
+     * @see $properties
+     * @param $email
+     * @return bool
+     */
+    public function subscribe(string $email)
+    {
+        $userList = $this->filter(new IsUserEmail($email))
+                         ->limit(1)
+                         ->all();
+
+        $user = $userList[0] ?? new User(['email' => $email, 'isSubscriber' => 1]);
+
+        if ((new IsUserSubscriber())->isSatisfiedBy($user)) {
+            return false;
+        }
+
+        if ($user->id) {
+            $this->update($user->id, ['isSubscriber' => 1]);
+
+            return true;
+        }
+
+        $this->create($user);
+
+        return true;
     }
     #endregion
 }
