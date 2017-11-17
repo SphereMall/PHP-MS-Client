@@ -18,43 +18,43 @@ class IsUserRegisteredTest extends SetUpResourceTest
     #region [Test methods]
     public function testIsUserRegisteredSpecificationSingle()
     {
-        $encodedPass = md5($this->password);
+        $hash = password_hash($this->password, PASSWORD_DEFAULT);
 
         // create new user
         $resource = $this->client->users();
         $user = $resource->create([
             'email' => $this->email,
-            'password' => $encodedPass
+            'password' => $hash
         ]);
         $this->testUserId = $user->id;
         $this->assertEquals($this->email, $user->email);
-        $this->assertEquals($encodedPass, $user->password);
+        $this->assertEquals($hash, $user->password);
 
         // check spec
-        $spec = new IsUserRegistered($this->email, $this->password);
+        $spec = new IsUserRegistered($this->email, $this->password, $hash);
         $this->assertTrue($spec->isSatisfiedBy($user));
     }
 
     public function testIsUserRegisteredSpecificationList()
     {
-        $encodedPass = md5($this->password);
+        $hash = password_hash($this->password, PASSWORD_DEFAULT);
 
         // create new user
         $resource = $this->client->users();
         $user = $resource->create([
             'email' => $this->email,
-            'password' => $encodedPass
+            'password' => $hash
         ]);
         $this->testUserId = $user->id;
         $this->assertEquals($this->email, $user->email);
-        $this->assertEquals($encodedPass, $user->password);
+        $this->assertEquals($hash, $user->password);
 
         // check spec
         $users = $resource
             ->limit(10)
             ->all();
 
-        $spec = new IsUserRegistered($this->email, $this->password);
+        $spec = new IsUserRegistered($this->email, $this->password, $hash);
 
         foreach ($users as $user) {
             if($user->email === $this->email) {
