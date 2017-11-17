@@ -59,6 +59,12 @@ class UsersResource extends Resource
         return true;
     }
 
+    /**
+     * Unsubscribe user
+     * @see $properties
+     * @param $id
+     * @return bool
+     */
     public function unsubscribe(int $id)
     {
         $user = $this->fields(['isSubscriber'])
