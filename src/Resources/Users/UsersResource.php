@@ -58,5 +58,19 @@ class UsersResource extends Resource
 
         return true;
     }
+
+    public function unsubscribe(int $id)
+    {
+        $user = $this->fields(['isSubscriber'])
+                     ->get($id);
+
+        if (!(new IsUserSubscriber())->isSatisfiedBy($user)) {
+            return false;
+        }
+
+        $this->update($user->id, ['isSubscriber' => 0]);
+
+        return true;
+    }
     #endregion
 }

@@ -36,7 +36,7 @@ class UsersResourceTest extends SetUpResourceTest
                           ->limit(1)
                           ->all();
 
-        if (!isset($userList[0]) || (isset($userList[0]) && !(new IsUserSubscriber())->isSatisfiedBy($userList[0]))) {
+        if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
             $this->assertTrue($users->subscribe($email));
         }
 
@@ -67,5 +67,37 @@ class UsersResourceTest extends SetUpResourceTest
         $this->assertTrue($users->delete($user->id));
 
     }
+
+    public function testUnsubscribeUser()
+    {
+
+        $email = 'test@test.com';
+
+        $users = $this->client->users();
+
+        $user = $users->create([
+            'email'        => $email,
+            'isSubscriber' => 1
+        ]);
+
+        $this->assertTrue($users->unsubscribe($user->id));
+        $this->assertTrue($users->delete($user->id));
+    }
+
+    public function testUnsubscribeUserIfNotExistOrNotSubscriber()
+    {
+        $email = 'test@test.com';
+
+        $users = $this->client->users();
+        $userList = $users->filter(new IsUserEmail($email))
+                          ->limit(1)
+                          ->all();
+
+        if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
+            $this->assertFalse($users->unsubscribe(0));
+        }
+
+    }
+
     #endregion
 }
