@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Tests\Resources\Users;
 
 use SphereMall\MS\Entities\User;
+use SphereMall\MS\Lib\Helpers\Guid;
 use SphereMall\MS\Lib\Specifications\Users\IsUserEmail;
 use SphereMall\MS\Lib\Specifications\Users\IsUserSubscriber;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
@@ -77,10 +78,11 @@ class UsersResourceTest extends SetUpResourceTest
 
         $user = $users->create([
             'email'        => $email,
+            "guid"=> Guid::Generate(),
             'isSubscriber' => 1
         ]);
 
-        $this->assertTrue($users->unsubscribe($user->id));
+        $this->assertTrue($users->unsubscribe($user->guid));
         $this->assertTrue($users->delete($user->id));
     }
 
@@ -94,7 +96,7 @@ class UsersResourceTest extends SetUpResourceTest
                           ->all();
 
         if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
-            $this->assertFalse($users->unsubscribe(0));
+            $this->assertFalse($users->unsubscribe('0'));
         }
 
     }

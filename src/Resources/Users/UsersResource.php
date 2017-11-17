@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Resources\Users;
 
 use SphereMall\MS\Entities\User;
+use SphereMall\MS\Lib\Filters\FilterOperators;
 use SphereMall\MS\Lib\Specifications\Users\IsUserEmail;
 use SphereMall\MS\Lib\Specifications\Users\IsUserSubscriber;
 use SphereMall\MS\Resources\Resource;
@@ -62,19 +63,20 @@ class UsersResource extends Resource
     /**
      * Unsubscribe user
      * @see $properties
-     * @param $id
+     * @param $guid
      * @return bool
      */
-    public function unsubscribe(int $id)
+    public function unsubscribe(string $guid)
     {
-        $user = $this->fields(['isSubscriber'])
-                     ->get($id);
+        $userList = $this->fields(['isSubscriber'])
+                     ->filter(['guid' => [FilterOperators::EQUAL => $guid]])
+                     ->all();
 
-        if (!(new IsUserSubscriber())->isSatisfiedBy($user)) {
+        if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
             return false;
         }
 
-        $this->update($user->id, ['isSubscriber' => 0]);
+        $this->update($userList[0]->id, ['isSubscriber' => 0]);
 
         return true;
     }
