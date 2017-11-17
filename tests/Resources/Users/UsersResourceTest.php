@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Tests\Resources\Users;
 
 use SphereMall\MS\Entities\User;
+use SphereMall\MS\Lib\Helpers\Guid;
 use SphereMall\MS\Lib\Specifications\Users\IsUserEmail;
 use SphereMall\MS\Lib\Specifications\Users\IsUserSubscriber;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
@@ -36,8 +37,8 @@ class UsersResourceTest extends SetUpResourceTest
                           ->limit(1)
                           ->all();
 
-        if (!isset($userList[0]) || (isset($userList[0]) && !(new IsUserSubscriber())->isSatisfiedBy($userList[0]))) {
-            $this->assertTrue($users->subscribe($email));
+        if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
+            $this->assertInstanceOf(User::class, $users->subscribe($email));
         }
 
         $userList = $users->filter(new IsUserEmail($email))
@@ -63,9 +64,42 @@ class UsersResourceTest extends SetUpResourceTest
         $this->assertEquals(1, $user->isSubscriber);
         $this->assertEquals($email, $user->email);
 
-        $this->assertFalse($users->subscribe($email));
+        $this->assertNull($users->subscribe($email));
         $this->assertTrue($users->delete($user->id));
 
     }
+
+    public function testUnsubscribeUser()
+    {
+
+        $email = 'test@test.com';
+
+        $users = $this->client->users();
+
+        $user = $users->create([
+            'email'        => $email,
+            "guid"         => Guid::Generate(),
+            'isSubscriber' => 1
+        ]);
+
+        $this->assertInstanceOf(User::class, $users->unsubscribe($user->guid));
+        $this->assertTrue($users->delete($user->id));
+    }
+
+    public function testUnsubscribeUserIfNotExistOrNotSubscriber()
+    {
+        $email = 'test@test.com';
+
+        $users = $this->client->users();
+        $userList = $users->filter(new IsUserEmail($email))
+                          ->limit(1)
+                          ->all();
+
+        if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
+            $this->assertNull($users->unsubscribe('0'));
+        }
+
+    }
+
     #endregion
 }
