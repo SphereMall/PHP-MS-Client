@@ -18,6 +18,7 @@ namespace SphereMall\MS\Entities;
  * @property string $name
  * @property string $surname
  * @property int $active
+ * @property int $isSubscriber
  * @property string $guid
  * @property string $avatar
  * @property int $defaultAddressId
@@ -33,6 +34,7 @@ class User extends Entity
     public $name;
     public $surname;
     public $active;
+    public $isSubscriber;
     public $guid;
     public $avatar;
 
