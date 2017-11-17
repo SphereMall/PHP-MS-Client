@@ -11,6 +11,7 @@ namespace SphereMall\MS\Resources\Users;
 
 use SphereMall\MS\Entities\User;
 use SphereMall\MS\Lib\Filters\FilterOperators;
+use SphereMall\MS\Lib\Helpers\Guid;
 use SphereMall\MS\Lib\Specifications\Users\IsUserEmail;
 use SphereMall\MS\Lib\Specifications\Users\IsUserSubscriber;
 use SphereMall\MS\Resources\Resource;
@@ -35,50 +36,52 @@ class UsersResource extends Resource
      * Subscribe user
      * @see $properties
      * @param $email
-     * @return bool
+     * @param $name
+     * @return User|null
      */
-    public function subscribe(string $email)
+    public function subscribe(string $email, string $name = '')
     {
         $userList = $this->filter(new IsUserEmail($email))
                          ->limit(1)
                          ->all();
 
-        $user = $userList[0] ?? new User(['email' => $email, 'isSubscriber' => 1]);
+        $user = $userList[0] ?? new User([
+                'email'        => $email,
+                'name'         => $name,
+                'guid'         => Guid::Generate(),
+                'isSubscriber' => 1
+            ]);
 
         if ((new IsUserSubscriber())->isSatisfiedBy($user)) {
-            return false;
+            return null;
         }
 
         if ($user->id) {
-            $this->update($user->id, ['isSubscriber' => 1]);
+            return $this->update($user->id, ['isSubscriber' => 1]);
 
-            return true;
         }
 
-        $this->create($user);
-
-        return true;
+        return $this->create($user);
     }
 
     /**
      * Unsubscribe user
      * @see $properties
      * @param $guid
-     * @return bool
+     * @return User|null
      */
     public function unsubscribe(string $guid)
     {
         $userList = $this->fields(['isSubscriber'])
                          ->filter(['guid' => [FilterOperators::EQUAL => $guid]])
+                         ->limit(1)
                          ->all();
 
         if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
-            return false;
+            return null;
         }
 
-        $this->update($userList[0]->id, ['isSubscriber' => 0]);
-
-        return true;
+        return $this->update($userList[0]->id, ['isSubscriber' => 0]);
     }
     #endregion
 }

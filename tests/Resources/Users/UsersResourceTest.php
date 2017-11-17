@@ -38,7 +38,7 @@ class UsersResourceTest extends SetUpResourceTest
                           ->all();
 
         if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
-            $this->assertTrue($users->subscribe($email));
+            $this->assertInstanceOf(User::class, $users->subscribe($email));
         }
 
         $userList = $users->filter(new IsUserEmail($email))
@@ -64,7 +64,7 @@ class UsersResourceTest extends SetUpResourceTest
         $this->assertEquals(1, $user->isSubscriber);
         $this->assertEquals($email, $user->email);
 
-        $this->assertFalse($users->subscribe($email));
+        $this->assertNull($users->subscribe($email));
         $this->assertTrue($users->delete($user->id));
 
     }
@@ -82,7 +82,7 @@ class UsersResourceTest extends SetUpResourceTest
             'isSubscriber' => 1
         ]);
 
-        $this->assertTrue($users->unsubscribe($user->guid));
+        $this->assertInstanceOf(User::class, $users->unsubscribe($user->guid));
         $this->assertTrue($users->delete($user->id));
     }
 
@@ -96,7 +96,7 @@ class UsersResourceTest extends SetUpResourceTest
                           ->all();
 
         if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
-            $this->assertFalse($users->unsubscribe('0'));
+            $this->assertNull($users->unsubscribe('0'));
         }
 
     }
