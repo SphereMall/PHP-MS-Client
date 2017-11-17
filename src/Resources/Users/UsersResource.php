@@ -42,13 +42,13 @@ class UsersResource extends Resource
                          ->limit(1)
                          ->all();
 
-        $user = $userList[0] ?? new User(['email'=>$email, 'isSubscriber'=>1]);
+        $user = $userList[0] ?? new User(['email' => $email, 'isSubscriber' => 1]);
 
-        if((new IsUserSubscriber())->isSatisfiedBy($user)){
+        if ((new IsUserSubscriber())->isSatisfiedBy($user)) {
             return false;
         }
 
-        if($user->id) {
+        if ($user->id) {
             $this->update($user->id, ['isSubscriber' => 1]);
 
             return true;

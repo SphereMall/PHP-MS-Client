@@ -36,7 +36,7 @@ class UsersResourceTest extends SetUpResourceTest
                           ->limit(1)
                           ->all();
 
-        if(!isset($userList[0]) || (isset($userList[0]) && !(new IsUserSubscriber())->isSatisfiedBy($userList[0]))){
+        if (!isset($userList[0]) || (isset($userList[0]) && !(new IsUserSubscriber())->isSatisfiedBy($userList[0]))) {
             $this->assertTrue($users->subscribe($email));
         }
 
