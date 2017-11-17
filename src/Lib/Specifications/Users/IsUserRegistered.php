@@ -15,14 +15,12 @@ use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
  * @package SphereMall\MS\Lib\Specifications\Basic
  * @property string $email
  * @property string $password
- * @property string $hash result of password_hash for verification
  */
 class IsUserRegistered implements FilterSpecification
 {
     #region [Properties]
     private $email;
     private $password;
-    private $hash;
     #endregion
 
     #region [Constructor]
@@ -30,13 +28,11 @@ class IsUserRegistered implements FilterSpecification
      * IsUserRegistered constructor.
      * @param string $email
      * @param string $password
-     * @param string $hash - needed for verification
      */
-    public function __construct(string $email, string $password, string $hash)
+    public function __construct(string $email, string $password)
     {
         $this->email = $email;
         $this->password = $password;
-        $this->hash = $hash;
     }
     #endregion
 
@@ -58,7 +54,7 @@ class IsUserRegistered implements FilterSpecification
     public function isSatisfiedBy(User $user)
     {
         return $this->email === $user->email &&
-            password_verify($this->password, $this->hash);
+            password_verify($this->password, $user->password);
     }
     #endregion
 }

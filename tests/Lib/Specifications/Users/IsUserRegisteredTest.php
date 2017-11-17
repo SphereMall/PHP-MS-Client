@@ -31,7 +31,7 @@ class IsUserRegisteredTest extends SetUpResourceTest
         $this->assertEquals($hash, $user->password);
 
         // check spec
-        $spec = new IsUserRegistered($this->email, $this->password, $hash);
+        $spec = new IsUserRegistered($this->email, $this->password);
         $this->assertTrue($spec->isSatisfiedBy($user));
     }
 
@@ -54,7 +54,7 @@ class IsUserRegisteredTest extends SetUpResourceTest
             ->limit(10)
             ->all();
 
-        $spec = new IsUserRegistered($this->email, $this->password, $hash);
+        $spec = new IsUserRegistered($this->email, $this->password);
 
         foreach ($users as $user) {
             if($user->email === $this->email) {
