@@ -98,6 +98,25 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals(['id', 'price'], $products2->getFields());
     }
 
+    public function testMultipleFilter()
+    {
+        $products = $this->client->products();
+
+        $product = $products->get($this->entityId);
+        $titleLike = substr($product->title, 2, 5);
+
+        $productTest = $products
+            ->filter([
+                'title' => [FilterOperators::LIKE => $titleLike],
+                'price' => [FilterOperators::GREATER_THAN_OR_EQUAL => 100],
+            ])
+            ->limit(1)
+            ->all();
+
+        $this->assertContains($titleLike, $productTest[0]->title);
+        $this->assertGreaterThanOrEqual(100, $productTest[0]->price);
+    }
+
     public function testFilterLike()
     {
         $products = $this->client->products();

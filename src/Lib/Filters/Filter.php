@@ -125,7 +125,7 @@ class Filter
             }
 
         }
-        return implode(':', $set);
+        return sprintf("[%s]", implode(',', $set));
     }
 
     /**
