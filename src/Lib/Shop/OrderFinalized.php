@@ -13,6 +13,7 @@ use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Address;
 use SphereMall\MS\Entities\DeliveryProvider;
 use SphereMall\MS\Entities\Order;
+use SphereMall\MS\Entities\OrderItem;
 use SphereMall\MS\Entities\User;
 use SphereMall\MS\Lib\Async\AsyncContainer;
 use SphereMall\MS\Lib\Collection;
@@ -23,7 +24,7 @@ use SphereMall\MS\Lib\Collection;
  * @property Client $client
  * @property int $id
  * @property string $orderId
- * @property Collection $items
+ * @property OrderItem[] $items
  * @property Delivery $delivery
  * @property Address $shippingAddress
  * @property Address $billingAddress

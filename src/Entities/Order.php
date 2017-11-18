@@ -33,9 +33,9 @@ namespace SphereMall\MS\Entities;
  * @property int $subTotalPrice
  * @property int $totalPrice
  * @property int $totalPriceWithoutDelivery
- * @property array $items
+ * @property OrderItem[] $items
  * @property string $createdDate
- * @property array $updateDate
+ * @property string $updateDate
  */
 class Order extends Entity
 {
