@@ -22,5 +22,6 @@ class DeliveryProvider extends Entity
     public $id;
     public $name;
     public $cost;
+    public $visible;
     #endregion
 }
