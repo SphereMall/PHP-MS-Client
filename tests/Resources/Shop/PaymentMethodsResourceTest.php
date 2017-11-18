@@ -20,9 +20,9 @@ class PaymentMethodsResourceTest extends SetUpResourceTest
         $paymentMethods = $this->client->paymentMethods();
         $methods = $paymentMethods->all();
 
-        foreach ($methods as $method) {
-            $this->assertInstanceOf(PaymentMethod::class, $method);
-        }
+            foreach ($methods as $method) {
+                $this->assertInstanceOf(PaymentMethod::class, $method);
+            }
     }
 
     #endregion

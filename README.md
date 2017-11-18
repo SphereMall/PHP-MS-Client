@@ -8,7 +8,7 @@ Official PHP SDK for integrating with **SphereMall Product**.
 * Products 1.1.0
 * Shop 1.0.1
 * Users 1.0.0
-
+* Grapher 1.0.0
 
 ## Installation
 You can install the package manually or by adding it to your `composer.json`:

@@ -65,7 +65,7 @@ class Filter
             }
 
             foreach ($rules as $operator => $value) {
-                if (!in_array($operator, $this->availableFilters) || empty($value)) {
+                if (!in_array($operator, $this->availableFilters) || (empty($value) && $value != '0')) {
                     continue;
                 }
                 $this->addFilter($field, $operator, $value);
@@ -85,7 +85,7 @@ class Filter
      */
     public function addFilter($field, $operator, $value)
     {
-        if (!empty($field) && !empty($value)) {
+        if (!empty($field) && (!empty($value) || $value == '0')) {
             if (!is_null($operator)) {
                 $this->filters[$field][$operator] = $value;
             } else {

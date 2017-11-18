@@ -10,7 +10,6 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
-use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
 use SphereMall\MS\Resources\Products\AttributeTypesResource;
@@ -18,21 +17,29 @@ use SphereMall\MS\Resources\Products\EntitiesResource;
 use SphereMall\MS\Resources\Products\EntityAttributesResource;
 use SphereMall\MS\Resources\Products\MediaTypesResource;
 use SphereMall\MS\Resources\Products\OptionsResource;
-use SphereMall\MS\Resources\Users\AddressResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsResource;
 use SphereMall\MS\Resources\Products\AttributesResource;
 use SphereMall\MS\Resources\Products\AttributeValuesResource;
-use SphereMall\MS\Resources\Shop\BasketResource;
 use SphereMall\MS\Resources\Products\BrandsResource;
-use SphereMall\MS\Resources\Shop\DeliveryPaymentsResource;
-use SphereMall\MS\Resources\Shop\DeliveryProvidersResource;
 use SphereMall\MS\Resources\Products\FunctionalNamesResource;
 use SphereMall\MS\Resources\Products\MediaResource;
-use SphereMall\MS\Resources\Shop\OrdersResource;
-use SphereMall\MS\Resources\Shop\PaymentMethodsResource;
 use SphereMall\MS\Resources\Products\ProductAttributeValuesResource;
 use SphereMall\MS\Resources\Products\ProductsResource;
+use SphereMall\MS\Resources\Users\AddressResource;
+use SphereMall\MS\Resources\Users\CompaniesResource;
 use SphereMall\MS\Resources\Users\UsersResource;
+use SphereMall\MS\Lib\Shop\Basket;
+use SphereMall\MS\Resources\Shop\OrdersResource;
+use SphereMall\MS\Resources\Shop\PaymentMethodsResource;
+use SphereMall\MS\Resources\Shop\DeliveryPaymentsResource;
+use SphereMall\MS\Resources\Shop\DeliveryProvidersResource;
+use SphereMall\MS\Resources\Shop\OrderStatusesResource;
+use SphereMall\MS\Resources\Shop\PaymentProvidersResource;
+use SphereMall\MS\Resources\Shop\BasketResource;
+use SphereMall\MS\Resources\Shop\CurrenciesRateResource;
+use SphereMall\MS\Resources\Shop\CurrenciesResource;
+use SphereMall\MS\Resources\Shop\VatsResource;
+use SphereMall\MS\Resources\Grapher\GridResource;
 
 /**
  * Trait ServiceInjector
@@ -241,6 +248,52 @@ trait ServiceInjector
         /** @var Client $this */
         return new DeliveryPaymentsResource($this);
     }
+
+    /**
+     * @return OrderStatusesResource
+     */
+    public function orderStatuses()
+    {
+        /** @var Client $this */
+        return new OrderStatusesResource($this);
+    }
+
+    /**
+     * @return PaymentProvidersResource
+     */
+    public function paymentProviders()
+    {
+        /** @var Client $this */
+        return new PaymentProvidersResource($this);
+    }
+
+
+    /**
+     * @return VatsResource
+     */
+    public function vats()
+    {
+        /** @var Client $this */
+        return new VatsResource($this);
+    }
+
+    /**
+     * @return CurrenciesResource
+     */
+    public function currencies()
+    {
+        /** @var Client $this */
+        return new CurrenciesResource($this);
+    }
+
+    /**
+     * @return CurrenciesRateResource
+     */
+    public function currenciesRate()
+    {
+        /** @var Client $this */
+        return new CurrenciesRateResource($this);
+    }
     #endregion
 
     #region [Users service]
@@ -260,6 +313,26 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new UsersResource($this);
+    }
+
+    /**
+     * @return CompaniesResource
+     */
+    public function companies()
+    {
+        /** @var Client $this */
+        return new CompaniesResource($this);
+    }
+    #endregion
+
+    #region [Grapher service]
+    /**
+     * @return GridResource
+     */
+    public function grid()
+    {
+        /** @var Client $this */
+        return new GridResource($this);
     }
     #endregion
 }
