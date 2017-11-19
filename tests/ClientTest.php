@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Tests;
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Resources\Products\ProductsResource;
 use SphereMall\MS\Resources\Resource;
 
@@ -50,5 +51,35 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf(Resource::class, $productService);
         $this->assertInstanceOf(ProductsResource::class, $productService);
+    }
+
+    public function testSetVersion()
+    {
+        $client = new Client([
+            'gatewayUrl' => API_GATEWAY_URL,
+            'clientId'   => API_CLIENT_ID,
+            'secretKey'  => API_SECRET_KEY,
+            'version'    => 'testV',
+        ]);
+
+
+        $this->assertEquals('testV', $client->getVersion());
+
+        $client->setVersion('newV');
+        $this->assertEquals('newV', $client->getVersion());
+    }
+
+    public function testAfterApiCall()
+    {
+        $client = new Client([
+            'gatewayUrl' => API_GATEWAY_URL,
+            'clientId'   => API_CLIENT_ID,
+            'secretKey'  => API_SECRET_KEY,
+            'version'    => 'testV',
+        ], null, function(Response $response){
+            $this->assertEquals(200, $response->getStatusCode());
+        });
+
+        $client->products()->limit(1)->all();
     }
 }

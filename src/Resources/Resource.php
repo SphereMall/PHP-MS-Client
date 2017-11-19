@@ -288,7 +288,7 @@ abstract class Resource
     {
         $response = $this->handler->handle('PUT', $data, $id);
         if(!$response->getSuccess()) {
-            throw new EntityNotFoundException($response->getErrors());
+            throw new EntityNotFoundException($response->getErrorMessage());
         }
 
         return $this->make($response, false);
@@ -303,7 +303,7 @@ abstract class Resource
     {
         $response = $this->handler->handle('DELETE', false, $id);
         if(!$response->getSuccess()) {
-            throw new EntityNotFoundException($response->getErrors());
+            throw new EntityNotFoundException($response->getErrorMessage());
         }
 
         return $response->getSuccess();

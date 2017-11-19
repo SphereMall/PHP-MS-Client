@@ -10,7 +10,9 @@
 namespace SphereMall\MS\Tests\Resources;
 
 use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Lib\Filters\FilterOperators;
+use SphereMall\MS\Lib\Specifications\Basic\IsVisible;
 
 class BaseResourceTest extends SetUpResourceTest
 {
@@ -51,12 +53,62 @@ class BaseResourceTest extends SetUpResourceTest
     }
 
     /**
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
+    public function testCreateAndDelete()
+    {
+        $user = $this->client->users()
+            ->create(['name' => 'new user']);
+
+        $this->assertEquals('new user', $user->name);
+
+        $this->client->users()->delete($user->id);
+    }
+
+    /**
+     * @expectedException \SphereMall\MS\Exceptions\EntityNotFoundException
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
+    public function testDeleteException()
+    {
+
+        $this->client->users()->delete(385635638475634);
+    }
+
+    /**
      * @expectedException \SphereMall\MS\Exceptions\EntityNotFoundException
      */
-    public function testCreateUnique()
+    public function testCreateException()
     {
         $this->client->users()
             ->create(['email' => 'test_unique@test.com']);
+    }
+
+    /**
+     * @expectedException \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
+    public function testUpdateException()
+    {
+        $this->client->users()
+            ->update(123234234234,['email' => 'updated']);
+    }
+
+    /**
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
+    public function testCreateAndUpdateAndDelete()
+    {
+        $user = $this->client->users()
+            ->create(['name' => 'new user name']);
+
+        $this->assertEquals('new user name', $user->name);
+
+        $user = $this->client->users()
+            ->update($user->id, ['name' => 'updated name']);
+
+        $this->assertEquals('updated name', $user->name);
+
+        $this->client->users()->delete($user->id);
     }
 
     public function testLimitOffsetAndAmountOfCalls()
@@ -88,6 +140,12 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals(5, $stat['amount']);
     }
 
+    public function testSetIds()
+    {
+        $products = $this->client->products()->ids([1, 2, 4]);
+        $this->assertEquals([1, 2, 4], $products->getIds());
+    }
+
     public function testFields()
     {
         $products1 = $this->client->products();
@@ -107,6 +165,17 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals(['id', 'price'], $products2->getFields());
     }
 
+    public function testGetFilter()
+    {
+        $products = $this->client->products()->filter([
+            'title' => [FilterOperators::LIKE => 'test']
+        ]);
+
+        $this->assertEquals(new Filter([
+            'title' => [FilterOperators::LIKE => 'test']
+        ]), $products->getFilter());
+    }
+
     public function testMultipleFilter()
     {
         $products = $this->client->products();
@@ -124,6 +193,16 @@ class BaseResourceTest extends SetUpResourceTest
 
         $this->assertContains($titleLike, $productTest[0]->title);
         $this->assertGreaterThanOrEqual(100, $productTest[0]->price);
+    }
+
+    public function testFilterSpecification()
+    {
+        $products = $this->client->products()
+            ->filter(new IsVisible())
+            ->limit(1)
+            ->all();
+
+        $this->assertEquals(1, $products[0]->visible);
     }
 
     public function testFilterLike()
