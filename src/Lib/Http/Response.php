@@ -15,7 +15,7 @@ namespace SphereMall\MS\Lib\Http;
  * @property array $data
  * @property bool $success
  * @property string $version
- * @property string $error
+ * @property array $errors
  * @property array $included
  */
 class Response
@@ -47,12 +47,12 @@ class Response
         try {
             $this->data = $contents['data'];
             $this->success = $contents['success'];
-            $this->error = $contents['error'];
+            $this->errors = $contents['error'];
             $this->version = $contents['ver'];
             $this->included = $contents['included'];
         } catch (\Exception $ex) {
             $this->success = false;
-            $this->error = $ex->getMessage();
+            $this->errors = $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
     }
@@ -76,11 +76,19 @@ class Response
     }
 
     /**
-     * @return string:array
+     * @return array
      */
-    public function getError()
+    public function getErrors()
     {
-        return $this->error;
+        return $this->errors;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorMessage()
+    {
+        return json_encode($this->errors);
     }
 
     /**

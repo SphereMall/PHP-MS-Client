@@ -12,10 +12,9 @@ namespace SphereMall\MS\Exceptions;
 use Exception;
 
 /**
- * Class ConfigurationException
+ * Class EntityNotFoundException
  * @package SphereMall\MS\Exceptions
  */
 class EntityNotFoundException extends Exception
 {
-    
 }

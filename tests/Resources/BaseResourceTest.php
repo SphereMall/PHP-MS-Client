@@ -50,6 +50,15 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals($this->entityId, $product->id);
     }
 
+    /**
+     * @expectedException \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
+    public function testCreateUnique()
+    {
+        $this->client->users()
+            ->create(['email' => 'test_unique@test.com']);
+    }
+
     public function testLimitOffsetAndAmountOfCalls()
     {
         $products = $this->client->products();
@@ -304,7 +313,7 @@ class BaseResourceTest extends SetUpResourceTest
     {
         $products1 = $this->client->products();
         $productCount = $products1->filter([
-            'price' => [FilterOperators::GREATER_THAN_OR_EQUAL=> 60000],
+            'price' => [FilterOperators::GREATER_THAN_OR_EQUAL => 60000],
         ])
             ->limit(2)
             ->sort('title')

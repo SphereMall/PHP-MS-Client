@@ -12,6 +12,7 @@ namespace SphereMall\MS\Resources;
 use GuzzleHttp\Promise\Promise;
 use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Lib\Makers\CountMaker;
@@ -265,10 +266,15 @@ abstract class Resource
     /**
      * @param $data
      * @return Entity
+     * @throws EntityNotFoundException
      */
     public function create($data)
     {
         $response = $this->handler->handle('POST', $data);
+        if(!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getErrorMessage());
+        }
+
         return $this->make($response, false);
     }
 
@@ -276,10 +282,14 @@ abstract class Resource
      * @param $id
      * @param $data
      * @return Entity
+     * @throws EntityNotFoundException
      */
     public function update($id, $data)
     {
         $response = $this->handler->handle('PUT', $data, $id);
+        if(!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getErrors());
+        }
 
         return $this->make($response, false);
     }
@@ -287,10 +297,14 @@ abstract class Resource
     /**
      * @param $id
      * @return bool
+     * @throws EntityNotFoundException
      */
     public function delete($id)
     {
         $response = $this->handler->handle('DELETE', false, $id);
+        if(!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getErrors());
+        }
 
         return $response->getSuccess();
     }
