@@ -14,8 +14,7 @@ abstract class Mapper
     #region [Public methods]
     public function createObject($array)
     {
-        $obj = $this->doCreateObject($array);
-        return $obj;
+        return $this->doCreateObject($array);
     }
     #endregion
 
