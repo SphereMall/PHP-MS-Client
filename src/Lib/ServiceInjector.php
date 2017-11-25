@@ -13,6 +13,7 @@ use SphereMall\MS\Client;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
 use SphereMall\MS\Resources\Products\AttributeTypesResource;
+use SphereMall\MS\Resources\Products\CatalogItemsResource;
 use SphereMall\MS\Resources\Products\EntitiesResource;
 use SphereMall\MS\Resources\Products\EntityAttributesResource;
 use SphereMall\MS\Resources\Products\MediaTypesResource;
@@ -187,6 +188,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new OptionsResource($this);
+    }
+
+    /**
+     * @return CatalogItemsResource
+     */
+    public function catalogItems()
+    {
+        /** @var Client $this */
+        return new CatalogItemsResource($this);
     }
     #endregion
 

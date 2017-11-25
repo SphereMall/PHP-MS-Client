@@ -20,6 +20,7 @@ use SphereMall\MS\Resources\Resource;
  * Class UsersResource
  * @package SphereMall\MS\Resources\Users
  * @method User get(int $id)
+ * @method User first()
  * @method User[] all()
  * @method User update($id, $data)
  * @method User create($data)

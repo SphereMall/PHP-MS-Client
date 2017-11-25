@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class OrdersResource
  * @package SphereMall\MS\Resources\Shop
  * @method OrderFinalized get(int $id)
+ * @method OrderFinalized first()
  * @method OrderFinalized[] all()
  * @method OrderFinalized update($id, $data)
  * @method OrderFinalized create($data)
@@ -31,13 +32,31 @@ class OrdersResource extends Resource
 
     #region [Public methods]
     /**
-     * Get list of entities
+     * Get full order data by orderId
      * @param $orderId
      * @return null|OrderFinalized
      */
-    public function byOrderId($orderId)
+    public function byOrderId(string $orderId)
     {
-        $uriAppend = "byorderid/$orderId";
+        return $this->getOrderByParam("byorderid/$orderId");
+    }
+
+    /**
+     * Get full order data by id
+     * @param int $id
+     * @return null|OrderFinalized
+     */
+    public function byId(int $id)
+    {
+        return $this->getOrderByParam("byid/$id");
+    }
+
+    /**
+     * @param $uriAppend
+     * @return null|OrderFinalized
+     */
+    private function getOrderByParam($uriAppend)
+    {
         $params = $this->getQueryParams();
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
 
@@ -50,5 +69,9 @@ class OrdersResource extends Resource
 
         return null;
     }
+    #endregion
+
+    #region [Private methods]
+
     #endregion
 }

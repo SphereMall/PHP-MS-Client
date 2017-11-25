@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class CurrenciesRateResource
  * @package SphereMall\MS\Resources\Shop
  * @method CurrencyRate get(int $id)
+ * @method CurrencyRate first()
  * @method CurrencyRate[] all()
  * @method CurrencyRate update($id, $data)
  * @method CurrencyRate create($data)

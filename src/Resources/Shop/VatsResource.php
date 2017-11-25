@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class VatsResource
  * @package SphereMall\MS\Resources\Shop
  * @method Vat get(int $id)
+ * @method Vat first()
  * @method Vat[] all()
  * @method Vat update($id, $data)
  * @method Vat create($data)

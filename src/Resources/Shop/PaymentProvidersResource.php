@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class PaymentProvidersResource
  * @package SphereMall\MS\Resources\Shop
  * @method PaymentProvider get(int $id)
+ * @method PaymentProvider first()
  * @method PaymentProvider[] all()
  * @method PaymentProvider update($id, $data)
  * @method PaymentProvider create($data)

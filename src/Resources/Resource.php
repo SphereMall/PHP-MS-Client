@@ -251,6 +251,18 @@ abstract class Resource
     }
 
     /**
+     * Get first entity - limit = 1
+     * @return Entity|null
+     */
+    public function first()
+    {
+        $this->limit(1, 0);
+        $params = $this->getQueryParams();
+        $response = $this->handler->handle('GET', false, 'by', $params);
+        return $this->make($response, false);
+    }
+
+    /**
      * @return int
      */
     public function count()
@@ -271,7 +283,7 @@ abstract class Resource
     public function create($data)
     {
         $response = $this->handler->handle('POST', $data);
-        if(!$response->getSuccess()) {
+        if (!$response->getSuccess()) {
             throw new EntityNotFoundException($response->getErrorMessage());
         }
 
@@ -287,7 +299,7 @@ abstract class Resource
     public function update($id, $data)
     {
         $response = $this->handler->handle('PUT', $data, $id);
-        if(!$response->getSuccess()) {
+        if (!$response->getSuccess()) {
             throw new EntityNotFoundException($response->getErrorMessage());
         }
 
@@ -302,7 +314,7 @@ abstract class Resource
     public function delete($id)
     {
         $response = $this->handler->handle('DELETE', false, $id);
-        if(!$response->getSuccess()) {
+        if (!$response->getSuccess()) {
             throw new EntityNotFoundException($response->getErrorMessage());
         }
 

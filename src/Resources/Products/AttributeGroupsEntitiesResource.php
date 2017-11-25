@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class AttributeGroupsEntitiesResource
  * @package SphereMall\MS\Resources\Products
  * @method AttributeGroupsEntities get(int $id)
+ * @method AttributeGroupsEntities first()
  * @method AttributeGroupsEntities[] all()
  * @method AttributeGroupsEntities update($id, $data)
  * @method AttributeGroupsEntities create($data)

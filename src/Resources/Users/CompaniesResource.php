@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class CompaniesResource
  * @package SphereMall\MS\Resources\Users
  * @method Company get(int $id)
+ * @method Company first()
  * @method Company[] all()
  * @method Company update($id, $data)
  * @method Company create($data)

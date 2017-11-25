@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class InvoicesResource
  * @package SphereMall\MS\Resources\Shop
  * @method Invoice get(int $id)
+ * @method Invoice first()
  * @method Invoice[] all()
  * @method Invoice update($id, $data)
  * @method Invoice create($data)

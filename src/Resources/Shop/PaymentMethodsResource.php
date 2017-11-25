@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class PaymentMethodsResource
  * @package SphereMall\MS\Resources\Shop
  * @method PaymentMethod get(int $id)
+ * @method PaymentMethod first()
  * @method PaymentMethod[] all()
  * @method PaymentMethod update($id, $data)
  * @method PaymentMethod create($data)

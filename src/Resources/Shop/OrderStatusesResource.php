@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class OrderStatusesResource
  * @package SphereMall\MS\Resources\Shop
  * @method OrderStatus get(int $id)
+ * @method OrderStatus first()
  * @method OrderStatus[] all()
  * @method OrderStatus update($id, $data)
  * @method OrderStatus create($data)

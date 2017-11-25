@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class BrandsResource
  * @package SphereMall\MS\Resources\Products
  * @method Brand get(int $id)
+ * @method Brand first()
  * @method Brand[] all()
  * @method Brand update($id, $data)
  * @method Brand create($data)

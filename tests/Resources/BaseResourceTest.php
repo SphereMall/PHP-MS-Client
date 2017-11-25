@@ -52,6 +52,12 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals($this->entityId, $product->id);
     }
 
+    public function testGetFirst()
+    {
+        $product = $this->client->products()->first();
+        $this->assertInstanceOf(Product::class, $product);
+    }
+
     /**
      * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */

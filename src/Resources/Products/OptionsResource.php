@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class OptionsResource
  * @package SphereMall\MS\Resources\Products
  * @method Option get(int $id)
+ * @method Option first()
  * @method Option[] all()
  * @method Option update($id, $data)
  * @method Option create($data)

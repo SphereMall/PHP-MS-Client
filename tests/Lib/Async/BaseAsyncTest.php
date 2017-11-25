@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Tests\Lib\Async;
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\Async\AsyncContainer;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
@@ -45,6 +46,10 @@ class BaseAsyncTest extends SetUpResourceTest
             return $client->products()->limit(20)->all();
         });
 
+        $ac->setCall('first', function (Client $client) {
+            return $client->products()->first();
+        });
+
         $data = $ac->call();
 
         $resTime = round((microtime(true) - $time1), 3);
@@ -54,6 +59,8 @@ class BaseAsyncTest extends SetUpResourceTest
         $this->assertCount(10, $data['list2']);
         $this->assertCount(15, $data['list3']);
         $this->assertCount(20, $data['list4']);
+
+        $this->assertInstanceOf(Product::class, $data['first']);
     }
 
     public function testNotAsyncCalls()

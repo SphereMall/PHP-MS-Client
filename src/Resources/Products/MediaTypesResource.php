@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class MediaTypesResource
  * @package SphereMall\MS\Resources\Products
  * @method MediaType get(int $id)
+ * @method MediaType first()
  * @method MediaType[] all()
  * @method MediaType update($id, $data)
  * @method MediaType create($data)

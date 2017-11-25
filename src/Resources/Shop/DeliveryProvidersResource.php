@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class DeliveryProvidersResource
  * @package SphereMall\MS\Resources\Shop
  * @method DeliveryProvider get(int $id)
+ * @method DeliveryProvider first()
  * @method DeliveryProvider[] all()
  * @method DeliveryProvider update($id, $data)
  * @method DeliveryProvider create($data)

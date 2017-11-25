@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class ProductsResource
  * @package SphereMall\MS\Resources\Products
  * @method Product get(int $id)
+ * @method Product first()
  * @method Product[] all()
  * @method Product update($id, $data)
  * @method Product create($data)

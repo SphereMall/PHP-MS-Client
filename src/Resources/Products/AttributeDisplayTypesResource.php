@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class AttributeDisplayTypesResource
  * @package SphereMall\MS\Resources\Products
  * @method AttributeDisplayType get(int $id)
+ * @method AttributeDisplayType first()
  * @method AttributeDisplayType[] all()
  * @method AttributeDisplayType update($id, $data)
  * @method AttributeDisplayType create($data)

@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Resource;
  * Class ImagesResource
  * @package SphereMall\MS\Resources\Products
  * @method Media get(int $id)
+ * @method Media first()
  * @method Media[] all()
  * @method Media update($id, $data)
  * @method Media create($data)
