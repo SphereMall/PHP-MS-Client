@@ -11,32 +11,37 @@ namespace SphereMall\MS\Lib;
 
 use Iterator;
 use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Lib\Http\Meta;
 
 /**
  * @property int $total
- * @property array $raw
  * @property array $objects
+ * @property Meta $meta
+ * @property int $pointer
  */
 class Collection implements Iterator
 {
     #region [Properties]
     protected $total = 0;
-    protected $raw = [];
     protected $objects = [];
+    protected $meta;
 
     private $pointer = 0;
     #endregion
 
     #region [Constructor]
     /**
-     * @param array $raw
+     * @param array|null $objects
+     * @param Meta|null $meta
      */
-    function __construct(array $raw = null)
+    function __construct(array $objects = null, Meta $meta = null)
     {
-        if (!is_null($raw)) {
-            $this->raw = $raw;
-            $this->total = count($raw);
+        if (!is_null($objects)) {
+            $this->objects = $objects;
+            $this->total = count($objects);
         }
+
+        $this->meta = $meta;
     }
 
     #endregion
@@ -80,6 +85,14 @@ class Collection implements Iterator
         }
         return $this->objects;
     }
+
+    /**
+     * @return Meta
+     */
+    public function getMeta()
+    {
+        return $this->meta;
+    }
     #endregion
 
     #region [Protected methods]
@@ -90,11 +103,6 @@ class Collection implements Iterator
     protected function getRow($index)
     {
         if (isset($this->objects[$index])) {
-            return $this->objects[$index];
-        }
-
-        if (isset($this->raw[$index])) {
-            $this->objects[$index] = $this->raw[$index];
             return $this->objects[$index];
         }
 

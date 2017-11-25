@@ -36,6 +36,14 @@ class ProductsResourceTest extends SetUpResourceTest
         }
     }
 
+    public function testServiceGetListWithMeta()
+    {
+        $products = $this->client->products();
+        $productCollection = $products->withMeta()->all();
+
+        $this->assertInstanceOf(Collection::class, $productCollection);
+    }
+
     public function testProductFull()
     {
         $products = $this->client

@@ -49,6 +49,7 @@ abstract class Resource
     protected $filter;
     protected $in = [];
     protected $sort = [];
+    protected $meta = false;
     #endregion
 
     #region [Constructor]
@@ -217,6 +218,15 @@ abstract class Resource
     {
         return $this->version;
     }
+
+    /**
+     * @return $this
+     */
+    public function withMeta()
+    {
+        $this->meta = true;
+        return $this;
+    }
     #endregion
 
     #region [CRUD]
@@ -335,6 +345,8 @@ abstract class Resource
         if (is_null($maker)) {
             $maker = $this->maker;
         }
+
+        $maker->setAsCollection($this->meta);
 
         if ($response instanceof Response) {
             if ($this->client->afterAPICall) {

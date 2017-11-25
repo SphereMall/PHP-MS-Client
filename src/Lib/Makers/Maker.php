@@ -12,12 +12,33 @@ namespace SphereMall\MS\Lib\Makers;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\Response;
 
-interface Maker
+/**
+ * Class Maker
+ * @package SphereMall\MS\Lib\Makers
+ * @property bool $asCollection Return array or collection with meta
+ */
+abstract class Maker
 {
+    #region [Properties]
+    protected $asCollection = false;
+    #endregion
+
+    #region [Abstract methods]
     /**
      * @param Response $response
      * @param bool $returnArray
      * @return array|Collection
      */
-    function make(Response $response, $returnArray = true);
+    abstract function make(Response $response, $returnArray = true);
+    #endregion
+
+    #region [Public methods]
+    /**
+     * @param $asCollection
+     */
+    public function setAsCollection($asCollection)
+    {
+        $this->asCollection = $asCollection;
+    }
+    #endregion
 }

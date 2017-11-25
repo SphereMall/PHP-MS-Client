@@ -16,6 +16,7 @@ namespace SphereMall\MS\Lib\Http;
  * @property bool $success
  * @property string $version
  * @property array $errors
+ * @property Meta $meta
  * @property array $included
  */
 class Response
@@ -26,7 +27,8 @@ class Response
     private $data;
     private $success;
     private $version;
-    private $error;
+    private $errors;
+    private $meta;
     private $included;
     #endregion
 
@@ -47,9 +49,12 @@ class Response
         try {
             $this->data = $contents['data'];
             $this->success = $contents['success'];
-            $this->errors = $contents['error'];
+            $this->errors = $contents['error'] ?? null;
             $this->version = $contents['ver'];
-            $this->included = $contents['included'];
+            $this->included = $contents['included'] ?? null;
+            if (!empty($contents['meta'])) {
+                $this->meta = new Meta(...array_values($contents['meta']));
+            }
         } catch (\Exception $ex) {
             $this->success = false;
             $this->errors = $ex->getMessage();
@@ -113,6 +118,14 @@ class Response
     public function getStatusCode()
     {
         return $this->statusCode;
+    }
+
+    /**
+     * @return Meta
+     */
+    public function getMeta()
+    {
+        return $this->meta;
     }
     #endregion
 }

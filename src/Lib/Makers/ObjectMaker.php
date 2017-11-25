@@ -15,25 +15,24 @@ use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\Mappers\Mapper;
 
-class ObjectMaker implements Maker
+class ObjectMaker extends Maker
 {
     #region [Public methods]
     /**
      * @param Response $response
      * @param bool $returnArray
-     * @return array|Entity
+     * @return array|Entity|Collection
      * @throws EntityNotFoundException
      */
     public function make(Response $response, $returnArray = true)
     {
-        $result = [];
-
         if (!$response->getSuccess()) {
-            return $result;
+            return [];
         }
 
         $included = $this->getIncludedArray($response->getIncluded());
 
+        $result = [];
         foreach ($response->getData() as $element) {
             if ($mapperClass = $this->getMapperClass($element['type'])) {
 
@@ -53,7 +52,16 @@ class ObjectMaker implements Maker
             throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
         }
 
-        return $returnArray ? $result : $result[0] ?? null;
+        if ($returnArray) {
+            if ($this->asCollection) {
+                $collection = new Collection($result, $response->getMeta());
+                return $collection;
+            }
+
+            return $result;
+        }
+
+        return $result[0] ?? null;
     }
     #endregion
 
