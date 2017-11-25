@@ -60,7 +60,7 @@ class Filter
     {
         foreach ($filters as $field => $rules) {
             if ($field == 'fullSearch') {
-                $this->addFilter($field, null, $rules);
+                $this->addFilter($field, $rules, null);
                 continue;
             }
 
@@ -68,7 +68,7 @@ class Filter
                 if (!in_array($operator, $this->availableFilters) || (empty($value) && $value != '0')) {
                     continue;
                 }
-                $this->addFilter($field, $operator, $value);
+                $this->addFilter($field, $value, $operator);
             }
         }
         return $this;
@@ -83,7 +83,7 @@ class Filter
      *
      * @return $this
      */
-    public function addFilter($field, $operator, $value)
+    public function addFilter($field, $value, $operator)
     {
         if (!empty($field) && (!empty($value) || $value == '0')) {
             if (!is_null($operator)) {

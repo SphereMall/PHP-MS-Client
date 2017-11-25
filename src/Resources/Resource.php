@@ -270,9 +270,8 @@ abstract class Resource
         $params = $this->getQueryParams();
 
         $response = $this->handler->handle('GET', false, 'count', $params);
-        $maker = new CountMaker();
 
-        return $maker->make($response);
+        return $this->make($response, false, new CountMaker());
     }
 
     /**
@@ -326,21 +325,26 @@ abstract class Resource
     /**
      * @param Promise|Response $response
      * @param bool $returnArray
-     * @return array|Collection|Entity
+     * @param Maker|null $maker
+     * @return array|Collection|Entity|int
      */
-    protected function make($response, $returnArray = true)
+    protected function make($response, $returnArray = true, Maker $maker = null)
     {
         $this->clearExtraDataForCall();
-        if ($response instanceof Response) {
 
+        if (is_null($maker)) {
+            $maker = $this->maker;
+        }
+
+        if ($response instanceof Response) {
             if ($this->client->afterAPICall) {
                 call_user_func($this->client->afterAPICall, $response);
             }
 
-            return $this->maker->make($response, $returnArray);
+            return $maker->make($response, $returnArray);
         }
 
-        return ['response' => $response, 'maker' => $this->maker, 'returnArray' => $returnArray];
+        return ['response' => $response, 'maker' => $maker, 'returnArray' => $returnArray];
     }
 
     protected function getQueryParams()

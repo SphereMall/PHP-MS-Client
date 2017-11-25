@@ -50,6 +50,10 @@ class BaseAsyncTest extends SetUpResourceTest
             return $client->products()->first();
         });
 
+        $ac->setCall('count', function (Client $client) {
+            return $client->products()->count();
+        });
+
         $data = $ac->call();
 
         $resTime = round((microtime(true) - $time1), 3);
@@ -60,6 +64,7 @@ class BaseAsyncTest extends SetUpResourceTest
         $this->assertCount(15, $data['list3']);
         $this->assertCount(20, $data['list4']);
 
+        $this->assertGreaterThanOrEqual(0, $data['count']);
         $this->assertInstanceOf(Product::class, $data['first']);
     }
 

@@ -10,6 +10,11 @@
 namespace SphereMall\MS\Resources\Grapher;
 
 use Exception;
+use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Lib\Filters\GridFilter;
+use SphereMall\MS\Lib\Makers\CountMaker;
+use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
 use SphereMall\MS\Resources\Resource;
 
 /**
@@ -26,10 +31,46 @@ class GridResource extends Resource
     #endregion
 
     #region [Override methods]
+    /**
+     * Set filter to the resource selecting
+     * @param array|FilterSpecification|GridFilter $filter
+     * @return $this
+     */
+    public function filter($filter)
+    {
+        if (is_array($filter)) {
+            $filter = new GridFilter($filter);
+        }
+
+        if ($filter instanceof FilterSpecification) {
+            $filter = new GridFilter($filter->asFilter());
+        }
+
+        $this->filter = $filter;
+        return $this;
+    }
+
+    /**
+     * @return Entity[]|Collection
+     */
     public function all()
     {
-        $response = $this->handler->handle('GET');
+        $params = $this->getQueryParams();
+
+        $response = $this->handler->handle('GET', false, false, $params);
         return $this->make($response);
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        $params = $this->getQueryParams();
+
+        $response = $this->handler->handle('GET', false, 'count', $params);
+
+        return $this->make($response, false, new CountMaker());
     }
 
     /**
@@ -71,7 +112,21 @@ class GridResource extends Resource
     }
     #endregion
 
-    #region [Public methods]
+    #region [Protected methods]
+    protected function getQueryParams()
+    {
+        $params = parent::getQueryParams();
 
+        if (!empty($params['where'])) {
+            foreach (explode('&', $params['where']) as $where) {
+                list($key, $value) = explode('=', $where);
+                $params[$key] = $value;
+            }
+
+            unset($params['where']);
+        }
+
+        return $params;
+    }
     #endregion
 }
