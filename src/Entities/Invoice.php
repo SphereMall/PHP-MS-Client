@@ -13,7 +13,7 @@ namespace SphereMall\MS\Entities;
  * Class Invoice
  * @package SphereMall\MS\Entities
  * @property int $id
- * @property string $hash
+ * @property string $invoiceHash
  * @property string $path
  * @property string $createDate
  * @property int $orderId
@@ -22,7 +22,7 @@ class Invoice extends Entity
 {
     #region [Properties]
     public $id;
-    public $hash;
+    public $invoiceHash;
     public $path;
     public $createDate;
     public $orderId;
