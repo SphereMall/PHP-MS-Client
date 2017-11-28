@@ -33,5 +33,21 @@ class OrdersResourceTest extends SetUpResourceTest
         $orderNew = $this->client->orders()->byId($order->id);
         $this->assertEquals($order->id, $orderNew->getId());
     }
+
+    public function testUpdateOrder()
+    {
+        $order1 = $this->client->orders()
+            ->filter(['statusId' => ['e' => 2]])
+            ->first();
+
+        $order2 = $this->client->orders()->byId($order1->id);
+
+        $items = $order2->items;
+
+        $order2->update(['paymentStatusId' => 2]);
+
+        $this->assertEquals(2, $order2->getPaymentStatusId());
+        $this->assertEquals($items, $order2->items);
+    }
     #endregion
 }

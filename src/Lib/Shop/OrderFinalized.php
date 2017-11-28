@@ -95,13 +95,16 @@ class OrderFinalized
     {
         $params = array_intersect_key($params, array_flip(['statusId', 'orderId', 'paymentStatusId']));
 
-        /**
-         * @var Order $order
-         */
+        //Update current order with params
         $order = $this->client
             ->orders()
             ->update($this->getId(), $params);
 
+        //Get order by current orderId with items
+        $orderWithItems = $this->client->orders()->byId($this->getId());
+        $order->items = $orderWithItems->items;
+
+        //Set data to current order
         $this->setOrderData($order);
     }
     #endregion

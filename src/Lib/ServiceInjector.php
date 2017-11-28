@@ -27,6 +27,7 @@ use SphereMall\MS\Resources\Products\MediaResource;
 use SphereMall\MS\Resources\Products\ProductAttributeValuesResource;
 use SphereMall\MS\Resources\Products\ProductsResource;
 use SphereMall\MS\Resources\Shop\InvoicesResource;
+use SphereMall\MS\Resources\Shop\OrderItemsResource;
 use SphereMall\MS\Resources\Users\AddressResource;
 use SphereMall\MS\Resources\Users\CompaniesResource;
 use SphereMall\MS\Resources\Users\UsersResource;
@@ -313,6 +314,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new InvoicesResource($this);
+    }
+
+    /**
+     * @return OrderItemsResource
+     */
+    public function orderItems()
+    {
+        /** @var Client $this */
+        return new OrderItemsResource($this);
     }
     #endregion
 

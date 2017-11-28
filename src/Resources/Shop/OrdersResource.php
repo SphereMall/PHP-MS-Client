@@ -9,17 +9,18 @@
 
 namespace SphereMall\MS\Resources\Shop;
 
+use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Lib\Shop\OrderFinalized;
 use SphereMall\MS\Resources\Resource;
 
 /**
  * Class OrdersResource
  * @package SphereMall\MS\Resources\Shop
- * @method OrderFinalized get(int $id)
- * @method OrderFinalized first()
- * @method OrderFinalized[] all()
- * @method OrderFinalized update($id, $data)
- * @method OrderFinalized create($data)
+ * @method Order get(int $id)
+ * @method Order first()
+ * @method Order[] all()
+ * @method Order update($id, $data)
+ * @method Order create($data)
  */
 class OrdersResource extends Resource
 {
