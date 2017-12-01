@@ -27,7 +27,7 @@ class BuilderTest extends SetUpResourceTest
             ->filter(['filterSettings' => [FilterOperators::NOT_EQUAL => 'null']])
             ->first();
 
-        $builder = new CatalogFilterBuilder($catalogItem->filterSettings);
+        $builder = new CatalogFilterBuilder([$catalogItem->filterSettings]);
         $filter = $builder->getFilter();
 
         $this->assertInstanceOf(GridFilter::class, $filter);

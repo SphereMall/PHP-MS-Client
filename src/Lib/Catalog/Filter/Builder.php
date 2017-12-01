@@ -32,7 +32,24 @@ class Builder
     #region [Public methods]
     public function getFilter()
     {
+        $elements = array_map(function ($item) {
+            return $this->getElement($item);
+        }, $this->params);
+
         return new GridFilter();
+    }
+    #endregion
+
+    #region [Private methods]
+    private function getElement($item)
+    {
+        return array_map(function ($element) {
+            return [
+                $element['type']['class'] => array_map(function ($el) {
+                    return $el;
+                }, $element['elements']['attributes']),
+            ];
+        }, $item);
     }
     #endregion
 }
