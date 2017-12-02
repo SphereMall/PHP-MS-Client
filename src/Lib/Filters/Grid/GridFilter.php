@@ -90,7 +90,7 @@ class GridFilter extends Filter
         $set = $this->getStandardFilter();
 
         if (!empty($this->elements)) {
-            $set['filter'] = json_encode($this->elements);
+            $set['params'] = json_encode($this->elements);
         }
 
         return http_build_query($set);

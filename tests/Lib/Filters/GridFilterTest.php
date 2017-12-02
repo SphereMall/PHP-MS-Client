@@ -84,14 +84,14 @@ class GridFilterTest extends SetUpResourceTest
         $f = (string)$filter->element($attr)
             ->orElement($fn);
 
-        $this->assertEquals('filter=[{"attributes":[[1,2,3],[3,2,4]]},{"functionalNames":[[1,2]]}]',
+        $this->assertEquals('params=[{"attributes":[[1,2,3],[3,2,4]]},{"functionalNames":[[1,2]]}]',
             urldecode($f));
 
         $filter = new GridFilter();
         $f1 = (string)$filter->element($attr)
             ->andElement($fn);
 
-        $this->assertEquals('filter=[{"attributes":[[1,2,3],[3,2,4]],"functionalNames":[[1,2]]}]',
+        $this->assertEquals('params=[{"attributes":[[1,2,3],[3,2,4]],"functionalNames":[[1,2]]}]',
             urldecode($f1));
 
 
@@ -100,24 +100,24 @@ class GridFilterTest extends SetUpResourceTest
         $filter = new GridFilter();
         $f1 = (string)$filter->element($attr);
 
-        $this->assertEquals('filter=[{"attributes":[[1022]]}]', urldecode($f1));
+        $this->assertEquals('params=[{"attributes":[[1022]]}]', urldecode($f1));
 
         $ent = EntityFilter::create()
             ->value(['product']);
         $filter = new GridFilter();
         $f1 = (string)$filter->element($ent);
 
-        $this->assertEquals('filter=[{"entity":[["product"]]}]', urldecode($f1));
+        $this->assertEquals('params=[{"entity":[["product"]]}]', urldecode($f1));
 
         $fn = FunctionalNameFilter::create()
             ->value([5]);
 
         $filter = new GridFilter();
         $f1 = (string)$filter->element($attr)
-            //->element($ent)
+            ->element($ent)
             ->orElement($fn);
 
-        $this->assertEquals('filter=[{"attributes":[[1022]],"entity":[["product"]]},{"functionalNames":[[5]]}]',
+        $this->assertEquals('params=[{"attributes":[[1022]],"entity":[["product"]]},{"functionalNames":[[5]]}]',
             urldecode($f1));
     }
 
@@ -144,7 +144,7 @@ class GridFilterTest extends SetUpResourceTest
             ->orElement($fn)
             ->andElement($attr1);
 
-        $this->assertEquals('filter=[{"attributes":[[1,2,3],[3,2,4]]},{"functionalNames":[[1,2]],"attributes":[[1,5]]}]',
+        $this->assertEquals('params=[{"attributes":[[1,2,3],[3,2,4]]},{"functionalNames":[[1,2]],"attributes":[[1,5]]}]',
             urldecode($f));
     }
 }
