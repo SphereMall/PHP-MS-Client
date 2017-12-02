@@ -114,7 +114,7 @@ class GridFilterTest extends SetUpResourceTest
 
         $filter = new GridFilter();
         $f1 = (string)$filter->element($attr)
-            ->element($ent)
+            //->element($ent)
             ->orElement($fn);
 
         $this->assertEquals('filter=[{"attributes":[[1022]],"entity":[["product"]]},{"functionalNames":[[5]]}]',
