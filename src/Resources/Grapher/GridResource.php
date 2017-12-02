@@ -12,7 +12,7 @@ namespace SphereMall\MS\Resources\Grapher;
 use Exception;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Lib\Collection;
-use SphereMall\MS\Lib\Filters\GridFilter;
+use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Makers\CountMaker;
 use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
 use SphereMall\MS\Resources\Resource;
@@ -69,7 +69,6 @@ class GridResource extends Resource
         $params = $this->getQueryParams();
 
         $response = $this->handler->handle('GET', false, 'count', $params);
-
         return $this->make($response, false, new CountMaker());
     }
 
@@ -117,15 +116,16 @@ class GridResource extends Resource
     {
         $params = parent::getQueryParams();
 
-        if (!empty($params['where'])) {
-            foreach (explode('&', $params['where']) as $where) {
-                list($key, $value) = explode('=', $where);
-                $params[$key] = $value;
-            }
-
-            unset($params['where']);
+        if (empty($params['where'])) {
+            return $params;
         }
 
+        foreach (explode('&', $params['where']) as $where) {
+            list($key, $value) = explode('=', $where);
+            $params[$key] = $value;
+        }
+
+        unset($params['where']);
         return $params;
     }
     #endregion
