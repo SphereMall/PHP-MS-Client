@@ -147,11 +147,43 @@ class Client
 
     #region [Setters methods]
     /**
+     * @param string $secretKey
+     * @return $this
+     */
+    public function setSecretKey(string $secretKey)
+    {
+        $this->secretKey = $secretKey;
+        return $this;
+    }
+
+    /**
+     * @param string $clientId
+     * @return $this
+     */
+    public function setClientId(string $clientId)
+    {
+        $this->clientId = $clientId;
+        return $this;
+    }
+
+    /**
+     * @param string $gatewayUrl
+     * @return $this
+     */
+    public function setGateWayUrl(string $gatewayUrl)
+    {
+        $this->gatewayUrl = $gatewayUrl;
+        return $this;
+    }
+
+    /**
      * @param $version
+     * @return Client
      */
     public function setVersion(string $version)
     {
         $this->version = $version;
+        return $this;
     }
     #endregion
 

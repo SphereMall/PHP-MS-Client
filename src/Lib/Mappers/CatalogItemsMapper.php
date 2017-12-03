@@ -25,7 +25,7 @@ class CatalogItemsMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $catalogItem = new CatalogItem($array);
-        $catalogItem->filterSettings = json_decode((string)$catalogItem->filterSettings);
+        $catalogItem->filterSettings = json_decode((string)$catalogItem->filterSettings, true);
 
         return $catalogItem;
     }
