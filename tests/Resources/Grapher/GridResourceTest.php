@@ -12,6 +12,8 @@ namespace SphereMall\MS\Tests\Resources\Grapher;
 use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Lib\Filters\Grid\EntityFilter;
+use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Http\Meta;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
@@ -38,16 +40,21 @@ class GridResourceTest extends SetUpResourceTest
 
     public function testGridFilter()
     {
+        $filter = new GridFilter();
+        $filter->element(EntityFilter::create()->value('product'));
+
         $grid = $this->client->grid()
-            ->filter(['entity' => 'product'])
+            ->filter($filter)
             ->all();
 
         foreach ($grid as $item) {
             $this->assertInstanceOf(Product::class, $item);
         }
 
+        $filter = new GridFilter();
+        $filter->element(EntityFilter::create()->value('document'));
         $grid = $this->client->grid()
-            ->filter(['entity' => 'document'])
+            ->filter($filter)
             ->all();
 
         foreach ($grid as $item) {
@@ -57,8 +64,11 @@ class GridResourceTest extends SetUpResourceTest
 
     public function testGridCount()
     {
+        $filter = new GridFilter();
+        $filter->element(EntityFilter::create()->value('product'));
+
         $amount = $this->client->grid()
-            ->filter(['entity' => 'product'])
+            ->filter($filter)
             ->count();
 
         $this->assertGreaterThan(0, $amount);
@@ -73,6 +83,17 @@ class GridResourceTest extends SetUpResourceTest
 
         foreach ($all as $item) {
             $this->assertInstanceOf(Entity::class, $item);
+        }
+    }
+
+    public function testGridFacets()
+    {
+        $all = $this->client->grid()->facets();
+
+        foreach ($all as $items) {
+            foreach ($items as $item) {
+                $this->assertInstanceOf(Entity::class, $item);
+            }
         }
     }
 

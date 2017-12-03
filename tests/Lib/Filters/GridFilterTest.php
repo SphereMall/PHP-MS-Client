@@ -13,9 +13,11 @@ namespace SphereMall\MS\Tests\Lib\Filters;
 use SphereMall\MS\Lib\Filters\Grid\AttributeFilter;
 use SphereMall\MS\Lib\Filters\Grid\BrandFilter;
 use SphereMall\MS\Lib\Filters\Grid\EntityFilter;
+use SphereMall\MS\Lib\Filters\Grid\FactorFilter;
 use SphereMall\MS\Lib\Filters\Grid\FunctionalNameFilter;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Filters\Grid\GridFilterElement;
+use SphereMall\MS\Lib\Filters\Grid\PriceRangeFilter;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class GridFilterTest extends SetUpResourceTest
@@ -145,6 +147,72 @@ class GridFilterTest extends SetUpResourceTest
             ->andElement($attr1);
 
         $this->assertEquals('params=[{"attributes":[[1,2,3],[3,2,4]]},{"functionalNames":[[1,2]],"attributes":[[1,5]]}]',
+            urldecode($f));
+    }
+
+    public function testGridFilterWithPrice()
+    {
+        $attr = AttributeFilter::create()
+            ->value([1022]);
+
+        $this->assertEquals('attributes', $attr->getName());
+        $this->assertEquals([[1022]], $attr->getValues());
+
+        $fn = FunctionalNameFilter::create()
+            ->value([5]);
+
+        $this->assertEquals('functionalNames', $fn->getName());
+        $this->assertEquals([[5]], $fn->getValues());
+
+        $br = BrandFilter::create()
+            ->value([1]);
+
+        $this->assertEquals('brands', $br->getName());
+        $this->assertEquals([[1]], $br->getValues());
+
+        $price = PriceRangeFilter::create()
+            ->value([10000, 50000]);
+
+        $this->assertEquals('priceRange', $price->getName());
+        $this->assertEquals([[10000, 50000]], $price->getValues());
+
+        $filter = new GridFilter();
+        $f = (string)$filter->element($attr)
+            ->element($fn)
+            ->element($br)
+            ->element($price);
+
+        $this->assertEquals('params=[{"attributes":[[1022]],"functionalNames":[[5]],"brands":[[1]],"priceRange":[[10000,50000]]}]',
+            urldecode($f));
+    }
+
+    public function testGridFilterWithFactors()
+    {
+        $attr = AttributeFilter::create()
+            ->value([1022]);
+
+        $this->assertEquals('attributes', $attr->getName());
+        $this->assertEquals([[1022]], $attr->getValues());
+
+        $fn = FunctionalNameFilter::create()
+            ->value([5]);
+
+        $this->assertEquals('functionalNames', $fn->getName());
+        $this->assertEquals([[5]], $fn->getValues());
+
+        $factor = FactorFilter::create()
+            ->value([1]);
+
+        $this->assertEquals('factors', $factor->getName());
+        $this->assertEquals([[1]], $factor->getValues());
+
+
+        $filter = new GridFilter();
+        $f = (string)$filter->element($attr)
+            ->orElement($fn)
+            ->element($factor);
+
+        $this->assertEquals('params=[{"attributes":[[1022]]},{"functionalNames":[[5]],"factors":[[1]]}]',
             urldecode($f));
     }
 }

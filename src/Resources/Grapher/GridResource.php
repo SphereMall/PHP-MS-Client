@@ -14,6 +14,7 @@ use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Makers\CountMaker;
+use SphereMall\MS\Lib\Makers\FacetsMaker;
 use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
 use SphereMall\MS\Resources\Resource;
 
@@ -59,6 +60,17 @@ class GridResource extends Resource
 
         $response = $this->handler->handle('GET', false, false, $params);
         return $this->make($response);
+    }
+
+    /**
+     * @return Entity[]|Collection
+     */
+    public function facets()
+    {
+        $params = $this->getQueryParams();
+
+        $response = $this->handler->handle('GET', false, 'filter', $params);
+        return $this->make($response, false, new FacetsMaker());
     }
 
     /**
