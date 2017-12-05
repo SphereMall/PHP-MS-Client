@@ -51,8 +51,9 @@ class Entity
      */
     public function getProperty($key)
     {
-        if(isset($this->properties[$key]))
+        if (isset($this->properties[$key])) {
             return $this->properties[$key];
+        }
 
         return null;
     }
@@ -62,7 +63,15 @@ class Entity
      */
     public function asArray()
     {
-        return get_object_vars($this);
+        $properties = [];
+        foreach ($this as $key => $value) {
+            if ($key == 'properties') {
+                continue;
+            }
+            $properties[$key] = $value;
+        }
+
+        return array_merge($properties, $this->properties);
     }
     #endregion
 }
