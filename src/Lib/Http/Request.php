@@ -12,6 +12,7 @@ namespace SphereMall\MS\Lib\Http;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Promise;
 use SphereMall\MS\Client;
+use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Resources\Resource as ServiceResource;
 
 /**
@@ -75,6 +76,10 @@ class Request
         //Add query params
         if ($queryParams) {
             $url = $url . '?' . http_build_query($queryParams);
+        }
+
+        if($body instanceof Entity) {
+            $body = $body->asArray();
         }
 
         if ($body) {
