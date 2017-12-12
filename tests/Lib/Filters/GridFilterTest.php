@@ -24,195 +24,173 @@ class GridFilterTest extends SetUpResourceTest
 {
     public function testGridFilterSingleElement()
     {
-        $gfe = FunctionalNameFilter::create()
-            ->value(6);
+        $gfe = new FunctionalNameFilter([6]);
 
         $this->assertEquals('functionalNames', $gfe->getName());
-        $this->assertEquals([[6]], $gfe->getValues());
+        $this->assertEquals([6], $gfe->getValues());
     }
 
     public function testGridFilterElements()
     {
-        $gfe = AttributeFilter::create()
-            ->value(128)
-            ->andValue(1)
-            ->andValue(2);
+        $gfe = new AttributeFilter([128, 1, 2]);
 
         $this->assertEquals('attributes', $gfe->getName());
-        $this->assertEquals([[128, 1, 2]], $gfe->getValues());
+        $this->assertEquals([128, 1, 2], $gfe->getValues());
 
-        $gfe = AttributeFilter::create()
-            ->value([1, 3, 5]);
-
-        $this->assertEquals('attributes', $gfe->getName());
-        $this->assertEquals([[1, 3, 5]], $gfe->getValues());
-        $this->assertNotEquals([[3, 1, 5]], $gfe->getValues());
-
-        $gfe = AttributeFilter::create()
-            ->value(2)
-            ->andValue(4)
-            ->orValue(6);
+        $gfe = new AttributeFilter([1, 3, 5]);
 
         $this->assertEquals('attributes', $gfe->getName());
-        $this->assertEquals([[2, 4], [6]], $gfe->getValues());
-
-        $gfe = BrandFilter::create()
-            ->value([1, 2, 3])
-            ->orValue([4, 5, 6])
-            ->andValue(7)
-            ->orValue([8, 9]);
-
-        $this->assertEquals('brands', $gfe->getName());
-        $this->assertEquals([[1, 2, 3], [4, 5, 6, 7], [8, 9]], $gfe->getValues());
+        $this->assertEquals([1, 3, 5], $gfe->getValues());
+        $this->assertNotEquals([3, 1, 5], $gfe->getValues());
     }
 
     public function testGridFilter()
     {
-        $attr = AttributeFilter::create()
-            ->value([1, 2, 3])
-            ->orValue([3, 2, 4]);
+        $attr = new AttributeFilter([1, 2, 3]);
 
         $this->assertEquals('attributes', $attr->getName());
-        $this->assertEquals([[1, 2, 3], [3, 2, 4]], $attr->getValues());
+        $this->assertEquals([1, 2, 3], $attr->getValues());
 
-        $fn = FunctionalNameFilter::create()
-            ->value([1, 2]);
+        $fn = new FunctionalNameFilter([1, 2]);
 
         $this->assertEquals('functionalNames', $fn->getName());
-        $this->assertEquals([[1, 2]], $fn->getValues());
+        $this->assertEquals([1, 2], $fn->getValues());
 
         $filter = new GridFilter();
 
-        $f = (string)$filter->element($attr)
-            ->orElement($fn);
+        $f = (string)$filter->elements([$attr])
+            ->elements([$fn]);
 
-        $this->assertEquals('params=[{"attributes":[[1,2,3],[3,2,4]]},{"functionalNames":[[1,2]]}]',
+        $this->assertEquals('params=[{"attributes":[1,2,3]},{"functionalNames":[1,2]}]',
             urldecode($f));
 
         $filter = new GridFilter();
-        $f1 = (string)$filter->element($attr)
-            ->andElement($fn);
+        $f1 = (string)$filter->elements([$attr, $fn]);
 
-        $this->assertEquals('params=[{"attributes":[[1,2,3],[3,2,4]],"functionalNames":[[1,2]]}]',
+        $this->assertEquals('params=[{"attributes":[1,2,3],"functionalNames":[1,2]}]',
             urldecode($f1));
 
 
-        $attr = AttributeFilter::create()
-            ->value([1022]);
+        $attr = new AttributeFilter([1022]);
         $filter = new GridFilter();
-        $f1 = (string)$filter->element($attr);
+        $f1 = (string)$filter->elements([$attr]);
 
-        $this->assertEquals('params=[{"attributes":[[1022]]}]', urldecode($f1));
+        $this->assertEquals('params=[{"attributes":[1022]}]', urldecode($f1));
 
-        $ent = EntityFilter::create()
-            ->value(['product']);
+        $ent = new EntityFilter(['product']);
         $filter = new GridFilter();
-        $f1 = (string)$filter->element($ent);
+        $f1 = (string)$filter->elements([$ent]);
 
-        $this->assertEquals('params=[{"entity":[["product"]]}]', urldecode($f1));
+        $this->assertEquals('params=[{"entity":["product"]}]', urldecode($f1));
 
-        $fn = FunctionalNameFilter::create()
-            ->value([5]);
+        $fn = new FunctionalNameFilter([5]);
 
         $filter = new GridFilter();
-        $f1 = (string)$filter->element($attr)
-            ->element($ent)
-            ->orElement($fn);
+        $f1 = (string)$filter->elements([$attr, $ent])
+            ->elements([$fn]);
 
-        $this->assertEquals('params=[{"attributes":[[1022]],"entity":[["product"]]},{"functionalNames":[[5]]}]',
+        $this->assertEquals('params=[{"attributes":[1022],"entity":["product"]},{"functionalNames":[5]}]',
             urldecode($f1));
     }
 
     public function testGridFilterParams()
     {
-        $attr = AttributeFilter::create()
-            ->value([1, 2, 3])
-            ->orValue([3, 2, 4]);
+        $attr1 = new AttributeFilter([1, 2, 3]);
+        $attr2 = new AttributeFilter([3, 2, 4]);
 
-        $this->assertEquals('attributes', $attr->getName());
-        $this->assertEquals([[1, 2, 3], [3, 2, 4]], $attr->getValues());
+        $this->assertEquals('attributes', $attr1->getName());
+        $this->assertEquals([1, 2, 3], $attr1->getValues());
 
-        $fn = FunctionalNameFilter::create()
-            ->value([1, 2]);
+        $this->assertEquals('attributes', $attr2->getName());
+        $this->assertEquals([3, 2, 4], $attr2->getValues());
+
+        $fn = new FunctionalNameFilter([1, 2]);
 
         $this->assertEquals('functionalNames', $fn->getName());
-        $this->assertEquals([[1, 2]], $fn->getValues());
+        $this->assertEquals([1, 2], $fn->getValues());
 
-        $attr1 = AttributeFilter::create()
-            ->value([1, 5]);
+        $attr1 = new AttributeFilter([1, 5]);
 
         $filter = new GridFilter();
-        $f = (string)$filter->element($attr)
-            ->orElement($fn)
-            ->andElement($attr1);
+        $f = (string)$filter->elements([$attr1])
+            ->elements([$fn, $attr2]);
 
-        $this->assertEquals('params=[{"attributes":[[1,2,3],[3,2,4]]},{"functionalNames":[[1,2]],"attributes":[[1,5]]}]',
+        $this->assertEquals('params=[{"attributes":[1,5]},{"functionalNames":[1,2],"attributes":[3,2,4]}]',
             urldecode($f));
     }
 
     public function testGridFilterWithPrice()
     {
-        $attr = AttributeFilter::create()
-            ->value([1022]);
+        $attr = new AttributeFilter([1022]);
 
         $this->assertEquals('attributes', $attr->getName());
-        $this->assertEquals([[1022]], $attr->getValues());
+        $this->assertEquals([1022], $attr->getValues());
 
-        $fn = FunctionalNameFilter::create()
-            ->value([5]);
+        $fn = new FunctionalNameFilter([5]);
 
         $this->assertEquals('functionalNames', $fn->getName());
-        $this->assertEquals([[5]], $fn->getValues());
+        $this->assertEquals([5], $fn->getValues());
 
-        $br = BrandFilter::create()
-            ->value([1]);
+        $br = new BrandFilter([1]);
 
         $this->assertEquals('brands', $br->getName());
-        $this->assertEquals([[1]], $br->getValues());
+        $this->assertEquals([1], $br->getValues());
 
-        $price = PriceRangeFilter::create()
-            ->value([10000, 50000]);
+        $price = new PriceRangeFilter([10000, 50000]);
 
         $this->assertEquals('priceRange', $price->getName());
-        $this->assertEquals([[10000, 50000]], $price->getValues());
+        $this->assertEquals([10000, 50000], $price->getValues());
 
         $filter = new GridFilter();
-        $f = (string)$filter->element($attr)
-            ->element($fn)
-            ->element($br)
-            ->element($price);
+        $f = (string)$filter->elements([$attr, $fn, $br, $price]);
 
-        $this->assertEquals('params=[{"attributes":[[1022]],"functionalNames":[[5]],"brands":[[1]],"priceRange":[[10000,50000]]}]',
+        $this->assertEquals('params=[{"attributes":[1022],"functionalNames":[5],"brands":[1],"priceRange":[10000,50000]}]',
             urldecode($f));
     }
 
     public function testGridFilterWithFactors()
     {
-        $attr = AttributeFilter::create()
-            ->value([1022]);
+        $attr = new AttributeFilter([1022]);
 
         $this->assertEquals('attributes', $attr->getName());
-        $this->assertEquals([[1022]], $attr->getValues());
+        $this->assertEquals([1022], $attr->getValues());
 
-        $fn = FunctionalNameFilter::create()
-            ->value([5]);
+        $fn = new FunctionalNameFilter([5]);
 
         $this->assertEquals('functionalNames', $fn->getName());
-        $this->assertEquals([[5]], $fn->getValues());
+        $this->assertEquals([5], $fn->getValues());
 
-        $factor = FactorFilter::create()
-            ->value([1]);
+        $factor = new FactorFilter([1]);
 
         $this->assertEquals('factors', $factor->getName());
-        $this->assertEquals([[1]], $factor->getValues());
+        $this->assertEquals([1], $factor->getValues());
 
 
         $filter = new GridFilter();
-        $f = (string)$filter->element($attr)
-            ->orElement($fn)
-            ->element($factor);
+        $f = (string)$filter->elements([$attr])
+            ->elements([$fn, $factor]);
 
-        $this->assertEquals('params=[{"attributes":[[1022]]},{"functionalNames":[[5]],"factors":[[1]]}]',
+        $this->assertEquals('params=[{"attributes":[1022]},{"functionalNames":[5],"factors":[1]}]',
+            urldecode($f));
+    }
+
+    public function testGridFilterWithAttributeAndFunctionalName()
+    {
+        $attr = new AttributeFilter([1022]);
+
+        $this->assertEquals('attributes', $attr->getName());
+        $this->assertEquals([1022], $attr->getValues());
+
+        $fn = new FunctionalNameFilter([5]);
+
+        $this->assertEquals('functionalNames', $fn->getName());
+        $this->assertEquals([5], $fn->getValues());
+
+
+        $filter = new GridFilter();
+        $f = (string)$filter->elements([$fn, $attr]);
+
+        $this->assertEquals('params=[{"functionalNames":[5],"attributes":[1022]}]',
             urldecode($f));
     }
 }

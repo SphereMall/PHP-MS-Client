@@ -22,7 +22,7 @@ namespace SphereMall\MS\Entities;
  * @property int $itemPriceWithDiscount
  * @property int $vatId
  * @property int $itemVatPrice
- * @property int $itemVatExcludedPrice
+ * @property int $itemVatExcludePrice
  * @property int $totalPrice
  * @property Product $product
  */
@@ -39,7 +39,7 @@ class OrderItem extends Entity
     public $itemPriceWithDiscount;
     public $vatId;
     public $itemVatPrice;
-    public $itemVatExcludedPrice;
+    public $itemVatExcludePrice;
     public $totalPrice;
 
     public $product;

@@ -26,32 +26,20 @@ class GridFilter extends Filter
 
     #region [Public methods]
     /**
-     * @param GridFilterElement $element
+     * @param GridFilterElement[] $elements
      * @return $this
      */
-    public function element(GridFilterElement $element)
+    public function elements(array $elements)
     {
-        $this->elements[$this->level][$element->getName()] = $element->getValues();
-        return $this;
-    }
+        /**
+         * @var GridFilterElement $element
+         */
+        foreach ($elements as $element) {
+            $this->elements[$this->level][$element->getName()] = $element->getValues();
+        }
 
-    /**
-     * @param GridFilterElement $element
-     * @return GridFilter
-     */
-    public function andElement(GridFilterElement $element)
-    {
-        return $this->element($element);
-    }
-
-    /**
-     * @param GridFilterElement $element
-     * @return GridFilter
-     */
-    public function orElement(GridFilterElement $element)
-    {
         $this->level++;
-        return $this->element($element);
+        return $this;
     }
 
     /**
