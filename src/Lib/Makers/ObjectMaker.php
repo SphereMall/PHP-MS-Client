@@ -12,6 +12,7 @@ namespace SphereMall\MS\Lib\Makers;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Lib\Http\Meta;
 use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\Mappers\Mapper;
 
@@ -27,6 +28,10 @@ class ObjectMaker extends Maker
     public function make(Response $response, $returnArray = true)
     {
         if (!$response->getSuccess()) {
+            if ($this->asCollection) {
+                return new Collection([], new Meta());
+            }
+
             return [];
         }
 

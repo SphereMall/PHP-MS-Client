@@ -31,7 +31,7 @@ class Meta
      * @param $limit
      * @param $offset
      */
-    public function __construct($count, $limit, $offset)
+    public function __construct($count = 0, $limit = 0, $offset = 0)
     {
         $this->count = $count;
         $this->limit = $limit;
