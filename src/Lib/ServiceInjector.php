@@ -44,6 +44,7 @@ use SphereMall\MS\Resources\Shop\CurrenciesRateResource;
 use SphereMall\MS\Resources\Shop\CurrenciesResource;
 use SphereMall\MS\Resources\Shop\VatsResource;
 use SphereMall\MS\Resources\Grapher\GridResource;
+use SphereMall\MS\Resources\Users\WishListItemsResource;
 
 /**
  * Trait ServiceInjector
@@ -362,6 +363,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new MessagesResource($this);
+    }
+
+    /**
+     * @return WishListItemsResource
+     */
+    public function wishListItems()
+    {
+        /** @var Client $this */
+        return new WishListItemsResource($this);
     }
     #endregion
 

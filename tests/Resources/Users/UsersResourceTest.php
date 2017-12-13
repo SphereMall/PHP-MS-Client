@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Tests\Resources\Users;
 
 use SphereMall\MS\Entities\User;
+use SphereMall\MS\Entities\WishListItem;
 use SphereMall\MS\Lib\Helpers\Guid;
 use SphereMall\MS\Lib\Specifications\Users\IsUserEmail;
 use SphereMall\MS\Lib\Specifications\Users\IsUserSubscriber;
@@ -34,16 +35,16 @@ class UsersResourceTest extends SetUpResourceTest
 
         $users = $this->client->users();
         $userList = $users->filter(new IsUserEmail($email))
-                          ->limit(1)
-                          ->all();
+            ->limit(1)
+            ->all();
 
         if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
             $this->assertInstanceOf(User::class, $users->subscribe($email));
         }
 
         $userList = $users->filter(new IsUserEmail($email))
-                          ->limit(1)
-                          ->all();
+            ->limit(1)
+            ->all();
 
         $this->assertEquals(1, $userList[0]->isSubscriber);
         $this->assertTrue($users->delete($userList[0]->id));
@@ -58,7 +59,7 @@ class UsersResourceTest extends SetUpResourceTest
 
         $user = $users->create([
             'email'        => $email,
-            'isSubscriber' => 1
+            'isSubscriber' => 1,
         ]);
 
         $this->assertEquals(1, $user->isSubscriber);
@@ -79,7 +80,7 @@ class UsersResourceTest extends SetUpResourceTest
         $user = $users->create([
             'email'        => $email,
             "guid"         => Guid::Generate(),
-            'isSubscriber' => 1
+            'isSubscriber' => 1,
         ]);
 
         $this->assertInstanceOf(User::class, $users->unsubscribe($user->guid));
@@ -92,13 +93,34 @@ class UsersResourceTest extends SetUpResourceTest
 
         $users = $this->client->users();
         $userList = $users->filter(new IsUserEmail($email))
-                          ->limit(1)
-                          ->all();
+            ->limit(1)
+            ->all();
 
         if (!isset($userList[0]) || !(new IsUserSubscriber())->isSatisfiedBy($userList[0])) {
             $this->assertNull($users->unsubscribe('0'));
         }
 
+    }
+
+    /**
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
+    public function testUserWishList()
+    {
+        $userId = 230;
+        $productId = 6354;
+        $all = $this->client->users()->getWishList($userId);
+
+        foreach ($all as $item) {
+            $this->assertInstanceOf(WishListItem::class, $item);
+        }
+
+        $wishListItem = $this->client->users()->addToWishList($userId, $productId);
+
+        $this->assertEquals($userId, $wishListItem->userId);
+        $this->assertEquals($productId, $wishListItem->productId);
+
+        $this->client->users()->removeFromWishList($userId, $productId);
     }
 
     #endregion

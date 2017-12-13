@@ -46,13 +46,13 @@ class Entity
     /**
      * Get value by name from property of class or $properties if value is not exist in class
      * @see $properties
-     * @param $key
+     * @param $name
      * @return bool
      */
-    public function getProperty($key)
+    public function getProperty($name)
     {
-        if (isset($this->properties[$key])) {
-            return $this->properties[$key];
+        if (isset($this->properties[$name])) {
+            return $this->properties[$name];
         }
 
         return null;
@@ -72,6 +72,15 @@ class Entity
         }
 
         return array_merge($properties, $this->properties);
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function __get($name)
+    {
+        return $this->getProperty($name);
     }
     #endregion
 }
