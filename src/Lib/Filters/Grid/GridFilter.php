@@ -43,6 +43,16 @@ class GridFilter extends Filter
     }
 
     /**
+     * @return $this
+     */
+    public function reset()
+    {
+        $this->elements = null;
+        $this->level = 0;
+        return $this;
+    }
+
+    /**
      * @param array $filters
      * @return $this
      */
@@ -66,6 +76,14 @@ class GridFilter extends Filter
     {
         $this->filters[$field] = $value;
         return $this;
+    }
+
+    /**
+     * @return GridFilterElement[]
+     */
+    public function getElements()
+    {
+        return $this->elements;
     }
 
     /**

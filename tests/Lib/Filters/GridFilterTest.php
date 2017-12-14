@@ -197,4 +197,44 @@ class GridFilterTest extends SetUpResourceTest
         $this->assertEquals('params=[{"entity":["product"],"attributes":[1022]}]',
             urldecode($f));
     }
+
+    public function testGridReset()
+    {
+        $attr = new AttributeFilter([1022]);
+
+        $this->assertEquals('attributes', $attr->getName());
+        $this->assertEquals([1022], $attr->getValues());
+
+        $fn = new FunctionalNameFilter([5]);
+
+        $this->assertEquals('functionalNames', $fn->getName());
+        $this->assertEquals([5], $fn->getValues());
+
+        $filter = new GridFilter();
+        $filter->elements([$fn, $attr]);
+
+        $this->assertEquals([
+            [
+                'functionalNames' => [5],
+                'attributes'      => [1022],
+            ],
+        ], $filter->getElements());
+
+        $filter->reset();
+
+        $this->assertEmpty($filter->getElements());
+
+        $filter->elements([$fn, $attr]);
+
+        $this->assertEquals([
+            [
+                'functionalNames' => [5],
+                'attributes'      => [1022],
+            ],
+        ], $filter->getElements());
+
+        $filter->reset();
+
+        $this->assertEmpty($filter->getElements());
+    }
 }
