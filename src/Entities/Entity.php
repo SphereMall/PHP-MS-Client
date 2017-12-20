@@ -24,7 +24,7 @@ class Entity
      * Entity constructor.
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         if (empty($data)) {
             return $this;
