@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Resources\Shop;
 
 use SphereMall\MS\Entities\Order;
+use SphereMall\MS\Lib\Makers\OrderHistoryMaker;
 use SphereMall\MS\Lib\Shop\OrderFinalized;
 use SphereMall\MS\Resources\Resource;
 
@@ -53,6 +54,25 @@ class OrdersResource extends Resource
     }
 
     /**
+     * @param int $userId
+     * @param int|null $orderId
+     * @return Order[]
+     */
+    public function getHistory(int $userId, int $orderId = null)
+    {
+        $uriAppend = "history/{$userId}";
+        if (!is_null($orderId)) {
+            $uriAppend .= "/{$orderId}";
+        }
+
+        $response = $this->handler->handle('GET', false, $uriAppend);
+
+        return $this->make($response, true, new OrderHistoryMaker());
+    }
+    #endregion
+
+    #region [Private methods]
+    /**
      * @param $uriAppend
      * @return null|OrderFinalized
      */
@@ -70,9 +90,5 @@ class OrdersResource extends Resource
 
         return null;
     }
-    #endregion
-
-    #region [Private methods]
-
     #endregion
 }

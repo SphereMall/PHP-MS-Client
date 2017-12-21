@@ -49,5 +49,15 @@ class OrdersResourceTest extends SetUpResourceTest
         $this->assertEquals(2, $order2->getPaymentStatusId());
         $this->assertEquals($items, $order2->items);
     }
+
+    public function testOrderHistory()
+    {
+        $all = $this->client->orders()->getHistory(227);
+
+        foreach ($all as $item) {
+            $this->assertEquals(227, $item->userId);
+            $this->assertInstanceOf(Order::class, $item);
+        }
+    }
     #endregion
 }

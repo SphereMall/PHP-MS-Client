@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Tests\Resources\Products;
 
 use SphereMall\MS\Entities\EntityAttribute;
+use SphereMall\MS\Resources\Products\EntityAttributesResource;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class EntityAttributesResourceTest extends SetUpResourceTest
@@ -18,6 +19,8 @@ class EntityAttributesResourceTest extends SetUpResourceTest
     public function testServiceGetList()
     {
         $entityAttributes = $this->client->entityAttributes();
+        $this->assertInstanceOf(EntityAttributesResource::class, $entityAttributes);
+
         $list = $entityAttributes->all();
 
         foreach ($list as $item) {
