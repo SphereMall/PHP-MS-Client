@@ -9,6 +9,7 @@
 
 namespace SphereMall\MS\Tests\Lib\Entities;
 
+use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
@@ -27,5 +28,10 @@ class EntityTest extends SetUpResourceTest
 
         $this->assertEquals('product', $product->getType());
         $this->assertInstanceOf(Product::class, $product);
+
+        $attribute = new Attribute();
+
+        $this->assertEquals('attribute', $attribute->getType());
+        $this->assertInstanceOf(Attribute::class, $attribute);
     }
 }

@@ -56,4 +56,21 @@ class Product extends Entity
     public $media;
     public $mainMedia;
     #endregion
+
+    #region [Public methods]
+    /**
+     * @param string $code
+     * @return null|Attribute
+     */
+    public function getAttributeByCode(string $code)
+    {
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->code == $code) {
+                return $attribute;
+            }
+        }
+
+        return null;
+    }
+    #endregion
 }

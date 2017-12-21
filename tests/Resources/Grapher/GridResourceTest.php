@@ -43,6 +43,8 @@ class GridResourceTest extends SetUpResourceTest
         $filter = new GridFilter();
         $filter->elements([new EntityFilter(['product'])]);
 
+        $this->assertInstanceOf(GridFilter::class, $filter);
+
         $grid = $this->client->grid()
             ->filter($filter)
             ->all();
@@ -92,7 +94,9 @@ class GridResourceTest extends SetUpResourceTest
 
         foreach ($all as $items) {
             foreach ($items as $item) {
-                $this->assertInstanceOf(Entity::class, $item);
+                if (is_object($item)) {
+                    $this->assertInstanceOf(Entity::class, $item);
+                }
             }
         }
     }
