@@ -41,7 +41,7 @@ class GridResourceTest extends SetUpResourceTest
     public function testGridFilter()
     {
         $filter = new GridFilter();
-        $filter->element(EntityFilter::create()->value('product'));
+        $filter->elements([new EntityFilter(['product'])]);
 
         $grid = $this->client->grid()
             ->filter($filter)
@@ -52,7 +52,7 @@ class GridResourceTest extends SetUpResourceTest
         }
 
         $filter = new GridFilter();
-        $filter->element(EntityFilter::create()->value('document'));
+        $filter->elements([new EntityFilter(['document'])]);
         $grid = $this->client->grid()
             ->filter($filter)
             ->all();
@@ -65,7 +65,7 @@ class GridResourceTest extends SetUpResourceTest
     public function testGridCount()
     {
         $filter = new GridFilter();
-        $filter->element(EntityFilter::create()->value('product'));
+        $filter->elements([new EntityFilter(['product'])]);
 
         $amount = $this->client->grid()
             ->filter($filter)

@@ -100,12 +100,14 @@ class AsyncContainer
                         call_user_func($this->client->afterAPICall, $response);
                     }
 
-                    $result[$key] = $return['maker']->make($response, $return['returnArray']);
+                    $result[$key] = $return['makeArray']
+                        ? $return['maker']->makeArray($response)
+                        : $return['maker']->makeSingle($response);
+
 
                 }
             },
             'rejected'    => function ($reason, $index) {
-                $a = '';
             },
             'options'     => $options,
         ]);

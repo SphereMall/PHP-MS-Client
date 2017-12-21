@@ -9,6 +9,7 @@
 
 namespace SphereMall\MS\Lib\Makers;
 
+use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\Response;
 
@@ -26,10 +27,15 @@ abstract class Maker
     #region [Abstract methods]
     /**
      * @param Response $response
-     * @param bool $returnArray
      * @return array|Collection
      */
-    abstract function make(Response $response, $returnArray = true);
+    abstract function makeArray(Response $response);
+
+    /**
+     * @param Response $response
+     * @return null|Entity
+     */
+    abstract function makeSingle(Response $response);
     #endregion
 
     #region [Public methods]
