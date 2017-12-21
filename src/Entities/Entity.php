@@ -9,6 +9,8 @@
 
 namespace SphereMall\MS\Entities;
 
+use ReflectionClass;
+
 /**
  * Class Entity
  * @package SphereMall\MS\Entities
@@ -24,7 +26,7 @@ class Entity
      * Entity constructor.
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         if (empty($data)) {
             return $this;
@@ -72,6 +74,11 @@ class Entity
         }
 
         return array_merge($properties, $this->properties);
+    }
+
+    public function getType()
+    {
+        return strtolower((new ReflectionClass(get_called_class()))->getShortName());
     }
 
     /**

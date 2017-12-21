@@ -19,13 +19,13 @@ use SphereMall\MS\Lib\Mappers\Mapper;
 class ObjectMaker extends Maker
 {
     #region [Public methods]
+
     /**
      * @param Response $response
-     * @param bool $returnArray
-     * @return array|Entity|Collection
+     * @return array|Collection
      * @throws EntityNotFoundException
      */
-    public function make(Response $response, $returnArray = true)
+    public function makeArray(Response $response)
     {
         if (!$response->getSuccess()) {
             if ($this->asCollection) {
@@ -35,36 +35,28 @@ class ObjectMaker extends Maker
             return [];
         }
 
-        $included = $this->getIncludedArray($response->getIncluded());
+        $result = $this->getResultFromResponse($response);
 
-        $result = [];
-        foreach ($response->getData() as $element) {
-            if ($mapperClass = $this->getMapperClass($element['type'])) {
-
-                $item = $this->getAttributes($element);
-                $relations = $this->getRelationships($element, $included);
-
-                $item = array_merge($item, $relations);
-                /**
-                 * @var Mapper $mapper
-                 */
-                $mapper = new $mapperClass();
-                $result[] = $mapper->createObject($item);
-
-                continue;
-            }
-
-            throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
+        if ($this->asCollection) {
+            $collection = new Collection($result, $response->getMeta());
+            return $collection;
         }
 
-        if ($returnArray) {
-            if ($this->asCollection) {
-                $collection = new Collection($result, $response->getMeta());
-                return $collection;
-            }
+        return $result;
+    }
 
-            return $result;
+    /**
+     * @param Response $response
+     * @return null|Entity
+     * @throws EntityNotFoundException
+     */
+    public function makeSingle(Response $response)
+    {
+        if (!$response->getSuccess()) {
+            return null;
         }
+
+        $result = $this->getResultFromResponse($response);
 
         return $result[0] ?? null;
     }
@@ -73,7 +65,7 @@ class ObjectMaker extends Maker
     #region [Protected methods]
     /**
      * @param $type
-     * @return bool|string
+     * @return null|string
      */
     protected function getMapperClass($type)
     {
@@ -82,18 +74,19 @@ class ObjectMaker extends Maker
             return $potentialEndpointClass;
         }
 
-        return false;
+        return null;
     }
 
     /**
      * @param array $item
-     * @return array|mixed
+     * @return array
      */
     protected function getAttributes(array $item)
     {
         if (isset($item['attributes']) && is_array($item['attributes'])) {
             return $item['attributes'];
         }
+
         return [];
     }
 
@@ -105,13 +98,13 @@ class ObjectMaker extends Maker
      */
     protected function getRelationships(array $item, array $included)
     {
-        $relations = [];
-        if (isset($item['relationships']) && is_array($item['relationships'])) {
-            $relations = $item['relationships'];
+        if (!isset($item['relationships']) || !is_array($item['relationships'])) {
+            return [];
         }
 
         $result = [];
-        foreach ($relations as $relationKey => $relationValue) {
+
+        foreach ($item['relationships'] as $relationKey => $relationValue) {
             foreach ($relationValue['data'] as $relationData) {
                 $result[$relationKey][] = $included[$relationData['type']][$relationData['id']];
             }
@@ -134,6 +127,51 @@ class ObjectMaker extends Maker
         }
 
         return $result;
+    }
+    #endregion
+
+    #region [Private methods]
+    /**
+     * @param Response $response
+     * @return array
+     * @throws EntityNotFoundException
+     */
+    private function getResultFromResponse(Response $response)
+    {
+        $result = [];
+
+        $included = $this->getIncludedArray($response->getIncluded());
+
+        foreach ($response->getData() as $element) {
+            $mapperClass = $this->getMapperClass($element['type']);
+
+            if (is_null($mapperClass)) {
+                throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
+            }
+
+            $result[] = $this->createObject($mapperClass, $element, $included);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $mapperClass
+     * @param $element
+     * @param $included
+     * @return mixed
+     */
+    private function createObject($mapperClass, $element, $included)
+    {
+        $item = $this->getAttributes($element);
+        $relations = $this->getRelationships($element, $included);
+
+        $item = array_merge($item, $relations);
+        /**
+         * @var Mapper $mapper
+         */
+        $mapper = new $mapperClass();
+        return $mapper->createObject($item);
     }
     #endregion
 }

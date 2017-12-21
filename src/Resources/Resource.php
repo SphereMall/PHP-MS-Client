@@ -334,11 +334,11 @@ abstract class Resource
     #region [Protected methods]
     /**
      * @param Promise|Response $response
-     * @param bool $returnArray
+     * @param bool $makeArray
      * @param Maker|null $maker
      * @return array|Collection|Entity|int
      */
-    protected function make($response, $returnArray = true, Maker $maker = null)
+    protected function make($response, $makeArray = true, Maker $maker = null)
     {
         $this->clearExtraDataForCall();
 
@@ -353,10 +353,14 @@ abstract class Resource
                 call_user_func($this->client->afterAPICall, $response);
             }
 
-            return $maker->make($response, $returnArray);
+            if ($makeArray) {
+                return $maker->makeArray($response);
+            }
+
+            return $maker->makeSingle($response);
         }
 
-        return ['response' => $response, 'maker' => $maker, 'returnArray' => $returnArray];
+        return ['response' => $response, 'maker' => $maker, 'makeArray' => $makeArray];
     }
 
     protected function getQueryParams()

@@ -80,5 +80,16 @@ class ProductsResourceTest extends SetUpResourceTest
         $this->assertNotNull($products[0]->functionalName);
 
     }
+
+    public function testAttributeHelpMethods()
+    {
+        $products = $this->client->products()
+            ->limit(1)
+            ->full();
+
+        $attribute = $products[0]->getAttributeByCode('test-html');
+        $this->assertEquals('test-html', $attribute->code);
+
+    }
     #endregion
 }

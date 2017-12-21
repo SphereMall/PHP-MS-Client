@@ -55,5 +55,20 @@ class AttributesResourceTest extends SetUpResourceTest
             $this->assertInstanceOf(Attribute::class, $item);
         }
     }
+
+    public function testAttributeHelpMethods()
+    {
+        $products = $this->client->products()
+            ->limit(1)
+            ->full();
+
+        $attributes = $products[0]->attributes;
+        foreach ($attributes as $attribute) {
+            $this->assertInstanceOf(Attribute::class, $attribute);
+        }
+
+        $attribute = $attributes[0];
+    }
+
     #endregion
 }

@@ -19,10 +19,9 @@ class CountMaker extends ObjectMaker
     #region [Public methods]
     /**
      * @param Response $response
-     * @param bool $returnArray
-     * @return int
+     * @return int|null|\SphereMall\MS\Entities\Entity
      */
-    public function make(Response $response, $returnArray = true)
+    public function makeSingle(Response $response)
     {
         if (!$response->getSuccess()) {
             return 0;
