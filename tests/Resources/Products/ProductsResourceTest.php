@@ -90,6 +90,9 @@ class ProductsResourceTest extends SetUpResourceTest
         $attribute = $products[0]->getAttributeByCode('test-html');
         $this->assertEquals('test-html', $attribute->code);
 
+        $attributeValue = $products[0]->getFirstValueByAttributeCode('test-html');
+        $this->assertEquals('fghfghfgh', $attributeValue->value);
+
     }
     #endregion
 }

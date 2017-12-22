@@ -33,6 +33,7 @@ class Client
     #region [Properties]
     public $beforeAPICall;
     public $afterAPICall;
+    public static $userAgent = "SM_SDK_PHP_CLIENT";
 
     protected $gatewayUrl;
     protected $clientId;
@@ -46,8 +47,6 @@ class Client
 
     protected $async = false;
     protected $promises = [];
-
-    public static $userAgent = "SM_SDK_PHP_CLIENT";
     #endregion
 
     #region [Constructor]

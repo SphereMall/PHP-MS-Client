@@ -41,8 +41,6 @@ use SphereMall\MS\Lib\Collection;
 class OrderFinalized
 {
     #region [Properties]
-    protected $client;
-
     public $items;
     public $subTotalVatPrice;
     public $totalVatPrice;
@@ -53,16 +51,14 @@ class OrderFinalized
     protected $id;
     protected $orderId;
     protected $delivery;
-
     protected $shippingAddress;
     protected $billingAddress;
-
     protected $paymentMethod;
-
     protected $user;
-
     protected $statusId;
     protected $paymentStatusId;
+
+    protected $client;
     #endregion
 
     #region [Constructor]

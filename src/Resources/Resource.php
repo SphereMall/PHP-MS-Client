@@ -340,8 +340,6 @@ abstract class Resource
      */
     protected function make($response, $makeArray = true, Maker $maker = null)
     {
-        $this->clearExtraDataForCall();
-
         if (is_null($maker)) {
             $maker = $this->maker;
         }
@@ -363,6 +361,9 @@ abstract class Resource
         return ['response' => $response, 'maker' => $maker, 'makeArray' => $makeArray];
     }
 
+    /**
+     * @return array
+     */
     protected function getQueryParams()
     {
         $params = [
@@ -391,18 +392,6 @@ abstract class Resource
         }
 
         return $params;
-    }
-
-    protected function clearExtraDataForCall()
-    {
-        /*$this->limit = 10;
-        $this->offset = 0;
-
-        $this->ids = [];
-        $this->fields = [];
-        $this->filter = [];
-        $this->in = [];
-        $this->sort = [];*/
     }
     #endregion
 }

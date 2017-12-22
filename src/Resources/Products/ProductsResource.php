@@ -10,7 +10,9 @@
 namespace SphereMall\MS\Resources\Products;
 
 use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Resources\Resource;
+use SphereMall\MS\Resources\Traits\FullResource;
 
 /**
  * Class ProductsResource
@@ -20,36 +22,19 @@ use SphereMall\MS\Resources\Resource;
  * @method Product[] all()
  * @method Product update($id, $data)
  * @method Product create($data)
+ * @method Product|Product[] full($param = null)
+ * @method Product[] fullAll()
+ * @method Product fullById(int $id)
+ * @method Product fullByCode(string $code)
  */
 class ProductsResource extends Resource
 {
+    use FullResource;
+
     #region [Override methods]
     public function getURI()
     {
         return "products";
-    }
-    #endregion
-
-    #region [Public methods]
-    /**
-     * Get list of entities
-     * @param null|int|string $param
-     * @return Product[]
-     */
-    public function full($param = null)
-    {
-        $uriAppend = 'full';
-        $params = $this->getQueryParams();
-
-        if (!is_null($param)) {
-            $uriAppend = is_int($param)
-                ? $uriAppend . "/$param"
-                : "url/$param";
-        }
-
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
-
-        return $this->make($response);
     }
     #endregion
 }

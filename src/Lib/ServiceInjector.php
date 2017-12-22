@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Resources\Documents\DocumentsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
 use SphereMall\MS\Resources\Products\AttributeTypesResource;
@@ -383,6 +384,17 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new GridResource($this);
+    }
+    #endregion
+
+    #region [Documents service]
+    /**
+     * @return DocumentsResource
+     */
+    public function documents()
+    {
+        /** @var Client $this */
+        return new DocumentsResource($this);
     }
     #endregion
 }
