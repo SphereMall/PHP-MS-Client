@@ -24,7 +24,24 @@ class DocumentsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return new Document($array);
+        $document = new Document($array);
+
+        if (isset($array['attributes'])) {
+            $document->attributes = [];
+
+            $mapper = new AttributesMapper();
+            foreach ($array['attributes'] as $attribute) {
+                $document->attributes[] = $mapper->createObject($attribute);
+            }
+        }
+
+        if (isset($array['functionalNames'][0])) {
+            $mapper = new FunctionalNamesMapper();
+            $document->functionalName = $mapper->createObject($array['functionalNames'][0]);
+
+        }
+
+        return $document;
     }
     #endregion
 }

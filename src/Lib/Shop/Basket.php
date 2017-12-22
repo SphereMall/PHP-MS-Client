@@ -194,14 +194,12 @@ class Basket extends OrderFinalized
 
         $this->setProperties($order);
     }
-    #endregion
 
-    #region [Private functions]
     /**
      * @param Address $address
      * @param string $addressKey
      */
-    private function setAddress(Address $address, $addressKey)
+    protected function setAddress(Address $address, $addressKey)
     {
         if (!$address->id) {
             $addressResource = $this->client
@@ -220,7 +218,7 @@ class Basket extends OrderFinalized
      * @param callable $action
      * @param array $params
      */
-    private function callResourceAction(callable $action, array $params)
+    protected function callResourceAction(callable $action, array $params)
     {
         $params['basketId'] = $this->getId();
 

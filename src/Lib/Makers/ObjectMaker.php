@@ -128,15 +128,13 @@ class ObjectMaker extends Maker
 
         return $result;
     }
-    #endregion
 
-    #region [Private methods]
     /**
      * @param Response $response
      * @return array
      * @throws EntityNotFoundException
      */
-    private function getResultFromResponse(Response $response)
+    protected function getResultFromResponse(Response $response)
     {
         $result = [];
 
@@ -161,7 +159,7 @@ class ObjectMaker extends Maker
      * @param $included
      * @return mixed
      */
-    private function createObject($mapperClass, $element, $included)
+    protected function createObject($mapperClass, $element, $included)
     {
         $item = $this->getAttributes($element);
         $relations = $this->getRelationships($element, $included);

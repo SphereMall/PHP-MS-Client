@@ -17,6 +17,7 @@ use SphereMall\MS\Entities\OrderItem;
 use SphereMall\MS\Entities\User;
 use SphereMall\MS\Lib\Async\AsyncContainer;
 use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Lib\Traits\InteractsWithProperties;
 
 /**
  * Class OrderFinalized
@@ -40,9 +41,9 @@ use SphereMall\MS\Lib\Collection;
  */
 class OrderFinalized
 {
-    #region [Properties]
-    protected $client;
+    use InteractsWithProperties;
 
+    #region [Properties]
     public $items;
     public $subTotalVatPrice;
     public $totalVatPrice;
@@ -53,16 +54,14 @@ class OrderFinalized
     protected $id;
     protected $orderId;
     protected $delivery;
-
     protected $shippingAddress;
     protected $billingAddress;
-
     protected $paymentMethod;
-
     protected $user;
-
     protected $statusId;
     protected $paymentStatusId;
+
+    protected $client;
     #endregion
 
     #region [Constructor]
@@ -202,6 +201,8 @@ class OrderFinalized
         $this->totalPriceWithoutDelivery = $order->totalPrice;
 
         $this->paymentMethod = $order->paymentMethodId;
+
+        $this->setPropertiesField($order->getPropertiesField());
 
         //Get all existing data for basket by async request
         $this->setAsyncProperties($order);

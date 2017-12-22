@@ -9,20 +9,24 @@
 
 namespace SphereMall\MS\Entities;
 
+use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
+
 /**
  * Class Company
  * @package SphereMall\MS\Entities
  * @property int $id
  * @property string $urlCode
- * @property string $title
- * @property string $shortDescription
+ * @property Attribute[] $attributes
  */
 class Document extends Entity
 {
+    use InteractsWithAttributes;
+
     #region [Properties]
     public $id;
     public $urlCode;
-    public $title;
-    public $shortDescription;
+
+    public $attributes;
+    public $functionalName;
     #endregion
 }
