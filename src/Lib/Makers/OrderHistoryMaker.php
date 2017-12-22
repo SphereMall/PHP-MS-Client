@@ -21,6 +21,29 @@ class OrderHistoryMaker extends ObjectMaker
 {
     #region [Protected methods]
     /**
+     * @param Response $response
+     * @return array
+     * @throws EntityNotFoundException
+     */
+    protected function getResultFromResponse(Response $response)
+    {
+        $result = [];
+
+        $included = $this->getIncludedArray($response->getIncluded());
+
+        foreach ($response->getData() as $element) {
+            $mapperClass = $this->getMapperClass($element);
+
+            if (is_null($mapperClass)) {
+                throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
+            }
+
+            $result[] = $this->createObject($mapperClass, $element, $included);
+        }
+
+        return $result;
+    }
+    /**
      * @param $type
      * @return null|string
      */
