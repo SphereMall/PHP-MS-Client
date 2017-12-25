@@ -99,7 +99,7 @@ class GridFilter extends Filter
             $set['params'] = json_encode($this->elements);
         }
 
-        return http_build_query($set);
+        return urldecode(http_build_query($set));
     }
     #endregion
 
