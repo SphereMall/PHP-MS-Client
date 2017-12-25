@@ -78,7 +78,7 @@ class Request
             $url = $url . '?' . urldecode(http_build_query($queryParams));
         }
 
-        if($body instanceof Entity) {
+        if ($body instanceof Entity) {
             $body = $body->asArray();
         }
 
