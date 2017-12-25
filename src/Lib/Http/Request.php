@@ -75,7 +75,7 @@ class Request
 
         //Add query params
         if ($queryParams) {
-            $url = $url . '?' . http_build_query($queryParams);
+            $url = $url . '?' . urldecode(http_build_query($queryParams));
         }
 
         if($body instanceof Entity) {
