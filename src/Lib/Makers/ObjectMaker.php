@@ -95,6 +95,7 @@ class ObjectMaker extends Maker
      * @param array $item
      * @param array $included
      * @return array
+     * @throws EntityNotFoundException
      */
     protected function getRelationships(array $item, array $included)
     {
@@ -106,6 +107,10 @@ class ObjectMaker extends Maker
 
         foreach ($item['relationships'] as $relationKey => $relationValue) {
             foreach ($relationValue['data'] as $relationData) {
+                if (!isset($included[$relationData['type']][$relationData['id']])) {
+                    throw new EntityNotFoundException("Data for type[{$relationData['type']}] and id[{$relationData['id']}] was not found in includes");
+                }
+
                 $result[$relationKey][] = $included[$relationData['type']][$relationData['id']];
             }
         }

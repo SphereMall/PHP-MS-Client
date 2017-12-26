@@ -16,9 +16,11 @@ namespace SphereMall\MS\Entities;
  * @property string $code
  * @property string $title
  * @property int $showInSpecList
+ * @property int $useInFilter
  * @property string $description
  * @property int $attributeGroupId
  * @property string $cssClass
+ * @property int $orderNumber
  * @property AttributeValue[] $values
  * @property AttributeGroup $group
  */
@@ -29,9 +31,11 @@ class Attribute extends Entity
     public $code;
     public $title;
     public $showInSpecList;
+    public $useInFilter;
     public $description;
     public $attributeGroupId;
     public $cssClass;
+    public $orderNumber;
 
     public $values;
     public $group;
