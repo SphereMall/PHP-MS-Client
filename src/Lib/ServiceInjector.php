@@ -11,6 +11,7 @@ namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
+use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
 use SphereMall\MS\Resources\Products\AttributeTypesResource;
@@ -384,6 +385,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new GridResource($this);
+    }
+
+    /**
+     * @return CorrelationsResource
+     */
+    public function correlations()
+    {
+        /** @var Client $this */
+        return new CorrelationsResource($this);
     }
     #endregion
 
