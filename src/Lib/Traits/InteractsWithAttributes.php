@@ -19,23 +19,41 @@ use SphereMall\MS\Entities\AttributeValue;
  */
 trait InteractsWithAttributes
 {
+    #region [Public methods]
+    /**
+     * @param int $id
+     * @return null|Attribute
+     */
+    public function getAttributeById(int $id)
+    {
+        return $this->getAttributeByFieldNameAndValue('id', $id);
+    }
+
+    /**
+     * @param array $ids
+     * @return array|Attribute[]
+     */
+    public function getAttributesByIds(array $ids)
+    {
+        return $this->getAttributesByFieldNameAndValues('id', $ids);
+    }
+
     /**
      * @param string $code
      * @return null|Attribute
      */
     public function getAttributeByCode(string $code)
     {
-        if (empty($this->attributes)) {
-            return null;
-        }
+        return $this->getAttributeByFieldNameAndValue('code', $code);
+    }
 
-        foreach ($this->attributes as $attribute) {
-            if ($attribute->code == $code) {
-                return $attribute;
-            }
-        }
-
-        return null;
+    /**
+     * @param array $codes
+     * @return array|Attribute[]
+     */
+    public function getAttributesByCodes(array $codes)
+    {
+        return $this->getAttributesByFieldNameAndValues('code', $codes);
     }
 
     /**
@@ -55,4 +73,49 @@ trait InteractsWithAttributes
 
         return $attribute->values[0];
     }
+    #endregion
+
+    #region [Protected methods]
+    /**
+     * @param string $fieldName
+     * @param $value
+     * @return null|Attribute
+     */
+    protected function getAttributeByFieldNameAndValue(string $fieldName, $value)
+    {
+        if (empty($this->attributes)) {
+            return null;
+        }
+
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->{$fieldName} == $value) {
+                return $attribute;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $fieldName
+     * @param $values
+     * @return array|Attribute[]
+     */
+    protected function getAttributesByFieldNameAndValues(string $fieldName, $values)
+    {
+        $attributes = [];
+
+        if (empty($values) || empty($this->attributes)) {
+            return $attributes;
+        }
+
+        foreach ($this->attributes as $attribute) {
+            if (in_array($attribute->{$fieldName}, $values)) {
+                $attributes[] = $attribute;
+            }
+        }
+
+        return $attributes;
+    }
+    #endregion
 }

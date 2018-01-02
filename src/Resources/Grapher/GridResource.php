@@ -11,6 +11,7 @@ namespace SphereMall\MS\Resources\Grapher;
 
 use Exception;
 use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Makers\CountMaker;
@@ -90,7 +91,7 @@ class GridResource extends Resource
      */
     public function get(int $id)
     {
-        throw new Exception("Method get() can not be use with GRID");
+        throw new MethodNotFoundException("Method get() can not be use with GRID");
     }
 
     /**
@@ -100,7 +101,7 @@ class GridResource extends Resource
      */
     public function update($id, $data)
     {
-        throw new Exception("Method update() can not be use with GRID");
+        throw new MethodNotFoundException("Method update() can not be use with GRID");
     }
 
     /**
@@ -109,7 +110,7 @@ class GridResource extends Resource
      */
     public function create($data)
     {
-        throw new Exception("Method create() can not be use with GRID");
+        throw new MethodNotFoundException("Method create() can not be use with GRID");
     }
 
     /**
@@ -119,7 +120,7 @@ class GridResource extends Resource
      */
     public function delete($id)
     {
-        throw new Exception("Method delete() can not be use with GRID");
+        throw new MethodNotFoundException("Method delete() can not be use with GRID");
     }
     #endregion
 
