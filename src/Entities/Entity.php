@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Entities;
 
 use ReflectionClass;
+use SphereMall\MS\Lib\Helpers\ClassReflectionHelper;
 use SphereMall\MS\Lib\Traits\InteractsWithProperties;
 
 /**
@@ -58,7 +59,7 @@ class Entity
 
     public function getType()
     {
-        return strtolower((new ReflectionClass(get_called_class()))->getShortName());
+        return (new ClassReflectionHelper(get_called_class()))->getShortLowerCaseName();
     }
     #endregion
 }
