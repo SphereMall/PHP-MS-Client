@@ -71,7 +71,9 @@ class GridResourceTest extends SetUpResourceTest
     public function testGridCount()
     {
         $filter = new GridFilter();
-        $filter->elements([new EntityFilter(['product'])]);
+        $filter->elements([
+            new EntityFilter([Product::class])
+        ]);
 
         $amount = $this->client->grid()
             ->filter($filter)
