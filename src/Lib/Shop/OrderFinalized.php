@@ -38,6 +38,8 @@ use SphereMall\MS\Lib\Traits\InteractsWithProperties;
  * @property int $subTotalPrice
  * @property int $totalPrice
  * @property int $totalPriceWithoutDelivery
+ * @property string $createDate
+ * @property string $updateDate
  */
 class OrderFinalized
 {
@@ -60,6 +62,9 @@ class OrderFinalized
     protected $user;
     protected $statusId;
     protected $paymentStatusId;
+
+    protected $updateDate;
+    protected $createDate;
 
     protected $client;
     #endregion
@@ -201,6 +206,9 @@ class OrderFinalized
         $this->totalPriceWithoutDelivery = $order->totalPrice;
 
         $this->paymentMethod = $order->paymentMethodId;
+
+        $this->createDate = $order->createDate;
+        $this->updateDate = $order->updateDate;
 
         $this->setPropertiesField($order->getPropertiesField());
 

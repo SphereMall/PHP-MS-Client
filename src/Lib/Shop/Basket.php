@@ -117,7 +117,7 @@ class Basket extends OrderFinalized
     public function setDelivery(Delivery $delivery)
     {
         if (!$delivery->id) {
-            throw new InvalidArgumentException("Can set delivery. Delivery id is empty.");
+            throw new InvalidArgumentException("Can not set delivery. Delivery id is empty.");
         }
 
         $this->updateParams['deliveryProviderId'] = $delivery->id;
