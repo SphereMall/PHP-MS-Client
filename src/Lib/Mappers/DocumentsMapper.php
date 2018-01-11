@@ -26,11 +26,13 @@ class DocumentsMapper extends Mapper
     {
         $document = new Document($array);
 
-        if (isset($array['attributes'])) {
+        if (isset($array['attributes']) && isset($array['attributeValues'])) {
             $document->attributes = [];
 
             $mapper = new AttributesMapper();
             foreach ($array['attributes'] as $attribute) {
+                $attribute['attributeValues'] = $this->getAttributeValues($attribute, $array['attributeValues']);
+
                 $document->attributes[] = $mapper->createObject($attribute);
             }
         }
@@ -42,6 +44,23 @@ class DocumentsMapper extends Mapper
         }
 
         return $document;
+    }
+
+    /**
+     * @param $attribute
+     * @param $attributeValues
+     * @return array
+     */
+    protected function getAttributeValues($attribute, $attributeValues)
+    {
+        $values = [];
+        foreach ($attributeValues as $attributeValue) {
+            if ($attribute['id'] == $attributeValue['attributeId']) {
+                $values[] = $attributeValue;
+            }
+        }
+
+        return $values;
     }
     #endregion
 }
