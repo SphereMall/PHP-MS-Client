@@ -15,6 +15,7 @@ use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Helpers\ClassReflectionHelper;
+use SphereMall\MS\Lib\Helpers\CorrelationTypeHelper;
 use SphereMall\MS\Lib\Makers\CountMaker;
 use SphereMall\MS\Lib\Makers\FacetsMaker;
 use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
@@ -24,7 +25,7 @@ use SphereMall\MS\Resources\Resource;
  * Class GridResource
  * @package SphereMall\MS\Resources\Users
  */
-class CorrelationsResource extends Resource
+class CorrelationsResource extends GrapherResource
 {
     #region [Override methods]
     public function getURI()
@@ -43,7 +44,7 @@ class CorrelationsResource extends Resource
     {
         $params = $this->getQueryParams();
 
-        $type = (new ClassReflectionHelper($forClassName))->getShortLowerCaseName();
+        $type = CorrelationTypeHelper::getGraphTypeByClass($forClassName);
         $uriAppend = "{$type}/{$id}";
 
         $response = $this->handler->handle('GET', false, $uriAppend, $params);

@@ -55,16 +55,16 @@ class OrdersResource extends Resource
 
     /**
      * @param int $userId
-     * @param int|null $orderId
+     * @param int|null $id
      * @return Order[]
      */
-    public function getHistory(int $userId, int $orderId = null)
+    public function getHistory(int $userId, int $id = null)
     {
         $params = $this->getQueryParams();
 
         $uriAppend = "history/{$userId}";
-        if (!is_null($orderId)) {
-            $uriAppend .= "/{$orderId}";
+        if (!is_null($id)) {
+            $uriAppend .= "/{$id}";
         }
 
         $response = $this->handler->handle('GET', false, $uriAppend, $params);

@@ -23,7 +23,7 @@ use SphereMall\MS\Resources\Resource;
  * Class GridResource
  * @package SphereMall\MS\Resources\Users
  */
-class GridResource extends Resource
+class GridResource extends GrapherResource
 {
     #region [Override methods]
     public function getURI()
@@ -121,25 +121,6 @@ class GridResource extends Resource
     public function delete($id)
     {
         throw new MethodNotFoundException("Method delete() can not be use with GRID");
-    }
-    #endregion
-
-    #region [Protected methods]
-    protected function getQueryParams()
-    {
-        $params = parent::getQueryParams();
-
-        if (empty($params['where'])) {
-            return $params;
-        }
-
-        foreach (explode('&', $params['where']) as $where) {
-            list($key, $value) = explode('=', $where);
-            $params[$key] = $value;
-        }
-
-        unset($params['where']);
-        return $params;
     }
     #endregion
 }

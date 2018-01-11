@@ -41,7 +41,9 @@ class GridResourceTest extends SetUpResourceTest
     public function testGridFilter()
     {
         $filter = new GridFilter();
-        $filter->elements([new EntityFilter(['product'])]);
+        $filter->elements([
+            new EntityFilter([Product::class])
+        ]);
 
         $this->assertInstanceOf(GridFilter::class, $filter);
 
@@ -54,7 +56,9 @@ class GridResourceTest extends SetUpResourceTest
         }
 
         $filter = new GridFilter();
-        $filter->elements([new EntityFilter(['document'])]);
+        $filter->elements([
+            new EntityFilter([Document::class])
+        ]);
         $grid = $this->client->grid()
             ->filter($filter)
             ->all();
@@ -67,7 +71,9 @@ class GridResourceTest extends SetUpResourceTest
     public function testGridCount()
     {
         $filter = new GridFilter();
-        $filter->elements([new EntityFilter(['product'])]);
+        $filter->elements([
+            new EntityFilter([Product::class])
+        ]);
 
         $amount = $this->client->grid()
             ->filter($filter)

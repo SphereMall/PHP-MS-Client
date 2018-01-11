@@ -9,10 +9,17 @@
 
 namespace SphereMall\MS\Tests\Resources\Grapher;
 
+use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Entities\FunctionalName;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
+use SphereMall\MS\Lib\Filters\FilterOperators;
+use SphereMall\MS\Lib\Filters\Grid\EntityFilter;
+use SphereMall\MS\Lib\Filters\Grid\FunctionalNameFilter;
+use SphereMall\MS\Lib\Filters\Grid\GridFilter;
+use SphereMall\MS\Lib\Helpers\CorrelationTypeHelper;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
@@ -77,15 +84,45 @@ class CorrelationsResourceTest extends SetUpResourceTest
      */
     public function is_product_correlations()
     {
-        $correlations = $this->client->correlations()->getById(4, Product::class);
-        if (empty($correlations)) {
-            $this->assertEmpty($correlations);
-
-            return;
-        }
-
+        $correlations = $this->client->correlations()->withMeta()->getById(4, Product::class);
+        $this->assertNotEquals(0, $correlations->count());
         foreach ($correlations as $correlation) {
             $this->assertInstanceOf(Entity::class, $correlation);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function is_product_type_title_correct()
+    {
+        $type = CorrelationTypeHelper::getGraphTypeByClass(Product::class);
+        $this->assertEquals('products', $type);
+    }
+
+    /**
+     * @test
+     */
+    public function test__correlations_with_filter()
+    {
+        $funcNameId = 1;
+        $filter = new GridFilter();
+        $filter->elements([
+            new EntityFilter([Product::class]),
+            new FunctionalNameFilter([$funcNameId])
+        ]);
+
+        $correlations = $this->client->correlations()
+                                     ->filter($filter)
+                                     ->withMeta()
+                                     ->getById(4, Document::class);
+        $this->assertNotEquals(0, $correlations->count());
+        /**
+         * @var $correlation Product
+         */
+        foreach ($correlations as $correlation) {
+            $this->assertInstanceOf(Product::class, $correlation);
+            $this->assertEquals($funcNameId, $correlation->functionalName->id);
         }
     }
     #endregion

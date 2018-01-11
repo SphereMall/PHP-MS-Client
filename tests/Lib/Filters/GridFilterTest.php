@@ -10,6 +10,7 @@
 
 namespace SphereMall\MS\Tests\Lib\Filters;
 
+use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\Filters\Grid\AttributeFilter;
 use SphereMall\MS\Lib\Filters\Grid\BrandFilter;
 use SphereMall\MS\Lib\Filters\Grid\EntityFilter;
@@ -77,11 +78,11 @@ class GridFilterTest extends SetUpResourceTest
 
         $this->assertEquals('params=[{"attributes":[1022]}]', urldecode($f1));
 
-        $ent = new EntityFilter(['product']);
+        $ent = new EntityFilter([Product::class]);
         $filter = new GridFilter();
         $f1 = (string)$filter->elements([$ent]);
 
-        $this->assertEquals('params=[{"entity":["product"]}]', urldecode($f1));
+        $this->assertEquals('params=[{"entity":["products"]}]', urldecode($f1));
 
         $fn = new FunctionalNameFilter([5]);
 
@@ -89,7 +90,7 @@ class GridFilterTest extends SetUpResourceTest
         $f1 = (string)$filter->elements([$attr, $ent])
             ->elements([$fn]);
 
-        $this->assertEquals('params=[{"attributes":[1022],"entity":["product"]},{"functionalNames":[5]}]',
+        $this->assertEquals('params=[{"attributes":[1022],"entity":["products"]},{"functionalNames":[5]}]',
             urldecode($f1));
     }
 
@@ -186,15 +187,15 @@ class GridFilterTest extends SetUpResourceTest
         $this->assertEquals('functionalNames', $fn->getName());
         $this->assertEquals([5], $fn->getValues());
 
-        $entity = new EntityFilter(['product']);
+        $entity = new EntityFilter([Product::class]);
 
         $this->assertEquals('entity', $entity->getName());
-        $this->assertEquals(['product'], $entity->getValues());
+        $this->assertEquals(['products'], $entity->getValues());
 
         $filter = new GridFilter();
         $f = (string)$filter->elements([$entity, $attr]);
 
-        $this->assertEquals('params=[{"entity":["product"],"attributes":[1022]}]',
+        $this->assertEquals('params=[{"entity":["products"],"attributes":[1022]}]',
             urldecode($f));
     }
 
