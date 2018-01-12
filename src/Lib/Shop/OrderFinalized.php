@@ -52,6 +52,8 @@ class OrderFinalized
     public $subTotalPrice;
     public $totalPrice;
     public $totalPriceWithoutDelivery;
+    public $updateDate;
+    public $createDate;
 
     protected $id;
     protected $orderId;
@@ -62,9 +64,6 @@ class OrderFinalized
     protected $user;
     protected $statusId;
     protected $paymentStatusId;
-
-    protected $updateDate;
-    protected $createDate;
 
     protected $client;
     #endregion
