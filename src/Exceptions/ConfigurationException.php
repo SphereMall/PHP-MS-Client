@@ -9,13 +9,11 @@
 
 namespace SphereMall\MS\Exceptions;
 
-use Exception;
-
 /**
  * Class ConfigurationException
  * @package SphereMall\MS\Exceptions
  */
-class ConfigurationException extends Exception
+class ConfigurationException extends SMSDKException
 {
     
 }

@@ -9,12 +9,10 @@
 
 namespace SphereMall\MS\Exceptions;
 
-use Exception;
-
 /**
  * Class EntityNotFoundException
  * @package SphereMall\MS\Exceptions
  */
-class EntityNotFoundException extends Exception
+class EntityNotFoundException extends SMSDKException
 {
 }
