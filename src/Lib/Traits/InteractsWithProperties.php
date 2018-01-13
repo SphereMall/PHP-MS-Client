@@ -33,9 +33,22 @@ trait InteractsWithProperties
         return null;
     }
 
+    /**
+     * @return array
+     */
     public function getPropertiesField()
     {
         return $this->properties;
+    }
+
+    /**
+     * @param $name
+     */
+    public function removeProperty($name)
+    {
+        if (isset($this->properties[$name])) {
+            unset($this->properties[$name]);
+        }
     }
 
     /**

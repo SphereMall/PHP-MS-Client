@@ -57,16 +57,17 @@ abstract class Resource
      * BaseService constructor.
      * @param Client $client
      * @param null $version
+     * @param null $handler
+     * @param null $maker
      */
-    public function __construct(Client $client, $version = null)
+    public function __construct(Client $client, $version = null, $handler = null, $maker = null)
     {
         $this->client = $client;
-        $this->version = is_null($version) ? $client->getVersion() : $version;
+        $this->version = $version ?? $client->getVersion();
 
-        /** @var Resource $this */
-        $this->handler = new Request($this->client, $this);
+        $this->handler = $handler ?? new Request($this->client, $this);
 
-        $this->maker = new ObjectMaker();
+        $this->maker = $maker ?? new ObjectMaker();
     }
     #endregion
 

@@ -9,10 +9,13 @@
 
 namespace SphereMall\MS\Exceptions;
 
+use Exception;
+
 /**
- * Class MethodNotFoundException
+ * Class ConfigurationException
  * @package SphereMall\MS\Exceptions
  */
-class MethodNotFoundException extends SMSDKException
+class SMSDKException extends Exception
 {
+    
 }
