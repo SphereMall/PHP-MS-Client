@@ -28,6 +28,7 @@ class FacetAttributesMapper extends Mapper
             $raw[$item['attributeId']]['title'] = $item['title'];
             $raw[$item['attributeId']]['code'] = $item['code'];
             $raw[$item['attributeId']]['cssClass'] = $item['cssClass'];
+            $raw[$item['attributeId']]['orderNumber'] = $item['orderNumber'];
 
             $raw[$item['attributeId']]['attributeValues'][] = [
                 'id'       => $item['id'],
