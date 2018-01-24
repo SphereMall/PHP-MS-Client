@@ -110,6 +110,31 @@ class OrderFinalized
         //Set data to current order
         $this->setOrderData($order);
     }
+
+    /**
+     * @param int|null $orderId
+     * @return OrderFinalized|null
+     */
+    public function copy(int $orderId = null)
+    {
+        if (is_null($orderId)) {
+            $orderId = $this->id;
+        }
+
+        $order = $this->client
+            ->basketResource()
+            ->copy($orderId);
+
+        if (!$order) {
+            return null;
+        }
+
+        $orderFinalized = new static($this->client);
+        $orderFinalized->id = $order->id;
+        $orderFinalized->setProperties($order);
+
+        return $orderFinalized;
+    }
     #endregion
 
     #region [Getters]

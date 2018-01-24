@@ -12,6 +12,7 @@ namespace SphereMall\MS\Tests\Lib\Shop;
 use SphereMall\MS\Entities\Address;
 use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Lib\Shop\Delivery;
+use SphereMall\MS\Lib\Shop\OrderFinalized;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class BasketTest extends SetUpResourceTest
@@ -191,6 +192,32 @@ class BasketTest extends SetUpResourceTest
             ->update();
 
         $this->assertEquals($basket->getPaymentMethod(), $paymentCollection[0]->id);
+    }
+
+    public function testCopyBasket()
+    {
+        $client = clone $this->client;
+        $basket = $client->basket();
+        $products = $this->client->products()->limit(1)->all();
+        $product = $products[0];
+
+        $basket->add([
+            'products' => [
+                [
+                    'id'     => $product->id,
+                    'amount' => 1,
+                ],
+            ],
+        ]);
+
+        $this->assertCount(1, $basket->items);
+        $basketId = $basket->getId();
+
+        $newBasket = $basket->copy();
+
+        $this->assertNotEquals($basketId, $newBasket->getId());
+
+        $this->assertInstanceOf(OrderFinalized::class, $newBasket);
     }
     #endregion
 }

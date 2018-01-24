@@ -96,7 +96,6 @@ class Basket extends OrderFinalized
 
         $this->updateParams = [];
     }
-
     #endregion
 
     #region [Setters]

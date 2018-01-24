@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Resources\Shop;
 
 use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Entities\Order;
 use SphereMall\MS\Resources\Resource;
 
 /**
@@ -75,6 +76,18 @@ class BasketResource extends Resource
     public function update($id, $data)
     {
         $response = $this->handler->handle('PUT', $data);
+        return $this->make($response, false);
+    }
+
+    /**
+     * @param $id
+     * @return array|int|Entity|\SphereMall\MS\Lib\Collection|Order
+     */
+    public function copy($id)
+    {
+        $uriAppend = 'copy/' . $id;
+
+        $response = $this->handler->handle('POST', false, $uriAppend);
         return $this->make($response, false);
     }
     #endregion
