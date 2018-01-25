@@ -33,10 +33,11 @@ class ProductAttributeValuesMapper extends Mapper
             $raw[$item['attributeId']]['cssClass'] = $item['cssClass'];
 
             $raw[$item['attributeId']]['attributeValues'][] = [
-                'id'       => $item['id'],
-                'value'    => $item['value'],
-                'title'    => $item['valueTitle'],
-                'cssClass' => $item['valueCssClass'],
+                'id'              => $item['id'],
+                'value'           => $item['value'],
+                'title'           => $item['valueTitle'],
+                'cssClass'        => $item['valueCssClass'],
+                'unitOfMeasureId' => $item['unitOfMeasureId'],
             ];
         }
 

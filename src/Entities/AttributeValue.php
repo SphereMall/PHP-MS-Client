@@ -18,6 +18,7 @@ namespace SphereMall\MS\Entities;
  * @property string $cssClass
  * @property string $image
  * @property int $orderNumber
+ * @property int $unitOfMeasureId
  */
 class AttributeValue extends Entity
 {
@@ -28,5 +29,6 @@ class AttributeValue extends Entity
     public $cssClass;
     public $image;
     public $orderNumber;
+    public $unitOfMeasureId;
     #endregion
 }
