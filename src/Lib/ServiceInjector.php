@@ -31,7 +31,7 @@ use SphereMall\MS\Resources\Products\ProductAttributeValuesResource;
 use SphereMall\MS\Resources\Products\ProductsResource;
 use SphereMall\MS\Resources\Shop\InvoicesResource;
 use SphereMall\MS\Resources\Shop\OrderItemsResource;
-use SphereMall\MS\Resources\Shop\PromotionsResource;
+use SphereMall\MS\Resources\Shop\CouponsResource;
 use SphereMall\MS\Resources\Users\AddressResource;
 use SphereMall\MS\Resources\Users\CompaniesResource;
 use SphereMall\MS\Resources\Users\MessagesResource;
@@ -332,12 +332,12 @@ trait ServiceInjector
     }
 
     /**
-     * @return PromotionsResource
+     * @return CouponsResource
      */
     public function promotions()
     {
         /** @var Client $this */
-        return new PromotionsResource($this);
+        return new CouponsResource($this);
     }
     #endregion
 

@@ -9,10 +9,10 @@ namespace SphereMall\MS\Resources\Shop;
 use SphereMall\MS\Resources\Resource;
 
 /**
- * Class PromotionsResource
+ * Class CouponsResource
  * @package SphereMall\MS\Resources\Shop
  */
-class PromotionsResource extends Resource
+class CouponsResource extends Resource
 {
     #region [Override methods]
     public function getURI()
@@ -31,7 +31,9 @@ class PromotionsResource extends Resource
 
         $response = $this->handler->handle('POST', $params, 'apply');
 
-        return $this->make($response, false);
+        //TODO: refactor to make method
+        return $response;
+//        return $this->make($response, false);
     }
     #endregion
 }
