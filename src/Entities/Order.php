@@ -6,6 +6,7 @@
  * Date: 08.10.2017
  * Time: 21:37
  */
+
 namespace SphereMall\MS\Entities;
 
 /**
@@ -25,7 +26,7 @@ namespace SphereMall\MS\Entities;
  * @property string $deliveryTime
  * @property int $deliveryStatusId
  * @property int $currency
- * @property array $additionalInfo
+ * @property string $additionalInfo
  * @property string $orderComment
  * @property int $deliveryCost
  * @property int $subTotalVatPrice
