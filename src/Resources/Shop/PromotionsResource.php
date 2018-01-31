@@ -29,7 +29,7 @@ class PromotionsResource extends Resource
             "couponCode" => $couponCode
         ];
 
-        $response = $this->handler->handle('POST', $params, 'coupon');
+        $response = $this->handler->handle('POST', $params, 'apply');
 
         return $this->make($response, false);
     }
