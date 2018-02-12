@@ -20,6 +20,7 @@ class WishListItemsMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return WishListItem
      */
     protected function doCreateObject(array $array)
@@ -34,6 +35,7 @@ class WishListItemsMapper extends Mapper
 
             $orderItem->product = $productMapper->createObject($array['products'][0]);
         }
+
         return $orderItem;
     }
     #endregion

@@ -27,14 +27,15 @@ class Meta
     #region [Constructor]
     /**
      * Meta constructor.
+     *
      * @param $count
      * @param $limit
      * @param $offset
      */
     public function __construct($count = 0, $limit = 0, $offset = 0)
     {
-        $this->count = $count;
-        $this->limit = $limit;
+        $this->count  = $count;
+        $this->limit  = $limit;
         $this->offset = $offset;
     }
     #endregion

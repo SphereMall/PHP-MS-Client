@@ -35,7 +35,9 @@ class GridResource extends GrapherResource
     #region [Override methods]
     /**
      * Set filter to the resource selecting
+     *
      * @param array|FilterSpecification|GridFilter $filter
+     *
      * @return $this
      */
     public function filter($filter)
@@ -49,44 +51,52 @@ class GridResource extends GrapherResource
         }
 
         $this->filter = $filter;
+
         return $this;
     }
 
     /**
      * @return Entity[]|Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function all()
     {
         $params = $this->getQueryParams();
 
         $response = $this->handler->handle('GET', false, false, $params);
+
         return $this->make($response);
     }
 
     /**
      * @return Entity[]|Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function facets()
     {
         $params = $this->getQueryParams();
 
         $response = $this->handler->handle('GET', false, 'filter', $params);
+
         return $this->make($response, false, new FacetsMaker());
     }
 
     /**
      * @return int
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function count()
     {
         $params = $this->getQueryParams();
 
         $response = $this->handler->handle('GET', false, 'count', $params);
+
         return $this->make($response, false, new CountMaker());
     }
 
     /**
      * @param int $id
+     *
      * @throws \Exception
      */
     public function get(int $id)
@@ -97,6 +107,7 @@ class GridResource extends GrapherResource
     /**
      * @param $id
      * @param $data
+     *
      * @throws Exception
      */
     public function update($id, $data)
@@ -106,6 +117,7 @@ class GridResource extends GrapherResource
 
     /**
      * @param $data
+     *
      * @throws Exception
      */
     public function create($data)
@@ -115,6 +127,7 @@ class GridResource extends GrapherResource
 
     /**
      * @param $id
+     *
      * @return bool|void
      * @throws Exception
      */

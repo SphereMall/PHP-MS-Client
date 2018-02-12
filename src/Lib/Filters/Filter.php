@@ -38,6 +38,7 @@ class Filter
         if (!empty($filters)) {
             $this->setFilters($filters);
         }
+
         return $this;
     }
     #endregion
@@ -54,6 +55,7 @@ class Filter
 
     /**
      * @param array $filters
+     *
      * @return $this
      */
     public function setFilters($filters = [])
@@ -71,6 +73,7 @@ class Filter
                 $this->addFilter($field, $value, $operator);
             }
         }
+
         return $this;
     }
 
@@ -92,6 +95,7 @@ class Filter
                 $this->filters[$field] = $value;
             }
         }
+
         return $this;
     }
 
@@ -108,6 +112,7 @@ class Filter
         if (isset($this->filters[$field][$operator])) {
             unset($this->filters[$field][$operator]);
         }
+
         return $this;
     }
 
@@ -125,6 +130,7 @@ class Filter
             }
 
         }
+
         return sprintf("[%s]", implode(',', $set));
     }
 
@@ -143,6 +149,7 @@ class Filter
             foreach ($rules as $operator => $value) {
                 $out[] = json_encode([$field => [$operator => $value]]);
             }
+
             return $out;
         }
         $out[] = json_encode([$field => $rules]);

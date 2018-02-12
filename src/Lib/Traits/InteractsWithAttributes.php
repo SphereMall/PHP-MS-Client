@@ -22,6 +22,7 @@ trait InteractsWithAttributes
     #region [Public methods]
     /**
      * @param int $id
+     *
      * @return null|Attribute
      */
     public function getAttributeById(int $id)
@@ -31,6 +32,7 @@ trait InteractsWithAttributes
 
     /**
      * @param array $ids
+     *
      * @return array|Attribute[]
      */
     public function getAttributesByIds(array $ids)
@@ -40,6 +42,7 @@ trait InteractsWithAttributes
 
     /**
      * @param string $code
+     *
      * @return null|Attribute
      */
     public function getAttributeByCode(string $code)
@@ -49,6 +52,7 @@ trait InteractsWithAttributes
 
     /**
      * @param array $codes
+     *
      * @return array|Attribute[]
      */
     public function getAttributesByCodes(array $codes)
@@ -58,6 +62,7 @@ trait InteractsWithAttributes
 
     /**
      * @param string $code
+     *
      * @return null|AttributeValue
      */
     public function getFirstValueByAttributeCode(string $code)
@@ -79,6 +84,7 @@ trait InteractsWithAttributes
     /**
      * @param string $fieldName
      * @param $value
+     *
      * @return null|Attribute
      */
     protected function getAttributeByFieldNameAndValue(string $fieldName, $value)
@@ -99,6 +105,7 @@ trait InteractsWithAttributes
     /**
      * @param string $fieldName
      * @param $values
+     *
      * @return array|Attribute[]
      */
     protected function getAttributesByFieldNameAndValues(string $fieldName, $values)

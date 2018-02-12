@@ -20,11 +20,13 @@ class AddressesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Address
      */
     protected function doCreateObject(array $array)
     {
         $address = new Address($array);
+
         return $address;
     }
     #endregion

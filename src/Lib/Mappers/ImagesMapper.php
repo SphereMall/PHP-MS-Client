@@ -20,6 +20,7 @@ class ImagesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Media
      */
     protected function doCreateObject(array $array)

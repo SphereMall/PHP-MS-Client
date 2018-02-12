@@ -20,6 +20,7 @@ class UserMessagesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Message
      */
     protected function doCreateObject(array $array)

@@ -37,15 +37,16 @@ class UsersResource extends Resource
     /**
      * Subscribe user
      * @see $properties
+     *
      * @param $email
      * @param $name
+     *
      * @return User|null
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
     public function subscribe(string $email, string $name = '')
     {
-        $userList = $this->filter(new IsUserEmail($email))
-            ->limit(1)
-            ->all();
+        $userList = $this->filter(new IsUserEmail($email))->limit(1)->all();
 
         $user = $userList[0] ?? new User([
                 'email'        => $email,
@@ -69,8 +70,11 @@ class UsersResource extends Resource
     /**
      * Unsubscribe user
      * @see $properties
+     *
      * @param $guid
+     *
      * @return User|null
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
     public function unsubscribe(string $guid)
     {
@@ -88,18 +92,23 @@ class UsersResource extends Resource
 
     /**
      * @param int $userId
+     *
      * @return WishListItem[]
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getWishList(int $userId)
     {
         $response = $this->handler->handle('GET', false, 'wishlist/' . $userId);
+
         return $this->make($response, true);
     }
 
     /**
      * @param int $userId
      * @param int $productId
+     *
      * @return WishListItem
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
     public function addToWishList(int $userId, int $productId)
     {
@@ -113,13 +122,13 @@ class UsersResource extends Resource
     /**
      * @param int $userId
      * @param int $productId
+     *
      * @return bool
      * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
     public function removeFromWishList(int $userId, int $productId)
     {
-        $item = $this->client->wishListItems()
-            ->filter([
+        $item = $this->client->wishListItems()->filter([
                 'userId'    => ['e' => $userId],
                 'productId' => ['e' => $productId],
             ])->first();

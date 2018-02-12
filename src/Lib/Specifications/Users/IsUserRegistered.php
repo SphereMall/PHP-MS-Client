@@ -26,12 +26,13 @@ class IsUserRegistered implements FilterSpecification
     #region [Constructor]
     /**
      * IsUserRegistered constructor.
+     *
      * @param string $email
      * @param string $password
      */
     public function __construct(string $email, string $password)
     {
-        $this->email = $email;
+        $this->email    = $email;
         $this->password = $password;
     }
     #endregion
@@ -43,18 +44,18 @@ class IsUserRegistered implements FilterSpecification
     public function asFilter()
     {
         return [
-            'email' => [FilterOperators::EQUAL => $this->email]
+            'email' => [FilterOperators::EQUAL => $this->email],
         ];
     }
 
     /**
      * @param User $user
+     *
      * @return bool
      */
     public function isSatisfiedBy(User $user)
     {
-        return $this->email === $user->email &&
-            password_verify($this->password, $user->password);
+        return $this->email === $user->email && password_verify($this->password, $user->password);
     }
     #endregion
 }

@@ -29,12 +29,13 @@ class Request
     #region [Constructor]
     /**
      * RequestHandler constructor.
+     *
      * @param Client $client
      * @param ServiceResource $resource
      */
     public function __construct(Client $client, ServiceResource $resource)
     {
-        $this->client = $client;
+        $this->client   = $client;
         $this->resource = $resource;
     }
 
@@ -46,12 +47,15 @@ class Request
      * @param bool $body
      * @param bool $uriAppend
      * @param array $queryParams
+     *
      * @return Promise\PromiseInterface|Response
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {
         $client = new \GuzzleHttp\Client();
-        $async = $this->client->getAsync();
+        $async  = $this->client->getAsync();
 
         //Set user authorization
         $options = [];
@@ -60,9 +64,7 @@ class Request
         }
 
         //Generate request URL
-        $url = $this->client->getGatewayUrl() . '/' .
-            $this->resource->getVersion() . '/' .
-            $this->resource->getURI();
+        $url = $this->client->getGatewayUrl() . '/' . $this->resource->getVersion() . '/' . $this->resource->getURI();
 
         //Base url should end without slash
         $url = str_replace('?', '', $url);
@@ -90,7 +92,7 @@ class Request
 
                 case 'post':
                     $options['content-type'] = 'application/x-www-form-urlencoded';
-                    $options['form_params'] = $body;
+                    $options['form_params']  = $body;
                     break;
 
                 case 'delete':

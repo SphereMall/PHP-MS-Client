@@ -17,9 +17,10 @@ class CorrelationTypeHelper
     #region [Static methods]
     /**
      * @param string $className
+     *
      * @return string
      */
-    public static function getGraphTypeByClass(string $className) : string
+    public static function getGraphTypeByClass(string $className): string
     {
         $type = (new ClassReflectionHelper($className))->getShortLowerCaseName();
 

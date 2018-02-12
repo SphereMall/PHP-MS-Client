@@ -27,6 +27,7 @@ class GridFilter extends Filter
     #region [Public methods]
     /**
      * @param GridFilterElement[] $elements
+     *
      * @return $this
      */
     public function elements(array $elements)
@@ -39,6 +40,7 @@ class GridFilter extends Filter
         }
 
         $this->level++;
+
         return $this;
     }
 
@@ -48,12 +50,14 @@ class GridFilter extends Filter
     public function reset()
     {
         $this->elements = null;
-        $this->level = 0;
+        $this->level    = 0;
+
         return $this;
     }
 
     /**
      * @param array $filters
+     *
      * @return $this
      */
     public function setFilters($filters = [])
@@ -61,20 +65,24 @@ class GridFilter extends Filter
         foreach ($filters as $key => $value) {
             $this->addFilter($key, $value);
         }
+
         return $this;
     }
 
     /**
      *  Adds a filter to the resource request
+     *
      * @param string $field the field to filter on
      * @param string $value the value of the attribute to operate on
      *
      * @param $operator
+     *
      * @return $this
      */
     public function addFilter($field, $value, $operator = null)
     {
         $this->filters[$field] = $value;
+
         return $this;
     }
 
@@ -112,11 +120,10 @@ class GridFilter extends Filter
         $set = [];
         if (!empty($this->filters)) {
             foreach ($this->filters as $key => $value) {
-                $set[$key] = is_array($value)
-                    ? implode(',', $value)
-                    : $value;
+                $set[$key] = is_array($value) ? implode(',', $value) : $value;
             }
         }
+
         return $set;
     }
     #endregion

@@ -35,7 +35,9 @@ class OrdersResource extends Resource
     #region [Public methods]
     /**
      * Get full order data by orderId
+     *
      * @param $orderId
+     *
      * @return null|OrderFinalized
      */
     public function byOrderId(string $orderId)
@@ -45,7 +47,9 @@ class OrdersResource extends Resource
 
     /**
      * Get full order data by id
+     *
      * @param int $id
+     *
      * @return null|OrderFinalized
      */
     public function byId(int $id)
@@ -56,7 +60,9 @@ class OrdersResource extends Resource
     /**
      * @param int $userId
      * @param int|null $id
+     *
      * @return Order[]
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getHistory(int $userId, int $id = null)
     {
@@ -76,17 +82,20 @@ class OrdersResource extends Resource
     #region [Private methods]
     /**
      * @param $uriAppend
+     *
      * @return null|OrderFinalized
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function getOrderByParam($uriAppend)
     {
-        $params = $this->getQueryParams();
+        $params   = $this->getQueryParams();
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
 
         $orderCollection = $this->make($response);
         if ($orderCollection) {
             $orderFinalized = new OrderFinalized($this->client);
             $orderFinalized->setOrderData($orderCollection[0]);
+
             return $orderFinalized;
         }
 

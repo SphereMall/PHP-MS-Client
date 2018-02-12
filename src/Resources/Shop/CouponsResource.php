@@ -15,6 +15,9 @@ use SphereMall\MS\Resources\Resource;
 class CouponsResource extends Resource
 {
     #region [Override methods]
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return "promotions";
@@ -22,11 +25,18 @@ class CouponsResource extends Resource
     #endregion
 
     #region [Public methods]
+    /**
+     * @param $basketId
+     * @param string $couponCode
+     *
+     * @return \GuzzleHttp\Promise\PromiseInterface|\SphereMall\MS\Lib\Http\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function applyCoupon($basketId, string $couponCode)
     {
         $params = [
-            "basketId" => $basketId,
-            "couponCode" => $couponCode
+            "basketId"   => $basketId,
+            "couponCode" => $couponCode,
         ];
 
         $response = $this->handler->handle('POST', $params, 'apply');

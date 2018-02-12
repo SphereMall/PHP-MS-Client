@@ -31,8 +31,8 @@ class Client
     use ServiceInjector;
 
     #region [Properties]
-    public $beforeAPICall;
-    public $afterAPICall;
+    public        $beforeAPICall;
+    public        $afterAPICall;
     public static $userAgent = "SM_SDK_PHP_CLIENT";
 
     protected $gatewayUrl;
@@ -42,19 +42,21 @@ class Client
     protected $services;
     protected $calledService;
 
-    protected $amountOfCalls = 0;
+    protected $amountOfCalls   = 0;
     protected $responseHistory = [];
 
-    protected $async = false;
+    protected $async    = false;
     protected $promises = [];
     #endregion
 
     #region [Constructor]
     /**
      * Client constructor.
+     *
      * @param array $options
      * @param callable|null $beforeAPICall
      * @param callable|null $afterAPICall
+     *
      * @throws ConfigurationException
      */
     public function __construct(array $options = [], callable $beforeAPICall = null, callable $afterAPICall = null)
@@ -71,7 +73,7 @@ class Client
             throw new ConfigurationException("API connection data not set");
         }
         $this->beforeAPICall = $beforeAPICall;
-        $this->afterAPICall = $afterAPICall;
+        $this->afterAPICall  = $afterAPICall;
     }
     #endregion
 
@@ -110,6 +112,7 @@ class Client
 
     /**
      * @param $async
+     *
      * @return void
      */
     public function setAsync($async)
@@ -127,6 +130,7 @@ class Client
 
     /**
      * Set call statistic
+     *
      * @param $callData
      */
     public function setCallStatistic($callData)
@@ -147,41 +151,49 @@ class Client
     #region [Setters methods]
     /**
      * @param string $secretKey
+     *
      * @return $this
      */
     public function setSecretKey(string $secretKey)
     {
         $this->secretKey = $secretKey;
+
         return $this;
     }
 
     /**
      * @param string $clientId
+     *
      * @return $this
      */
     public function setClientId(string $clientId)
     {
         $this->clientId = $clientId;
+
         return $this;
     }
 
     /**
      * @param string $gatewayUrl
+     *
      * @return $this
      */
     public function setGateWayUrl(string $gatewayUrl)
     {
         $this->gatewayUrl = $gatewayUrl;
+
         return $this;
     }
 
     /**
      * @param $version
+     *
      * @return Client
      */
     public function setVersion(string $version)
     {
         $this->version = $version;
+
         return $this;
     }
     #endregion

@@ -20,11 +20,13 @@ class AttributeGroupsMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return AttributeGroup
      */
     protected function doCreateObject(array $array)
     {
         $attributeGroup = new AttributeGroup($array);
+
         return $attributeGroup;
     }
     #endregion

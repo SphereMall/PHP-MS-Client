@@ -73,6 +73,7 @@ class OrderFinalized
     #region [Constructor]
     /**
      * Shop constructor.
+     *
      * @param Client $client
      */
     public function __construct(Client $client = null)
@@ -95,19 +96,24 @@ class OrderFinalized
     #region [Public methods]
     /**
      * @param array $params
+     *
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
     public function update(array $params = [])
     {
-        $params = array_intersect_key($params, array_flip(['statusId', 'orderId', 'paymentStatusId', 'additionalInfo']));
+        $params = array_intersect_key($params, array_flip([
+            'statusId',
+            'orderId',
+            'paymentStatusId',
+            'additionalInfo',
+        ]));
 
         //Update current order with params
-        $order = $this->client
-            ->orders()
-            ->update($this->getId(), $params);
+        $order = $this->client->orders()->update($this->getId(), $params);
 
         //Get order by current orderId with items
         $orderWithItems = $this->client->orders()->byId($this->getId());
-        $order->items = $orderWithItems->items;
+        $order->items   = $orderWithItems->items;
 
         //Set data to current order
         $this->setOrderData($order);
@@ -115,6 +121,7 @@ class OrderFinalized
 
     /**
      * @param int|null $orderId
+     *
      * @return OrderFinalized|null
      */
     public function copy(int $orderId = null)
@@ -123,15 +130,13 @@ class OrderFinalized
             $orderId = $this->id;
         }
 
-        $order = $this->client
-            ->basketResource()
-            ->copy($orderId);
+        $order = $this->client->basketResource()->copy($orderId);
 
         if (!$order) {
             return null;
         }
 
-        $orderFinalized = new static($this->client);
+        $orderFinalized     = new static($this->client);
         $orderFinalized->id = $order->id;
         $orderFinalized->setProperties($order);
 
@@ -219,22 +224,22 @@ class OrderFinalized
      */
     protected function setProperties(Order $order)
     {
-        $this->orderId = $order->orderId;
-        $this->statusId = $order->statusId;
+        $this->orderId         = $order->orderId;
+        $this->statusId        = $order->statusId;
         $this->paymentStatusId = $order->paymentStatusId;
 
         $this->items = $order->items;
 
-        $this->subTotalVatPrice = $order->subTotalVatPrice;
-        $this->totalVatPrice = $order->totalVatPrice;
-        $this->subTotalPrice = $order->subTotalPrice;
-        $this->totalPrice = $order->totalPrice;
+        $this->subTotalVatPrice          = $order->subTotalVatPrice;
+        $this->totalVatPrice             = $order->totalVatPrice;
+        $this->subTotalPrice             = $order->subTotalPrice;
+        $this->totalPrice                = $order->totalPrice;
         $this->totalPriceWithoutDelivery = $order->totalPrice;
 
         $this->paymentMethod = $order->paymentMethodId;
 
-        $this->createDate = $order->createDate;
-        $this->updateDate = $order->updateDate;
+        $this->createDate     = $order->createDate;
+        $this->updateDate     = $order->updateDate;
         $this->additionalInfo = json_decode($order->additionalInfo, true);
 
         $this->setPropertiesField($order->getPropertiesField());
@@ -280,7 +285,7 @@ class OrderFinalized
         $asyncResult = $ac->call();
 
         if (!empty($asyncResult['deliveryProvider'])) {
-            $provider = $asyncResult['deliveryProvider'];
+            $provider       = $asyncResult['deliveryProvider'];
             $this->delivery = new Delivery(new DeliveryProvider([
                 'id'   => $provider->id,
                 'cost' => $order->deliveryCost,

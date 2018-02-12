@@ -21,7 +21,9 @@ trait InteractsWithProperties
     /**
      * Get value by name from property of class or $properties if value is not exist in class
      * @see $properties
+     *
      * @param $name
+     *
      * @return bool
      */
     public function getProperty($name)
@@ -53,6 +55,7 @@ trait InteractsWithProperties
 
     /**
      * @param $name
+     *
      * @return bool
      */
     public function __get($name)

@@ -9,17 +9,19 @@
 
 namespace SphereMall\MS\Lib\Makers;
 
-use SphereMall\MS\Exceptions\EntityNotFoundException;
-use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\Mappers\FacetAttributesMapper;
-use SphereMall\MS\Lib\Mappers\Mapper;
 
+/**
+ * Class FacetsMaker
+ * @package SphereMall\MS\Lib\Makers
+ */
 class FacetsMaker extends ObjectMaker
 {
     #region [Public methods]
     /**
      * @param Response $response
+     *
      * @return array
      */
     public function makeSingle(Response $response)
@@ -29,11 +31,11 @@ class FacetsMaker extends ObjectMaker
         }
 
         $result = [];
-        $data = $response->getData();
+        $data   = $response->getData();
         foreach ($data as $type => $items) {
             switch ($type) {
                 case 'attributes':
-                    $mapper = new FacetAttributesMapper();
+                    $mapper               = new FacetAttributesMapper();
                     $result['attributes'] = $mapper->createObject($items);
                     break;
 

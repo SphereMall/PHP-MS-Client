@@ -20,6 +20,7 @@ class AttributeTypesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return AttributeType
      */
     protected function doCreateObject(array $array)

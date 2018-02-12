@@ -20,6 +20,7 @@ class FunctionalNamesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return FunctionalName
      */
     protected function doCreateObject(array $array)

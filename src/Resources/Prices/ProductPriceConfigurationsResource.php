@@ -23,6 +23,9 @@ use SphereMall\MS\Resources\Resource;
 class ProductPriceConfigurationsResource extends Resource
 {
     #region [Override methods]
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return "findprice";
@@ -30,6 +33,7 @@ class ProductPriceConfigurationsResource extends Resource
 
     /**
      * @param $data
+     *
      * @throws MethodNotFoundException
      */
     public function create($data)
@@ -39,6 +43,7 @@ class ProductPriceConfigurationsResource extends Resource
 
     /**
      * @param int $id
+     *
      * @throws MethodNotFoundException
      */
     public function get(int $id)
@@ -49,6 +54,7 @@ class ProductPriceConfigurationsResource extends Resource
     /**
      * @param $id
      * @param $data
+     *
      * @throws MethodNotFoundException
      */
     public function update($id, $data)
@@ -58,6 +64,7 @@ class ProductPriceConfigurationsResource extends Resource
 
     /**
      * @param $id
+     *
      * @return bool|void
      * @throws MethodNotFoundException
      */
@@ -70,8 +77,10 @@ class ProductPriceConfigurationsResource extends Resource
     #region [Public methods]
     /**
      * @param PriceConfigurationFilter $priceConfigurationFilter
+     *
      * @return array|ProductPriceConfiguration[]
      * @throws \SphereMall\MS\Exceptions\SMSDKException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function findPrice(PriceConfigurationFilter $priceConfigurationFilter)
     {
@@ -87,8 +96,10 @@ class ProductPriceConfigurationsResource extends Resource
 
     /**
      * @param PriceProduct $product
+     *
      * @return ProductPriceConfiguration|null
      * @throws \SphereMall\MS\Exceptions\SMSDKException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function findProductPrice(PriceProduct $product)
     {

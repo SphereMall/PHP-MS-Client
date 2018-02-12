@@ -20,6 +20,7 @@ class OptionsMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Option
      */
     protected function doCreateObject(array $array)

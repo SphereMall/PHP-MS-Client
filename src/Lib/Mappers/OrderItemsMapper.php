@@ -20,6 +20,7 @@ class OrderItemsMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return OrderItem
      */
     protected function doCreateObject(array $array)
@@ -31,9 +32,10 @@ class OrderItemsMapper extends Mapper
                 $array['products'][0]['images'] = $array['images'];
             }
 
-            $productMapper = new ProductsMapper();
+            $productMapper      = new ProductsMapper();
             $orderItem->product = $productMapper->createObject($array['products'][0]);
         }
+
         return $orderItem;
     }
     #endregion

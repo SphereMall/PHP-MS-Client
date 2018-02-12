@@ -20,6 +20,7 @@ class DeliveryProvidersMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return DeliveryProvider
      */
     protected function doCreateObject(array $array)

@@ -21,6 +21,7 @@ class AttributesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Attribute
      */
     protected function doCreateObject(array $array)
@@ -34,7 +35,7 @@ class AttributesMapper extends Mapper
         }
 
         if (isset($array['attributeGroups'])) {
-            $mapper = new AttributeGroupsMapper();
+            $mapper           = new AttributeGroupsMapper();
             $attribute->group = $mapper->createObject($array['attributeGroups']);
         }
 

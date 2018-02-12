@@ -2,6 +2,7 @@
 /**
  * User: Yaroslav Draha
  */
+
 namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\Coupon;
@@ -15,6 +16,7 @@ class CouponsMapper extends OrdersMapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Coupon
      */
     protected function doCreateObject(array $array)

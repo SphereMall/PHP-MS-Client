@@ -36,6 +36,7 @@ abstract class GrapherResource extends Resource
         }
 
         unset($params['where']);
+
         return $params;
     }
     #endregion

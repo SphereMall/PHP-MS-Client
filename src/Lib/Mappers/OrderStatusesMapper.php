@@ -20,6 +20,7 @@ class OrderStatusesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return OrderStatus
      */
     protected function doCreateObject(array $array)

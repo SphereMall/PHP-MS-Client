@@ -20,6 +20,7 @@ class OrdersMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Order
      */
     protected function doCreateObject(array $array)
@@ -28,7 +29,7 @@ class OrdersMapper extends Mapper
 
         if (isset($array['items'])) {
             $orderItemMapper = new OrderItemsMapper();
-            $order->items = array_map(function ($item) use ($orderItemMapper) {
+            $order->items    = array_map(function ($item) use ($orderItemMapper) {
                 return $orderItemMapper->createObject($item);
             }, $array['items']);
         }

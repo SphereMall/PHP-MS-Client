@@ -32,9 +32,13 @@ class ProductsResource extends Resource
     use FullResource;
 
     #region [Override methods]
+
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return "products";
     }
-    #endregion
+    #endregiona
 }

@@ -20,6 +20,7 @@ class InvoicesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Invoice
      */
     protected function doCreateObject(array $array)

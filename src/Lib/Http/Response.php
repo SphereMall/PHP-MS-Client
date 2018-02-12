@@ -35,29 +35,31 @@ class Response
     #region [Constructor]
     /**
      * Response constructor.
+     *
      * @param \GuzzleHttp\Psr7\Response $response
+     *
      * @throws \Exception
      */
     public function __construct(\GuzzleHttp\Psr7\Response $response)
     {
         $this->statusCode = $response->getStatusCode();
-        $this->headers = $response->getHeaders();
+        $this->headers    = $response->getHeaders();
 
         $bodyContent = $response->getBody()->getContents();
-        $contents = json_decode($bodyContent, true);
+        $contents    = json_decode($bodyContent, true);
 
         try {
-            $this->data = $contents['data'];
-            $this->success = $contents['success'];
-            $this->errors = $contents['error'] ?? null;
-            $this->version = $contents['ver'];
+            $this->data     = $contents['data'];
+            $this->success  = $contents['success'];
+            $this->errors   = $contents['error'] ?? null;
+            $this->version  = $contents['ver'];
             $this->included = $contents['included'] ?? null;
             if (!empty($contents['meta'])) {
                 $this->meta = new Meta(...array_values($contents['meta']));
             }
         } catch (\Exception $ex) {
             $this->success = false;
-            $this->errors = $ex->getMessage();
+            $this->errors  = $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
     }

@@ -9,19 +9,20 @@
 
 namespace SphereMall\MS\Lib\Makers;
 
-use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
-use SphereMall\MS\Lib\Collection;
-use SphereMall\MS\Lib\Http\Meta;
 use SphereMall\MS\Lib\Http\Response;
-use SphereMall\MS\Lib\Mappers\Mapper;
 use SphereMall\MS\Lib\Mappers\OrdersMapper;
 
+/**
+ * Class OrderHistoryMaker
+ * @package SphereMall\MS\Lib\Makers
+ */
 class OrderHistoryMaker extends ObjectMaker
 {
     #region [Protected methods]
     /**
      * @param Response $response
+     *
      * @return array
      * @throws EntityNotFoundException
      */
@@ -43,8 +44,10 @@ class OrderHistoryMaker extends ObjectMaker
 
         return $result;
     }
+
     /**
      * @param $type
+     *
      * @return null|string
      */
     protected function getMapperClass($type)
@@ -54,6 +57,7 @@ class OrderHistoryMaker extends ObjectMaker
 
     /**
      * @param array $item
+     *
      * @return array
      */
     protected function getAttributes(array $item)

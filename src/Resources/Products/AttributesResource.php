@@ -32,12 +32,15 @@ class AttributesResource extends Resource
      * @param string $entityClass class name like Entity::class
      * @param int|null $attributeGroupId
      * @param int|null $attributeId
+     *
      * @return array|\SphereMall\MS\Lib\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
      */
     public function belong(string $entityClass, int $attributeGroupId = null, int $attributeId = null)
     {
         $uriAppend = '/belong/' . strtolower((new \ReflectionClass($entityClass))->getShortName()) . "s";
-        $params = $this->getQueryParams();
+        $params    = $this->getQueryParams();
         if (!is_null($attributeGroupId)) {
             $uriAppend .= "/$attributeGroupId";
             if (!is_null($attributeId)) {
