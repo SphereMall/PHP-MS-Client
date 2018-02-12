@@ -36,6 +36,7 @@ class ProductAttributeValuesMapper extends Mapper
                 'id'              => $item['id'],
                 'value'           => $item['value'],
                 'title'           => $item['valueTitle'],
+                'image'           => $item['image'],
                 'cssClass'        => $item['valueCssClass'],
                 'unitOfMeasureId' => $item['unitOfMeasureId'],
             ];
