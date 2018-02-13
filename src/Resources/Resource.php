@@ -317,6 +317,21 @@ abstract class Resource
     }
 
     /**
+     * @param array $data
+     * @return Collection
+     * @throws EntityNotFoundException
+     */
+    public function multiUpdate(array $data)
+    {
+        $response = $this->handler->handle('PATCH', $data);
+        if (!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getErrorMessage());
+        }
+
+        return $this->make($response);
+    }
+
+    /**
      * @param $id
      * @return bool
      * @throws EntityNotFoundException

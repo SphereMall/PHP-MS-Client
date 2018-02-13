@@ -88,6 +88,11 @@ class Request
                     $options['body'] = http_build_query($body);
                     break;
 
+                case 'patch':
+                    $options['body'] = json_encode($body);
+                    $method = 'PUT';
+                    break;
+
                 case 'post':
                     $options['content-type'] = 'application/x-www-form-urlencoded';
                     $options['form_params'] = $body;

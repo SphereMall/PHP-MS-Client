@@ -100,6 +100,18 @@ class BaseResourceTest extends SetUpResourceTest
     }
 
     /**
+     * @expectedException \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
+    public function testMultiUpdateException()
+    {
+        $this->client->users()
+                     ->multiUpdate([
+                         ['id' => 123234234234, 'email' => 'updated'],
+                         ['id' => 1232342342349, 'email' => 'updated2']
+                     ]);
+    }
+
+    /**
      * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
     public function testCreateAndUpdateAndDelete()
@@ -115,6 +127,43 @@ class BaseResourceTest extends SetUpResourceTest
         $this->assertEquals('updated name', $user->name);
 
         $this->client->users()->delete($user->id);
+    }
+
+    /**
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
+    public function testMultiUpdate()
+    {
+        $user1 = $this->client->users()
+                              ->create(['name' => 'new user name1']);
+
+        $user2 = $this->client->users()
+                              ->create(['name' => 'new user name2']);
+
+        $users = $this->client->users()
+                              ->multiUpdate([
+                                  ['id' => $user1->id, 'name' => 'updated name1'],
+                                  ['id' => $user2->id, 'name' => 'updated name2']
+                              ]);
+
+        foreach ($users as $user) {
+            $updatedName = '';
+
+            switch ($user->id) {
+                case $user1->id :
+                    $updatedName = 'updated name1';
+                    break;
+                case $user2->id :
+                    $updatedName = 'updated name2';
+                    break;
+
+            }
+
+            $this->assertEquals($updatedName, $user->name);
+        }
+
+        $this->client->users()->delete($user1->id);
+        $this->client->users()->delete($user2->id);
     }
 
     public function testLimitOffsetAndAmountOfCalls()
