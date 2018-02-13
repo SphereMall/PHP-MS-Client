@@ -102,10 +102,10 @@ class BaseResourceTest extends SetUpResourceTest
     /**
      * @expectedException \SphereMall\MS\Exceptions\EntityNotFoundException
      */
-    public function testMultiUpdateException()
+    public function testUpdateListException()
     {
         $this->client->users()
-                     ->multiUpdate([
+                     ->updateList([
                          ['id' => 123234234234, 'email' => 'updated'],
                          ['id' => 1232342342349, 'email' => 'updated2']
                      ]);
@@ -132,7 +132,7 @@ class BaseResourceTest extends SetUpResourceTest
     /**
      * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
-    public function testMultiUpdate()
+    public function testUpdateList()
     {
         $user1 = $this->client->users()
                               ->create(['name' => 'new user name1']);
@@ -141,7 +141,7 @@ class BaseResourceTest extends SetUpResourceTest
                               ->create(['name' => 'new user name2']);
 
         $users = $this->client->users()
-                              ->multiUpdate([
+                              ->updateList([
                                   ['id' => $user1->id, 'name' => 'updated name1'],
                                   ['id' => $user2->id, 'name' => 'updated name2']
                               ]);

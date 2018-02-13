@@ -321,7 +321,7 @@ abstract class Resource
      * @return Collection
      * @throws EntityNotFoundException
      */
-    public function multiUpdate(array $data)
+    public function updateList(array $data)
     {
         $response = $this->handler->handle('PATCH', $data);
         if (!$response->getSuccess()) {
