@@ -21,6 +21,7 @@ namespace SphereMall\MS\Entities;
  * @property int $attributeGroupId
  * @property string $cssClass
  * @property int $orderNumber
+ * @property string $schemaOrgProperty
  * @property AttributeValue[] $values
  * @property AttributeGroup $group
  */
@@ -36,6 +37,7 @@ class Attribute extends Entity
     public $attributeGroupId;
     public $cssClass;
     public $orderNumber;
+    public $schemaOrgProperty;
 
     public $values;
     public $group;
