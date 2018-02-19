@@ -31,7 +31,7 @@ class ProductAttributeValuesMapper extends Mapper
             $raw[$item['attributeId']]['description'] = $item['description'];
             $raw[$item['attributeId']]['attributeGroupId'] = $item['attributeGroupId'];
             $raw[$item['attributeId']]['cssClass'] = $item['cssClass'];
-            $raw[$item['attributeId']]['schemaOrgProperty'] = $item['schemaOrgProperty'];
+            $raw[$item['attributeId']]['schemaOrgProperty'] = $item['schemaOrgProperty'] ?? null;
 
             $raw[$item['attributeId']]['attributeValues'][] = [
                 'id'              => $item['id'],
