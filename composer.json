@@ -1,11 +1,11 @@
 {
-  "name": "spheremall/ms-client",
-  "description": "SphereMall API client for SphereMall GateWay",
-  "type": "library",
-  "config": {
+  "name"        : "spheremall/ms-client",
+  "description" : "SphereMall API client for SphereMall GateWay",
+  "type"        : "library",
+  "config"      : {
     "vendor-dir": "vendor"
   },
-  "autoload": {
+  "autoload"    : {
     "psr-4": {
       "SphereMall\\MS\\": "src/"
     }
@@ -15,17 +15,18 @@
       "SphereMall\\MS\\Tests\\": "tests/"
     }
   },
-  "require": {
-    "guzzlehttp/guzzle": "~6.0"
+  "require"     : {
+    "guzzlehttp/guzzle"          : "~6.0",
+    "elasticsearch/elasticsearch": "~6.0"
   },
-  "authors": [
+  "authors"     : [
     {
-      "name": "Sergey Kondratovec",
+      "name" : "Sergey Kondratovec",
       "email": "sergey@spheremall.com"
     }
   ],
-  "version": "1.0.26",
-  "require-dev": {
+  "version"     : "1.0.26",
+  "require-dev" : {
     "phpunit/phpunit": "6.2"
   }
 }
