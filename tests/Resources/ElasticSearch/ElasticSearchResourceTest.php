@@ -18,7 +18,7 @@ use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 class ElasticSearchResourceTest extends SetUpResourceTest
 {
     #region [Test methods]
-    public function testServiceGetList()
+    public function testFullTextSearch()
     {
         $index  = new ElasticSearchIndexFilter([Product::class]);
         $filter = new FullTextFilter();
