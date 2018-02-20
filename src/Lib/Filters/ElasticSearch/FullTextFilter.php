@@ -9,13 +9,14 @@
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
 use SphereMall\MS\Lib\Filters\Filter;
+use SphereMall\MS\Lib\Filters\Grid\ElasticSearchFilterElement;
 
 /**
  * Class FullTextFilter
  * @package SphereMall\MS\Lib\Filters\ElasticSearch
  *
- * @property array  $fields
  * @property string $keyword
+ * @property array  $indexes
  */
 class FullTextFilter extends Filter
 {
@@ -26,16 +27,18 @@ class FullTextFilter extends Filter
     ];
 
     protected $keyword;
-    protected $index;
-    protected $orderFields;
+    protected $indexes;
 
     /**
-     * @param string $index
+     * @param array $indexes
      * @return $this
      */
-    public function index(string $index)
+    public function index(array $indexes)
     {
-        $this->index = $index;
+        /** @var ElasticSearchFilterElement $index */
+        foreach ($indexes as $index) {
+            $this->indexes = $index->getValues();
+        }
 
         return $this;
     }
@@ -60,24 +63,6 @@ class FullTextFilter extends Filter
     }
 
     /**
-     * @param array $fields
-     * @return $this
-     */
-    public function order(array $fields)
-    {
-        $defaultOrder = ['order' => 'asc'];
-        foreach ($fields as $field => $value) {
-            if (!is_array($value)) {
-                $this->orderFields[$value] = $defaultOrder;
-                continue;
-            }
-            $this->orderFields[$field] = ['order' => isset($value['order']) ? $value['order'] : ['order' => 'asc']];
-        }
-
-        return $this;
-    }
-
-    /**
      *  Convert the filter object to a string for a URL
      *
      * @return string
@@ -85,7 +70,7 @@ class FullTextFilter extends Filter
     public function __toString()
     {
         $set = [
-            'index' => $this->index,
+            'index' => implode(',', $this->indexes),
             'body'  => [
                 'query' => [
                     'multi_match' => [
@@ -97,10 +82,6 @@ class FullTextFilter extends Filter
 
         if (!empty($this->keyword)) {
             $set['body']['query']['multi_match']['query'] = $this->keyword;
-        }
-
-        if (!empty($this->orderFields)) {
-            $set['body']['sort'] = $this->orderFields;
         }
 
         return json_encode($set);
