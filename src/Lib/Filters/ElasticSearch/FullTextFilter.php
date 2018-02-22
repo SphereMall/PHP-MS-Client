@@ -9,7 +9,6 @@
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
 use SphereMall\MS\Lib\Filters\Filter;
-use SphereMall\MS\Lib\Filters\Grid\ElasticSearchFilterElement;
 
 /**
  * Class FullTextFilter

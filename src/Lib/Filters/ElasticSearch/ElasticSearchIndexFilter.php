@@ -6,8 +6,10 @@
  * Time: 9:41
  */
 
-namespace SphereMall\MS\Lib\Filters\Grid;
+namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
+use SphereMall\MS\Lib\FilterParams\ElasticSearch\IndexFilterParams;
+use SphereMall\MS\Lib\FilterParams\FilterParams;
 use SphereMall\MS\Lib\Helpers\ElasticSearchIndexHelper;
 
 class ElasticSearchIndexFilter extends ElasticSearchFilterElement
@@ -19,15 +21,16 @@ class ElasticSearchIndexFilter extends ElasticSearchFilterElement
     #region [Constructor]
     /**
      * ElasticSearchIndexFilter constructor.
-     * @param array $values
+     * @param FilterParams $values
+     * @param string       $lang
      */
-    public function __construct(array $values)
+    public function __construct(FilterParams $values, string $lang = null)
     {
         $values = array_map(function ($item) {
             return ElasticSearchIndexHelper::getIndexByClass($item);
-        }, $values);
+        }, $values->getParams());
 
-        parent::__construct($values);
+        parent::__construct(new IndexFilterParams($values), $lang);
     }
     #endregion
 }

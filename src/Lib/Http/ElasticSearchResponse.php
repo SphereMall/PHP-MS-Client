@@ -22,17 +22,6 @@ namespace SphereMall\MS\Lib\Http;
  */
 class ElasticSearchResponse extends Response
 {
-    #region [Properties]
-    private $statusCode;
-    private $headers;
-    private $data;
-    private $success;
-    private $version;
-    private $errors;
-    private $meta;
-    private $included;
-    #endregion
-
     #region [Constructor]
     /**
      * ElasticSearchResponse constructor.
@@ -56,72 +45,6 @@ class ElasticSearchResponse extends Response
             $this->errors  = $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
-    }
-    #endregion
-
-    #region [Getters]
-    /**
-     * @return bool
-     */
-    public function getSuccess()
-    {
-        return $this->success;
-    }
-
-    /**
-     * @return array
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-    /**
-     * @return string
-     */
-    public function getErrorMessage()
-    {
-        return json_encode($this->errors);
-    }
-
-    /**
-     * @return string
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * @return array
-     */
-    public function getIncluded()
-    {
-        return $this->included;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
-    }
-
-    /**
-     * @return Meta
-     */
-    public function getMeta()
-    {
-        return $this->meta;
     }
     #endregion
 }
