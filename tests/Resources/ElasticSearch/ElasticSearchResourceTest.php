@@ -25,6 +25,7 @@ use SphereMall\MS\Lib\Filters\ElasticSearch\PriceRangeFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\SearchFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\ElasticSearchIndexFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\TermsFilter;
+use SphereMall\MS\Lib\SortParams\ElasticSearch\AttributeSortParams;
 use SphereMall\MS\Lib\SortParams\ElasticSearch\FieldSortParams;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
@@ -173,6 +174,7 @@ class ElasticSearchResourceTest extends SetUpResourceTest
 
         $all = $this->client->elasticSearch()
                             ->filter($searchFilter)
+                            ->sort(new AttributeSortParams(7))
                             ->all();
 
         foreach ($all as $item) {

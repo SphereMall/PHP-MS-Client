@@ -21,6 +21,7 @@ use SphereMall\MS\Lib\Makers\ObjectMaker;
 use SphereMall\MS\Lib\Http\Request;
 use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\SortParams\ElasticSearch\FieldSortParams;
+use SphereMall\MS\Lib\SortParams\SortParams;
 use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
 
 /**
@@ -211,7 +212,7 @@ abstract class Resource
      */
     public function sort($field)
     {
-        if($field instanceof FieldSortParams){
+        if($field instanceof SortParams){
             $field = $field->getParams();
         }
         $this->sort[] = $field;

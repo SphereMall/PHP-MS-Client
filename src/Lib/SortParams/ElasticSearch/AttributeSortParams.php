@@ -10,24 +10,26 @@ namespace SphereMall\MS\Lib\SortParams\ElasticSearch;
 
 use SphereMall\MS\Lib\SortParams\SortParams;
 
+/**
+ * Class AttributeSortParams
+ * @package SphereMall\MS\Lib\SortParams\ElasticSearch
+ * @property int $attributeId
+ */
 class AttributeSortParams extends SortParams
 {
     protected $attributeId;
-    protected $attributeValueId;
 
     /**
      * AttributeSortParams constructor.
      * @param int $attributeId
-     * @param int $attributeValueId
      */
-    public function __construct(int $attributeId, int $attributeValueId)
+    public function __construct(int $attributeId)
     {
         $this->attributeId = $attributeId;
-        $this->attributeValueId = $attributeValueId;
     }
 
     public function getParams()
     {
-        return '*_attr.orderNumber';
+        return $this->attributeId . '_attr.valueOrderNumber';
     }
 }
