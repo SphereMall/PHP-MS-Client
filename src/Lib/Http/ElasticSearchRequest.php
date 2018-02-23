@@ -16,6 +16,14 @@ use Elasticsearch\ClientBuilder;
  */
 class ElasticSearchRequest extends Request
 {
+    /**
+     * @param string $method
+     * @param bool   $body
+     * @param bool   $uriAppend
+     * @param array  $queryParams
+     * @return \GuzzleHttp\Promise\PromiseInterface|ElasticSearchResponse|Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {
         $clientBuilder = new ClientBuilder();
@@ -25,13 +33,13 @@ class ElasticSearchRequest extends Request
                                 ->setHosts([$url])
                                 ->build();
 
-        // ToDo: do we need exception catching here?
-        /*try{
+        try {
             $response = new ElasticSearchResponse($client->search($queryParams));
-        } catch (\Exception $ex){
-            $a = 1;
-        }*/
+        } catch (\Exception $ex) {
+            $error = json_decode($ex->getMessage());
+            throw new \Exception($error->error->reason);
+        }
 
-        return new ElasticSearchResponse($client->search($queryParams));
+        return $response;
     }
 }

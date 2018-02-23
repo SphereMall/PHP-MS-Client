@@ -40,7 +40,7 @@ class ElasticSearchResource extends Resource
     public function __construct(Client $client, $version = null, $handler = null, $maker = null)
     {
         parent::__construct($client, $version, $handler, $maker);
-        $this->handler = new ElasticSearchRequest($this->client, $this);
+        $this->handler = $handler ?? new ElasticSearchRequest($this->client, $this);
     }
 
     /** Search
@@ -83,7 +83,7 @@ class ElasticSearchResource extends Resource
 
         unset($params['where']);
 
-        if($params['sort']){
+        if(isset($params['sort']) && $params['sort']){
             foreach (explode(',', $params['sort']) as $field){
                 $params['body']['sort'][] = $field;
             }
