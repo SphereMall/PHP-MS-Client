@@ -20,7 +20,6 @@ class MatchFilterParams extends FilterParams
 {
     protected $field;
     protected $value;
-    protected $languages;
 
     /**
      * MatchFilterParams constructor.
