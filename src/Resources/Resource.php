@@ -14,6 +14,8 @@ use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Lib\FieldsParams\FieldsParams;
+use SphereMall\MS\Lib\Filters\ElasticSearch\FullTextFilter;
 use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Lib\Makers\CountMaker;
 use SphereMall\MS\Lib\Makers\Maker;
@@ -23,6 +25,7 @@ use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\SortParams\ElasticSearch\FieldSortParams;
 use SphereMall\MS\Lib\SortParams\SortParams;
 use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
+use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 
 /**
  * @property Client $client
@@ -139,13 +142,13 @@ abstract class Resource
     /**
      * Set list of fields for selecting the resource
      *
-     * @param array $fields
+     * @param $fields
      *
      * @return $this
      */
-    public function fields(array $fields)
+    public function fields($fields)
     {
-        $this->fields = $fields;
+        $this->fields = $fields instanceof FieldsParams ? $fields->getFields() : $fields;
 
         return $this;
     }
@@ -213,9 +216,10 @@ abstract class Resource
     public function sort($field)
     {
         if($field instanceof SortParams){
-            $field = $field->getParams();
+            $this->sort = array_merge($this->sort, $field->getParams());
+        } else {
+            $this->sort[] = $field;
         }
-        $this->sort[] = $field;
 
         return $this;
     }
@@ -416,6 +420,10 @@ abstract class Resource
         }
 
         if ($this->filter) {
+            if (method_exists($this->filter, 'setFields') && sizeof($this->fields) > 0) {
+                $this->filter->setFields($this->fields);
+                unset($params['fields']);
+            }
             $params['where'] = (string)$this->filter;
         }
 
@@ -424,7 +432,7 @@ abstract class Resource
         }
 
         if ($this->sort) {
-            $params['sort'] = implode(',', $this->sort);
+            $params['sort'] = $this instanceof ElasticSearchResource ? $this->sort : implode(',', $this->sort);
         }
 
         return $params;

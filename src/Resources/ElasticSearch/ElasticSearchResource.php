@@ -84,9 +84,7 @@ class ElasticSearchResource extends Resource
         unset($params['where']);
 
         if(isset($params['sort']) && $params['sort']){
-            foreach (explode(',', $params['sort']) as $field){
-                $params['body']['sort'][] = $field;
-            }
+            $params['body']['sort'] = $params['sort'];
             unset($params['sort']);
         }
 
