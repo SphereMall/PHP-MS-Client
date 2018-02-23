@@ -11,8 +11,11 @@ namespace SphereMall\MS\Lib\SortParams;
 /**
  * Class SortParams
  * @package SphereMall\MS\Lib\SortParams
+ * @property string $order
  */
 abstract class SortParams
 {
+    protected $order = 'asc';
+
     abstract public function getParams();
 }

@@ -13,6 +13,7 @@ use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Entities\Page;
 use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Lib\FieldsParams\ElasticSearch\FullTextSearchFieldsParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\AttributeFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\IndexFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\MatchFilterParams;
@@ -39,6 +40,7 @@ class ElasticSearchResourceTest extends SetUpResourceTest
     protected $langCode           = 'fr';
 
     #region [Test methods]
+
     public function testFullTextSearch()
     {
         $indexes = ['sm-products', 'sm-documents', 'sm-pages'];
@@ -50,6 +52,9 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         $filter = (new FullTextFilter())->index([$index])->keyword('test');
         $this->assertAttributeEquals($indexes, 'indexes', $filter);
         $this->assertAttributeEquals('test', 'keyword', $filter);
+
+        $fields = new FullTextSearchFieldsParams(['title', 'shortDescription']);
+        $this->assertAttributeEquals(['title', 'shortDescription'], 'fields', $fields);
     }
 
     /**
@@ -64,9 +69,6 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         }
     }
 
-    /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
     public function testMultipleFiltersSearch()
     {
         $indexes = ['sm-products', 'sm-documents', 'sm-pages'];
@@ -117,15 +119,6 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         ];
         $this->assertAttributeEquals($indexes, 'indexes', $searchFilter);
         $this->assertAttributeEquals($elements, 'elements', $searchFilter);
-    }
-
-    public function testSortingParams()
-    {
-        $attributesSortParams = new AttributeSortParams(7);
-        $this->assertAttributeEquals(7, 'attributeId', $attributesSortParams);
-
-        $fieldSortParams = new FieldSortParams('lastUpdate');
-        $this->assertAttributeEquals('lastUpdate', 'field', $fieldSortParams);
     }
 
     /**

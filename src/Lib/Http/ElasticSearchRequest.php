@@ -23,6 +23,7 @@ class ElasticSearchRequest extends Request
      * @param array  $queryParams
      * @return \GuzzleHttp\Promise\PromiseInterface|ElasticSearchResponse|Response
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {

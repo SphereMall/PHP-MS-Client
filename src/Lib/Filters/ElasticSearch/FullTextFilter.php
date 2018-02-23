@@ -8,6 +8,7 @@
 
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
+use SphereMall\MS\Lib\FieldsParams\ElasticSearch\FullTextSearchFieldsParams;
 use SphereMall\MS\Lib\Filters\Filter;
 
 /**
@@ -19,14 +20,19 @@ use SphereMall\MS\Lib\Filters\Filter;
  */
 class FullTextFilter extends Filter
 {
-    protected $fields = [
-        "title_*",
-        "shortDescription_*",
-        "fullDescription_*",
-    ];
-
+    protected $fields;
     protected $keyword;
     protected $indexes;
+
+    /**
+     * FullTextFilter constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $fieldParams  = new FullTextSearchFieldsParams(['title', 'shortDescription', 'fullDescription']);
+        $this->fields = $fieldParams->getFields();
+    }
 
     /**
      * @param array $indexes
@@ -59,6 +65,14 @@ class FullTextFilter extends Filter
     public function getKeyword()
     {
         return $this->keyword;
+    }
+
+    /**
+     * @param array $fields
+     */
+    public function setFields(array $fields)
+    {
+        $this->fields = $fields;
     }
 
     /**

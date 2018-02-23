@@ -21,15 +21,17 @@ class AttributeSortParams extends SortParams
 
     /**
      * AttributeSortParams constructor.
-     * @param int $attributeId
+     * @param int    $attributeId
+     * @param string $order
      */
-    public function __construct(int $attributeId)
+    public function __construct(int $attributeId, string $order = 'asc')
     {
         $this->attributeId = $attributeId;
+        $this->order       = $order;
     }
 
     public function getParams()
     {
-        return $this->attributeId . '_attr.valueOrderNumber';
+        return [$this->attributeId . '_attr.valueOrderNumber' => ['order' => $this->order]];
     }
 }

@@ -13,7 +13,6 @@ use SphereMall\MS\Lib\SortParams\SortParams;
 /**
  * Class FieldSortParams
  * @package SphereMall\MS\Lib\SortParams\ElasticSearch
- *
  * @property string $field
  */
 class FieldSortParams extends SortParams
@@ -23,14 +22,16 @@ class FieldSortParams extends SortParams
     /**
      * FieldSortParams constructor.
      * @param string $field
+     * @param string $order
      */
-    public function __construct(string $field)
+    public function __construct(string $field, string $order = 'asc')
     {
         $this->field = $field;
+        $this->order = $order;
     }
 
     public function getParams()
     {
-        return $this->field;
+        return [$this->field => ['order' => $this->order]];
     }
 }
