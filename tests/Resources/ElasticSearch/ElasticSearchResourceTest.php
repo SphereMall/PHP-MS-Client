@@ -183,7 +183,9 @@ class ElasticSearchResourceTest extends SetUpResourceTest
 
         $searchFilter = (new SearchFilter())->index([$index])->elements([$brandTerm, $attrTerm, $priceTerm, $priceRange, $match, $matchPhrase]);
 
-        $elements = [
+        $elements = $searchFilter->getElements();
+
+        $elementsArray = [
             ['terms' => ['brandId' => [333, 50]]],
             ['terms' => ['7_attr.valueId' => [279, 554]]],
             ['terms' => ['price' => [6600]]],
@@ -192,7 +194,9 @@ class ElasticSearchResourceTest extends SetUpResourceTest
             ['match_phrase' => ['title_fr' => 'test']],
         ];
         $this->assertAttributeEquals($indexes, 'indexes', $searchFilter);
-        $this->assertAttributeEquals($elements, 'elements', $searchFilter);
+        foreach ($elements as $i => $element) {
+            $this->assertEquals($elementsArray[$i], $element->getValues());
+        }
     }
 
     /**
