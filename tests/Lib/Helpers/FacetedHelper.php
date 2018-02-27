@@ -20,40 +20,41 @@ use SphereMall\MS\Lib\Helpers\FacetedHelper;
 class FacetedHelperTest extends SetUpResourceTest
 {
 
+    protected $filters = [];
+    protected $filterArray = ['terms' => ['brandId' => [333,50]]];
+    protected $key = 'test';
+    protected $name = 'terms';
+    protected $expected = ['filter' => ['bool' => ['must' => [0 => ['terms' => ['brandId' => [333, 50]]]]]]];
+
     public function testAddFilter()
     {
-        $filters = [];
-        $filterArray = ['terms' => ['brandId' => [333,50]]];
-        $key = 'test';
-        $name = 'terms';
-        $expected = ['filter' => ['bool' => ['must' => [0 => ['terms' => ['brandId' => [333, 50]]]]]]];
-        $filters = FacetedHelper::addFilter($filters, $filterArray, $key, $name);
+        $filters = FacetedHelper::addFilter($this->filters, $this->filterArray, $this->key, $this->name);
 
-        $this->assertEquals($expected, $filters);
+        $this->assertEquals($this->expected, $filters);
 
-        $filters = [];
-        $filterArray = ['terms' => ['brandId' => [333,50]]];
-        $key = 'brandId';
-        $name = 'terms';
-        $expected = [];
-        $filters = FacetedHelper::addFilter($filters, $filterArray, $key, $name);
+        $this->filters = [];
+        $this->filterArray = ['terms' => ['brandId' => [333,50]]];
+        $this->key = 'brandId';
+        $this->name = 'terms';
+        $this->expected = [];
+        $filters = FacetedHelper::addFilter($this->filters, $this->filterArray, $this->key, $this->name);
 
-        $this->assertEquals($expected, $filters);
+        $this->assertEquals($this->expected, $filters);
     }
 
     public function testAddAggregation()
     {
-        $filters = ['7_attr' => ['field' => '7_attr.valueId']];
-        $filterArray = ['terms' => ['brandId' => [333,50]]];
-        $key = 'test';
-        $name = 'terms';
-        $expected = [
+        $this->filters = ['7_attr' => ['field' => '7_attr.valueId']];
+        $this->filterArray = ['terms' => ['brandId' => [333,50]]];
+        $this->key = 'test';
+        $this->name = 'terms';
+        $this->expected = [
             'filter' => ['bool' => ['must' => [0 => ['terms' => ['brandId' => [333, 50]]]]]],
             '7_attr' => ['field' => '7_attr.valueId'],
         ];
-        $filters = FacetedHelper::addFilter($filters, $filterArray, $key, $name);
+        $filters = FacetedHelper::addFilter($this->filters, $this->filterArray, $this->key, $this->name);
 
 
-        $this->assertEquals($expected, $filters);
+        $this->assertEquals($this->expected, $filters);
     }
 }
