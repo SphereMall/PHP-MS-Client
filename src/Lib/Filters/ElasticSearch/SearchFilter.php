@@ -80,19 +80,11 @@ class SearchFilter extends Filter implements SearchFilterInterface
     }
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return '';
-    }
-
-    /**
      * @return array
      */
     public function getSearchFilters(): array
     {
-        $set = ['index' => implode(',', $this->indexes),];
+        $set = $this->addIndexToFilters();
         if (!empty($this->elements)) {
             foreach ($this->elements as $element) {
                 $set['body']['query']['bool']['filter'][] = $element->getValues();
@@ -107,15 +99,12 @@ class SearchFilter extends Filter implements SearchFilterInterface
      */
     public function getFacetedFilters(): array
     {
-        $set = [
-            'index' => implode(',', $this->indexes),
-            'size' => 0,
-        ];
+        $set = $this->addIndexToFilters();
+        $set['size'] = 0;
         if (!empty($this->facets)) {
             foreach ($this->facets as $faceted) {
                 $param = $faceted->getFacetedValues();
                 $key = array_keys($param)[0];
-                $set['body']['aggs'][$key] = [];
                 $filters = [];
                 /** @var SearchInterface $filter */
                 foreach ($this->facets as $filter) {
@@ -126,5 +115,13 @@ class SearchFilter extends Filter implements SearchFilterInterface
         }
 
         return $set;
+    }
+
+    /**
+     * @return array
+     */
+    protected function addIndexToFilters(): array
+    {
+        return ['index' => implode(',', $this->indexes)];
     }
 }

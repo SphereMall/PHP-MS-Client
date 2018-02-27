@@ -53,9 +53,7 @@ class ElasticSearchResource extends Resource
      */
     public function facets()
     {
-        $additionalParams = $this->filter ? $this->filter->getFacetedFilters() : [];
-
-        $params   = $this->getQueryParams($additionalParams);
+        $params   = $this->getQueryParams($this->filter ? $this->filter->getFacetedFilters() : []);
         $response = $this->handler->handle('GET', false, false, $params);
         $this->maker = new ElasticSearchFacetedMaker();
 
@@ -68,9 +66,7 @@ class ElasticSearchResource extends Resource
      */
     public function all()
     {
-        $additionalParams = $this->filter ? $this->filter->getSearchFilters() : [];
-
-        $params   = $this->getQueryParams($additionalParams);
+        $params   = $this->getQueryParams($this->filter ? $this->filter->getSearchFilters() : []);
         $response = $this->handler->handle('GET', false, false, $params);
 
         return $this->make($response);
@@ -83,7 +79,7 @@ class ElasticSearchResource extends Resource
      */
     protected function getQueryParams(array $additionalParams = [])
     {
-        $params                 = parent::getQueryParams([]);
+        $params                 = parent::getQueryParams();
         $params['body']['from'] = $params['offset'];
         $params['body']['size'] = $params['limit'];
 
