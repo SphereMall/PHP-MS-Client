@@ -9,15 +9,24 @@
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
 use SphereMall\MS\Lib\Filters\Filter;
+use SphereMall\MS\Lib\Filters\Interfaces\FacetedInterface;
+use SphereMall\MS\Lib\Filters\Interfaces\SearchFilterInterface;
+use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
+use SphereMall\MS\Lib\Helpers\FacetedHelper;
 
 /**
  * Class SearchFilter
  * @package SphereMall\MS\Lib\Filters\ElasticSearch
+ *
+ * @property array $indexes
+ * @property FacetedInterface[] $facets
+ * @property SearchInterface[] $elements
  */
-class SearchFilter extends Filter
+class SearchFilter extends Filter implements SearchFilterInterface
 {
     protected $indexes;
     protected $elements;
+    protected $facets;
 
     /**
      * @param array $elements
@@ -25,9 +34,13 @@ class SearchFilter extends Filter
      */
     public function elements(array $elements)
     {
-        /** @var ElasticSearchFilterElement $element */
         foreach ($elements as $element) {
-            $this->elements[] = $element->getValues();
+            if (is_a($element, SearchInterface::class)) {
+                $this->elements[] = $element;
+            }
+            if (is_a($element, FacetedInterface::class)) {
+                $this->facets[] = $element;
+            }
         }
 
         return $this;
@@ -71,11 +84,47 @@ class SearchFilter extends Filter
      */
     public function __toString()
     {
+        return '';
+    }
+
+    /**
+     * @return array
+     */
+    public function getSearchFilters(): array
+    {
         $set = ['index' => implode(',', $this->indexes),];
         if (!empty($this->elements)) {
-            $set['body']['query']['bool']['filter'] = $this->elements;
+            foreach ($this->elements as $element) {
+                $set['body']['query']['bool']['filter'][] = $element->getValues();
+            }
         }
 
-        return json_encode($set);
+        return $set;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFacetedFilters(): array
+    {
+        $set = [
+            'index' => implode(',', $this->indexes),
+            'size' => 0,
+        ];
+        if (!empty($this->facets)) {
+            foreach ($this->facets as $faceted) {
+                $param = $faceted->getFacetedValues();
+                $key = array_keys($param)[0];
+                $set['body']['aggs'][$key] = [];
+                $filters = [];
+                /** @var SearchInterface $filter */
+                foreach ($this->facets as $filter) {
+                    $filters = FacetedHelper::addFilter($filters, $filter->getValues(), $key, $filter->getName());
+                }
+                $set['body']['aggs'][$key] = FacetedHelper::addAggregation($param, $filters);
+            }
+        }
+
+        return $set;
     }
 }

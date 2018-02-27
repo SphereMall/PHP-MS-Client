@@ -9,6 +9,8 @@
 namespace SphereMall\MS\Lib\FilterParams\ElasticSearch;
 
 use SphereMall\MS\Lib\FilterParams\FilterParams;
+use SphereMall\MS\Lib\FilterParams\Interfaces\FacetedParamsInterface;
+use SphereMall\MS\Lib\FilterParams\Interfaces\SearchParamsInterface;
 
 /**
  * Class AttributeFilterParams
@@ -17,7 +19,7 @@ use SphereMall\MS\Lib\FilterParams\FilterParams;
  * @property int   $attributeId
  * @property array $attributeValueIds
  */
-class AttributeFilterParams extends FilterParams
+class AttributeFilterParams extends FilterParams implements SearchParamsInterface, FacetedParamsInterface
 {
     protected $attributeId;
     protected $attributeValueIds;
@@ -25,7 +27,7 @@ class AttributeFilterParams extends FilterParams
     /**
      * AttributeFilterParams constructor.
      * @param int $attributeId
-     * @param int $attributeValueIds
+     * @param array $attributeValueIds
      */
     public function __construct(int $attributeId, array $attributeValueIds)
     {
@@ -35,9 +37,18 @@ class AttributeFilterParams extends FilterParams
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function getParams()
     {
         return ["{$this->attributeId}_attr.valueId" => $this->attributeValueIds];
+    }
+
+    /**
+     * @return array
+     */
+    public function getFacetedParams()
+    {
+        return ['field' => "{$this->attributeId}_attr.valueId"];
     }
 }

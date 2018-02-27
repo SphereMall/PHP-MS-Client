@@ -34,7 +34,7 @@ class ElasticSearchResponse extends Response
         $this->headers    = [];
 
         try {
-            $this->data     = $response['hits'];
+            $this->data     = $response;
             $this->success  = !$response['timed_out'];
             $this->errors   = $response['error'] ?? null;
             $this->version  = 1;

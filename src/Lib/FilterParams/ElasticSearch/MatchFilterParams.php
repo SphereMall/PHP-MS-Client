@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Lib\FilterParams\ElasticSearch;
 
 use SphereMall\MS\Lib\FilterParams\FilterParams;
+use SphereMall\MS\Lib\FilterParams\Interfaces\SearchParamsInterface;
 
 /**
  * Class MatchFilterParams
@@ -16,7 +17,7 @@ use SphereMall\MS\Lib\FilterParams\FilterParams;
  * @property string $field
  * @property string $value
  */
-class MatchFilterParams extends FilterParams
+class MatchFilterParams extends FilterParams implements SearchParamsInterface
 {
     protected $field;
     protected $value;

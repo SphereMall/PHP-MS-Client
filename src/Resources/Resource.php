@@ -402,9 +402,11 @@ abstract class Resource
     }
 
     /**
+     * @param array $additionalParams
+     *
      * @return array
      */
-    protected function getQueryParams()
+    protected function getQueryParams(array $additionalParams = [])
     {
         $params = [
             'offset' => $this->offset,

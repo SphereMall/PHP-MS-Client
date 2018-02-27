@@ -8,11 +8,19 @@
 
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
+use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
 
-class PriceRangeFilter extends ElasticSearchFilterElement
+/**
+ * Class PriceRangeFilter
+ * @package SphereMall\MS\Lib\Filters\ElasticSearch
+ */
+class PriceRangeFilter extends ElasticSearchFilterElement implements SearchInterface
 {
     protected $name = 'range';
 
+    /**
+     * @return array
+     */
     public function getValues()
     {
         $result = [];

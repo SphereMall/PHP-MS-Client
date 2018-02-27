@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Lib\FilterParams\ElasticSearch;
 
 use SphereMall\MS\Lib\FilterParams\FilterParams;
+use SphereMall\MS\Lib\FilterParams\Interfaces\SearchParamsInterface;
 
 /**
  * Class PriceRangeFilterParams
@@ -16,7 +17,7 @@ use SphereMall\MS\Lib\FilterParams\FilterParams;
  * @property int $priceMin
  * @property int $priceMax
  */
-class PriceRangeFilterParams extends FilterParams
+class PriceRangeFilterParams extends FilterParams implements SearchParamsInterface
 {
     protected $priceMin;
     protected $priceMax;

@@ -1,0 +1,75 @@
+
+{
+  "took": 0,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 31,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "1066_attr": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": 811,
+          "doc_count": 28
+        },
+        {
+          "key": 810,
+          "doc_count": 1
+        }
+      ]
+    },
+    "brandId": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": 1,
+          "doc_count": 24
+        },
+        {
+          "key": 333,
+          "doc_count": 4
+        },
+        {
+          "key": 50,
+          "doc_count": 1
+        },
+        {
+          "key": 290,
+          "doc_count": 1
+        },
+        {
+          "key": 301,
+          "doc_count": 1
+        }
+      ]
+    },
+    "7_attr": {
+      "doc_count": 25,
+      "7_attr": {
+        "doc_count_error_upper_bound": 0,
+        "sum_other_doc_count": 0,
+        "buckets": [
+          {
+            "key": 279,
+            "doc_count": 20
+          },
+          {
+            "key": 2747,
+            "doc_count": 1
+          }
+        ]
+      }
+    }
+  }
+}
