@@ -44,12 +44,4 @@ class TermsFilter extends ElasticSearchFilterElement implements SearchInterface,
 
         return $data;
     }
-
-    /**
-     * @return mixed|string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 }
