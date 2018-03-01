@@ -25,12 +25,12 @@ class ElasticSearchFacetedMaker extends ElasticSearchMaker
     protected function getResultFromResponse(ElasticSearchResponse $response): array
     {
         $result = [];
-
-        if (isset($response->getData()['aggregations'])) {
-            foreach ($response->getData()['aggregations'] as $fieldName => $aggregation) {
-                if ($array = $this->createArray($fieldName, $aggregation)) {
-                    $result = array_merge($result, $array);
-                }
+        if (!isset($response->getData()['aggregations'])) {
+            return $result;
+        }
+        foreach ($response->getData()['aggregations'] as $fieldName => $aggregation) {
+            if ($array = $this->createArray($fieldName, $aggregation)) {
+                $result = array_merge($result, $array);
             }
         }
 
