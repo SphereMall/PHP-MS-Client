@@ -13,13 +13,13 @@ use SphereMall\MS\Lib\FilterParams\Interfaces\SearchFacetedInterface;
 use SphereMall\MS\Lib\FilterParams\Interfaces\SearchQueryInterface;
 
 /**
- * Class AttributeFilterParams
+ * Class AttributeFilterSearch
  * @package SphereMall\MS\Lib\FilterParams\ElasticSearch
  *
  * @property int   $attributeId
  * @property array $attributeValueIds
  */
-class AttributeFilterParams extends FilterParams implements SearchQueryInterface, SearchFacetedInterface
+class AttributeFilterSearch extends FilterParams implements SearchQueryInterface, SearchFacetedInterface
 {
     protected $attributeId;
     protected $attributeValueIds;

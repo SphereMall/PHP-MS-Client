@@ -10,14 +10,18 @@ namespace SphereMall\MS\Resources\ElasticSearch;
 
 use SphereMall\MS\Client;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
+use SphereMall\MS\Lib\Filters\ElasticSearch\SearchFilter;
 use SphereMall\MS\Lib\Http\ElasticSearchRequest;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
+use SphereMall\MS\Lib\Makers\ElasticSearchFacetedMaker;
 use SphereMall\MS\Lib\Makers\Maker;
 use SphereMall\MS\Resources\Resource;
 
 /**
  * Class ElasticSearchResource
  * @package SphereMall\MS\Resources\ElasticSearch
+ *
+ * @property SearchFilter $filter
  */
 class ElasticSearchResource extends Resource
 {
@@ -43,22 +47,37 @@ class ElasticSearchResource extends Resource
         $this->handler = $handler ?? new ElasticSearchRequest($this->client, $this);
     }
 
+    /**
+     * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function facets()
+    {
+        $params   = $this->getQueryParams($this->filter ? $this->filter->getFacetedFilters() : []);
+        $response = $this->handler->handle('GET', false, false, $params);
+        $this->maker = new ElasticSearchFacetedMaker();
+
+        return $this->make($response);
+    }
+
     /** Search
      * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function all()
     {
-        $params   = $this->getQueryParams();
+        $params   = $this->getQueryParams($this->filter ? $this->filter->getSearchFilters() : []);
         $response = $this->handler->handle('GET', false, false, $params);
 
         return $this->make($response);
     }
 
     /**
+     * @param array $additionalParams
+     *
      * @return array
      */
-    protected function getQueryParams()
+    protected function getQueryParams(array $additionalParams = [])
     {
         $params                 = parent::getQueryParams();
         $params['body']['from'] = $params['offset'];
@@ -71,7 +90,7 @@ class ElasticSearchResource extends Resource
             return $params;
         }
 
-        $where = json_decode($params['where'], true);
+        $where = $additionalParams;
 
         if(isset($where['body'])){
             $params['body'] = array_merge($params['body'], $where['body']);
@@ -116,14 +135,6 @@ class ElasticSearchResource extends Resource
         }
 
         return ['response' => $response, 'maker' => $maker, 'makeArray' => $makeArray];
-    }
-
-    /**
-     * @throws MethodNotFoundException
-     */
-    public function facets()
-    {
-        throw new MethodNotFoundException("Method facets() can not be use with Elasticsearch");
     }
 
     /**

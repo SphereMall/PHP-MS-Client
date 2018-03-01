@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Lib\Http;
 
 use Elasticsearch\ClientBuilder;
+use SphereMall\MS\Lib\Helpers\HttpHelper;
 
 /**
  * Class ElasticSearchRequest
@@ -18,9 +19,10 @@ class ElasticSearchRequest extends Request
 {
     /**
      * @param string $method
-     * @param bool   $body
-     * @param bool   $uriAppend
-     * @param array  $queryParams
+     * @param bool $body
+     * @param bool $uriAppend
+     * @param array $queryParams
+     *
      * @return \GuzzleHttp\Promise\PromiseInterface|ElasticSearchResponse|Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
@@ -28,10 +30,9 @@ class ElasticSearchRequest extends Request
     public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {
         $clientBuilder = new ClientBuilder();
-        //$url           = $this->client->getGatewayUrl() . '/' . $this->resource->getVersion() . '/' . $this->resource->getURI();
-        $url    = '192.168.53.72:9200';
+        $url           = HttpHelper::setHttPortToUrl($this->client->getGatewayUrl()) . '/' . $this->resource->getVersion() . '/' . $this->resource->getURI();
         $client = $clientBuilder->setConnectionParams(['client' => ['headers' => $this->setAuthorization()]])
-                                ->setHosts([$url])
+                                ->setHosts(['host' => $url])
                                 ->build();
 
         try {

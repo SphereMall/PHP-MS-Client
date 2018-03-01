@@ -9,12 +9,13 @@
 namespace SphereMall\MS\Lib\FilterParams\ElasticSearch;
 
 use SphereMall\MS\Lib\FilterParams\FilterParams;
+use SphereMall\MS\Lib\FilterParams\Interfaces\SearchQueryInterface;
 
 /**
  * Class IndexFilterParams
  * @package SphereMall\MS\Lib\FilterParams\ElasticSearch
  */
-class IndexFilterParams extends FilterParams
+class IndexFilterParams extends FilterParams implements SearchQueryInterface
 {
     protected $entities;
 

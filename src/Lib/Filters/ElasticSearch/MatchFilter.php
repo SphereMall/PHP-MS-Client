@@ -9,13 +9,14 @@
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
 use SphereMall\MS\Exceptions\ConfigurationException;
+use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
 
 /**
  * Class MatchFilter
  * @package SphereMall\MS\Lib\Filters\ElasticSearch
  * @property string $name
  */
-class MatchFilter extends ElasticSearchFilterElement
+class MatchFilter extends ElasticSearchFilterElement implements SearchInterface
 {
     protected $name = 'match';
 
