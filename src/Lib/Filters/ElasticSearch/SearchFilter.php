@@ -101,17 +101,18 @@ class SearchFilter extends Filter implements SearchFilterInterface
     {
         $set = $this->addIndexToFilters();
         $set['size'] = 0;
-        if (!empty($this->facets)) {
-            foreach ($this->facets as $faceted) {
-                $param = $faceted->getFacetedValues();
-                $key = array_keys($param)[0];
-                $filters = [];
-                /** @var SearchInterface $filter */
-                foreach ($this->facets as $filter) {
-                    $filters = FacetedHelper::addFilter($filters, $filter->getValues(), $key, $filter->getName());
-                }
-                $set['body']['aggs'][$key] = FacetedHelper::addAggregation($param, $filters);
+        if (empty($this->facets)) {
+            return $set;
+        }
+        foreach ($this->facets as $faceted) {
+            $param = $faceted->getFacetedValues();
+            $key = array_keys($param)[0];
+            $filters = [];
+            /** @var SearchInterface $filter */
+            foreach ($this->facets as $filter) {
+                $filters = FacetedHelper::addFilter($filters, $filter->getValues(), $key, $filter->getName());
             }
+            $set['body']['aggs'][$key] = FacetedHelper::addAggregation($param, $filters);
         }
 
         return $set;
