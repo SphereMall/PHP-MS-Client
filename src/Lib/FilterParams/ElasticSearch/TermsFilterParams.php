@@ -9,8 +9,8 @@
 namespace SphereMall\MS\Lib\FilterParams\ElasticSearch;
 
 use SphereMall\MS\Lib\FilterParams\FilterParams;
-use SphereMall\MS\Lib\FilterParams\Interfaces\FacetedParamsInterface;
-use SphereMall\MS\Lib\FilterParams\Interfaces\SearchParamsInterface;
+use SphereMall\MS\Lib\FilterParams\Interfaces\SearchFacetedInterface;
+use SphereMall\MS\Lib\FilterParams\Interfaces\SearchQueryInterface;
 
 /**
  * Class TermsFilterParams
@@ -18,7 +18,7 @@ use SphereMall\MS\Lib\FilterParams\Interfaces\SearchParamsInterface;
  * @property string $field
  * @property array  $values
  */
-class TermsFilterParams extends FilterParams implements SearchParamsInterface, FacetedParamsInterface
+class TermsFilterParams extends FilterParams implements SearchQueryInterface, SearchFacetedInterface
 {
     protected $field;
     protected $values;

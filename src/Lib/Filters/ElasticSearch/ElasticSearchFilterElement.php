@@ -9,8 +9,8 @@
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
 use SphereMall\MS\Lib\FilterParams\FilterParams;
-use SphereMall\MS\Lib\FilterParams\Interfaces\FacetedParamsInterface;
-use SphereMall\MS\Lib\FilterParams\Interfaces\SearchParamsInterface;
+use SphereMall\MS\Lib\FilterParams\Interfaces\SearchFacetedInterface;
+use SphereMall\MS\Lib\FilterParams\Interfaces\SearchQueryInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
 
 /**
@@ -38,10 +38,10 @@ class ElasticSearchFilterElement implements SearchInterface
      */
     public function __construct(FilterParams $values, array $langs = null)
     {
-        if (is_a($values, SearchParamsInterface::class)) {
+        if (is_a($values, SearchQueryInterface::class)) {
             $this->values = $values->getParams();
         }
-        if (is_a($values, FacetedParamsInterface::class)) {
+        if (is_a($values, SearchFacetedInterface::class)) {
             $this->facets = $values->getFacetedParams();
         }
         if ($langs) {

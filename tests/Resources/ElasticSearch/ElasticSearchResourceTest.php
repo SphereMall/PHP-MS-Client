@@ -16,13 +16,10 @@ use SphereMall\MS\Entities\Page;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\FieldsParams\ElasticSearch\FullTextSearchFieldsParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\AttributeFilterParams;
-use SphereMall\MS\Lib\FilterParams\ElasticSearch\FacetedAttributeSearchParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\IndexFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\MatchFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\PriceRangeFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\TermsFilterParams;
-use SphereMall\MS\Lib\Filters\ElasticSearch\FacetedFilter;
-use SphereMall\MS\Lib\Filters\ElasticSearch\FacetedFilterElement;
 use SphereMall\MS\Lib\Filters\ElasticSearch\FullTextFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MatchFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MatchPhraseFilter;
@@ -33,8 +30,6 @@ use SphereMall\MS\Lib\Filters\ElasticSearch\TermsFilter;
 use SphereMall\MS\Lib\Http\ElasticSearchRequest;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
-use SphereMall\MS\Lib\SortParams\ElasticSearch\AttributeSortParams;
-use SphereMall\MS\Lib\SortParams\ElasticSearch\FieldSortParams;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
@@ -223,7 +218,7 @@ class ElasticSearchResourceTest extends SetUpResourceTest
     private function getMockDataForFaceted()
     {
         $requestHandler = $this->createMock(ElasticSearchRequest::class);
-        $response       = json_decode(file_get_contents(__DIR__ . '/faceted-mock.json'), true);
+        $response       = json_decode(file_get_contents(__DIR__ . '/../../_source/faceted-mock.json'), true);
         $requestHandler->method('handle')
             ->with('GET')
             ->will($this->returnValue(new ElasticSearchResponse($response)));
