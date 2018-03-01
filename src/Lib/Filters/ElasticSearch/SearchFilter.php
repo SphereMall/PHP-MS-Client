@@ -86,9 +86,10 @@ class SearchFilter extends Filter implements SearchFilterInterface
     {
         $set = $this->addIndexToFilters();
         if (!empty($this->elements)) {
-            foreach ($this->elements as $element) {
-                $set['body']['query']['bool']['filter'][] = $element->getValues();
-            }
+            return $set;
+        }
+        foreach ($this->elements as $element) {
+            $set['body']['query']['bool']['filter'][] = $element->getValues();
         }
 
         return $set;
