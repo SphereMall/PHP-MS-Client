@@ -64,28 +64,62 @@ class AutoCompleteFilter extends ElasticSearchFilterElement implements SearchInt
         ];
     }
 
-    /**
-     * @param bool $isHighlight
-     * @return array
-     */
-    private function combineParams($isHighlight = false)
-    {
-        $result = [];
 
-        foreach ($this->values as $key => $value) {
-            foreach ($this->langCodes as $langCode) {
-                if ($isHighlight) {
-                    $result["{$key}_{$langCode}.{$this->autoCompleteField}"] = [
-                        'type'                => 'fvh',
-                        'number_of_fragments' => 0,
-                        'force_source'        => true,
-                    ];
-                } else {
-                    $result[$this->getName()]["{$key}_{$langCode}.{$this->autoCompleteField}"] = $value;
-                }
+
+    /**
+     * @param $result
+     * @param $value
+     * @param $isHighlight
+     * @param $key
+     * @return mixed
+     */
+    protected function combineParamValues($result, $value, $isHighlight, $key)
+    {
+        foreach ($this->langCodes as $langCode) {
+            if ($isHighlight) {
+                $result[$this->createKey($key, $langCode)] = $this->defaultValue();
+            }
+            if (!$isHighlight) {
+                $result[$this->getName()][$this->createKey($key, $langCode)] = $value;
             }
         }
 
         return $result;
+    }
+    /**
+     * @param bool $isHighlight
+     * @return array
+     */
+    protected function combineParams($isHighlight = false)
+    {
+        $result = [];
+
+        foreach ($this->values as $key => $value) {
+            $result = $this->combineParamValues($result, $value, $isHighlight, $key);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $key
+     * @param $langCode
+     * @return string
+     */
+    protected function createKey($key, $langCode): string
+    {
+        return "{$key}_{$langCode}.{$this->autoCompleteField}";
+    }
+
+    /**
+     * @return array
+     */
+    protected function defaultValue(): array
+    {
+        return [
+            'type'                => 'fvh',
+            'number_of_fragments' => 0,
+            'force_source'        => true,
+        ];
     }
 }

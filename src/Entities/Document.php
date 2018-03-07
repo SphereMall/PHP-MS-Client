@@ -23,10 +23,6 @@ class Document extends AutoCompleteEntity
     use InteractsWithAttributes;
 
     #region [Properties]
-    public $id;
-    public $urlCode;
-
-    public $attributes;
     public $functionalName;
     #endregion
 }

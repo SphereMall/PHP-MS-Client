@@ -38,9 +38,6 @@ class Product extends AutoCompleteEntity
     use InteractsWithAttributes;
 
     #region [Properties]
-    public $id;
-    public $urlCode;
-    public $title;
     public $shortDescription;
     public $fullDescription;
     public $seoTitle;

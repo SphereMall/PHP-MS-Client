@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: User
+ * User: Dmitry Sokolov
  * Date: 07.03.2018
  * Time: 9:53
  */
@@ -21,4 +21,5 @@ abstract class AutoCompleteEntity extends Entity
     public $id;
     public $title;
     public $urlCode;
+
 }

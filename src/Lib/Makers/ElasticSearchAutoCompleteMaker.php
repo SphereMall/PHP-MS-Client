@@ -21,9 +21,8 @@ use SphereMall\MS\Lib\Http\Meta;
  *
  * @property bool $asCollection
  */
-class ElasticSearchAutoCompleteMaker
+class ElasticSearchAutoCompleteMaker extends ElasticSearchMaker
 {
-    protected $asCollection = false;
     protected $langCodes = [];
 
     /**
@@ -33,45 +32,6 @@ class ElasticSearchAutoCompleteMaker
     public function __construct($langCodes = [])
     {
         $this->langCodes = $langCodes;
-    }
-    /**
-     * @param ElasticSearchResponse $response
-     * @return mixed|null
-     * @throws EntityNotFoundException
-     */
-    public function makeSingle(ElasticSearchResponse $response)
-    {
-        if (!$response->getSuccess()) {
-            return null;
-        }
-
-        $result = $this->getResultFromResponse($response);
-
-        return $result[0] ?? null;
-    }
-
-    /**
-     * @param ElasticSearchResponse $response
-     * @return array|Collection
-     * @throws EntityNotFoundException
-     */
-    public function makeArray(ElasticSearchResponse $response)
-    {
-        if (!$response->getSuccess()) {
-            if ($this->asCollection) {
-                return new Collection([], new Meta());
-            }
-
-            return [];
-        }
-
-        $result = $this->getResultFromResponse($response);
-
-        if ($this->asCollection) {
-            return new Collection($result, $response->getMeta());
-        }
-
-        return $result;
     }
 
     /**
@@ -105,29 +65,5 @@ class ElasticSearchAutoCompleteMaker
         }
 
         return $result;
-    }
-
-    /**
-     * @param $type
-     * @return null|string
-     */
-    protected function getMapperClass($type)
-    {
-        $potentialEndpointClass = 'SphereMall\\MS\\Lib\\Mappers\\' . ucfirst($type) . 'Mapper';
-        if (class_exists($potentialEndpointClass)) {
-            return $potentialEndpointClass;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param $mapperClass
-     * @param $element
-     * @return mixed
-     */
-    protected function createObject($mapperClass, $element)
-    {
-        return (new $mapperClass())->createObject($element);
     }
 }
