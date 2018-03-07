@@ -21,5 +21,4 @@ abstract class AutoCompleteEntity extends Entity
     public $id;
     public $title;
     public $urlCode;
-
 }
