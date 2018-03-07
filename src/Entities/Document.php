@@ -18,7 +18,7 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  * @property string $urlCode
  * @property Attribute[] $attributes
  */
-class Document extends Entity
+class Document extends AutoCompleteEntity
 {
     use InteractsWithAttributes;
 

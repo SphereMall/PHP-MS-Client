@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
 use SphereMall\MS\Lib\Filters\Filter;
+use SphereMall\MS\Lib\Filters\Interfaces\AutoCompleteInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\FacetedInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\SearchFilterInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
@@ -20,7 +21,7 @@ use SphereMall\MS\Lib\Helpers\FacetedHelper;
  *
  * @property array $indexes
  * @property FacetedInterface[] $facets
- * @property SearchInterface[] $elements
+ * @property SearchInterface[] | AutoCompleteInterface[] $elements
  */
 class SearchFilter extends Filter implements SearchFilterInterface
 {
@@ -65,6 +66,11 @@ class SearchFilter extends Filter implements SearchFilterInterface
         return $this->elements;
     }
 
+    public function __toString()
+    {
+        return '';
+    }
+
     /**
      * @param array $indexes
      * @return $this
@@ -85,11 +91,14 @@ class SearchFilter extends Filter implements SearchFilterInterface
     public function getSearchFilters(): array
     {
         $set = $this->addIndexToFilters();
-        if (!empty($this->elements)) {
+        if (empty($this->elements)) {
             return $set;
         }
         foreach ($this->elements as $element) {
             $set['body']['query']['bool']['filter'][] = $element->getValues();
+            if (is_a($element, AutoCompleteInterface::class)) {
+                $set['body']['highlight'] = $element->getHighlight();
+            }
         }
 
         return $set;

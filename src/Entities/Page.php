@@ -29,7 +29,7 @@ namespace SphereMall\MS\Entities;
  * @property int            $noindex
  * @property FunctionalName $functionalName
  */
-class Page extends Entity
+class Page extends AutoCompleteEntity
 {
     #region [Properties]
     public $id;

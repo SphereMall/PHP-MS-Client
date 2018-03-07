@@ -1,0 +1,187 @@
+{
+  "took"     : 0,
+  "timed_out": false,
+  "_shards"  : {
+    "total"     : 15,
+    "successful": 15,
+    "skipped"   : 0,
+    "failed"    : 0
+  },
+  "hits"     : {
+    "total"    : 4,
+    "max_score": 0,
+    "hits"     : [
+      {
+        "_index"   : "sm-products",
+        "_type"    : "products",
+        "_id"      : "6354",
+        "_score"   : 0,
+        "_source"  : {
+          .
+          "urlCode"            : "versmeergranen-ciabatta-oude-kaas",
+          "title_fr"           : "Test product",
+          "functionalNameId"   : "50",
+          "shortDescription_fr": "1",
+          "fullDescription_fr" : "Meergranen ciabatta uit eigen oven met Jumbo's Roem",
+          "visible"            : "1",
+          "brandId"            : "50",
+          "purchasePrice"      : "5000",
+          "price"              : "6600",
+          "oldPrice"           : "0",
+          "lastUpdate"         : "2017-11-02 12:03:54",
+          "disable"            : "0",
+          "isMain"             : "1",
+          "priceExclVat"       : null,
+          "7_attr"             : [
+            {
+              "id"              : "7",
+              "valueId"         : "279",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ],
+          "1066_attr"          : [
+            {
+              "id"              : "1066",
+              "valueId"         : "811",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ],
+          "1068_attr"          : [
+            {
+              "id"              : "1068",
+              "valueId"         : "814",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ],
+          "1067_attr"          : [
+            {
+              "id"              : "1067",
+              "valueId"         : "1058",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ]
+        },
+        "highlight": {
+          "title_fr.autocomplete": [
+            "<em>Test</em> product"
+          ]
+        }
+      },
+      {
+        "_index"   : "sm-products",
+        "_type"    : "products",
+        "_id"      : "6329",
+        "_score"   : 0,
+        "_source"  : {
+          "urlCode"            : "limoen-komkommer-fruitwater",
+          "title_fr"           : "test",
+          "functionalNameId"   : "3",
+          "shortDescription_fr": "Best product",
+          "fullDescription_fr" : "Best product in the world",
+          "visible"            : "1",
+          "brandId"            : "333",
+          "purchasePrice"      : "10000",
+          "price"              : "20000",
+          "oldPrice"           : "0",
+          "lastUpdate"         : "2018-02-22 17:48:42",
+          "disable"            : "0",
+          "isMain"             : "0",
+          "priceExclVat"       : "20000",
+          "1067_attr"          : [
+            {
+              "id"              : "1067",
+              "valueId"         : "812",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ],
+          "1073_attr"          : [
+            {
+              "id"              : "1073",
+              "valueId"         : "2607",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ],
+          "1074_attr"          : [
+            {
+              "id"              : "1074",
+              "valueId"         : "2744",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ],
+          "1075_attr"          : [
+            {
+              "id"              : "1075",
+              "valueId"         : "2745",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ],
+          "7_attr"             : [
+            {
+              "id"              : "7",
+              "valueId"         : "2747",
+              "orderNumber"     : null,
+              "valueOrderNumber": null
+            }
+          ],
+          "9_attr"             : [
+            {
+              "id"              : "9",
+              "valueId"         : "17",
+              "orderNumber"     : "1",
+              "valueOrderNumber": "1"
+            }
+          ]
+        },
+        "highlight": {
+          "title_fr.autocomplete": [
+            "<em>test</em>"
+          ]
+        }
+      },
+      {
+        "_index"   : "sm-pages",
+        "_type"    : "pages",
+        "_id"      : "9316",
+        "_score"   : 0,
+        "_source"  : {
+          "viewId"             : null,
+          "urlCode"            : "test11",
+          "title_fr"           : "Test11",
+          "shortDescription_fr": null,
+          "functionalNameId"   : null
+        },
+        "highlight": {
+          "title_fr.autocomplete": [
+            "<em>Test11</em>"
+          ]
+        }
+      },
+      {
+        "_index"   : "sm-pages",
+        "_type"    : "pages",
+        "_id"      : "9318",
+        "_score"   : 0,
+        "_source"  : {
+          "viewId"             : null,
+          "urlCode"            : "test2",
+          "title_fr"           : "Test2",
+          "shortDescription_fr": "Test 22",
+          "functionalNameId"   : "28"
+        },
+        "highlight": {
+          "title_fr.autocomplete": [
+            "<em>Test2</em>"
+          ]
+        }
+      }
+    ]
+  }
+}

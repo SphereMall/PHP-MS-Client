@@ -7,19 +7,22 @@
  * Time: 20:02
  */
 
-namespace SphereMall\MS\Tests\Resources\Grapher;
+namespace SphereMall\MS\Tests\Resources\ElasticSearch;
 
 use function GuzzleHttp\Psr7\str;
+use SphereMall\MS\Entities\AutoCompleteEntity;
 use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Entities\Page;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\FieldsParams\ElasticSearch\FullTextSearchFieldsParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\AttributeFilterParams;
+use SphereMall\MS\Lib\FilterParams\ElasticSearch\AutoCompleteFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\IndexFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\MatchFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\PriceRangeFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\TermsFilterParams;
+use SphereMall\MS\Lib\Filters\ElasticSearch\AutoCompleteFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\FullTextFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MatchFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MatchPhraseFilter;
@@ -44,13 +47,13 @@ class ElasticSearchResourceTest extends SetUpResourceTest
      */
     public function testFacet()
     {
-        $indexes = ['sm-products', 'sm-documents', 'sm-pages'];
-        $attributeId = '7';
-        $termsFilterName = 'brandId';
-        $termsFilterValues = [333, 50];
+        $indexes               = ['sm-products', 'sm-documents', 'sm-pages'];
+        $attributeId           = '7';
+        $termsFilterName       = 'brandId';
+        $termsFilterValues     = [333, 50];
         $termsAttributesValues = [279, 554];
 
-        $index   = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class, Document::class, Page::class]));
+        $index = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class, Document::class, Page::class]));
         $this->assertAttributeEquals('index', 'name', $index);
         $this->assertAttributeEquals($indexes, 'values', $index);
         $this->assertAttributeEquals(null, 'langCodes', $index);
@@ -67,22 +70,22 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         $this->assertAttributeEquals(null, 'langCodes', $attrTerm);
         $this->assertAttributeEquals(['field' => $attributeId . '_attr.valueId'], 'facets', $attrTerm);
 
-        $searchFilter = (new SearchFilter())->index([$index])->elements([$brandTerm, $attrTerm]);
+        $searchFilter   = (new SearchFilter())->index([$index])->elements([$brandTerm, $attrTerm]);
         $facetedFilters = $searchFilter->getFacetedFilters();
-        $expected = [
+        $expected       = [
             'index' => 'sm-products,sm-documents,sm-pages',
             'size'  => 0,
             'body'  => [
                 'aggs' => [
-                    'brandId' => [
+                    'brandId'        => [
                         'filter' => [
                             'bool' => ['must' => [0 => ['terms' => ['7_attr.valueId' => [279, 554]]]]],
                         ],
-                        'aggs'   => ['brandId' => ['terms' => ['field' => 'brandId' ]]],
+                        'aggs'   => ['brandId' => ['terms' => ['field' => 'brandId']]],
                     ],
                     '7_attr.valueId' => [
                         'filter' => ['bool' => ['must' => [0 => ['terms' => ['brandId' => [333, 50]]]]]],
-                        'aggs' => ['7_attr.valueId' => ['terms' => ['field' => '7_attr.valueId']]],
+                        'aggs'   => ['7_attr.valueId' => ['terms' => ['field' => '7_attr.valueId']]],
                     ],
                 ],
             ],
@@ -129,9 +132,28 @@ class ElasticSearchResourceTest extends SetUpResourceTest
      */
     public function testSearch()
     {
-        $all = $this->getMockData()->all();
+        $all = $this->getMockDataForAutoComplete()->all();
         foreach ($all as $item) {
             $this->assertInstanceOf(Entity::class, $item);
+        }
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testAutoComplete()
+    {
+        $params       = new AutoCompleteFilterParams('title', 'prod');
+        $autocomplete = new AutoCompleteFilter($params, [$this->langCode]);
+
+        $this->assertAttributeEquals('title', 'field', $params);
+        $this->assertAttributeEquals([$this->langCode], 'langCodes', $autocomplete);
+        $this->assertAttributeEquals(['title' => 'prod'], 'values', $autocomplete);
+
+        $all = $this->getMockData()->autoComplete([$this->langCode]);
+        foreach ($all as $item) {
+            $this->assertInstanceOf(AutoCompleteEntity::class, $item);
         }
     }
 
@@ -176,7 +198,14 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         $this->assertAttributeEquals(['title' => 'test'], 'values', $matchPhrase);
         $this->assertAttributeEquals(['fr'], 'langCodes', $matchPhrase);
 
-        $searchFilter = (new SearchFilter())->index([$index])->elements([$brandTerm, $attrTerm, $priceTerm, $priceRange, $match, $matchPhrase]);
+        $searchFilter = (new SearchFilter())->index([$index])->elements([
+            $brandTerm,
+            $attrTerm,
+            $priceTerm,
+            $priceRange,
+            $match,
+            $matchPhrase,
+        ]);
 
         $elements = $searchFilter->getElements();
 
@@ -220,8 +249,21 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         $requestHandler = $this->createMock(ElasticSearchRequest::class);
         $response       = json_decode(file_get_contents(__DIR__ . '/../../_source/faceted-mock.json'), true);
         $requestHandler->method('handle')
-            ->with('GET')
-            ->will($this->returnValue(new ElasticSearchResponse($response)));
+                       ->with('GET')
+                       ->will($this->returnValue(new ElasticSearchResponse($response)));
+
+        $elasticSearchResource = new ElasticSearchResource($this->client, 'v1', $requestHandler, new ElasticSearchMaker());
+
+        return $elasticSearchResource;
+    }
+
+    private function getMockDataForAutoComplete()
+    {
+        $requestHandler = $this->createMock(ElasticSearchRequest::class);
+        $response       = json_decode(file_get_contents(__DIR__ . '/../../_source/autoComplete.json'), true);
+        $requestHandler->method('handle')
+                       ->with('GET')
+                       ->will($this->returnValue(new ElasticSearchResponse($response)));
 
         $elasticSearchResource = new ElasticSearchResource($this->client, 'v1', $requestHandler, new ElasticSearchMaker());
 
