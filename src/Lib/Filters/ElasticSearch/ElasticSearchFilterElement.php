@@ -68,5 +68,10 @@ class ElasticSearchFilterElement implements SearchInterface
     {
         return $this->name;
     }
+
+    public function getLanguages()
+    {
+        return $this->langCodes;
+    }
     #endregion
 }

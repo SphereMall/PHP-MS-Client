@@ -13,6 +13,7 @@ use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Lib\Filters\ElasticSearch\SearchFilter;
 use SphereMall\MS\Lib\Http\ElasticSearchRequest;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
+use SphereMall\MS\Lib\Makers\ElasticSearchAutoCompleteMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchFacetedMaker;
 use SphereMall\MS\Lib\Makers\Maker;
 use SphereMall\MS\Resources\Resource;
@@ -49,27 +50,41 @@ class ElasticSearchResource extends Resource
 
     /**
      * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function facets()
     {
-        $params   = $this->getQueryParams($this->filter ? $this->filter->getFacetedFilters() : []);
-        $response = $this->handler->handle('GET', false, false, $params);
         $this->maker = new ElasticSearchFacetedMaker();
+        $params      = $this->getQueryParams($this->filter ? $this->filter->getFacetedFilters() : []);
 
-        return $this->make($response);
+        return $this->make($this->getResponse($params));
     }
 
-    /** Search
-     * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+    /**
+     * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function all()
     {
-        $params   = $this->getQueryParams($this->filter ? $this->filter->getSearchFilters() : []);
-        $response = $this->handler->handle('GET', false, false, $params);
+        $params = $this->getQueryParams($this->filter && method_exists( $this->filter, 'getSearchFilters') ? $this->filter->getSearchFilters() : []);
 
-        return $this->make($response);
+        return $this->make($this->getResponse($params));
+    }
+
+    /**
+     * @param array $langs
+     * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function autoComplete(array $langs = [])
+    {
+        $this->maker = new ElasticSearchAutoCompleteMaker($langs);
+        $params = $this->getQueryParams($this->filter ? $this->filter->getSearchFilters() : []);
+
+        return $this->make($this->getResponse($params));
     }
 
     /**
@@ -86,13 +101,12 @@ class ElasticSearchResource extends Resource
         unset($params['offset']);
         unset($params['limit']);
 
-        if (empty($params['where'])) {
+        $where = $additionalParams ? $additionalParams : json_decode($params['where'], true);
+        if (empty($where)) {
             return $params;
         }
 
-        $where = $additionalParams;
-
-        if(isset($where['body'])){
+        if (isset($where['body'])) {
             $params['body'] = array_merge($params['body'], $where['body']);
             unset($where['body']);
         }
@@ -102,7 +116,7 @@ class ElasticSearchResource extends Resource
 
         unset($params['where']);
 
-        if(isset($params['sort']) && $params['sort']){
+        if (isset($params['sort']) && $params['sort']) {
             $params['body']['sort'] = $params['sort'];
             unset($params['sort']);
         }
@@ -186,5 +200,21 @@ class ElasticSearchResource extends Resource
     {
         throw new MethodNotFoundException("Method delete() can not be use with Elasticsearch");
     }
+
     #endregion
+
+    #region [privates methods]
+    /**
+     * @param $params
+     * @return \GuzzleHttp\Promise\PromiseInterface|ElasticSearchResponse|\SphereMall\MS\Lib\Http\Response
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function getResponse($params)
+    {
+        return $this->handler->handle('GET', false, false, $params);
+    }
+
+    #endregion
+
 }

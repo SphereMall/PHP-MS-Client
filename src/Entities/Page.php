@@ -29,18 +29,15 @@ namespace SphereMall\MS\Entities;
  * @property int            $noindex
  * @property FunctionalName $functionalName
  */
-class Page extends Entity
+class Page extends AutoCompleteEntity
 {
     #region [Properties]
-    public $id;
-    public $urlCode;
     public $seoTitle;
     public $seoDescription;
     public $seoKeywords;
     public $visible;
     public $introHtml;
     public $outroHtml;
-    public $title;
     public $html;
     public $shortDescription;
     public $dateStartVisible;
