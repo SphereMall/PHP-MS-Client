@@ -12,11 +12,13 @@ namespace SphereMall\MS\Entities;
 use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
 
 /**
- * Class Company
+ * Class Document
  * @package SphereMall\MS\Entities
  * @property int $id
  * @property string $urlCode
+ * @property string $title
  * @property Attribute[] $attributes
+ * @property FunctionalName $functionalName
  */
 class Document extends Entity
 {
