@@ -100,7 +100,16 @@ class OrderFinalized
      */
     public function update(array $params = [])
     {
-        $params = array_intersect_key($params, array_flip(['statusId', 'orderId', 'paymentStatusId', 'additionalInfo']));
+        $params = array_intersect_key(
+            $params,
+            array_flip([
+                'statusId',
+                'orderId',
+                'paymentStatusId',
+                'additionalInfo',
+                'paymentStatusDescription'
+            ])
+        );
 
         //Update current order with params
         $order = $this->client
