@@ -3,7 +3,7 @@ Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
 ### Version 1.0.31
-[Changelog 1.0.31](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
+[Changelog 1.0.32](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
 #### Supported microservices
 * Gateway 1.1.1
 * Products 1.1.0
@@ -41,3 +41,4 @@ $client = new Client([
 * [Product Resource](https://github.com/SphereMall/PHP-MS-Client/wiki/7.-Product-Resource)
   * [Get full](https://github.com/SphereMall/PHP-MS-Client/wiki/7.1.-Get-full)
 * [Shop](https://github.com/SphereMall/PHP-MS-Client/wiki/8.-Shop-service)
+* [ElasticSearch](https://github.com/SphereMall/PHP-MS-Client/wiki/9.-ElasticSearch)
