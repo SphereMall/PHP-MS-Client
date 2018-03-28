@@ -64,33 +64,26 @@ class AsyncContainer
             ],
         ];
 
-        $returns = $this->responses;
+        $returns   = $this->responses;
         $asyncKeys = [];
         foreach ($returns as $key => $return) {
             $asyncKeys[] = $key;
 
             if ($this->client->beforeAPICall) {
-                call_user_func($this->client->beforeAPICall,
-                    $return['response']['method'],
-                    $return['response']['url'],
-                    array_merge($options, $return['response']['options'])
-                );
+                call_user_func($this->client->beforeAPICall, $return['response']['method'], $return['response']['url'], array_merge($options, $return['response']['options']));
             }
         }
 
         $requests = function () use ($returns, $options) {
             foreach ($returns as $key => $return) {
-                yield new Request($return['response']['method'],
-                    $return['response']['url'],
-                    array_merge($options, $return['response']['options']));
+                yield new Request($return['response']['method'], $return['response']['url'], array_merge($options, $return['response']['options']));
             }
         };
 
         //Call pool with async requests
-        $pool = new Pool(new \GuzzleHttp\Client(), $requests(), [
+        $pool    = new Pool(new \GuzzleHttp\Client(), $requests(), [
             'concurrency' => 5,
-            'fulfilled'   => function (\GuzzleHttp\Psr7\Response $guzzleResponse, $index)
-            use ($returns, $asyncKeys, &$result) {
+            'fulfilled'   => function (\GuzzleHttp\Psr7\Response $guzzleResponse, $index) use ($returns, $asyncKeys, &$result) {
                 $key = $asyncKeys[$index];
                 if ($returns[$key]) {
                     $return = $returns[$key];
@@ -100,9 +93,7 @@ class AsyncContainer
                         call_user_func($this->client->afterAPICall, $response);
                     }
 
-                    $result[$key] = $return['makeArray']
-                        ? $return['maker']->makeArray($response)
-                        : $return['maker']->makeSingle($response);
+                    $result[$key] = $return['makeArray'] ? $return['maker']->makeArray($response) : $return['maker']->makeSingle($response);
 
 
                 }
@@ -115,6 +106,7 @@ class AsyncContainer
         $promise->wait();
 
         $this->client->setAsync(false);
+
         return $result;
     }
     #endregion

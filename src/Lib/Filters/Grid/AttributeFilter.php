@@ -10,7 +10,7 @@
 namespace SphereMall\MS\Lib\Filters\Grid;
 
 /**
- * Class AttributeFilter
+ * Class AttributeFilters
  * @package SphereMall\MS\Lib\Filters\Grid
  * @property string $name
  */

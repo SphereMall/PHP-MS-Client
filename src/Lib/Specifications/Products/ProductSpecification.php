@@ -19,6 +19,7 @@ interface ProductSpecification
 {
     /**
      * @param Product $product
+     *
      * @return bool
      */
     public function isSatisfiedBy(Product $product);

@@ -16,12 +16,17 @@ use SphereMall\MS\Lib\Http\Meta;
 use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\Mappers\Mapper;
 
+/**
+ * Class ObjectMaker
+ * @package SphereMall\MS\Lib\Makers
+ */
 class ObjectMaker extends Maker
 {
     #region [Public methods]
 
     /**
      * @param Response $response
+     *
      * @return array|Collection
      * @throws EntityNotFoundException
      */
@@ -39,6 +44,7 @@ class ObjectMaker extends Maker
 
         if ($this->asCollection) {
             $collection = new Collection($result, $response->getMeta());
+
             return $collection;
         }
 
@@ -47,6 +53,7 @@ class ObjectMaker extends Maker
 
     /**
      * @param Response $response
+     *
      * @return null|Entity
      * @throws EntityNotFoundException
      */
@@ -65,6 +72,7 @@ class ObjectMaker extends Maker
     #region [Protected methods]
     /**
      * @param $type
+     *
      * @return null|string
      */
     protected function getMapperClass($type)
@@ -79,6 +87,7 @@ class ObjectMaker extends Maker
 
     /**
      * @param array $item
+     *
      * @return array
      */
     protected function getAttributes(array $item)
@@ -92,8 +101,10 @@ class ObjectMaker extends Maker
 
     /**
      * Get relationships from array
+     *
      * @param array $item
      * @param array $included
+     *
      * @return array
      * @throws EntityNotFoundException
      */
@@ -121,7 +132,9 @@ class ObjectMaker extends Maker
     /**
      * Prepare array of included data, we walk through ONCE
      * result example: ['brands'][706] = {attributes}
+     *
      * @param array $included
+     *
      * @return array
      */
     protected function getIncludedArray(array $included)
@@ -136,6 +149,7 @@ class ObjectMaker extends Maker
 
     /**
      * @param Response $response
+     *
      * @return array
      * @throws EntityNotFoundException
      */
@@ -162,11 +176,12 @@ class ObjectMaker extends Maker
      * @param $mapperClass
      * @param $element
      * @param $included
+     *
      * @return mixed
      */
     protected function createObject($mapperClass, $element, $included)
     {
-        $item = $this->getAttributes($element);
+        $item      = $this->getAttributes($element);
         $relations = $this->getRelationships($element, $included);
 
         $item = array_merge($item, $relations);
@@ -174,6 +189,7 @@ class ObjectMaker extends Maker
          * @var Mapper $mapper
          */
         $mapper = new $mapperClass();
+
         return $mapper->createObject($item);
     }
     #endregion

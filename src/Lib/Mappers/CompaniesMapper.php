@@ -20,6 +20,7 @@ class CompaniesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Company
      */
     protected function doCreateObject(array $array)

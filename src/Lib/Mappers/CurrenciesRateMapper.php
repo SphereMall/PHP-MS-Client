@@ -20,6 +20,7 @@ class CurrenciesRateMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return CurrencyRate
      */
     protected function doCreateObject(array $array)

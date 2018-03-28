@@ -29,8 +29,11 @@ class BasketResource extends Resource
     #region [Override CRUD]
     /**
      * Get entity by id
+     *
      * @param int $id
+     *
      * @return Entity
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(int $id)
     {
@@ -41,14 +44,16 @@ class BasketResource extends Resource
         }
 
         $uriAppend = 'byId/' . $id;
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+        $response  = $this->handler->handle('GET', false, $uriAppend, $params);
 
         return $this->make($response, false);
     }
 
     /**
      * @param $data
+     *
      * @return Entity
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function new($data)
     {
@@ -59,7 +64,9 @@ class BasketResource extends Resource
 
     /**
      * @param array $params
+     *
      * @return Entity
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function removeItems(array $params)
     {
@@ -71,23 +78,29 @@ class BasketResource extends Resource
     /**
      * @param $id
      * @param $data
+     *
      * @return Entity
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update($id, $data)
     {
         $response = $this->handler->handle('PUT', $data);
+
         return $this->make($response, false);
     }
 
     /**
      * @param $id
+     *
      * @return array|int|Entity|\SphereMall\MS\Lib\Collection|Order
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function copy($id)
     {
         $uriAppend = 'copy/' . $id;
 
         $response = $this->handler->handle('POST', false, $uriAppend);
+
         return $this->make($response, false);
     }
     #endregion

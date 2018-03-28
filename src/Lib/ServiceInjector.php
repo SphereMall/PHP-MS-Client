@@ -10,7 +10,11 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Lib\Http\ElasticSearchRequest;
+use SphereMall\MS\Lib\Http\ElasticSearchResponse;
+use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
+use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
@@ -53,7 +57,7 @@ use SphereMall\MS\Resources\Users\WishListItemsResource;
 /**
  * Trait ServiceInjector
  * @package SphereMall\MS\Lib
- * @static Shop $basket
+ * @static  Shop $basket
  */
 trait ServiceInjector
 {
@@ -427,6 +431,17 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new ProductPriceConfigurationsResource($this);
+    }
+    #endregion
+
+    #region [ElasticSearch service]
+    /**
+     * @return ElasticSearchResource
+     */
+    public function elasticSearch()
+    {
+        /** @var Client $this */
+        return new ElasticSearchResource($this, null, null, new ElasticSearchMaker());
     }
     #endregion
 }

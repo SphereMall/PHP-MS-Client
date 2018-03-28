@@ -20,11 +20,13 @@ abstract class GrapherResource extends Resource
 
     #region [Protected methods]
     /**
+     * @param array $additionalParams
+     *
      * @return array|mixed
      */
-    protected function getQueryParams()
+    protected function getQueryParams(array $additionalParams = [])
     {
-        $params = parent::getQueryParams();
+        $params = parent::getQueryParams($additionalParams);
 
         if (empty($params['where'])) {
             return $params;
@@ -36,6 +38,7 @@ abstract class GrapherResource extends Resource
         }
 
         unset($params['where']);
+
         return $params;
     }
     #endregion

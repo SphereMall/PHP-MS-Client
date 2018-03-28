@@ -20,10 +20,10 @@ class BaseAsyncTest extends SetUpResourceTest
     public function testAsyncCalls()
     {
         $products = $this->client->products();
-        $product = $products->limit(1)->all();
+        $product  = $products->limit(1)->all();
 
         $time1 = microtime(true);
-        $ac = new AsyncContainer($this->client);
+        $ac    = new AsyncContainer($this->client);
 
         $ac->setCall('oneProduct', function (Client $client) {
             return $client->products()->limit(1)->all();

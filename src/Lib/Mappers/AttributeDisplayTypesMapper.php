@@ -20,11 +20,13 @@ class AttributeDisplayTypesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return AttributeDisplayType
      */
     protected function doCreateObject(array $array)
     {
         $attributeDisplayType = new AttributeDisplayType($array);
+
         return $attributeDisplayType;
     }
     #endregion

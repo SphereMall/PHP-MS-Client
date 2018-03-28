@@ -23,7 +23,7 @@ class PriceProduct
     #region [Constructor]
     public function __construct(int $productId, int $priceTypeId)
     {
-        $this->productId = $productId;
+        $this->productId   = $productId;
         $this->priceTypeId = $priceTypeId;
     }
     #endregion

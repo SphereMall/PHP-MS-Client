@@ -20,6 +20,7 @@ class VatMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Vat
      */
     protected function doCreateObject(array $array)

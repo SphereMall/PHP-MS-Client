@@ -20,6 +20,7 @@ class DocumentsMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Document
      */
     protected function doCreateObject(array $array)
@@ -38,7 +39,7 @@ class DocumentsMapper extends Mapper
         }
 
         if (isset($array['functionalNames'][0])) {
-            $mapper = new FunctionalNamesMapper();
+            $mapper                   = new FunctionalNamesMapper();
             $document->functionalName = $mapper->createObject($array['functionalNames'][0]);
 
         }
@@ -49,6 +50,7 @@ class DocumentsMapper extends Mapper
     /**
      * @param $attribute
      * @param $attributeValues
+     *
      * @return array
      */
     protected function getAttributeValues($attribute, $attributeValues)

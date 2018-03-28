@@ -15,6 +15,9 @@ use SphereMall\MS\Resources\Resource;
 class CouponsResource extends Resource
 {
     #region [Override methods]
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return "promotions";
@@ -31,8 +34,8 @@ class CouponsResource extends Resource
     public function applyCoupon($basketId, string $couponCode)
     {
         $params = [
-            "basketId" => $basketId,
-            "couponCode" => $couponCode
+            "basketId"   => $basketId,
+            "couponCode" => $couponCode,
         ];
 
         $response = $this->handler->handle('POST', $params, 'apply');

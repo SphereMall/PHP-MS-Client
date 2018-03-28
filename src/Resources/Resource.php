@@ -14,13 +14,18 @@ use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
+use SphereMall\MS\Lib\FieldsParams\FieldsParams;
+use SphereMall\MS\Lib\Filters\ElasticSearch\FullTextFilter;
 use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Lib\Makers\CountMaker;
 use SphereMall\MS\Lib\Makers\Maker;
 use SphereMall\MS\Lib\Makers\ObjectMaker;
 use SphereMall\MS\Lib\Http\Request;
 use SphereMall\MS\Lib\Http\Response;
+use SphereMall\MS\Lib\SortParams\ElasticSearch\FieldSortParams;
+use SphereMall\MS\Lib\SortParams\SortParams;
 use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
+use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 
 /**
  * @property Client $client
@@ -43,18 +48,19 @@ abstract class Resource
     protected $handler;
     protected $maker;
     protected $offset = 0;
-    protected $limit = 10;
-    protected $ids = [];
+    protected $limit  = 10;
+    protected $ids    = [];
     protected $fields = [];
     protected $filter;
-    protected $in = [];
-    protected $sort = [];
-    protected $meta = false;
+    protected $in     = [];
+    protected $sort   = [];
+    protected $meta   = false;
     #endregion
 
     #region [Constructor]
     /**
      * BaseService constructor.
+     *
      * @param Client $client
      * @param null $version
      * @param null $handler
@@ -62,7 +68,7 @@ abstract class Resource
      */
     public function __construct(Client $client, $version = null, $handler = null, $maker = null)
     {
-        $this->client = $client;
+        $this->client  = $client;
         $this->version = $version ?? $client->getVersion();
 
         $this->handler = $handler ?? new Request($this->client, $this);
@@ -78,13 +84,15 @@ abstract class Resource
     #region [Query methods]
     /**
      * Set a limit on the number of resource and offset for skipping the number of resource
+     *
      * @param $offset
      * @param $limit
+     *
      * @return $this
      */
     public function limit($limit = 10, $offset = 0)
     {
-        $this->limit = $limit;
+        $this->limit  = $limit;
         $this->offset = $offset;
 
         return $this;
@@ -110,7 +118,9 @@ abstract class Resource
 
     /**
      * Set list of ids for selecting list of resources
+     *
      * @param array $ids
+     *
      * @return $this
      */
     public function ids(array $ids)
@@ -131,12 +141,14 @@ abstract class Resource
 
     /**
      * Set list of fields for selecting the resource
-     * @param array $fields
+     *
+     * @param $fields
+     *
      * @return $this
      */
-    public function fields(array $fields)
+    public function fields($fields)
     {
-        $this->fields = $fields;
+        $this->fields = $fields instanceof FieldsParams ? $fields->getFields() : $fields;
 
         return $this;
     }
@@ -152,7 +164,9 @@ abstract class Resource
 
     /**
      * Set filter to the resource selecting
+     *
      * @param array|Filter|FilterSpecification $filter
+     *
      * @return $this
      */
     public function filter($filter)
@@ -166,6 +180,7 @@ abstract class Resource
         }
 
         $this->filter = $filter;
+
         return $this;
     }
 
@@ -181,6 +196,7 @@ abstract class Resource
     /**
      * @param $field
      * @param $values
+     *
      * @return $this
      */
     public function in($field, $values)
@@ -192,12 +208,18 @@ abstract class Resource
 
     /**
      * Set field for sorting
+     *
      * @param $field
+     *
      * @return $this
      */
     public function sort($field)
     {
-        $this->sort[] = $field;
+        if($field instanceof SortParams){
+            $this->sort = array_merge($this->sort, $field->getParams());
+        } else {
+            $this->sort[] = $field;
+        }
 
         return $this;
     }
@@ -226,6 +248,7 @@ abstract class Resource
     public function withMeta()
     {
         $this->meta = true;
+
         return $this;
     }
     #endregion
@@ -233,8 +256,11 @@ abstract class Resource
     #region [CRUD]
     /**
      * Get entity by id
+     *
      * @param int $id
+     *
      * @return array|Entity
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(int $id)
     {
@@ -245,12 +271,14 @@ abstract class Resource
         }
 
         $response = $this->handler->handle('GET', false, $id, $params);
+
         return $this->make($response, false);
     }
 
     /**
      * Get list of entities
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function all()
     {
@@ -264,17 +292,21 @@ abstract class Resource
     /**
      * Get first entity - limit = 1
      * @return Entity|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function first()
     {
         $this->limit(1, 0);
-        $params = $this->getQueryParams();
+        $params   = $this->getQueryParams();
         $response = $this->handler->handle('GET', false, 'by', $params);
+
         return $this->make($response, false);
     }
 
     /**
      * @return int
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function count()
     {
@@ -287,8 +319,10 @@ abstract class Resource
 
     /**
      * @param $data
+     *
      * @return Entity
      * @throws EntityNotFoundException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create($data)
     {
@@ -303,8 +337,10 @@ abstract class Resource
     /**
      * @param $id
      * @param $data
+     *
      * @return Entity
      * @throws EntityNotFoundException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update($id, $data)
     {
@@ -333,8 +369,10 @@ abstract class Resource
 
     /**
      * @param $id
+     *
      * @return bool
      * @throws EntityNotFoundException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete($id)
     {
@@ -352,6 +390,7 @@ abstract class Resource
      * @param Promise|Response $response
      * @param bool $makeArray
      * @param Maker|null $maker
+     *
      * @return array|Collection|Entity|int
      */
     protected function make($response, $makeArray = true, Maker $maker = null)
@@ -378,9 +417,11 @@ abstract class Resource
     }
 
     /**
+     * @param array $additionalParams
+     *
      * @return array
      */
-    protected function getQueryParams()
+    protected function getQueryParams(array $additionalParams = [])
     {
         $params = [
             'offset' => $this->offset,
@@ -396,6 +437,10 @@ abstract class Resource
         }
 
         if ($this->filter) {
+            if (method_exists($this->filter, 'setFields') && sizeof($this->fields) > 0) {
+                $this->filter->setFields($this->fields);
+                unset($params['fields']);
+            }
             $params['where'] = (string)$this->filter;
         }
 
@@ -404,7 +449,7 @@ abstract class Resource
         }
 
         if ($this->sort) {
-            $params['sort'] = implode(',', $this->sort);
+            $params['sort'] = $this instanceof ElasticSearchResource ? $this->sort : implode(',', $this->sort);
         }
 
         return $params;

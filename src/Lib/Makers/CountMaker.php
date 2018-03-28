@@ -9,16 +9,18 @@
 
 namespace SphereMall\MS\Lib\Makers;
 
-use SphereMall\MS\Exceptions\EntityNotFoundException;
-use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\Response;
-use SphereMall\MS\Lib\Mappers\Mapper;
 
+/**
+ * Class CountMaker
+ * @package SphereMall\MS\Lib\Makers
+ */
 class CountMaker extends ObjectMaker
 {
     #region [Public methods]
     /**
      * @param Response $response
+     *
      * @return int|null|\SphereMall\MS\Entities\Entity
      */
     public function makeSingle(Response $response)
@@ -28,8 +30,9 @@ class CountMaker extends ObjectMaker
         }
 
         $data = $response->getData();
-        if(isset($data[0])){
+        if (isset($data[0])) {
             $item = $this->getAttributes($data[0]);
+
             return (int)$item['count'];
         }
 

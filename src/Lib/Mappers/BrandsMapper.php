@@ -20,6 +20,7 @@ class BrandsMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Brand
      */
     protected function doCreateObject(array $array)

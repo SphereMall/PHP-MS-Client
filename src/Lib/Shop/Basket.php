@@ -197,6 +197,8 @@ class Basket extends OrderFinalized
     /**
      * @param Address $address
      * @param string $addressKey
+     *
+     * @throws EntityNotFoundException
      */
     protected function setAddress(Address $address, $addressKey)
     {

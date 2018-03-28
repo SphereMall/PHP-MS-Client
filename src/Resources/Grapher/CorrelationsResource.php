@@ -38,21 +38,25 @@ class CorrelationsResource extends GrapherResource
     /**
      * @param int $id
      * @param string $forClassName
+     *
      * @return array|Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getById(int $id, string $forClassName)
     {
         $params = $this->getQueryParams();
 
-        $type = CorrelationTypeHelper::getGraphTypeByClass($forClassName);
+        $type      = CorrelationTypeHelper::getGraphTypeByClass($forClassName);
         $uriAppend = "{$type}/{$id}";
 
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
+
         return $this->make($response);
     }
 
     /**
      * @param int $id
+     *
      * @throws \Exception
      */
     public function get(int $id)
@@ -63,6 +67,7 @@ class CorrelationsResource extends GrapherResource
     /**
      * @param $id
      * @param $data
+     *
      * @throws Exception
      */
     public function update($id, $data)
@@ -72,6 +77,7 @@ class CorrelationsResource extends GrapherResource
 
     /**
      * @param $data
+     *
      * @throws Exception
      */
     public function create($data)
@@ -81,6 +87,7 @@ class CorrelationsResource extends GrapherResource
 
     /**
      * @param $id
+     *
      * @return bool|void
      * @throws Exception
      */

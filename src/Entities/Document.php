@@ -20,15 +20,11 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  * @property Attribute[] $attributes
  * @property FunctionalName $functionalName
  */
-class Document extends Entity
+class Document extends AutoCompleteEntity
 {
     use InteractsWithAttributes;
 
     #region [Properties]
-    public $id;
-    public $urlCode;
-
-    public $attributes;
     public $functionalName;
     #endregion
 }

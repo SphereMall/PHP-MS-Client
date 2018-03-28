@@ -29,6 +29,7 @@ class IsActive implements FilterSpecification, EntitySpecification
 
     /**
      * @param Entity $entity
+     *
      * @return bool
      */
     public function isSatisfiedBy(Entity $entity)

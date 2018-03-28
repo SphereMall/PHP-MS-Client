@@ -33,14 +33,11 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  * @property Media[] $media
  * @property Media $mainMedia
  */
-class Product extends Entity
+class Product extends AutoCompleteEntity
 {
     use InteractsWithAttributes;
 
     #region [Properties]
-    public $id;
-    public $urlCode;
-    public $title;
     public $shortDescription;
     public $fullDescription;
     public $seoTitle;

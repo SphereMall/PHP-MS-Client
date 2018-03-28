@@ -20,6 +20,7 @@ class ProductsMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return Product
      */
     protected function doCreateObject(array $array)
@@ -27,7 +28,7 @@ class ProductsMapper extends Mapper
         $product = new Product($array);
 
         if (isset($array['productAttributeValues'])) {
-            $mapper = new ProductAttributeValuesMapper();
+            $mapper              = new ProductAttributeValuesMapper();
             $product->attributes = $mapper->createObject($array['productAttributeValues']);
         }
 
@@ -44,13 +45,13 @@ class ProductsMapper extends Mapper
         }
 
         if (isset($array['brands'][0])) {
-            $mapper = new BrandsMapper();
+            $mapper         = new BrandsMapper();
             $product->brand = $mapper->createObject($array['brands'][0]);
 
         }
 
         if (isset($array['functionalNames'][0])) {
-            $mapper = new FunctionalNamesMapper();
+            $mapper                  = new FunctionalNamesMapper();
             $product->functionalName = $mapper->createObject($array['functionalNames'][0]);
 
         }

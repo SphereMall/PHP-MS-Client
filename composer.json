@@ -15,8 +15,10 @@
       "SphereMall\\MS\\Tests\\": "tests/"
     }
   },
-  "require": {
-    "guzzlehttp/guzzle": "~6.0"
+  "require"     : {
+    "php"                        : "^7.0",
+    "guzzlehttp/guzzle"          : "~6.0",
+    "elasticsearch/elasticsearch": "~6.0"
   },
   "authors": [
     {

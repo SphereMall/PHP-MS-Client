@@ -27,12 +27,14 @@ abstract class Maker
     #region [Abstract methods]
     /**
      * @param Response $response
+     *
      * @return array|Collection
      */
     abstract function makeArray(Response $response);
 
     /**
      * @param Response $response
+     *
      * @return null|Entity
      */
     abstract function makeSingle(Response $response);

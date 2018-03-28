@@ -97,6 +97,8 @@ class OrderFinalized
     #region [Public methods]
     /**
      * @param array $params
+     *
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
     public function update(array $params = [])
     {

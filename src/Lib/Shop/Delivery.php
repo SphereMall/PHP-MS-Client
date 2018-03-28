@@ -19,7 +19,7 @@ use SphereMall\MS\Entities\DeliveryProvider;
 class Delivery
 {
     #region [Properties]
-    public $id;
+    public    $id;
     protected $deliveryProvider;
     #endregion
 
@@ -27,7 +27,7 @@ class Delivery
     public function __construct(DeliveryProvider $deliveryProvider)
     {
         $this->deliveryProvider = $deliveryProvider;
-        $this->id = $deliveryProvider->id;
+        $this->id               = $deliveryProvider->id;
     }
     #endregion
 

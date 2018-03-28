@@ -20,11 +20,12 @@ class CatalogItemsMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return CatalogItem
      */
     protected function doCreateObject(array $array)
     {
-        $catalogItem = new CatalogItem($array);
+        $catalogItem                 = new CatalogItem($array);
         $catalogItem->filterSettings = json_decode((string)$catalogItem->filterSettings, true);
 
         return $catalogItem;

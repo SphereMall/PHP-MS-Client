@@ -6,6 +6,7 @@
  * Date: 10/8/2017
  * Time: 4:52 PM
  */
+
 namespace SphereMall\MS\Tests;
 
 use SphereMall\MS\Client;
@@ -13,6 +14,10 @@ use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Resources\Products\ProductsResource;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class ClientTest
+ * @package SphereMall\MS\Tests
+ */
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -23,6 +28,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new Client();
     }
 
+    /**
+     * @throws \SphereMall\MS\Exceptions\ConfigurationException
+     */
     public function testClientObjectCreatedWithConfiguration()
     {
         $client = new Client([
@@ -38,6 +46,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(API_VERSION, $client->getVersion());
     }
 
+    /**
+     * @throws \SphereMall\MS\Exceptions\ConfigurationException
+     */
     public function testClientCallService()
     {
         $client = new Client([
@@ -53,6 +64,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(ProductsResource::class, $productService);
     }
 
+    /**
+     * @throws \SphereMall\MS\Exceptions\ConfigurationException
+     */
     public function testSetVersion()
     {
         $client = new Client([
@@ -69,6 +83,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('newV', $client->getVersion());
     }
 
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \SphereMall\MS\Exceptions\ConfigurationException
+     */
     public function testAfterApiCall()
     {
         $client = new Client([
@@ -76,7 +94,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             'clientId'   => API_CLIENT_ID,
             'secretKey'  => API_SECRET_KEY,
             'version'    => 'testV',
-        ], null, function(Response $response){
+        ], null, function (Response $response) {
             $this->assertEquals(200, $response->getStatusCode());
         });
 

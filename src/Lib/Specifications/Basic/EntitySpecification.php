@@ -19,6 +19,7 @@ interface EntitySpecification
 {
     /**
      * @param Entity $entity
+     *
      * @return bool
      */
     public function isSatisfiedBy(Entity $entity);

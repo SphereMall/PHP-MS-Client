@@ -10,6 +10,12 @@ namespace SphereMall\MS\Tests\Resources;
 
 use SphereMall\MS\Client;
 
+/**
+ * Class SetUpResourceTest
+ * @package SphereMall\MS\Tests\Resources
+ *
+ * @property Client $client
+ */
 class SetUpResourceTest extends \PHPUnit\Framework\TestCase
 {
     #region [Properties]
@@ -23,6 +29,9 @@ class SetUpResourceTest extends \PHPUnit\Framework\TestCase
     #endregion
 
     #region [SetUp]
+    /**
+     * @throws \SphereMall\MS\Exceptions\ConfigurationException
+     */
     protected function setUp()
     {
         $this->client = new Client([

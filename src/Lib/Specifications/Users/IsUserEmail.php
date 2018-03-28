@@ -42,6 +42,7 @@ class IsUserEmail implements FilterSpecification, UserSpecification
 
     /**
      * @param User $user
+     *
      * @return bool
      */
     public function isSatisfiedBy(User $user)

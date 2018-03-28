@@ -20,6 +20,7 @@ class PaymentProvidersMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return PaymentProvider
      */
     protected function doCreateObject(array $array)

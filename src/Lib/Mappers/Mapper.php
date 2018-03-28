@@ -9,9 +9,18 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
+/**
+ * Class Mapper
+ * @package SphereMall\MS\Lib\Mappers
+ */
 abstract class Mapper
 {
     #region [Public methods]
+    /**
+     * @param $array
+     *
+     * @return mixed
+     */
     public function createObject($array)
     {
         return $this->doCreateObject($array);

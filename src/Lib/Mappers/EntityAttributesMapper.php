@@ -20,6 +20,7 @@ class EntityAttributesMapper extends Mapper
     #region [Protected methods]
     /**
      * @param array $array
+     *
      * @return EntityAttribute
      */
     protected function doCreateObject(array $array)
