@@ -1,7 +1,8 @@
 <?php
 
+namespace SphereMall\MS\Lib\Makers;
+
 use SphereMall\MS\Lib\Http\Response;
-use SphereMall\MS\Lib\Makers\ObjectMaker;
 
 /**
  * Created by PhpStorm.

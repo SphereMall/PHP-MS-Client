@@ -1,4 +1,5 @@
 <?php
+namespace SphereMall\MS\Resources\ElasticSearch;
 
 use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Resources\Resource;

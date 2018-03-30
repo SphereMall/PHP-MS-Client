@@ -9,13 +9,13 @@
 
 namespace SphereMall\MS\Lib;
 
-use ElasticIndexerResource;
-use ElasticIndexerResponseMaker;
 use SphereMall\MS\Client;
 use SphereMall\MS\Lib\Http\ElasticSearchRequest;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
+use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
+use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
