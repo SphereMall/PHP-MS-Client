@@ -27,7 +27,7 @@ class ElasticIndexerResource extends Resource{
      */
     public function runIndex(){
         $response = $this->handler->handle('GET', null, 'runindex');
-        return $this->make($response, false, new ElasticIndexerResponseMaker());
+        return $this->make($response, false);
 
     }
 
@@ -38,7 +38,7 @@ class ElasticIndexerResource extends Resource{
      */
     public function reindex(){
         $response = $this->handler->handle('GET', null, 'reindex');
-        return $this->make($response, false, new ElasticIndexerResponseMaker());
+        return $this->make($response, false);
     }
 
     /**
@@ -49,7 +49,7 @@ class ElasticIndexerResource extends Resource{
     public function deleteIndex()
     {
         $response = $this->handler->handle('DELETE', null, 'delete');
-        return $this->make($response, false, new ElasticIndexerResponseMaker());
+        return $this->make($response, false);
     }
 
     /**
