@@ -16,6 +16,7 @@ use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
+use SphereMall\MS\Resources\Grapher\FactorsResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
@@ -393,6 +394,15 @@ trait ServiceInjector
     #endregion
 
     #region [Grapher service]
+    /**
+     * @return FactorsResource
+     */
+    public function factors()
+    {
+        /** @var Client $this */
+        return new FactorsResource($this);
+    }
+
     /**
      * @return GridResource
      */
