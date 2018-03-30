@@ -9,6 +9,8 @@
 
 namespace SphereMall\MS\Lib;
 
+use ElasticIndexerResource;
+use ElasticIndexerResponseMaker;
 use SphereMall\MS\Client;
 use SphereMall\MS\Lib\Http\ElasticSearchRequest;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
@@ -442,6 +444,17 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new ElasticSearchResource($this, null, null, new ElasticSearchMaker());
+    }
+    #endregion
+
+    #region [ElasticIndexer service]
+    /**
+     * @return ElasticIndexerResource
+     */
+    public function elasticIndexer()
+    {
+        /** @var Client $this */
+        return new ElasticIndexerResource($this, null, null, new ElasticIndexerResponseMaker());
     }
     #endregion
 }
