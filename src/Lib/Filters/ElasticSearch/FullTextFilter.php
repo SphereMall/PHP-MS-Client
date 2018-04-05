@@ -10,6 +10,7 @@ namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
 use SphereMall\MS\Lib\FieldsParams\ElasticSearch\FullTextSearchFieldsParams;
 use SphereMall\MS\Lib\Filters\Filter;
+use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
 
 /**
  * Class FullTextFilter
@@ -17,12 +18,14 @@ use SphereMall\MS\Lib\Filters\Filter;
  *
  * @property string $keyword
  * @property array  $indexes
+ * @property array  $elements
  */
 class FullTextFilter extends Filter
 {
     protected $fields;
     protected $keyword;
     protected $indexes;
+    protected $elements;
 
     /**
      * FullTextFilter constructor.
@@ -60,6 +63,16 @@ class FullTextFilter extends Filter
     }
 
     /**
+     * @param array $elements
+     * @return $this
+     */
+    public function elements(array $elements){
+        $this->elements = $elements;
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getKeyword()
@@ -82,19 +95,32 @@ class FullTextFilter extends Filter
      */
     public function __toString()
     {
+
         $set = [
             'index' => implode(',', $this->indexes),
             'body'  => [
                 'query' => [
-                    'multi_match' => [
-                        'fields' => $this->fields,
+                    'bool' => [
+                        'must' => [
+                            'multi_match' => [
+                                'fields' => $this->fields,
+                            ],
+                        ],
                     ],
                 ],
             ],
         ];
 
+        if(!empty($this->elements)){
+            foreach ($this->elements as $element){
+                if ($element instanceof SearchInterface) {
+                    $set['body']['query']['bool']['filter'][] = $element->getValues();
+                }
+            }
+        }
+
         if (!empty($this->keyword)) {
-            $set['body']['query']['multi_match']['query'] = $this->keyword;
+            $set['body']['query']['bool']['must']['multi_match']['query'] = $this->keyword;
         }
 
         return json_encode($set);
