@@ -36,6 +36,13 @@ class EntityFactorsResourceTest extends SetUpResourceTest
     {
         $factors = $this->client->entityFactors()->set('users', '177', [6]);
         $this->assertNotEmpty($factors);
+        if (is_array($factors)) {
+            foreach ($factors as $factor) {
+                $this->assertInstanceOf(EntityFactor::class, $factor);
+            }
+        } else {
+            $this->assertInstanceOf(EntityFactor::class, $factors);
+        }
     }
     #endregion
 
