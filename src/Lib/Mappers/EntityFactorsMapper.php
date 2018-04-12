@@ -28,19 +28,19 @@ class EntityFactorsMapper extends Mapper
         $entityFactor = new EntityFactor($array);
 
         $factor = [
-            'id' => $array['factorId'] ?? null,
-            'code' => $array['factorCode'] ?? null,
-            'name' => $array['factorName'] ?? null,
+            'id'            => $array['factorId'] ?? null,
+            'code'          => $array['factorCode'] ?? null,
+            'name'          => $array['factorName'] ?? null,
         ];
         $mapper = new FactorsMapper();
         $entityFactor->factor = $mapper->createObject($factor);
 
         $factorValue = [
-            'id' => $array['id'] ?? null,
-            'name' => $array['name'] ?? null,
-            'factorId' => $array['factorId'] ?? null,
-            'image' => $array['image'] ?? null,
-            'description' => $array['description'] ?? null,
+            'id'            => $array['id'] ?? null,
+            'name'          => $array['name'] ?? null,
+            'factorId'      => $array['factorId'] ?? null,
+            'image'         => $array['image'] ?? null,
+            'description'   => $array['description'] ?? null,
         ];
         $mapper = new FactorValuesMapper();
         $entityFactor->factorValue = $mapper->createObject($factorValue);

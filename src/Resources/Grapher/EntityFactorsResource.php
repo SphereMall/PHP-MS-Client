@@ -85,11 +85,10 @@ class EntityFactorsResource extends Resource
     public function list($entityCode, $entityId, $param = null)
     {
         $entityCode = strtolower($entityCode);
-        $uriAppend = "{$entityCode}/{$entityId}";
+        $uriAppend  = "{$entityCode}/{$entityId}";
 
-        $params = $this->getQueryParams();
-
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+        $params     = $this->getQueryParams();
+        $response   = $this->handler->handle('GET', false, $uriAppend, $params);
 
         return $this->make($response);
     }
@@ -110,9 +109,9 @@ class EntityFactorsResource extends Resource
         $uriAppend = 'set';
 
         $params = array_merge($this->getQueryParams(), [
-            'entityToCode' => $entityToCode,
-            'entityId' => $entityId,
-            'factorValueIds' => implode(',', $factorValueIds)
+            'entityToCode'      => $entityToCode,
+            'entityId'          => $entityId,
+            'factorValueIds'    => implode(',', $factorValueIds)
         ]);
 
         $response = $this->handler->handle('POST', false, $uriAppend, $params);
