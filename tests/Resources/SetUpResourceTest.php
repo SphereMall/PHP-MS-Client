@@ -35,9 +35,9 @@ class SetUpResourceTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->client = new Client([
-            'gatewayUrl' => MS_URL_GATEWAY,
-            'clientId'   => MS_CLIENT_ID,
-            'secretKey'  => MS_SECRET_KEY
+            'gatewayUrl' => API_GATEWAY_URL,
+            'clientId'   => API_CLIENT_ID,
+            'secretKey'  => API_SECRET_KEY
         ]);
     }
     #endregion
