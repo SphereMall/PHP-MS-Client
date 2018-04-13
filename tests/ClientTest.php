@@ -95,7 +95,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             'secretKey'  => API_SECRET_KEY,
             'version'    => 'testV',
         ], null, function (Response $response) {
-            $this->assertEquals(200, $response->getStatusCode());
+            $this->assertEquals(200, $response->getHttpStatusCode());
         });
 
         $client->products()->limit(1)->all();

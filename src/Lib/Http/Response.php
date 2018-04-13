@@ -14,8 +14,10 @@ namespace SphereMall\MS\Lib\Http;
  * @property array $headers
  * @property array $data
  * @property bool $success
+ * @property bool $status
  * @property string $version
  * @property array $errors
+ * @property array $debug
  * @property Meta $meta
  * @property array $included
  */
@@ -25,9 +27,10 @@ class Response
     protected $statusCode;
     protected $headers;
     protected $data;
-    protected $success;
+    protected $status;
     protected $version;
     protected $errors;
+    protected $debug;
     protected $meta;
     protected $included;
     #endregion
@@ -50,15 +53,15 @@ class Response
 
         try {
             $this->data     = $contents['data'];
-            $this->success  = $contents['success'];
-            $this->errors   = $contents['error'] ?? null;
+            $this->status  = $contents['status'];
+            $this->errors   = $contents['errors'] ?? null;
+            $this->debug   = $contents['debug'] ?? null;
             $this->version  = $contents['ver'];
-            $this->included = $contents['included'] ?? null;
+            $this->included = $contents['included'] ?? [];
             if (!empty($contents['meta'])) {
                 $this->meta = new Meta(...array_values($contents['meta']));
             }
         } catch (\Exception $ex) {
-            $this->success = false;
             $this->errors  = $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
@@ -71,7 +74,15 @@ class Response
      */
     public function getSuccess()
     {
-        return $this->success;
+        return $this->status == 'OK';
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -88,6 +99,14 @@ class Response
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDebug()
+    {
+        return $this->debug;
     }
 
     /**

@@ -9,6 +9,8 @@
 
 namespace SphereMall\MS\Lib\Http;
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Promise;
 use SphereMall\MS\Client;
@@ -120,7 +122,15 @@ class Request
         }
 
         //Return response
-        return new Response($client->request($method, $url, $options));
+        try{
+            $httpResponse = $client->request($method, $url, $options);
+        }catch (ClientException  $e){
+            $httpResponse = $e->getResponse();
+        }catch (ServerException $e){
+            $httpResponse = $e->getResponse();
+        }
+
+        return new Response($httpResponse);
     }
     #endregion
 

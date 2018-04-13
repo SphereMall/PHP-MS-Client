@@ -35,13 +35,13 @@ class ElasticSearchResponse extends Response
 
         try {
             $this->data     = $response;
-            $this->success  = !$response['timed_out'];
+            $this->status  = !$response['timed_out'] ? 'OK' : 'ERROR';
             $this->errors   = $response['error'] ?? null;
+            $this->debug   = $contents['debug'] ?? null;
             $this->version  = 1;
             $this->included = [];
             $this->meta     = null;
         } catch (\Exception $ex) {
-            $this->success = false;
             $this->errors  = $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
