@@ -27,7 +27,6 @@ class Response
     protected $statusCode;
     protected $headers;
     protected $data;
-    protected $success;
     protected $status;
     protected $version;
     protected $errors;
@@ -54,7 +53,6 @@ class Response
 
         try {
             $this->data     = $contents['data'];
-            $this->success  = $contents['status'] == 'OK';
             $this->status  = $contents['status'];
             $this->errors   = $contents['errors'] ?? null;
             $this->debug   = $contents['debug'] ?? null;
@@ -64,7 +62,6 @@ class Response
                 $this->meta = new Meta(...array_values($contents['meta']));
             }
         } catch (\Exception $ex) {
-            $this->success = false;
             $this->errors  = $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
@@ -77,7 +74,7 @@ class Response
      */
     public function getSuccess()
     {
-        return $this->success;
+        return $this->status == 'OK';
     }
 
     /**
