@@ -50,10 +50,10 @@ class Response
 
         try {
             $this->data     = $contents['data'];
-            $this->success  = $contents['success'];
-            $this->errors   = $contents['error'] ?? null;
+            $this->success  = $contents['status'] == 'OK';
+            $this->errors   = $contents['errors'] ?? null;
             $this->version  = $contents['ver'];
-            $this->included = $contents['included'] ?? null;
+            $this->included = $contents['included'] ?? [];
             if (!empty($contents['meta'])) {
                 $this->meta = new Meta(...array_values($contents['meta']));
             }
