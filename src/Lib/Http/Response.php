@@ -14,8 +14,10 @@ namespace SphereMall\MS\Lib\Http;
  * @property array $headers
  * @property array $data
  * @property bool $success
+ * @property bool $status
  * @property string $version
  * @property array $errors
+ * @property array $debug
  * @property Meta $meta
  * @property array $included
  */
@@ -26,8 +28,10 @@ class Response
     protected $headers;
     protected $data;
     protected $success;
+    protected $status;
     protected $version;
     protected $errors;
+    protected $debug;
     protected $meta;
     protected $included;
     #endregion
@@ -51,7 +55,9 @@ class Response
         try {
             $this->data     = $contents['data'];
             $this->success  = $contents['status'] == 'OK';
+            $this->status  = $contents['status'];
             $this->errors   = $contents['errors'] ?? null;
+            $this->debug   = $contents['debug'] ?? null;
             $this->version  = $contents['ver'];
             $this->included = $contents['included'] ?? [];
             if (!empty($contents['meta'])) {
@@ -75,6 +81,14 @@ class Response
     }
 
     /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
      * @return array
      */
     public function getData()
@@ -88,6 +102,14 @@ class Response
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDebug()
+    {
+        return $this->debug;
     }
 
     /**
