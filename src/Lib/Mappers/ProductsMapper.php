@@ -32,12 +32,14 @@ class ProductsMapper extends Mapper
             $product->attributes = $mapper->createObject($array['productAttributeValues']);
         }
 
-        if (isset($array['images'])) {
+        if (isset($array['media'])) {
+            $media = [];
             $mapper = new ImagesMapper();
-            foreach ($array['images'] as $image) {
-                $product->media[] = $mapper->createObject($image);
+            foreach ($array['media'] as $image) {
+                $media[] = $mapper->createObject($image);
             }
 
+            $product->media = $media;
 
             if (!empty($product->media[0])) {
                 $product->mainMedia = $product->media[0];

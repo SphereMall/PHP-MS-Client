@@ -25,7 +25,7 @@ class MediaResource extends Resource
 {
     public function getURI()
     {
-        return "images";
+        return "media";
     }
 
 }
