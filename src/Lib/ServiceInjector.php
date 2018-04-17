@@ -32,6 +32,7 @@ use SphereMall\MS\Resources\Products\OptionsResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsResource;
 use SphereMall\MS\Resources\Products\AttributesResource;
 use SphereMall\MS\Resources\Products\AttributeValuesResource;
+use SphereMall\MS\Resources\Products\UnitOfMeasureResource;
 use SphereMall\MS\Resources\Products\BrandsResource;
 use SphereMall\MS\Resources\Products\FunctionalNamesResource;
 use SphereMall\MS\Resources\Products\MediaResource;
@@ -131,6 +132,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new AttributeValuesResource($this);
+    }
+
+    /**
+     * @return UnitOfMeasure
+     */
+    public function unitOfMeasure()
+    {
+        /** @var Client $this */
+        return new UnitOfMeasureResource($this);
     }
 
     /**
