@@ -19,7 +19,7 @@ namespace SphereMall\MS\Entities;
  * @property int $coefficient
  */
 
-class UnitOfMeasure
+class UnitOfMeasure extends Entity
 {
     #region [Properties]
     public $id;
