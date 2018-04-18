@@ -135,7 +135,7 @@ trait ServiceInjector
     }
 
     /**
-     * @return UnitOfMeasure
+     * @return UnitOfMeasureResource
      */
     public function unitOfMeasure()
     {
