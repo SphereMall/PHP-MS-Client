@@ -2,8 +2,8 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
-### Version 2.0.1
-[Changelog 2.0.1](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
+### Version 2.0.3
+[Changelog 2.0.3](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
 #### Supported microservices
 * Gateway 2.0.0
 * Products 2.0.0
