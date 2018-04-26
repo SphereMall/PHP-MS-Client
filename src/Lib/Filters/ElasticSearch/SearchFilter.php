@@ -122,7 +122,7 @@ class SearchFilter extends Filter implements SearchFilterInterface
             foreach ($this->facets as $filter) {
                 $filters = FacetedHelper::addFilter($filters, $filter->getValues(), $key, $filter->getName());
             }
-            $set['body']['aggs'][$key] = FacetedHelper::addAggregation($param, $filters);
+            $set['body']['aggs'][$key] = FacetedHelper::addAggregation($param, $filters)[$key];
         }
 
         return $set;
