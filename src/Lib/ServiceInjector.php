@@ -10,8 +10,6 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
-use SphereMall\MS\Lib\Http\ElasticSearchRequest;
-use SphereMall\MS\Lib\Http\ElasticSearchResponse;
 use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
@@ -58,6 +56,7 @@ use SphereMall\MS\Resources\Shop\CurrenciesResource;
 use SphereMall\MS\Resources\Shop\VatsResource;
 use SphereMall\MS\Resources\Grapher\GridResource;
 use SphereMall\MS\Resources\Users\WishListItemsResource;
+use SphereMall\MS\Resources\Shop\RulesResource;
 
 /**
  * Trait ServiceInjector
@@ -356,6 +355,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new CouponsResource($this);
+    }
+
+    /**
+     * @return RulesResource
+     */
+    public function rules()
+    {
+        /** @var Client $this */
+        return new RulesResource($this);
     }
     #endregion
 
