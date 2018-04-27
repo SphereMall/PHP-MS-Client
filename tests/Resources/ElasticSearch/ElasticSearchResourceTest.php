@@ -51,25 +51,25 @@ class ElasticSearchResourceTest extends SetUpResourceTest
      */
     public function testFromGateway()
     {
-        $this->client = new Client([
-            'gatewayUrl' => 'http://gateway-bc.alpha.spheremall.net:8089',
-            'clientId'   => 'api_demo_user',
-            'secretKey'  => 'demo_pass'
-        ]);
-
-        $index = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class]));
-        //$attributeFilter = new TermsFilter(new AttributeFilterParams('212', [2486]));
-        //$BrandsFilter = new TermsFilter(new TermsFilterParams('brandId', [333, 50]));
-        $priceRange = new PriceRangeFilter(new PriceRangeFilterParams(100, 6060));
-        $dealersGeo = new DealersGeoFilter(new DealersGeoFilterParams(200, 40, -70, GeoDistanceUnits::KILOMETER));
-
-        $searchFilter = (new SearchFilter())->index([$index])// select index
-                                            ->elements([$priceRange, $dealersGeo]);
-
-
-        $facet = $this->client->elasticSearch()->filter($searchFilter)->all();
-
-        $a = 2;
+//        $this->client = new Client([
+//            'gatewayUrl' => 'http://gateway-bc.alpha.spheremall.net:8089',
+//            'clientId'   => 'api_demo_user',
+//            'secretKey'  => 'demo_pass'
+//        ]);
+//
+//        $index = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class]));
+//        //$attributeFilter = new TermsFilter(new AttributeFilterParams('212', [2486]));
+//        //$BrandsFilter = new TermsFilter(new TermsFilterParams('brandId', [333, 50]));
+//        $priceRange = new PriceRangeFilter(new PriceRangeFilterParams(100, 6060));
+//        $dealersGeo = new DealersGeoFilter(new DealersGeoFilterParams(200, 40, -70, GeoDistanceUnits::KILOMETER));
+//
+//        $searchFilter = (new SearchFilter())->index([$index])// select index
+//                                            ->elements([$priceRange, $dealersGeo]);
+//
+//
+//        $facet = $this->client->elasticSearch()->filter($searchFilter)->all();
+//
+//        $a = 2;
     }
 
     /**
