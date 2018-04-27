@@ -19,11 +19,13 @@ use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\FieldsParams\ElasticSearch\FullTextSearchFieldsParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\AttributeFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\AutoCompleteFilterParams;
+use SphereMall\MS\Lib\FilterParams\ElasticSearch\DealersGeoFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\IndexFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\MatchFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\PriceRangeFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\TermsFilterParams;
 use SphereMall\MS\Lib\Filters\ElasticSearch\AutoCompleteFilter;
+use SphereMall\MS\Lib\Filters\ElasticSearch\DealersGeoFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\FullTextFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MatchFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MatchPhraseFilter;
@@ -31,6 +33,7 @@ use SphereMall\MS\Lib\Filters\ElasticSearch\PriceRangeFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\SearchFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\ElasticSearchIndexFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\TermsFilter;
+use SphereMall\MS\Lib\Filters\GeoDistanceUnits;
 use SphereMall\MS\Lib\Http\ElasticSearchRequest;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
@@ -46,22 +49,28 @@ class ElasticSearchResourceTest extends SetUpResourceTest
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \SphereMall\MS\Exceptions\ConfigurationException
      */
-//    public function testFromGateway()
-//    {
-//        $index           = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class]));
-//        $attributeFilter = new TermsFilter(new AttributeFilterParams('212', [2486]));
-//        $BrandsFilter = new TermsFilter(new TermsFilterParams('brandId', [333, 50]));
-//        $searchFilter = (new SearchFilter())->index([$index])// select index
-//                                            ->elements([$BrandsFilter]);
-//        $this->client = new Client([
-//            'gatewayUrl' => 'http://gateway-bc.alpha.spheremall.net:8089',
-//            'clientId'   => 'api_demo_user',
-//            'secretKey'  => 'demo_pass'
-//        ]);
-//        $facet        = $this->client->elasticSearch()->filter($searchFilter)->facets();
-//
-//        $a = 2;
-//    }
+    public function testFromGateway()
+    {
+        $this->client = new Client([
+            'gatewayUrl' => 'http://gateway-bc.alpha.spheremall.net:8089',
+            'clientId'   => 'api_demo_user',
+            'secretKey'  => 'demo_pass'
+        ]);
+
+        $index = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class]));
+        //$attributeFilter = new TermsFilter(new AttributeFilterParams('212', [2486]));
+        //$BrandsFilter = new TermsFilter(new TermsFilterParams('brandId', [333, 50]));
+        $priceRange = new PriceRangeFilter(new PriceRangeFilterParams(100, 6060));
+        $dealersGeo = new DealersGeoFilter(new DealersGeoFilterParams(200, 40, -70, GeoDistanceUnits::KILOMETER));
+
+        $searchFilter = (new SearchFilter())->index([$index])// select index
+                                            ->elements([$priceRange, $dealersGeo]);
+
+
+        $facet = $this->client->elasticSearch()->filter($searchFilter)->all();
+
+        $a = 2;
+    }
 
     /**
      * @throws \Exception
@@ -220,6 +229,16 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         $this->assertAttributeEquals(['title' => 'test'], 'values', $matchPhrase);
         $this->assertAttributeEquals(['fr'], 'langCodes', $matchPhrase);
 
+        $dealersGeo = new DealersGeoFilter(new DealersGeoFilterParams(200, 40, -70, GeoDistanceUnits::KILOMETER));
+        $this->assertAttributeEquals('geo_distance', 'name', $dealersGeo);
+        $this->assertAttributeEquals([
+            'distance'      => 200,
+            'distance_unit' => 'km',
+            'lat'           => 40,
+            'lon'           => -70
+        ], 'values', $dealersGeo);
+        $this->assertAttributeEquals(null, 'langCodes', $dealersGeo);
+
         $searchFilter = (new SearchFilter())->index([$index])->elements([
             $brandTerm,
             $attrTerm,
@@ -227,6 +246,7 @@ class ElasticSearchResourceTest extends SetUpResourceTest
             $priceRange,
             $match,
             $matchPhrase,
+            $dealersGeo
         ]);
 
         $elements = $searchFilter->getElements();
@@ -238,6 +258,17 @@ class ElasticSearchResourceTest extends SetUpResourceTest
             ['range' => ['price' => ['gte' => 100, 'lte' => 6060]]],
             ['match' => ['title_fr' => 'test']],
             ['match_phrase' => ['title_fr' => 'test']],
+            [
+                'geo_distance' => [
+                    'distance'      => 200,
+                    'distance_unit' => 'km',
+                    // ToDo: replace FIELD to needed field
+                    'FIELD'         => [
+                        'lat' => 40,
+                        'lon' => -70
+                    ]
+                ]
+            ]
         ];
         $this->assertAttributeEquals($indexes, 'indexes', $searchFilter);
         foreach ($elements as $i => $element) {
