@@ -18,6 +18,7 @@ use SphereMall\MS\Lib\Makers\CountMaker;
 use SphereMall\MS\Lib\Makers\FacetsMaker;
 use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
 use SphereMall\MS\Resources\Resource;
+use SphereMall\MS\Resources\Traits\WithActions;
 
 /**
  * Class GridResource
@@ -25,6 +26,8 @@ use SphereMall\MS\Resources\Resource;
  */
 class GridResource extends GrapherResource
 {
+    use WithActions;
+    
     #region [Override methods]
     public function getURI()
     {
