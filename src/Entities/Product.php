@@ -32,6 +32,8 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  * @property FunctionalName $functionalName
  * @property Media[] $media
  * @property Media $mainMedia
+ * @property Promotion[] $promotions
+ * @property ProductToPromotions[] $productsToPromotions
  */
 class Product extends AutoCompleteEntity
 {
@@ -56,5 +58,8 @@ class Product extends AutoCompleteEntity
 
     public $media;
     public $mainMedia;
+
+    public $promotions;
+    public $productsToPromotions;
     #endregion
 }
