@@ -74,6 +74,7 @@ class ProductsMapper extends Mapper
             foreach ($array['productsToPromotions'] as $productsToPromotion) {
                 $productsToPromotions[] = $mapper->createObject($productsToPromotion);
             }
+
             $product->productsToPromotions = $productsToPromotions;
         }
         return $product;
