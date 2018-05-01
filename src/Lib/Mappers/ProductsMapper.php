@@ -60,18 +60,21 @@ class ProductsMapper extends Mapper
 
         if (isset($array['promotions']) && is_array($array['promotions'])) {
             $mapper = new PromotionsMapper();
-
+            $promotions = [];
             foreach ($array['promotions'] as $promotion) {
-                $product->promotions[] = $mapper->createObject($promotion);
+                $promotions[] = $mapper->createObject($promotion);
             }
+
+            $product->promotions = $promotions;
         }
 
         if (isset($array['productsToPromotions']) && is_array($array['productsToPromotions'])) {
             $mapper = new ProductsToPromotionsMapper();
-
+            $productsToPromotions = [];
             foreach ($array['productsToPromotions'] as $productsToPromotion) {
-                $product->productsToPromotions[] = $mapper->createObject($productsToPromotion);
+                $productsToPromotions[] = $mapper->createObject($productsToPromotion);
             }
+            $product->productsToPromotions = $productsToPromotions;
         }
         return $product;
     }
