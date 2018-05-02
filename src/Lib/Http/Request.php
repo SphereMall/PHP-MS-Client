@@ -35,7 +35,7 @@ class Request
      */
     public function __construct(Client $client, ServiceResource $resource)
     {
-        $this->client   = $client;
+        $this->client = $client;
         $this->resource = $resource;
     }
 
@@ -55,7 +55,7 @@ class Request
     public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {
         $client = new \GuzzleHttp\Client();
-        $async  = $this->client->getAsync();
+        $async = $this->client->getAsync();
 
         //Set user authorization
         $options = [];
@@ -97,7 +97,7 @@ class Request
 
                 case 'post':
                     $options['content-type'] = 'application/x-www-form-urlencoded';
-                    $options['form_params']  = $body;
+                    $options['form_params'] = $body;
                     break;
 
                 case 'delete':
@@ -131,13 +131,13 @@ class Request
      */
     protected function setAuthorization()
     {
-        $authToken = new AuthToken($this->client);
+        $authToken = AuthToken::getInstance($this->client);
         list($token, $userAgent) = $authToken->getTokenData();
 
         return [
             'headers' => [
                 'Authorization' => "Bearer $token",
-                'User-Agent'    => $userAgent,
+                'User-Agent' => $userAgent,
             ],
         ];
     }

@@ -23,6 +23,9 @@ class AuthToken
      */
     private $client;
 
+    private static $instances;
+    private $token = null;
+
     const GUEST_COOKIE_NAME = "MS_GUEST_COOKIE";
 
     /**
@@ -35,6 +38,15 @@ class AuthToken
         $this->client = $client;
     }
 
+    public static function getInstance(Client $client)
+    {
+        if (!isset(static::$instances[$client->getClientId()])) {
+            static::$instances[$client->getClientId()] = new static($client);
+        }
+
+        return static::$instances[$client->getClientId()];
+    }
+
     /**
      * @return array|bool
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -42,33 +54,37 @@ class AuthToken
      */
     public function getTokenData()
     {
-        $token     = null;
         $userAgent = ($_SERVER['SERVER_NAME'] ?? 'SphereMall') . '_AGENT_' . Client::$userAgent;
 
         if (isset($_COOKIE[AuthToken::GUEST_COOKIE_NAME])) {
-            $token = $_COOKIE[AuthToken::GUEST_COOKIE_NAME];
-
-            return [$token, $userAgent];
+            $this->token = $_COOKIE[AuthToken::GUEST_COOKIE_NAME];
         }
 
-        $options['content-type']                 = 'application/x-www-form-urlencoded';
-        $options['form_params']['client_id']     = $this->client->getClientId();
+        if ($this->token) {
+            return [$this->token, $userAgent];
+        }
+
+        $options['content-type'] = 'application/x-www-form-urlencoded';
+        $options['form_params']['client_id'] = $this->client->getClientId();
         $options['form_params']['client_secret'] = $this->client->getSecretKey();
-        $options['headers']['User-Agent']        = $userAgent;
+        $options['headers']['User-Agent'] = $userAgent;
 
 
         $url = $this->client->getGatewayUrl() . '/' . $this->client->getVersion() . '/' . 'oauth/token';
 
         try {
-            $client   = new \GuzzleHttp\Client();
+            $client = new \GuzzleHttp\Client();
+
+            $this->client->setCallStatistic(['method' => "POST", 'url' => $url, 'options' => $options]);
+
             $response = new Response($client->request('POST', $url, $options));
             if ($response->getSuccess()) {
-                $token    = $response->getData()[0]['token'] ?? false;
+                $this->token = $response->getData()[0]['token'] ?? false;
                 $expiries = $response->getData()[0]['expiries'];
-                $isGuest  = $response->getData()[0]['isGuest'];
+                $isGuest = $response->getData()[0]['isGuest'];
                 if ($isGuest) {
                     try {
-                        setcookie(AuthToken::GUEST_COOKIE_NAME, $token, time() + $expiries, '/');
+                        setcookie(AuthToken::GUEST_COOKIE_NAME, $this->token, time() + $expiries, '/');
                     } catch (\Exception $ex) {
                         //TODO: Can not set cookies with unit tests
                     }
@@ -79,6 +95,6 @@ class AuthToken
             return false;
         }
 
-        return [$token, $userAgent];
+        return [$this->token, $userAgent];
     }
 }

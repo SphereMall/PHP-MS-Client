@@ -54,7 +54,7 @@ class AsyncContainer
         $result = [];
 
         //Get authorization token for all async requests
-        $authToken = new AuthToken($this->client);
+        $authToken = AuthToken::getInstance($this->client);
         list($token, $userAgent) = $authToken->getTokenData();
 
         $options = [
