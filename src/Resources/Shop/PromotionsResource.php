@@ -12,7 +12,7 @@ use SphereMall\MS\Resources\Resource;
  * Class CouponsResource
  * @package SphereMall\MS\Resources\Shop
  */
-class CouponsResource extends Resource
+class PromotionsResource extends Resource
 {
     #region [Override methods]
     /**
@@ -30,6 +30,8 @@ class CouponsResource extends Resource
      * @param $basketId
      * @param string $couponCode
      * @return \GuzzleHttp\Promise\PromiseInterface|\SphereMall\MS\Lib\Http\Response
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function applyCoupon($basketId, string $couponCode)
     {
@@ -51,6 +53,8 @@ class CouponsResource extends Resource
      * @param string $couponCode
      * @param integer $userId
      * @return \GuzzleHttp\Promise\PromiseInterface|\SphereMall\MS\Lib\Http\Response
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function cancelCoupon($basketId, string $couponCode, $userId)
     {
@@ -65,6 +69,18 @@ class CouponsResource extends Resource
         //TODO: refactor to make method
         return $response;
 //        return $this->make($response, false);
+    }
+
+    /**
+     * @param array $products
+     * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function byIds(array $products){
+
+        $response = $this->handler->handle('POST', $products, 'products/byIds');
+        return $this->make($response, true);
     }
     #endregion
 }
