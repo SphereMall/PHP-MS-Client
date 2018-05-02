@@ -79,7 +79,7 @@ class PromotionsResource extends Resource
      */
     public function byIds(array $products){
 
-        $response = $this->handler->handle('POST', $products, 'products/byIds');
+        $response = $this->handler->handle('POST', $products, 'products/byids');
         return $this->make($response, true);
     }
     #endregion
