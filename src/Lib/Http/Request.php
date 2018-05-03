@@ -106,12 +106,11 @@ class Request
 
             }
         }
-        //Set statistic history for current call
-        $this->client->setCallStatistic(compact('method', 'url', 'options'));
 
         //Check and generate async request if needed
+        $time = 0;
         if ($async) {
-            return compact('method', 'url', 'options');
+            return compact('method', 'url', 'options', 'time');
         }
 
         //Call closure if existing
@@ -119,8 +118,16 @@ class Request
             call_user_func($this->client->beforeAPICall, $method, $url, $options);
         }
 
+        $time = microtime(true);
+
         //Return response
-        return new Response($client->request($method, $url, $options));
+        $response = $client->request($method, $url, $options);
+
+        $time = round((microtime(true) - $time), 4);
+        //Set statistic history for current call
+        $this->client->setCallStatistic(compact('method', 'url', 'options', 'time'));
+
+        return new Response($response);
     }
     #endregion
 
