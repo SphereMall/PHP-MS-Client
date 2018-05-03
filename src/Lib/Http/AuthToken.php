@@ -38,6 +38,10 @@ class AuthToken
         $this->client = $client;
     }
 
+    /**
+     * @param Client $client
+     * @return AuthToken
+     */
     public static function getInstance(Client $client)
     {
         if (!isset(static::$instances[$client->getClientId()])) {
@@ -75,9 +79,16 @@ class AuthToken
         try {
             $client = new \GuzzleHttp\Client();
 
-            $this->client->setCallStatistic(['method' => "POST", 'url' => $url, 'options' => $options]);
 
-            $response = new Response($client->request('POST', $url, $options));
+            //Check and generate async request if needed
+            $time = microtime(true);
+            $response = $client->request('POST', $url, $options);
+
+            $time = round((microtime(true) - $time), 4);
+            //Set statistic history for current call
+            $this->client->setCallStatistic(['method' => "POST", 'url' => $url, 'options' => $options, 'time' => $time]);
+
+            $response = new Response($response);
             if ($response->getSuccess()) {
                 $this->token = $response->getData()[0]['token'] ?? false;
                 $expiries = $response->getData()[0]['expiries'];
