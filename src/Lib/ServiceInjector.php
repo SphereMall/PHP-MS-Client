@@ -421,7 +421,7 @@ trait ServiceInjector
     /**
      * @return FactorsValuesResource
      */
-    public function factorvalues()
+    public function factorValues()
     {
         /** @var Client $this */
         return new FactorsValuesResource($this);
