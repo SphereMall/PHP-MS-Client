@@ -27,16 +27,15 @@ class DealersGeoFilter extends ElasticSearchFilterElement implements SearchInter
         if (isset($this->values['distance'])) {
             $result[$this->getName()]['distance'] = $this->values['distance'];
         }
-        if (isset($this->values['distance_unit'])) {
-            $result[$this->getName()]['distance_unit'] = $this->values['distance_unit'];
+        if (isset($this->values['distance_unit']) && $result[$this->getName()]['distance']) {
+            $result[$this->getName()]['distance'] .= $this->values['distance_unit'];
         }
 
-        // ToDo: replace FIELD to needed field
         if (isset($this->values['lat'])) {
-            $result[$this->getName()]['FIELD']['lat'] = $this->values['lat'];
+            $result[$this->getName()]['addresses.location']['lat'] = $this->values['lat'];
         }
         if (isset($this->values['lon'])) {
-            $result[$this->getName()]['FIELD']['lon'] = $this->values['lon'];
+            $result[$this->getName()]['addresses.location']['lon'] = $this->values['lon'];
         }
 
         return $result;

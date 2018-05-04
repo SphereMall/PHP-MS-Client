@@ -26,11 +26,11 @@ class DealersGeoFilterParams extends FilterParams implements SearchQueryInterfac
     /**
      * DealersGeoFilterParams constructor.
      * @param int $distance
-     * @param int $lat
-     * @param int $lon
+     * @param float $lat
+     * @param float $lon
      * @param string $distance_unit
      */
-    public function __construct(int $distance, int $lat, int $lon, string $distance_unit = GeoDistanceUnits::KILOMETER)
+    public function __construct(int $distance, float $lat, float $lon, string $distance_unit = GeoDistanceUnits::KILOMETER)
     {
         $this->distance      = $distance;
         $this->lat           = $lat;
@@ -44,8 +44,7 @@ class DealersGeoFilterParams extends FilterParams implements SearchQueryInterfac
     public function getParams()
     {
         return [
-            'distance'      => $this->distance,
-            'distance_unit' => $this->distance_unit,
+            'distance'      => $this->distance . $this->distance_unit,
             'lat'           => $this->lat,
             'lon'           => $this->lon,
         ];
