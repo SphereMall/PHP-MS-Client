@@ -40,6 +40,7 @@ use SphereMall\MS\Resources\Shop\DiscountTypesResource;
 use SphereMall\MS\Resources\Shop\InvoicesResource;
 use SphereMall\MS\Resources\Shop\OrderItemsResource;
 use SphereMall\MS\Resources\Shop\PromotionsResource;
+use SphereMall\MS\Resources\StaticTexts\WebTextsResource;
 use SphereMall\MS\Resources\Users\AddressResource;
 use SphereMall\MS\Resources\Users\CompaniesResource;
 use SphereMall\MS\Resources\Users\MessagesResource;
@@ -470,6 +471,17 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new DocumentsResource($this);
+    }
+    #endregion
+
+    #region [StaticTexts service]
+    /**
+     * @return WebTextsResource
+     */
+    public function webTexts()
+    {
+        /** @var Client $this */
+        return new WebTextsResource($this);
     }
     #endregion
 
