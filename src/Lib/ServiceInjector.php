@@ -20,6 +20,7 @@ use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorsResource;
+use SphereMall\MS\Resources\Grapher\FactorValuesResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
@@ -415,6 +416,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new FactorsResource($this);
+    }
+
+    /**
+     * @return FactorValuesResource
+     */
+    public function factorValues()
+    {
+        /** @var Client $this */
+        return new FactorValuesResource($this);
     }
 
     /**
