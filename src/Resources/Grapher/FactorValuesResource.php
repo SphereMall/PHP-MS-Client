@@ -1,15 +1,13 @@
 <?php
-/**
- * Created by SergeyBondarchuk.
- * 29.03.2018 18:52
- */
-
 namespace SphereMall\MS\Resources\Grapher;
 
+
+use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Resources\Resource;
 
 /**
- * Class FactorsResource
+ * Class FactorValuesResource
  * @package SphereMall\MS\Resources\Grapher
  */
 class FactorValuesResource extends Resource
