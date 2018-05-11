@@ -105,33 +105,35 @@ class UsersResource extends Resource
 
     /**
      * @param int $userId
-     * @param int $productId
-     *
+     * @param int $objectId
+     * @param int $entityId
      * @return WishListItem
-     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
-    public function addToWishList(int $userId, int $productId)
+    public function addToWishList(int $userId, int $objectId, int $entityId)
     {
         return $this->client->wishListItems()->create([
             'userId'     => $userId,
-            'productId'  => $productId,
+            'objectId'  => $objectId,
+            'entityId' => $entityId,
             'createDate' => date('Y-m-d H:i:s'),
         ]);
     }
 
     /**
      * @param int $userId
-     * @param int $productId
-     *
+     * @param int $objectId
+     * @param int $entityId
      * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
-    public function removeFromWishList(int $userId, int $productId)
+    public function removeFromWishList(int $userId, int $objectId, int $entityId)
     {
         $item = $this->client->wishListItems()->filter([
-                'userId'    => ['e' => $userId],
-                'productId' => ['e' => $productId],
-            ])->first();
+            'userId'    => ['e' => $userId],
+            'objectId' => ['e' => $objectId],
+            'entityId' => ['e' => $entityId],
+        ])->first();
 
         if ($item) {
             return $this->client->wishListItems()->delete($item->id);
