@@ -18,6 +18,7 @@ use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorsResource;
+use SphereMall\MS\Resources\Grapher\FactorValuesResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
@@ -40,6 +41,7 @@ use SphereMall\MS\Resources\Shop\DiscountTypesResource;
 use SphereMall\MS\Resources\Shop\InvoicesResource;
 use SphereMall\MS\Resources\Shop\OrderItemsResource;
 use SphereMall\MS\Resources\Shop\PromotionsResource;
+use SphereMall\MS\Resources\StaticTexts\WebTextsResource;
 use SphereMall\MS\Resources\Users\AddressResource;
 use SphereMall\MS\Resources\Users\CompaniesResource;
 use SphereMall\MS\Resources\Users\MessagesResource;
@@ -435,6 +437,15 @@ trait ServiceInjector
     }
 
     /**
+     * @return FactorValuesResource
+     */
+    public function factorValues()
+    {
+        /** @var Client $this */
+        return new FactorValuesResource($this);
+    }
+
+    /**
      * @return EntityFactorsResource
      */
     public function entityFactors()
@@ -470,6 +481,17 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new DocumentsResource($this);
+    }
+    #endregion
+
+    #region [StaticTexts service]
+    /**
+     * @return WebTextsResource
+     */
+    public function webTexts()
+    {
+        /** @var Client $this */
+        return new WebTextsResource($this);
     }
     #endregion
 

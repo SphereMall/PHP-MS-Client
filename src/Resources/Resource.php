@@ -335,6 +335,22 @@ abstract class Resource
     }
 
     /**
+     * @param array $data
+     *
+     * @return Collection
+     * @throws EntityNotFoundException
+     */
+    public function createList(array $data)
+    {
+        $response = $this->handler->handle('POST', $data);
+        if (!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getErrorMessage());
+        }
+
+        return $this->make($response);
+    }
+
+    /**
      * @param $id
      * @param $data
      *
@@ -383,6 +399,10 @@ abstract class Resource
 
         return $response->getSuccess();
     }
+
+    /**
+     * Delete list should be added
+     */
     #endregion
 
     #region [Protected methods]
