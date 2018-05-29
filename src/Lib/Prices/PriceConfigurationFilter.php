@@ -39,10 +39,23 @@ class PriceConfigurationFilter
 
         $data = [];
         foreach ($this->products as $product) {
-            $data[] = [
+            $rowData = [
                 'priceTypeId' => $product->priceTypeId,
                 'productId'   => $product->productId,
             ];
+
+            if ($product->attributes) {
+                $affectAttributes = [];
+                $values = [];
+
+                foreach ($product->attributes as $attributeId => $valueId) {
+                    $affectAttributes[] = $attributeId;
+                    $values[] = $valueId;
+                }
+
+                $rowData['attributes'] = ['affectAttributes' => $affectAttributes, 'values' => [$values]];
+            }
+            $data[] = $rowData;
         }
 
         return ['filters' => json_encode($data)];

@@ -18,13 +18,16 @@ class PriceProduct
     #region [Properties]
     public $productId;
     public $priceTypeId;
+    public $attributes;
     #endregion
 
     #region [Constructor]
-    public function __construct(int $productId, int $priceTypeId)
+    public function __construct(int $productId, int $priceTypeId, $attributes)
     {
         $this->productId   = $productId;
         $this->priceTypeId = $priceTypeId;
+        $this->attributes = $attributes;
+
     }
     #endregion
 }
