@@ -12,10 +12,10 @@ namespace SphereMall\MS\Lib\Mappers;
 use SphereMall\MS\Entities\Price\ProductPriceConfiguration;
 
 /**
- * Class ProductPriceConfigurationsMapper
+ * Class PriceValuesMapper
  * @package SphereMall\MS\Lib\Mappers
  */
-class ProductPriceConfigurationsMapper extends Mapper
+class PriceValuesMapper extends Mapper
 {
     #region [Protected methods]
     /**
