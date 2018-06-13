@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Entities\ProductOptionValue;
 
 /**
  * Class ProductsMapper
@@ -76,6 +77,27 @@ class ProductsMapper extends Mapper
             }
 
             $product->productsToPromotions = $productsToPromotions;
+        }
+
+        if(isset($array['options']) && is_array($array['options'])){
+            $optionMapper = new OptionsMapper();
+            $productOptionValuesMapper = new ProductOptionValuesMapper();
+            $options = [];
+
+            foreach ($array['options'] as $option){
+                $productOptionValues = array_filter($array['productOptionValues'] ?? [], function($productOptionValue) use ($option) {
+                    return $option['id'] == $productOptionValue['optionId'];
+                });
+
+                foreach ($productOptionValues ?? [] as $productOptionValue){
+                    $option['values'][] = $productOptionValuesMapper->createObject($productOptionValue);
+                }
+
+                $options[] = $optionMapper->createObject($option);
+            }
+
+            $product->options = $options;
+
         }
         return $product;
     }

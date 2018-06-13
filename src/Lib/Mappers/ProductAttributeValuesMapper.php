@@ -48,7 +48,7 @@ class ProductAttributeValuesMapper extends Mapper
         $mapper = new AttributesMapper();
         $result = [];
         foreach ($raw as $item) {
-            $result[] = $mapper->createObject($item);
+            $result[$item['code']] = $mapper->createObject($item);
         }
 
         return $result;

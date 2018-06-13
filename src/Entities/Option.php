@@ -26,5 +26,7 @@ class Option extends Entity
     public $visible;
     public $description;
     public $orderNumber;
+
+    public $values;
     #endregion
 }

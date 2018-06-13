@@ -34,6 +34,7 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  * @property Media $mainMedia
  * @property Promotion[] $promotions
  * @property ProductToPromotions[] $productsToPromotions
+ * @property Option[] $options
  */
 class Product extends AutoCompleteEntity
 {
@@ -61,5 +62,7 @@ class Product extends AutoCompleteEntity
 
     public $promotions;
     public $productsToPromotions;
+
+    public $options;
     #endregion
 }
