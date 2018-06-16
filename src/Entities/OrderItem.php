@@ -43,5 +43,6 @@ class OrderItem extends Entity
     public $totalPrice;
 
     public $product;
+    public $options;
     #endregion
 }

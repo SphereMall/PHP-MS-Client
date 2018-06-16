@@ -36,6 +36,12 @@ class PriceValuesMapper extends Mapper
                 $productPriceConfiguration->priceTable[$priceKey] = $price;
             }
         }
+        if(isset($array['prices']['priceWithVat'])) {
+            $productPriceConfiguration->priceWithVat = $array['prices']['priceWithVat'];
+        }
+        if(isset($array['prices']['priceWithoutVat'])) {
+            $productPriceConfiguration->priceWithoutVat = $array['prices']['priceWithoutVat'];
+        }
 
         $productPriceConfiguration->removeProperty('prices');
 

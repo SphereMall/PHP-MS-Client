@@ -22,5 +22,8 @@ class ProductPriceConfiguration extends Entity
     public $productId;
     public $affectedAttributes;
     public $priceTable;
+    public $priceWithVat;
+    public $priceWithoutVat;
+
     #endregion
 }

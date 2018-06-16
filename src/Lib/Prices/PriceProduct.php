@@ -19,15 +19,16 @@ class PriceProduct
     public $productId;
     public $priceTypeId;
     public $attributes;
+    public $options;
     #endregion
 
     #region [Constructor]
-    public function __construct(int $productId, int $priceTypeId, $attributes)
+    public function __construct(int $productId, int $priceTypeId, $attributes, $options)
     {
         $this->productId   = $productId;
         $this->priceTypeId = $priceTypeId;
-        $this->attributes = $attributes;
-
+        $this->attributes  = $attributes;
+        $this->options     = $options;
     }
     #endregion
 }

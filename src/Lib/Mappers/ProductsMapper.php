@@ -99,6 +99,7 @@ class ProductsMapper extends Mapper
             $product->options = $options;
 
         }
+
         return $product;
     }
     #endregion

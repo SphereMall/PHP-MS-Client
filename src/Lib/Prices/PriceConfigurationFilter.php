@@ -55,6 +55,16 @@ class PriceConfigurationFilter
 
                 $rowData['attributes'] = ['affectAttributes' => $affectAttributes, 'values' => [$values]];
             }
+
+            if ($product->options) {
+                $options = [];
+
+                foreach ($product->options as $option) {
+                    $options[] = $option;
+                }
+
+                $rowData['productOptionValues'] = $options;
+            }
             $data[] = $rowData;
         }
 
