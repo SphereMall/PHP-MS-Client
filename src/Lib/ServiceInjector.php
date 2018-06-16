@@ -505,15 +505,6 @@ trait ServiceInjector
         /** @var Client $this */
         return new ProductPriceConfigurationsResource($this);
     }
-
-    /**
-     * @return FindDetailPricesResource
-     */
-    public function findDetailPrices()
-    {
-        /** @var Client $this */
-        return new FindDetailPricesResource($this);
-    }
     #endregion
 
     #region [ElasticSearch service]

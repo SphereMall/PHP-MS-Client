@@ -32,28 +32,6 @@ class OrderItemsMapper extends Mapper
                 $array['products'][0]['images'] = $array['images'];
             }
 
-//            // options
-//            if (isset($array['options'][0]) && is_array($array['options'][0])) {
-//                $optionMapper = new OptionsMapper();
-//                $productOptionValuesMapper = new ProductOptionValuesMapper();
-//                $options = [];
-//
-//                foreach ($array['options'] as $option) {
-//                    $productOptionValues = array_filter($array['productOptionValues'] ?? [], function ($productOptionValue) use ($option) {
-//                        return $option['id'] == $productOptionValue['optionId'];
-//                    });
-//
-//                    foreach ($productOptionValues ?? [] as $productOptionValue) {
-//                        $option['values'][] = $productOptionValuesMapper->createObject($productOptionValue);
-//                    }
-//
-//                    $options[] = $optionMapper->createObject($option);
-//                }
-//
-//                $array['products'][0]['options'] = $options;
-//
-//            }
-
             $productMapper = new ProductsMapper();
             $orderItem->product = $productMapper->createObject($array['products'][0]);
         }

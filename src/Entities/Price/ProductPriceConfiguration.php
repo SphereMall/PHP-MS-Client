@@ -20,8 +20,16 @@ class ProductPriceConfiguration extends Entity
     #region [Properties]
     public $id;
     public $productId;
+
+    /**
+     * @deprecated
+     */
     public $affectedAttributes;
+    /**
+     * @deprecated
+     */
     public $priceTable;
+
     public $priceWithVat;
     public $priceWithoutVat;
 
