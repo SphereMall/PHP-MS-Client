@@ -15,7 +15,7 @@ use SphereMall\MS\Resources\Resource;
  * Class FactorsResource
  * @package SphereMall\MS\Resources\Grapher
  */
-class FactorResource extends Resource
+class FactorsResource extends Resource
 {
     #region [Override methods]
     public function getURI()
