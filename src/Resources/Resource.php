@@ -47,6 +47,7 @@ abstract class Resource
     protected $version;
     protected $handler;
     protected $maker;
+    protected $multi;
     protected $offset = 0;
     protected $limit  = 10;
     protected $ids    = [];
@@ -65,10 +66,12 @@ abstract class Resource
      * @param null $version
      * @param null $handler
      * @param null $maker
+     * @param bool $multi
      */
-    public function __construct(Client $client, $version = null, $handler = null, $maker = null)
+    public function __construct(Client $client, $version = null, $handler = null, $maker = null, $multi = false)
     {
-        $this->client  = $client;
+        $this->client = $client;
+        $this->multi = $multi;
         $this->version = $version ?? $client->getVersion();
 
         $this->handler = $handler ?? new Request($this->client, $this);
@@ -191,6 +194,11 @@ abstract class Resource
     public function getFilter()
     {
         return $this->filter;
+    }
+
+    public function getFilters()
+    {
+        return $this->filter->getFilters() ?? [];
     }
 
     /**
@@ -461,7 +469,15 @@ abstract class Resource
                 $this->filter->setFields($this->fields);
                 unset($params['fields']);
             }
-            $params['where'] = (string)$this->filter;
+
+            if ($this->multi && ($filters = $this->getFilters()) && !empty($filters)) {
+                $params['where'] = '';
+                foreach ($filters AS $filter) {
+                    $params['where'] .= (string)$filter;
+                }
+            } else {
+                $params['where'] = (string)$this->filter;
+            }
         }
 
         if ($this->in) {

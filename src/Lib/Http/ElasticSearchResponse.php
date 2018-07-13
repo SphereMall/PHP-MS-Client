@@ -22,29 +22,47 @@ namespace SphereMall\MS\Lib\Http;
  */
 class ElasticSearchResponse extends Response
 {
+    private $multi = false;
     #region [Constructor]
     /**
      * ElasticSearchResponse constructor.
      * @param array $response
      * @throws \Exception
      */
-    public function __construct(array $response)
+    public function __construct(array $response, $multi = false)
     {
+        $this->multi = $multi;
+
+        $responses = null;
+        if ($this->multi) {
+            $responses = $response['responses'];
+            $response = $responses[0];
+        }
+
         $this->statusCode = (!$response['timed_out'] ? 200 : 404);
         $this->headers    = [];
 
         try {
-            $this->data     = $response;
-            $this->status  = !$response['timed_out'] ? 'OK' : 'ERROR';
+            $this->data     = $responses ?? $response;
+            $this->status   = !$response['timed_out'] ? 'OK' : 'ERROR';
             $this->errors   = $response['error'] ?? null;
-            $this->debug   = $contents['debug'] ?? null;
+            $this->debug    = $contents['debug'] ?? null;
             $this->version  = 1;
             $this->included = [];
             $this->meta     = null;
         } catch (\Exception $ex) {
+            $this->success = false;
             $this->errors  = $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMulti()
+    {
+        return $this->multi;
     }
     #endregion
 }

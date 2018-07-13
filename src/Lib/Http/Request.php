@@ -24,6 +24,7 @@ use SphereMall\MS\Resources\Resource as ServiceResource;
 class Request
 {
     #region [Properties]
+    protected $multi;
     protected $client;
     protected $resource;
     #endregion
@@ -35,8 +36,9 @@ class Request
      * @param Client $client
      * @param ServiceResource $resource
      */
-    public function __construct(Client $client, ServiceResource $resource)
+    public function __construct(Client $client, ServiceResource $resource, $multi = false)
     {
+        $this->multi = $multi;
         $this->client = $client;
         $this->resource = $resource;
     }

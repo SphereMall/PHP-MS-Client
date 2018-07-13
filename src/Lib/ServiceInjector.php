@@ -509,12 +509,13 @@ trait ServiceInjector
 
     #region [ElasticSearch service]
     /**
+     * @param bool $multi
      * @return ElasticSearchResource
      */
-    public function elasticSearch()
+    public function elasticSearch($multi = false)
     {
         /** @var Client $this */
-        return new ElasticSearchResource($this, null, null, new ElasticSearchMaker());
+        return new ElasticSearchResource($this, null, null, new ElasticSearchMaker(), $multi);
     }
     #endregion
 

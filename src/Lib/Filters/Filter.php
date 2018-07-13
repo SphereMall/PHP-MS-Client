@@ -9,6 +9,8 @@
 
 namespace SphereMall\MS\Lib\Filters;
 
+use SphereMall\MS\Lib\Filters\ElasticSearch\MultiFullTextFilter;
+
 /**
  * @property array $availableFilters
  * @property array $filters
@@ -61,7 +63,12 @@ class Filter
     public function setFilters($filters = [])
     {
         foreach ($filters as $field => $rules) {
-            if ($field == 'fullSearch') {
+            if ($field === 'fullSearch') {
+                $this->addFilter($field, $rules, null);
+                continue;
+            }
+
+            if (is_a($rules, MultiFullTextFilter::class)) {
                 $this->addFilter($field, $rules, null);
                 continue;
             }
@@ -88,7 +95,7 @@ class Filter
      */
     public function addFilter($field, $value, $operator)
     {
-        if (!empty($field) && (!empty($value) || $value == '0')) {
+        if ((is_numeric($field) || !empty($field)) && (!empty($value) || $value == '0')) {
             if (!is_null($operator)) {
                 $this->filters[$field][$operator] = $value;
             } else {
@@ -149,6 +156,10 @@ class Filter
             foreach ($rules as $operator => $value) {
                 $out[] = json_encode([$field => [$operator => $value]]);
             }
+
+            return $out;
+        } elseif (is_a($rules, MultiFullTextFilter::class)) {
+            $out[] = (string)$rules;
 
             return $out;
         }
