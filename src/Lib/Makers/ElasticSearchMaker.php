@@ -79,7 +79,7 @@ class ElasticSearchMaker
                 $result = array_merge($result, $this->getDataFromResponse($item));
             }
         } else {
-            $result = $this->getDataFromResponse($response);
+            $result = $this->getDataFromResponse($response->getData());
         }
 
         return $result;
