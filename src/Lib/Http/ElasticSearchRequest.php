@@ -36,7 +36,7 @@ class ElasticSearchRequest extends Request
                                 ->build();
 
         try {
-            $response = new ElasticSearchResponse($client->search($queryParams));
+            $response = new ElasticSearchResponse($this->multi ? $client->msearch($queryParams) : $client->search($queryParams), $this->multi);
         } catch (\Exception $ex) {
             $error = json_decode($ex->getMessage());
             throw new \Exception($error->error->reason);

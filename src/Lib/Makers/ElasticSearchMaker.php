@@ -74,7 +74,21 @@ class ElasticSearchMaker
     {
         $result = [];
 
-        foreach ($response->getData()['hits']['hits'] as $element) {
+        if ($response->getMulti()) {
+            $responses = $response->getData();
+            foreach ($responses AS $item) {
+                $this->getDataFromResponse($item, $result);
+            }
+        } else {
+            $this->getDataFromResponse($response, $result);
+        }
+
+        return $result;
+    }
+
+    protected function getDataFromResponse(array $response, &$result)
+    {
+        foreach ($response['hits']['hits'] as $element) {
             $mapperClass = $this->getMapperClass($element['_type']);
             if (is_null($mapperClass)) {
                 throw new EntityNotFoundException("Entity mapper class for {$element['_type']} was not found");

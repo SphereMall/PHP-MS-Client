@@ -42,10 +42,10 @@ class ElasticSearchResource extends Resource
      * @param null   $handler
      * @param null   $maker
      */
-    public function __construct(Client $client, $version = null, $handler = null, $maker = null)
+    public function __construct(Client $client, $version = null, $handler = null, $maker = null, $multi = false)
     {
-        parent::__construct($client, $version, $handler, $maker);
-        $this->handler = $handler ?? new ElasticSearchRequest($this->client, $this);
+        parent::__construct($client, $version, $handler, $maker, $multi);
+        $this->handler = $handler ?? new ElasticSearchRequest($this->client, $this, $multi);
     }
 
     /**
@@ -101,7 +101,23 @@ class ElasticSearchResource extends Resource
         unset($params['offset']);
         unset($params['limit']);
 
-        $where = $additionalParams ? $additionalParams : json_decode($params['where'], true);
+        if ($additionalParams) {
+            $where = $additionalParams;
+        } else {
+            if (!empty($this->filter) && $this->multi) {
+                $where = explode("\n", trim($params['where']));
+                foreach ($where AS $key => &$item) {
+                    if ($key !== 'body') {
+                        $where['body'][] = json_decode($item, true);
+                        unset($where[$key]);
+                    }
+                }
+                unset($params['body']['from'], $params['body']['size']);
+            } else {
+                $where = json_decode($params['where'], true);
+            }
+        }
+
         if (empty($where)) {
             return $params;
         }
