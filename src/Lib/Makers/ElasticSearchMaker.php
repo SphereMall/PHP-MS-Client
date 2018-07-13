@@ -73,21 +73,21 @@ class ElasticSearchMaker
     protected function getResultFromResponse(ElasticSearchResponse $response)
     {
         $result = [];
-
         if ($response->getMulti()) {
             $responses = $response->getData();
             foreach ($responses AS $item) {
-                $this->getDataFromResponse($item, $result);
+                $result = array_merge($result, $this->getDataFromResponse($item));
             }
         } else {
-            $this->getDataFromResponse($response, $result);
+            $result = $this->getDataFromResponse($response);
         }
 
         return $result;
     }
 
-    protected function getDataFromResponse(array $response, &$result)
+    protected function getDataFromResponse(array $response)
     {
+        $result = [];
         foreach ($response['hits']['hits'] as $element) {
             $mapperClass = $this->getMapperClass($element['_type']);
             if (is_null($mapperClass)) {

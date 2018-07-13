@@ -30,7 +30,8 @@ class MultiFullTextFilter extends Filter
     protected $limit  = 10;
 
     /**
-     * FullTextFilter constructor.
+     * MultiFullTextFilter constructor.
+     * @param array $fields
      */
     public function __construct(array $fields = [])
     {
@@ -44,14 +45,14 @@ class MultiFullTextFilter extends Filter
     }
 
     /**
-     * @param array $indexes
+     * @param $index
      * @return $this
      */
     public function index($index)
     {
         /** @var ElasticSearchFilterElement $index */
         if (is_object($index)) {
-            $this->index = $index->getValues();;
+            $this->index = $index->getValues();
         } elseif (is_array($index)) {
             $this->index = [];
             foreach ($index AS $item) {
@@ -64,7 +65,7 @@ class MultiFullTextFilter extends Filter
 
     /**
      * @param string $keyword
-     * @return FullTextFilter
+     * @return MultiFullTextFilter
      */
     public function keyword(string $keyword)
     {

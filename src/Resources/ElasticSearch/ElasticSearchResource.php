@@ -106,7 +106,7 @@ class ElasticSearchResource extends Resource
         } else {
             if (!empty($this->filter) && $this->multi) {
                 $where = explode("\n", trim($params['where']));
-                foreach ($where AS $key => &$item) {
+                foreach ($where AS $key => $item) {
                     if ($key !== 'body') {
                         $where['body'][] = json_decode($item, true);
                         unset($where[$key]);

@@ -44,9 +44,9 @@ class ElasticSearchResponse extends Response
 
         try {
             $this->data     = $responses ?? $response;
-            $this->status  = !$response['timed_out'] ? 'OK' : 'ERROR';
+            $this->status   = !$response['timed_out'] ? 'OK' : 'ERROR';
             $this->errors   = $response['error'] ?? null;
-            $this->debug   = $contents['debug'] ?? null;
+            $this->debug    = $contents['debug'] ?? null;
             $this->version  = 1;
             $this->included = [];
             $this->meta     = null;
@@ -56,8 +56,12 @@ class ElasticSearchResponse extends Response
             throw new \Exception($ex->getMessage());
         }
     }
-    
-    public function getMulti(){
+
+    /**
+     * @return bool
+     */
+    public function getMulti()
+    {
         return $this->multi;
     }
     #endregion
