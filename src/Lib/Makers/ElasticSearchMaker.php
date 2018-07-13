@@ -73,13 +73,13 @@ class ElasticSearchMaker
     protected function getResultFromResponse(ElasticSearchResponse $response)
     {
         $result = [];
+        $data = $response->getData();
         if ($response->getMulti()) {
-            $responses = $response->getData();
-            foreach ($responses AS $item) {
+            foreach ($data AS $item) {
                 $result = array_merge($result, $this->getDataFromResponse($item));
             }
         } else {
-            $result = $this->getDataFromResponse($response->getData());
+            $result = $this->getDataFromResponse($data);
         }
 
         return $result;
