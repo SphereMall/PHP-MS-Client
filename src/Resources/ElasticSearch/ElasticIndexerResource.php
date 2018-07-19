@@ -27,7 +27,8 @@ class ElasticIndexerResource extends Resource{
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function runIndex(){
-        $response = $this->handler->handle('GET', null, 'runindex');
+        $params = $this->getQueryParams();
+        $response = $this->handler->handle('GET', null, 'runindex', $params);
         return $this->make($response, false);
 
     }
@@ -38,7 +39,8 @@ class ElasticIndexerResource extends Resource{
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function reindex(){
-        $response = $this->handler->handle('GET', null, 'reindex');
+        $params = $this->getQueryParams();
+        $response = $this->handler->handle('GET', null, 'reindex', $params);
         return $this->make($response, false);
     }
 
