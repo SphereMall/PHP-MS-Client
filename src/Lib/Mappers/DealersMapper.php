@@ -24,9 +24,9 @@ class DealersMapper extends Mapper
     {
         $dealer = new Dealer($array);
 
-        if (isset($array['brands'][0])) {
+        if (isset($array['brands']) && $brand = reset($array['brands'])) {
             $mapper        = new BrandsMapper();
-            $dealer->brand = $mapper->createObject($array['brands'][0]);
+            $dealer->brand = $mapper->createObject($brand);
         }
 
         if (isset($array['addresses'])) {

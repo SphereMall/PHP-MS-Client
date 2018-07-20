@@ -12,6 +12,7 @@ namespace SphereMall\MS\Resources\Products;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Resources\Resource;
+use SphereMall\MS\Resources\Traits\DetailResource;
 use SphereMall\MS\Resources\Traits\FullResource;
 use SphereMall\MS\Resources\Traits\WithActions;
 
@@ -31,6 +32,7 @@ use SphereMall\MS\Resources\Traits\WithActions;
 class ProductsResource extends Resource
 {
     use FullResource;
+    use DetailResource;
     use WithActions;
     #region [Override methods]
 

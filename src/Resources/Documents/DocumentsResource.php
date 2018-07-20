@@ -11,6 +11,7 @@ namespace SphereMall\MS\Resources\Documents;
 
 use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Resources\Resource;
+use SphereMall\MS\Resources\Traits\DetailResource;
 use SphereMall\MS\Resources\Traits\FullResource;
 
 /**
@@ -29,6 +30,7 @@ use SphereMall\MS\Resources\Traits\FullResource;
 class DocumentsResource extends Resource
 {
     use FullResource;
+    use DetailResource;
 
     #region [Override methods]
 

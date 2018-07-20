@@ -122,7 +122,7 @@ class ObjectMaker extends Maker
                     throw new EntityNotFoundException("Data for type[{$relationData['type']}] and id[{$relationData['id']}] was not found in includes");
                 }
 
-                $result[$relationKey][] = $included[$relationData['type']][$relationData['id']];
+                $result[$relationKey][$relationData['id']] = $included[$relationData['type']][$relationData['id']];
             }
         }
 

@@ -23,9 +23,9 @@ class PagesMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $page = new Page($array);
-        if (isset($array['functionalNames'][0])) {
+        if (isset($array['functionalNames']) && $functionalName = reset($array['functionalNames'])) {
             $mapper               = new FunctionalNamesMapper();
-            $page->functionalName = $mapper->createObject($array['functionalNames'][0]);
+            $page->functionalName = $mapper->createObject($functionalName);
         }
 
         return $page;

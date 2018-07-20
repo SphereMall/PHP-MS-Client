@@ -26,6 +26,16 @@ class DocumentsResourceTest extends SetUpResourceTest
         $this->assertEquals(1, count($documents));
     }
 
+    public function testDocumentDetail()
+    {
+        $documents = $this->client
+            ->documents()
+            ->limit(1)
+            ->detailAll();
+
+        $this->assertEquals(1, count($documents));
+    }
+
     public function testAttributeHelpMethods()
     {
         $documents = $this->client

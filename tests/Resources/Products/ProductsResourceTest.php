@@ -81,6 +81,47 @@ class ProductsResourceTest extends SetUpResourceTest
 
     }
 
+    public function testProductDetail()
+    {
+        $products = $this->client
+            ->products()
+            ->limit(2)
+            ->detailAll();
+
+        $this->assertEquals(2, count($products));
+
+        $this->assertEquals(2, count($products));
+
+        $products = $this->client
+            ->products()
+            ->limit(1)
+            ->ids([1])
+            ->detailAll();
+
+        $this->assertEquals(1, $products[0]->id);
+
+        $products = $this->client
+            ->products()
+            ->detail(1);
+
+        $this->assertEquals(1, $products[0]->id);
+
+        $url = 'mona-halfvolle-aardbeien-kwark-667g';
+
+        $products = $this->client
+            ->products()
+            ->detail($url);
+
+        $this->assertEquals($url, $products[0]->urlCode);
+        $this->assertCount(1, $products);
+
+        $this->assertNotNull($products[0]->attributes);
+        $this->assertNotNull($products[0]->media);
+        $this->assertNotNull($products[0]->brand);
+        $this->assertNotNull($products[0]->functionalName);
+
+    }
+
     public function testAttributeHelpMethods()
     {
         $products = $this->client->products()

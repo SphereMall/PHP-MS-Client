@@ -19,6 +19,8 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  * @property string $title
  * @property Attribute[] $attributes
  * @property FunctionalName $functionalName
+ * @property Media[] $media
+ * @property Media $mainMedia
  */
 class Document extends AutoCompleteEntity
 {

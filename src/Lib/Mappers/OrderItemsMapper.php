@@ -26,14 +26,14 @@ class OrderItemsMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $orderItem = new OrderItem($array);
-        if (isset($array['products'][0])) {
+        if (isset($array['products']) && $product = reset($array['products'])) {
 
             if (isset($array['images'])) {
-                $array['products'][0]['images'] = $array['images'];
+                $product['images'] = $array['images'];
             }
 
             $productMapper = new ProductsMapper();
-            $orderItem->product = $productMapper->createObject($array['products'][0]);
+            $orderItem->product = $productMapper->createObject($product);
         }
 
         return $orderItem;
