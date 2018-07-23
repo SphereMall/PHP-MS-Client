@@ -26,6 +26,10 @@ use SphereMall\MS\Resources\Traits\FullResource;
  * @method Document[] fullAll()
  * @method Document fullById(int $id)
  * @method Document fullByCode(string $code)
+ * @method Document|Document[] detail($param = null)
+ * @method Document[] detailAll()
+ * @method Document detailById(int $id)
+ * @method Document detailByCode(string $code)
  */
 class DocumentsResource extends Resource
 {

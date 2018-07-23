@@ -28,6 +28,10 @@ use SphereMall\MS\Resources\Traits\WithActions;
  * @method Product[] fullAll()
  * @method Product fullById(int $id)
  * @method Product fullByCode(string $code)
+ * @method Product|Product[] detail($param = null)
+ * @method Product[] detailAll()
+ * @method Product detailById(int $id)
+ * @method Product detailByCode(string $code)
  */
 class ProductsResource extends Resource
 {

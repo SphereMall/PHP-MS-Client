@@ -39,7 +39,7 @@ class ElasticSearchRequest extends Request
             $response = new ElasticSearchResponse($this->multi ? $client->msearch($queryParams) : $client->search($queryParams), $this->multi);
         } catch (\Exception $ex) {
             $error = json_decode($ex->getMessage());
-            throw new \Exception($error->error->reason);
+            throw new \Exception($error->error->reason ?? $ex->getMessage());
         }
 
         return $response;

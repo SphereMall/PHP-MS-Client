@@ -72,11 +72,11 @@ trait InteractsWithAttributes
             return null;
         }
 
-        if (empty($attribute->values[0])) {
+        if (empty($value = reset($attribute->values))) {
             return null;
         }
 
-        return $attribute->values[0];
+        return $value;
     }
     #endregion
 
