@@ -9,7 +9,10 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
+use SphereMall\MS\Entities\Attribute;
+use SphereMall\MS\Entities\AttributeValue;
 use SphereMall\MS\Entities\Document;
+use SphereMall\MS\Entities\Media;
 
 /**
  * Class DocumentsMapper
@@ -27,6 +30,48 @@ class DocumentsMapper extends Mapper
     {
         $document = new Document($array);
 
+        if (isset($array['functionalNames']) && $functionalName = reset($array['functionalNames'])) {
+            $mapper                   = new FunctionalNamesMapper();
+            $document->functionalName = $mapper->createObject($functionalName);
+
+        }
+
+        /* Customize mapping */
+        $document = isset($array['entityAttributeValues'])
+            ? $this->buildDetailResponse($document, $array)
+            : $this->buildFullResponse($document, $array);
+
+        return $document;
+    }
+
+    /**
+     * @param $attribute
+     * @param $attributeValues
+     *
+     * @return array
+     */
+    private function getAttributeValues($attribute, $attributeValues)
+    {
+        $values = [];
+        foreach ($attributeValues as $attributeValue) {
+            if ($attribute['id'] == $attributeValue['attributeId']) {
+                $values[] = $attributeValue;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * map data with custom fields
+     *
+     * @param Document $document
+     * @param array $array
+     * @return Document
+     */
+    private function buildFullResponse(Document $document, array $array)
+    {
+
         if (isset($array['attributes']) && isset($array['attributeValues'])) {
             $document->attributes = [];
 
@@ -38,31 +83,64 @@ class DocumentsMapper extends Mapper
             }
         }
 
-        if (isset($array['functionalNames'][0])) {
-            $mapper                   = new FunctionalNamesMapper();
-            $document->functionalName = $mapper->createObject($array['functionalNames'][0]);
+        if (isset($array['media'])) {
+            $media = [];
+            $mapper = new ImagesMapper();
+            foreach ($array['media'] as $image) {
+                $media[] = $mapper->createObject($image);
+            }
 
+            $document->media = $media;
+
+            if (!empty($document->media[0])) {
+                $document->mainMedia = $document->media[0];
+            }
         }
 
         return $document;
     }
 
     /**
-     * @param $attribute
-     * @param $attributeValues
+     * map data without custom fields
      *
-     * @return array
+     * @param Document $document
+     * @param array $array
+     * @return Document
      */
-    protected function getAttributeValues($attribute, $attributeValues)
+    private function buildDetailResponse(Document $document, array $array)
     {
-        $values = [];
-        foreach ($attributeValues as $attributeValue) {
-            if ($attribute['id'] == $attributeValue['attributeId']) {
-                $values[] = $attributeValue;
+        $avs = $array['attributeValues'] ?? [];
+        $as = $array['attributes'] ?? [];
+
+        /** @var Attribute[] $attributes */
+        $attributes = [];
+
+        foreach ($avs as $av) {
+            if (!isset($attributes[$av['attributeId']])) {
+                $attributes[$av['attributeId']] = new Attribute($as[$av['attributeId']]);
             }
+            $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($av);
         }
 
-        return $values;
+        $document->attributes = $attributes;
+
+        $me = $array['mediaEntities'] ?? [];
+        $m = $array['media'] ?? [];
+
+        /** @var Media[] $media */
+        $media = [];
+
+        foreach ($me as $item) {
+            $media[$item['id']] = new Media(array_merge($m[$item['mediaId']], $item));
+        }
+
+        $document->media = $media;
+
+        if (!empty($document->media[0])) {
+            $document->mainMedia = $document->media[0];
+        }
+
+        return $document;
     }
     #endregion
 }

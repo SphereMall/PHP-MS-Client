@@ -26,14 +26,14 @@ class WishListItemsMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $orderItem = new WishListItem($array);
-        if (isset($array['products'][0])) {
+        if (isset($array['products']) && $product = reset($array['products'])) {
             $productMapper = new ProductsMapper();
 
             if (isset($array['images'])) {
-                $array['products'][0]['images'] = $array['images'];
+                $product['images'] = $array['images'];
             }
 
-            $orderItem->product = $productMapper->createObject($array['products'][0]);
+            $orderItem->product = $productMapper->createObject($product);
         }
 
         return $orderItem;
