@@ -89,7 +89,7 @@ class Request
         }
 
         if($this->client->withChannel) {
-            $options['header']['Channel-id'] = $this->client->channelId;
+            $options['headers']['Channel-id'] = $this->client->channelId;
         }
 
         if ($body) {
