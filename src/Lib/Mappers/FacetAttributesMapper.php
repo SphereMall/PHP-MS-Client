@@ -40,6 +40,7 @@ class FacetAttributesMapper extends Mapper
                 'value'  => $item['value'],
                 'title'  => $item['valueTitle'],
                 'amount' => $item['amount'],
+                'orderNumber' => $item['orderNumberAttributeValues'] ?? null
             ];
         }
 
