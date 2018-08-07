@@ -88,6 +88,10 @@ class Request
             $body = $body->asArray();
         }
 
+        if($this->client->withChannel) {
+            $options['header']['Channel-id'] = $this->client->channelId;
+        }
+
         if ($body) {
             switch (strtolower($method)) {
                 case 'put':
