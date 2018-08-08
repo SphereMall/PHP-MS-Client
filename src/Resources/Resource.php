@@ -413,6 +413,17 @@ abstract class Resource
      */
     #endregion
 
+    #region [Public methods]
+    /**
+     * @return $this
+     */
+    public function withoutChannel()
+    {
+        $this->handler->disableChannel();
+        return $this;
+    }
+    #endregion
+
     #region [Protected methods]
     /**
      * @param Promise|Response $response

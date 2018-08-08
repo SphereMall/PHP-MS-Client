@@ -33,9 +33,8 @@ class Client
     #region [Properties]
     public        $beforeAPICall;
     public        $afterAPICall;
-    public $withChannel = true;
-    public $channelId;
     public static $userAgent = "SM_SDK_PHP_CLIENT";
+    public $channelId;
 
     protected $gatewayUrl;
     protected $clientId;
@@ -78,15 +77,6 @@ class Client
         $this->afterAPICall  = $afterAPICall;
     }
     #endregion
-
-    /**
-     * @return $this
-     */
-    public function withoutChannel()
-    {
-        $this->withChannel = false;
-        return $this;
-    }
 
     #region [Getters methods]
     /**

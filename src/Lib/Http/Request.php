@@ -24,6 +24,7 @@ use SphereMall\MS\Resources\Resource as ServiceResource;
 class Request
 {
     #region [Properties]
+    protected $withChannel = true;
     protected $multi;
     protected $client;
     protected $resource;
@@ -46,6 +47,15 @@ class Request
     #endregion
 
     #region [Public methods]
+
+    /**
+     * @return $this
+     */
+    public function disableChannel()
+    {
+        $this->withChannel = false;
+    }
+
     /**
      * @param string $method
      * @param bool $body
@@ -88,7 +98,7 @@ class Request
             $body = $body->asArray();
         }
 
-        if($this->client->withChannel) {
+        if($this->withChannel) {
             $options['headers']['Channel-id'] = $this->client->channelId;
         }
 
