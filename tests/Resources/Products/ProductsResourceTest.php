@@ -9,6 +9,7 @@
 
 namespace SphereMall\MS\Tests\Resources\Products;
 
+use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
@@ -134,6 +135,25 @@ class ProductsResourceTest extends SetUpResourceTest
         $attributeValue = $products[0]->getFirstValueByAttributeCode('test-html');
         $this->assertEquals('fghfghfgh', $attributeValue->value);
 
+    }
+
+    public function testGetProductForChannel()
+    {
+        $channelId = 999;
+        $client = new Client([
+            'gatewayUrl' => API_GATEWAY_URL,
+            'clientId'   => API_CLIENT_ID,
+            'secretKey'  => API_SECRET_KEY,
+            'channelId'  => $channelId,
+        ]);
+
+        $products = $client
+            ->products()
+            ->limit(2)
+            ->all();
+
+        $message = "Channel functionality doesn't work or DB has products for channel with id $channelId";
+        $this->assertCount(0, $products, $message);
     }
     #endregion
 }
