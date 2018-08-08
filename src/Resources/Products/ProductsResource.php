@@ -54,7 +54,7 @@ class ProductsResource extends Resource
      */
     public function getProductVariantsByIds($ids)
     {
-        $uriAppend = 'variants?ids=' . implode(',', $ids) . '&offset=0&&limit=1000';
+        $uriAppend = 'detail/variants?ids=' . implode(',', $ids) . '&offset=0&&limit=1000';
         $response = $this->handler->handle('GET', false, $uriAppend);
         return $this->make($response);
     }
