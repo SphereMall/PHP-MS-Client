@@ -34,6 +34,7 @@ class Client
     public        $beforeAPICall;
     public        $afterAPICall;
     public static $userAgent = "SM_SDK_PHP_CLIENT";
+    public $channelId;
 
     protected $gatewayUrl;
     protected $clientId;
