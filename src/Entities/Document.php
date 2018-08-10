@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Entities;
 
 use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
+use SphereMall\MS\Lib\Traits\InteractsWithMedia;
 
 /**
  * Class Document
@@ -25,6 +26,7 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
 class Document extends AutoCompleteEntity
 {
     use InteractsWithAttributes;
+    use InteractsWithMedia;
 
     #region [Properties]
     public $functionalName;
