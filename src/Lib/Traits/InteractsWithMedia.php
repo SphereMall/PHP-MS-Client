@@ -44,19 +44,8 @@ trait InteractsWithMedia
         if(!empty($this->images)) {
             return $this->images;
         }
-        $this->setImages();
+        $this->setMediaByType(MediaTypes::IMAGE_TYPE, 'images');
         return $this->images;
-    }
-
-    private function setImages()
-    {
-        $images = [];
-        foreach($this->media as $media) {
-            if($media->properties['mediaTypeId'] == MediaTypes::IMAGE_TYPE) {
-                $images[] = $media;
-            }
-        }
-        $this->images = $this->sortMedia($images);
     }
     #endregion
 
@@ -69,19 +58,8 @@ trait InteractsWithMedia
         if(!empty($this->files)) {
             return $this->files;
         }
-        $this->setFiles();
+        $this->setMediaByType(MediaTypes::FILE_TYPE, 'files');
         return $this->files;
-    }
-
-    private function setFiles()
-    {
-        $files = [];
-        foreach($this->media as $media) {
-            if($media->properties['mediaTypeId'] == MediaTypes::FILE_TYPE) {
-                $files[] = $media;
-            }
-        }
-        $this->files = $this->sortMedia($files);
     }
     #endregion
 
@@ -94,23 +72,25 @@ trait InteractsWithMedia
         if(!empty($this->videos)) {
             return $this->images;
         }
-        $this->setVideos();
+        $this->setMediaByType(MediaTypes::VIDEO_TYPE, 'videos');
         return $this->videos;
-    }
-
-    private function setVideos()
-    {
-        $videos = [];
-        foreach($this->media as $media) {
-            if($media->properties['mediaTypeId'] == MediaTypes::VIDEO_TYPE) {
-                $videos[] = $media;
-            }
-        }
-        $this->videos = $this->sortMedia($videos);
     }
     #endregion
 
     #region [Private methods]
+
+
+    private function setMediaByType($type, $property)
+    {
+        $mediaFiles = [];
+        foreach($this->media as $media) {
+            if($media->properties['mediaTypeId'] == $type) {
+                $mediaFiles[] = $media;
+            }
+        }
+        $this->{$property} = $this->sortMedia($mediaFiles);
+    }
+
     private function sortMedia(array $media)
     {
         if(empty($media)) {
