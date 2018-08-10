@@ -14,4 +14,8 @@ class MediaTypes
     CONST IMAGE_TYPE = 1;
     CONST FILE_TYPE = 2;
     CONST VIDEO_TYPE = 3;
+
+    CONST IMAGES = 'images';
+    CONST FILES = 'files';
+    CONST VIDEOS = 'videos';
 }

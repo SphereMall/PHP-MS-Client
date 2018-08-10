@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Lib\Traits;
 
 use SphereMall\MS\Entities\Media;
+use SphereMall\MS\Exceptions\PropertyNotFoundException;
 use SphereMall\MS\Lib\Specifications\Media\MediaTypes;
 
 /**
@@ -35,50 +36,42 @@ trait InteractsWithMedia
         return $images[0] ?? null;
     }
 
-    #region [Images]
     /**
      * @return array
      */
-    public function getImages()
+    public function getFiles(): array
     {
-        if(!empty($this->images)) {
-            return $this->images;
-        }
-        $this->setMediaByType(MediaTypes::IMAGE_TYPE, 'images');
-        return $this->images;
+        return $this->getMedia(MediaTypes::FILE_TYPE, MediaTypes::FILES);
     }
-    #endregion
 
-    #region [Files]
     /**
      * @return array
      */
-    public function getFiles()
+    public function getImages(): array
     {
-        if(!empty($this->files)) {
-            return $this->files;
-        }
-        $this->setMediaByType(MediaTypes::FILE_TYPE, 'files');
-        return $this->files;
+        return $this->getMedia(MediaTypes::IMAGE_TYPE, MediaTypes::IMAGES);
     }
-    #endregion
 
-    #region [Videos]
     /**
      * @return array
      */
-    public function getVideos()
+    public function getVideos(): array
     {
-        if(!empty($this->videos)) {
-            return $this->images;
-        }
-        $this->setMediaByType(MediaTypes::VIDEO_TYPE, 'videos');
-        return $this->videos;
+        return $this->getMedia(MediaTypes::VIDEO_TYPE, MediaTypes::VIDEOS);
     }
-    #endregion
 
     #region [Private methods]
-
+    private function getMedia($type, $property)
+    {
+        if(property_exists('InteractsWithMedia', $property)) {
+            throw new PropertyNotFoundException("Property {$property} not found");
+        }
+        if(!empty($this->{$property})) {
+            return $this->{$property};
+        }
+        $this->setMediaByType($type, $property);
+        return $this->{$property};
+    }
 
     private function setMediaByType($type, $property)
     {
