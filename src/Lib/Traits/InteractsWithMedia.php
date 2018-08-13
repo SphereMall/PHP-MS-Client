@@ -27,6 +27,7 @@ trait InteractsWithMedia
     public $files = [];
     public $videos = [];
 
+    #region [Get method]
     /**
      * @return Media|null
      */
@@ -41,7 +42,7 @@ trait InteractsWithMedia
      */
     public function getFiles(): array
     {
-        return $this->getMedia(MediaTypes::FILE_TYPE, MediaTypes::FILES);
+        return $this->getMedia(MediaTypes::FILE_TYPE_ID, MediaTypes::FILE_TYPE_NAME);
     }
 
     /**
@@ -49,7 +50,7 @@ trait InteractsWithMedia
      */
     public function getImages(): array
     {
-        return $this->getMedia(MediaTypes::IMAGE_TYPE, MediaTypes::IMAGES);
+        return $this->getMedia(MediaTypes::IMAGE_TYPE_ID, MediaTypes::IMAGE_TYPE_NAME);
     }
 
     /**
@@ -57,8 +58,9 @@ trait InteractsWithMedia
      */
     public function getVideos(): array
     {
-        return $this->getMedia(MediaTypes::VIDEO_TYPE, MediaTypes::VIDEOS);
+        return $this->getMedia(MediaTypes::VIDEO_TYPE_ID, MediaTypes::VIDEO_TYPE_NAME);
     }
+    #endregion
 
     #region [Private methods]
     private function getMedia($type, $property)

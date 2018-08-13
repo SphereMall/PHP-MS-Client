@@ -11,11 +11,11 @@ namespace SphereMall\MS\Lib\Specifications\Media;
 
 class MediaTypes
 {
-    CONST IMAGE_TYPE = 1;
-    CONST FILE_TYPE = 2;
-    CONST VIDEO_TYPE = 3;
+    CONST IMAGE_TYPE_ID = 1;
+    CONST FILE_TYPE_ID = 2;
+    CONST VIDEO_TYPE_ID = 3;
 
-    CONST IMAGES = 'images';
-    CONST FILES = 'files';
-    CONST VIDEOS = 'videos';
+    CONST IMAGE_TYPE_NAME = 'images';
+    CONST FILE_TYPE_NAME = 'files';
+    CONST VIDEO_TYPE_NAME = 'videos';
 }
