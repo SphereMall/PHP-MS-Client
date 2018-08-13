@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Entities;
 
 use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
+use SphereMall\MS\Lib\Traits\InteractsWithMedia;
 
 /**
  * Class Product
@@ -39,6 +40,7 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
 class Product extends AutoCompleteEntity
 {
     use InteractsWithAttributes;
+    use InteractsWithMedia;
 
     #region [Properties]
     public $shortDescription;
