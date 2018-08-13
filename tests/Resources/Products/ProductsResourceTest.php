@@ -155,5 +155,13 @@ class ProductsResourceTest extends SetUpResourceTest
         $message = "Channel functionality doesn't work or DB has products for channel with id $channelId";
         $this->assertCount(0, $products, $message);
     }
+
+    public function testGetProductVariantsByIds()
+    {
+        $product = $this->client->products()->getProductVariantsByIds([1]);
+        $this->assertNotNull($product);
+        $this->assertEquals(count($product), 2);
+
+    }
     #endregion
 }

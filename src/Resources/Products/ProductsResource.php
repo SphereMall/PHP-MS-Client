@@ -47,5 +47,16 @@ class ProductsResource extends Resource
     {
         return "products";
     }
+
+    /**
+     * @param $ids
+     * @return array|\SphereMall\MS\Lib\Collection
+     */
+    public function getProductVariantsByIds($ids)
+    {
+        $uriAppend = 'detail/variants?ids=' . implode(',', $ids);
+        $response = $this->handler->handle('GET', false, $uriAppend);
+        return $this->make($response);
+    }
     #endregiona
 }
