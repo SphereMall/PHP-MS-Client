@@ -190,7 +190,8 @@ class Basket extends OrderFinalized
         if (is_null($order)) {
             throw new EntityNotFoundException("Can not found basket with id: $id");
         }
-
+    
+        $this->id = (int)$order->id;
         $this->setProperties($order);
     }
 
