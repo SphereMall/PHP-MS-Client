@@ -78,6 +78,10 @@ trait InteractsWithMedia
     private function setMediaByType($type, $property)
     {
         $mediaFiles = [];
+        if(!is_array($this->media)) {
+            $this->{$property} = [];
+            return;
+        }
         foreach($this->media as $media) {
             if($media->properties['mediaTypeId'] == $type) {
                 $mediaFiles[] = $media;
