@@ -19,4 +19,16 @@ class PriceRangeFilter extends GridFilterElement
     #region [Properties]
     protected $name = 'priceRange';
     #endregion
+
+    #region [Constructor]
+    /**
+     * PriceRangeFilter constructor.
+     *
+     * @param array $values
+     */
+    public function __construct(array $values)
+    {
+        $this->values = [$values];
+    }
+    #endregion
 }
