@@ -15,6 +15,7 @@ namespace SphereMall\MS\Entities;
  * @property int $id
  * @property string $code
  * @property string $title
+ * @property int $displayType
  * @property int $showInSpecList
  * @property int $useInFilter
  * @property string $description
