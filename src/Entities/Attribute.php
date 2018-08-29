@@ -31,6 +31,7 @@ class Attribute extends Entity
     public $id;
     public $code;
     public $title;
+    public $displayType;
     public $showInSpecList;
     public $useInFilter;
     public $description;
