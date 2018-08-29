@@ -32,13 +32,12 @@ class BasketResource extends Resource
      *
      * @param int $id
      *
+     * @param array $params
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get(int $id)
+    public function get(int $id, $params = [])
     {
-        $params = [];
-
         if ($this->fields) {
             $params['fields'] = implode(',', $this->fields);
         }

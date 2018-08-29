@@ -185,7 +185,7 @@ class Basket extends OrderFinalized
          */
         $order = $this->client
             ->basketResource()
-            ->get($id);
+            ->get($id, ['recalculate' => true]);
 
         if (is_null($order)) {
             throw new EntityNotFoundException("Can not found basket with id: $id");
