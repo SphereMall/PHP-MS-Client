@@ -12,6 +12,7 @@ namespace SphereMall\MS\Lib;
 use SphereMall\MS\Client;
 use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
+use SphereMall\MS\Resources\Comments\CommentsResource;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
@@ -527,6 +528,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new ElasticIndexerResource($this, null, null, new ElasticIndexerResponseMaker());
+    }
+
+    /**
+     * @return CommentsResource
+     */
+    public function comments()
+    {
+        /** @var Client $this */
+        return new CommentsResource($this);
     }
     #endregion
 }
