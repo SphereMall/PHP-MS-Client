@@ -13,8 +13,8 @@ use SphereMall\MS\Lib\Filters\Interfaces\AutoCompleteInterface;
 class ShouldSearchFilter extends SearchFilter
 {
     /**
-     * @return array
      * This method give opportunity to use OR operator
+     * @return array
      */
     public function getSearchFilters(): array
     {
@@ -24,6 +24,7 @@ class ShouldSearchFilter extends SearchFilter
         if (empty($this->elements)) {
             return $set;
         }
+
         foreach ($this->elements as $element) {
             $set['body']['query']['bool']['should'][] = $element->getValues();
             if (is_a($element, AutoCompleteInterface::class)) {
