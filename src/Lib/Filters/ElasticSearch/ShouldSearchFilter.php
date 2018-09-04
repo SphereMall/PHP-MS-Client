@@ -10,6 +10,10 @@ namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
 use SphereMall\MS\Lib\Filters\Interfaces\AutoCompleteInterface;
 
+/**
+ * Class ShouldSearchFilter
+ * @package SphereMall\MS\Lib\Filters\ElasticSearch
+ */
 class ShouldSearchFilter extends SearchFilter
 {
     /**
