@@ -11,6 +11,7 @@ namespace SphereMall\MS\Lib\Makers;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
+use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\Http\Meta;
 
 // ToDo: extends Maker or ObjectMaker with overriding
@@ -21,16 +22,17 @@ use SphereMall\MS\Lib\Http\Meta;
  *
  * @property bool $asCollection
  */
-class ElasticSearchMaker
+class ElasticSearchMaker extends ObjectMaker
 {
+
     protected $asCollection = false;
 
     /**
-     * @param ElasticSearchResponse $response
+     * @param Response $response
      * @return mixed|null
      * @throws EntityNotFoundException
      */
-    public function makeSingle(ElasticSearchResponse $response)
+    public function makeSingle(Response $response)
     {
         if (!$response->getSuccess()) {
             return null;
@@ -42,11 +44,11 @@ class ElasticSearchMaker
     }
 
     /**
-     * @param ElasticSearchResponse $response
+     * @param Response $response
      * @return array|Collection
      * @throws EntityNotFoundException
      */
-    public function makeArray(ElasticSearchResponse $response)
+    public function makeArray(Response $response)
     {
         if (!$response->getSuccess()) {
             if ($this->asCollection) {
@@ -65,68 +67,29 @@ class ElasticSearchMaker
         return $result;
     }
 
+
     /**
-     * @param ElasticSearchResponse $response
+     * @param Response $response
      * @return array
      * @throws EntityNotFoundException
      */
-    protected function getResultFromResponse(ElasticSearchResponse $response)
+    protected function getResultFromResponse(Response $response)
     {
-        $result = [];
-        $data = $response->getData();
-        if ($response->getMulti()) {
-            foreach ($data AS $item) {
-                $result = array_merge($result, $this->getDataFromResponse($item));
-            }
-        } else {
-            $result = $this->getDataFromResponse($data);
-        }
+        $hits = $response->getData()[0]['hits']['hits'];
 
-        return $result;
-    }
+        foreach ($hits as $hit) {
+            $data = json_decode($hit['_source']['scope'], true);
+            $element = $data['data'][0];
+            $included = $this->getIncludedArray($data['included']);
+            $mapperClass = $this->getMapperClass($element['type']);
 
-    protected function getDataFromResponse(array $response)
-    {
-        $result = [];
-        foreach ($response['hits']['hits'] as $element) {
-            $mapperClass = $this->getMapperClass($element['_type']);
             if (is_null($mapperClass)) {
-                throw new EntityNotFoundException("Entity mapper class for {$element['_type']} was not found");
+                throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
             }
 
-            if (!$element = $element['_source']['scope'] ?? null) {
-                continue;
-            }
-            if (is_string($element)) {
-                $element = json_decode($element, true);
-            }
-            $result[] = $this->createObject($mapperClass, $element);
+            $result[] = $this->createObject($mapperClass, $element, $included);
         }
 
-        return $result;
-    }
-
-    /**
-     * @param $type
-     * @return null|string
-     */
-    protected function getMapperClass($type)
-    {
-        $potentialEndpointClass = 'SphereMall\\MS\\Lib\\Mappers\\' . ucfirst($type) . 'Mapper';
-        if (class_exists($potentialEndpointClass)) {
-            return $potentialEndpointClass;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param $mapperClass
-     * @param $element
-     * @return mixed
-     */
-    protected function createObject($mapperClass, $element)
-    {
-        return (new $mapperClass())->createObject($element);
+        return $result ?? [];
     }
 }
