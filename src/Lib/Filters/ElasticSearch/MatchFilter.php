@@ -18,6 +18,7 @@ use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
  */
 class MatchFilter extends ElasticSearchFilterElement implements SearchInterface
 {
+
     protected $name = 'match';
 
     /**
@@ -26,9 +27,14 @@ class MatchFilter extends ElasticSearchFilterElement implements SearchInterface
      */
     public function getValues()
     {
-        if (sizeof($this->langCodes) < 1) {
-            throw new ConfigurationException('No lang codes selected');
+        if (!isset($this->langCodes) || sizeof($this->langCodes) < 1) {
+            foreach ($this->values as $key => $value) {
+                $result[$this->getName()][$key] = $value;
+            }
+
+            return $result;
         }
+
         $result = [];
         foreach ($this->values as $key => $value) {
             foreach ($this->langCodes as $langCode) {
