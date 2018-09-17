@@ -27,7 +27,7 @@ class DealersMapper extends Mapper
         $dealer = new Dealer($array);
 
         if (isset($array['brands']) && $brand = reset($array['brands'])) {
-            $mapper        = new BrandsMapper();
+            $mapper = new BrandsMapper();
             $dealer->brand = $mapper->createObject($brand);
         }
 
@@ -41,17 +41,23 @@ class DealersMapper extends Mapper
             $dealer->addresses = $addresses;
         }
 
-        $avs = $array['entityAttributeValues'] ?? [];
+        $eavs = $array['entityAttributeValues'] ?? [];
+        $avs = $array['attributeValues'] ?? [];
         $as = $array['attributes'] ?? [];
 
         /** @var Attribute[] $attributes */
         $attributes = [];
 
-        foreach ($avs as $av) {
+        foreach ($eavs as $av) {
             if (!isset($attributes[$av['attributeId']]) && isset($as[$av['attributeId']])) {
                 $attributes[$av['attributeId']] = new Attribute($as[$av['attributeId']]);
             }
-            $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($av);
+
+            if (!isset($avs[$av['attributeValueId']])) {
+                continue;
+            }
+            
+            $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($avs[$av['attributeValueId']]);
         }
 
         $dealer->attributes = $attributes;
