@@ -68,6 +68,7 @@ class ElasticSearchMaker extends ObjectMaker
     }
 
 
+
     /**
      * @param Response $response
      * @return array
@@ -75,18 +76,22 @@ class ElasticSearchMaker extends ObjectMaker
      */
     protected function getResultFromResponse(Response $response)
     {
-        $hits = $response->getData()[0]['hits']['hits'];
+        $hits = $response->getData()['hits']['hits'];
 
         foreach ($hits as $hit) {
+
             $data = json_decode($hit['_source']['scope'], true);
             $element = $data['data'][0];
-            $included = $this->getIncludedArray($data['included']);
+            $included = $data['included'];
+
+            $included = $this->getIncludedArray($included);
             $mapperClass = $this->getMapperClass($element['type']);
 
             if (is_null($mapperClass)) {
                 throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
             }
 
+            $element['attributes'] = array_merge($element['attributes'], $hit['_source']);
             $result[] = $this->createObject($mapperClass, $element, $included);
         }
 

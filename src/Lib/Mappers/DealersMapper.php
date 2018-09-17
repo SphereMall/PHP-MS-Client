@@ -8,6 +8,8 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
+use SphereMall\MS\Entities\Attribute;
+use SphereMall\MS\Entities\AttributeValue;
 use SphereMall\MS\Entities\Dealer;
 
 /**
@@ -38,6 +40,21 @@ class DealersMapper extends Mapper
 
             $dealer->addresses = $addresses;
         }
+
+        $avs = $array['attributeValues'] ?? [];
+        $as = $array['attributes'] ?? [];
+
+        /** @var Attribute[] $attributes */
+        $attributes = [];
+
+        foreach ($avs as $av) {
+            if (!isset($attributes[$av['attributeId']]) && isset($as[$av['attributeId']])) {
+                $attributes[$av['attributeId']] = new Attribute($as[$av['attributeId']]);
+            }
+            $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($av);
+        }
+
+        $dealer->attributes = $attributes;
 
         return $dealer;
     }
