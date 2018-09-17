@@ -41,7 +41,7 @@ class DealersMapper extends Mapper
             $dealer->addresses = $addresses;
         }
 
-        $avs = $array['attributeValues'] ?? [];
+        $avs = $array['entityAttributeValues'] ?? [];
         $as = $array['attributes'] ?? [];
 
         /** @var Attribute[] $attributes */
