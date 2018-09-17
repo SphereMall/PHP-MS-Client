@@ -25,7 +25,7 @@ use SphereMall\MS\Lib\Http\Meta;
 class ElasticSearchMaker extends ObjectMaker
 {
 
-    protected $asCollection = false;
+    protected $asCollection = true;
 
     /**
      * @param Response $response
@@ -59,9 +59,10 @@ class ElasticSearchMaker extends ObjectMaker
         }
 
         $result = $this->getResultFromResponse($response);
+        $meta = new Meta([$response->getData()['hits']['total']]);
 
         if ($this->asCollection) {
-            return new Collection($result, $response->getMeta());
+            return new Collection($result, $meta);
         }
 
         return $result;
