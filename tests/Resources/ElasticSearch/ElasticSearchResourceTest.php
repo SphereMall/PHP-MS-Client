@@ -248,6 +248,23 @@ class ElasticSearchResourceTest extends SetUpResourceTest
     }
 
     /**
+     * @throws \Exception
+     */
+    public function testFacetFiltersSearch()
+    {
+        $index = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class]));
+
+        $searchFilter = (new SearchFilter())->index([$index])
+                                           ->elements();
+
+        $connect = $this->client->elasticSearch();
+
+
+
+        $this->assertEquals(true, true);
+    }
+
+    /**
      * @return ElasticSearchResource
      * @throws \Exception
      */

@@ -2,8 +2,8 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
-### [Version 2.6.4.8](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
-
+### [Version 2.7](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
+## !!! Indexer version: 
 
 ## Installation
 You can install the package manually or by adding it to your `composer.json`:
