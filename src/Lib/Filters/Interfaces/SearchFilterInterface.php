@@ -15,7 +15,8 @@ namespace SphereMall\MS\Lib\Filters\Interfaces;
 interface SearchFilterInterface
 {
     /**
+     * @param array $body
      * @return mixed
      */
-    public function getSearchFilters();
+    public function getSearchFilters($body = []);
 }

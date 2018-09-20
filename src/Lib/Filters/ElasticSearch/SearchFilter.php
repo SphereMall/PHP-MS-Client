@@ -29,6 +29,8 @@ class SearchFilter extends Filter implements SearchFilterInterface
     protected $elements;
     protected $facets;
 
+    protected $filterKey = "filter";
+
     /**
      * @param array $elements
      * @return $this
@@ -53,7 +55,7 @@ class SearchFilter extends Filter implements SearchFilterInterface
     public function reset()
     {
         $this->elements = null;
-        $this->indexes  = null;
+        $this->indexes = null;
 
         return $this;
     }
@@ -86,22 +88,29 @@ class SearchFilter extends Filter implements SearchFilterInterface
     }
 
     /**
+     * @param array $body
      * @return array
      */
-    public function getSearchFilters(): array
+    public function getSearchFilters($body = []): array
     {
-        $set = $this->addIndexToFilters();
-        if (empty($this->elements)) {
-            return $set;
+        $body = $this->addIndexToFilters($body);
+        if (!isset($body['body']['query']['bool'])) {
+            $body['body']['query']['bool'] = [];
         }
+
+        if (empty($this->elements)) {
+            return $body;
+        }
+
         foreach ($this->elements as $element) {
-            $set['body']['query']['bool']['filter'][] = $element->getValues();
+
+            $body['body']['query']['bool'][$this->filterKey][] = $element->getValues();
             if (is_a($element, AutoCompleteInterface::class)) {
-                $set['body']['highlight'] = $element->getHighlight();
+                $body['body'] = $element->getHighlight();
             }
         }
 
-        return $set;
+        return $body;
     }
 
     /**
@@ -129,10 +138,17 @@ class SearchFilter extends Filter implements SearchFilterInterface
     }
 
     /**
+     * @param array $body
      * @return array
      */
-    protected function addIndexToFilters(): array
+    protected function addIndexToFilters($body = []): array
     {
-        return ['index' => implode(',', $this->indexes)];
+        if (empty($body)) {
+            return [
+                'index' => implode(',', $this->indexes),
+            ];
+        }
+
+        return $body;
     }
 }
