@@ -74,7 +74,7 @@ class AuthToken
         $options['headers']['User-Agent'] = $userAgent;
 
 
-        $url = $this->client->getGatewayUrl() . '/' . $this->client->getVersion() . '/' . 'oauth/token';
+        $url = $this->client->getGatewayUrl() . '/' . $this->client->getVersion() . '/' . 'auth/token';
 
         try {
             $client = new \GuzzleHttp\Client();
@@ -86,16 +86,21 @@ class AuthToken
 
             $time = round((microtime(true) - $time), 4);
             //Set statistic history for current call
-            $this->client->setCallStatistic(['method' => "POST", 'url' => $url, 'options' => $options, 'time' => $time]);
+            $this->client->setCallStatistic(['method'  => "POST",
+                                             'url'     => $url,
+                                             'options' => $options,
+                                             'time'    => $time,
+            ]);
 
             $response = new Response($response);
             if ($response->getSuccess()) {
-                $this->token = $response->getData()[0]['token'] ?? false;
-                $expiries = $response->getData()[0]['expiries'];
-                $isGuest = $response->getData()[0]['isGuest'];
+                $this->token = $response->getData()[0]['accessToken'] ?? false;
+                $expiries = $response->getData()[0]['expires_in'];
+                $isGuest = $response->getData()[0]['isGuest'] ?? true;
                 if ($isGuest) {
                     try {
-                        setcookie(AuthToken::GUEST_COOKIE_NAME, $this->token, time() + $expiries, '/', '', !empty($_SERVER['HTTPS']), true);
+                        setcookie(AuthToken::GUEST_COOKIE_NAME, $this->token, time() + $expiries, '/', '',
+                            !empty($_SERVER['HTTPS']), true);
                     } catch (\Exception $ex) {
                         //TODO: Can not set cookies with unit tests
                     }
