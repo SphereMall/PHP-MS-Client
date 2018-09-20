@@ -59,7 +59,7 @@ class ElasticSearchMaker extends ObjectMaker
         }
 
         $result = $this->getResultFromResponse($response);
-        $meta = new Meta([$response->getData()['hits']['total']]);
+        $meta = $response->getMeta();
 
         if ($this->asCollection) {
             return new Collection($result, $meta);
@@ -67,7 +67,6 @@ class ElasticSearchMaker extends ObjectMaker
 
         return $result;
     }
-
 
 
     /**

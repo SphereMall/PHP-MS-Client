@@ -26,11 +26,14 @@ use SphereMall\MS\Lib\FilterParams\ElasticSearch\MatchFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\PriceRangeFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\TermsFilterParams;
 use SphereMall\MS\Lib\Filters\ElasticSearch\AutoCompleteFilter;
+use SphereMall\MS\Lib\Filters\ElasticSearch\BodyQueryFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\DealersGeoFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\FullTextFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MatchFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MatchPhraseFilter;
+use SphereMall\MS\Lib\Filters\ElasticSearch\MultiFullTextFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\MustNotSearchFilter;
+use SphereMall\MS\Lib\Filters\ElasticSearch\MustSearchFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\PriceRangeFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\QueryFilter;
 use SphereMall\MS\Lib\Filters\ElasticSearch\SearchFilter;
@@ -40,6 +43,7 @@ use SphereMall\MS\Lib\Filters\GeoDistanceUnits;
 use SphereMall\MS\Lib\Http\ElasticSearchRequest;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
+use SphereMall\MS\Lib\Mappers\PagesMapper;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
@@ -270,6 +274,63 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         $connect = $this->client->elasticSearch();
         $records = $connect->filter($queryFilter)->all();
 
+        $this->assertEquals(true, true);
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testMultiMustFiltersSearch()
+    {
+        $index = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class, Document::class, Page::class]));
+        $filter = (new BodyQueryFilter())
+            ->query([
+                "bool" => [
+                    "must" => [
+                        [
+                            "bool" => [
+                                "must" => [
+                                    [
+                                        "multi_match" => [
+                                            "fields" => [
+                                                "title_*",
+                                                "html_*",
+                                            ],
+                                            "query"  => "Batavus Dinsdag",
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            "bool" => [
+                                "should" => [
+                                    [
+                                        "terms" => [
+                                            "isMain" => [
+                                                1,
+                                            ],
+                                        ],
+                                    ],
+                                    [
+                                        "terms" => [
+                                            "_type" => [
+                                                "pages",
+                                                "documents",
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ])
+            ->index([$index]);
+
+        $connect = $this->client->elasticSearch();
+        $records = $connect->filter($filter)->all();
         $this->assertEquals(true, true);
     }
 
