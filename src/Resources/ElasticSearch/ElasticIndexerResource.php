@@ -1,6 +1,8 @@
 <?php
 namespace SphereMall\MS\Resources\ElasticSearch;
 
+use SphereMall\MS\Entities\ElasticIndexer;
+use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Resources\Resource;
 
@@ -22,31 +24,40 @@ class ElasticIndexerResource extends Resource{
     }
 
     /**
-     * @return array
-     * @throws Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return ElasticIndexer[]
+     * @throws EntityNotFoundException
      */
-    public function runIndex(){
+    public function runIndex()
+    {
         $params = $this->getQueryParams();
         $response = $this->handler->handle('GET', null, 'runindex', $params);
-        return $this->make($response, false);
 
+        if (!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getFirstErrorMessage());
+        }
+
+        return $this->make($response);
     }
 
     /**
-     * @return array
-     * @throws Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return ElasticIndexer[]
+     * @throws EntityNotFoundException
      */
-    public function reindex(){
+    public function reindex()
+    {
         $params = $this->getQueryParams();
         $response = $this->handler->handle('GET', null, 'reindex', $params);
-        return $this->make($response, false);
+
+        if (!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getFirstErrorMessage());
+        }
+
+        return $this->make($response);
     }
 
     /**
      * @return array
-     * @throws Exception
+     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function deleteIndex()
