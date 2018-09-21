@@ -2,7 +2,9 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
-### [Version 2.6.4.1](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
+### HOTFIX FOR 2.6.4 (Changes are in master)
+
+### [Version 2.6.4.11](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
 
 
 ## Installation
