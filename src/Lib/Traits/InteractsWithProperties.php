@@ -123,17 +123,6 @@ trait InteractsWithProperties
     }
 
     /**
-     * Magic method
-     * @param string $name
-     * @param mixed $value
-     * @return bool
-     */
-    public function __set($name, $value)
-    {
-        return $this->setProperty($name, $value);
-    }
-
-    /**
      * @param array $data
      */
     public function setPropertiesField(array $data)
