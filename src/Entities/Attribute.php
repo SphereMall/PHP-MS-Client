@@ -44,4 +44,17 @@ class Attribute extends Entity
     public $values;
     public $group;
     #endregion
+
+    /**
+     * @return null|string
+     */
+    public function getValue()
+    {
+        if(!isset($this->values)) {
+            return null;
+        }
+        $firstValue = reset($this->values);
+        return $firstValue->value;
+    }
+
 }
