@@ -8,10 +8,8 @@
 
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
-use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Lib\Filters\Interfaces\AutoCompleteInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\FacetedInterface;
-use SphereMall\MS\Lib\Filters\Interfaces\SearchFilterInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
 use SphereMall\MS\Lib\Helpers\FacetedHelper;
 
@@ -21,11 +19,11 @@ use SphereMall\MS\Lib\Helpers\FacetedHelper;
  *
  * @property array $indexes
  * @property FacetedInterface[] $facets
+ * @property array $fields
  * @property SearchInterface[] | AutoCompleteInterface[] $elements
  */
-class SearchFilter extends Filter implements SearchFilterInterface
+class SearchFilter extends ComplexFilter
 {
-    protected $indexes;
     protected $elements;
     protected $facets;
 
@@ -54,8 +52,9 @@ class SearchFilter extends Filter implements SearchFilterInterface
      */
     public function reset()
     {
+        parent::reset();
+
         $this->elements = null;
-        $this->indexes = null;
 
         return $this;
     }
@@ -74,26 +73,15 @@ class SearchFilter extends Filter implements SearchFilterInterface
     }
 
     /**
-     * @param array $indexes
-     * @return $this
-     */
-    public function index(array $indexes)
-    {
-        /** @var ElasticSearchFilterElement $index */
-        foreach ($indexes as $index) {
-            $this->indexes = $index->getValues();
-        }
-
-        return $this;
-    }
-
-    /**
      * @param array $body
      * @return array
      */
     public function getSearchFilters($body = []): array
     {
         $body = $this->addIndexToFilters($body);
+
+        $body = $this->setFilterFields($body);
+
         if (!isset($body['body']['query']['bool'])) {
             $body['body']['query']['bool'] = [];
         }
@@ -135,20 +123,5 @@ class SearchFilter extends Filter implements SearchFilterInterface
         }
 
         return $set;
-    }
-
-    /**
-     * @param array $body
-     * @return array
-     */
-    protected function addIndexToFilters($body = []): array
-    {
-        if (empty($body)) {
-            return [
-                'index' => implode(',', $this->indexes),
-            ];
-        }
-
-        return $body;
     }
 }

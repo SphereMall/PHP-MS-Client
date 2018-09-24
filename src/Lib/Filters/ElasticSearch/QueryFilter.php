@@ -8,23 +8,16 @@
 
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
-use SphereMall\MS\Lib\Filters\Filter;
-use SphereMall\MS\Lib\Filters\Interfaces\AutoCompleteInterface;
-use SphereMall\MS\Lib\Filters\Interfaces\FacetedInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\SearchFilterInterface;
-use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
-use SphereMall\MS\Lib\Helpers\FacetedHelper;
-
 /**
- * Class SearchFilter
+ * Class QueryFilter
  * @package SphereMall\MS\Lib\Filters\ElasticSearch
  *
  * @property array $indexes
  * @property SearchFilterInterface[] $queries
  */
-class QueryFilter extends Filter implements SearchFilterInterface
+class QueryFilter extends ComplexFilter
 {
-    protected $indexes;
     protected $queries;
 
     /**
@@ -55,7 +48,8 @@ class QueryFilter extends Filter implements SearchFilterInterface
      */
     public function reset()
     {
-        $this->queries = null;
+        parent::reset();
+
         $this->indexes = null;
 
         return $this;
@@ -75,26 +69,15 @@ class QueryFilter extends Filter implements SearchFilterInterface
     }
 
     /**
-     * @param array $indexes
-     * @return $this
-     */
-    public function index(array $indexes)
-    {
-        /** @var ElasticSearchFilterElement $index */
-        foreach ($indexes as $index) {
-            $this->indexes = $index->getValues();
-        }
-
-        return $this;
-    }
-
-    /**
      * @param array $body
      * @return array
      */
     public function getSearchFilters($body = []): array
     {
         $set = $this->addIndexToFilters();
+
+        $set = $this->setFilterFields($set);
+
         if (empty($this->queries)) {
             return $set;
         }
@@ -103,13 +86,5 @@ class QueryFilter extends Filter implements SearchFilterInterface
         }
 
         return $set;
-    }
-
-    /**
-     * @return array
-     */
-    protected function addIndexToFilters(): array
-    {
-        return ['index' => implode(',', $this->indexes)];
     }
 }

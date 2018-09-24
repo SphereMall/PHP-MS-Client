@@ -33,6 +33,7 @@ use SphereMall\MS\Resources\Products\OptionsResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsResource;
 use SphereMall\MS\Resources\Products\AttributesResource;
 use SphereMall\MS\Resources\Products\AttributeValuesResource;
+use SphereMall\MS\Resources\Products\ProductVariantsResource;
 use SphereMall\MS\Resources\Products\UnitOfMeasureResource;
 use SphereMall\MS\Resources\Products\BrandsResource;
 use SphereMall\MS\Resources\Products\FunctionalNamesResource;
@@ -110,6 +111,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new ProductsResource($this);
+    }
+
+    /**
+     * @return ProductVariantsResource
+     */
+    public function productVariants()
+    {
+        /** @var Client $this */
+        return new ProductVariantsResource($this);
     }
 
     /**

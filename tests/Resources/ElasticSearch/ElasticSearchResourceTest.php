@@ -255,6 +255,7 @@ class ElasticSearchResourceTest extends SetUpResourceTest
 
     /**
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function testFacetFiltersSearch()
     {
@@ -273,6 +274,26 @@ class ElasticSearchResourceTest extends SetUpResourceTest
 
         $connect = $this->client->elasticSearch();
         $records = $connect->filter($queryFilter)->all();
+
+        $this->assertEquals(true, true);
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testFieldsFiltersSearch()
+    {
+        $index = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class]));
+
+        $element1 = new MatchFilter(new MatchFilterParams('brandId', '93'));
+
+        $searchFilter = (new SearchFilter())->index([$index])
+            ->fields(['scope'])
+            ->elements([$element1]);
+
+        $connect = $this->client->elasticSearch();
+        $records = $connect->filter($searchFilter)->all();
 
         $this->assertEquals(true, true);
     }
