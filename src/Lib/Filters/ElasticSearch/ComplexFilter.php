@@ -38,12 +38,16 @@ abstract class ComplexFilter extends BaseFilter
     public function setFilterFields($body): array
     {
         if (empty($this->fields)) {
+            $body['_source'] = ['scope'];
+
             return $body;
         }
 
         if (!isset($body['_source'])) {
-            $body['_source'] = $this->fields;
+            $body['_source'] = [];
         }
+
+        $body['_source'] = array_merge($body['_source'], $this->fields);
 
         return $body;
     }

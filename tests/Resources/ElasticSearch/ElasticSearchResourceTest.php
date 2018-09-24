@@ -289,7 +289,6 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         $element1 = new MatchFilter(new MatchFilterParams('brandId', '93'));
 
         $searchFilter = (new SearchFilter())->index([$index])
-            ->fields(['scope'])
             ->elements([$element1]);
 
         $connect = $this->client->elasticSearch();
