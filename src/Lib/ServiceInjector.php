@@ -13,6 +13,7 @@ use SphereMall\MS\Client;
 use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Resources\Comments\CommentsResource;
+use SphereMall\MS\Resources\Comments\EntitiesAverageRating;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
@@ -537,6 +538,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new CommentsResource($this);
+    }
+
+    /**
+     * @return EntitiesAverageRating
+     */
+    public function entitiesAverageRating()
+    {
+        /** @var Client $this */
+        return new EntitiesAverageRating($this);
     }
     #endregion
 }
