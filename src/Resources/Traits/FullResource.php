@@ -23,6 +23,7 @@ trait FullResource
     /**
      * @return Entity[]
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @deprecated
      */
     public function fullAll()
     {
@@ -35,6 +36,7 @@ trait FullResource
      * @return Entity
      * @throws EntityNotFoundException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @deprecated
      */
     public function fullById(int $id)
     {
@@ -49,6 +51,7 @@ trait FullResource
      * @return Entity
      * @throws EntityNotFoundException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @deprecated
      */
     public function fullByCode(string $code)
     {
@@ -64,6 +67,7 @@ trait FullResource
      *
      * @return Entity|Entity[]
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @deprecated
      */
     public function full($param = null)
     {

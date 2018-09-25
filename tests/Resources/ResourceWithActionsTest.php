@@ -27,7 +27,7 @@ class ResourceWithActionsTest extends SetUpResourceTest
                 $product = $this->client->products()
                                         ->includeEntities([OptionalEntities::PROMOTIONS])
                                         ->excludeEntities([OptionalEntities::MEDIA])
-                                        ->fullByCode($product->urlCode);
+                                        ->detailByCode($product->urlCode);
 
                 $this->assertEmpty($product->media);
             }

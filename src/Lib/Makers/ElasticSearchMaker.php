@@ -11,6 +11,7 @@ namespace SphereMall\MS\Lib\Makers;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
+use SphereMall\MS\Lib\Http\Response;
 use SphereMall\MS\Lib\Http\Meta;
 
 // ToDo: extends Maker or ObjectMaker with overriding
@@ -21,16 +22,17 @@ use SphereMall\MS\Lib\Http\Meta;
  *
  * @property bool $asCollection
  */
-class ElasticSearchMaker
+class ElasticSearchMaker extends ObjectMaker
 {
-    protected $asCollection = false;
+
+    protected $asCollection = true;
 
     /**
-     * @param ElasticSearchResponse $response
+     * @param Response $response
      * @return mixed|null
      * @throws EntityNotFoundException
      */
-    public function makeSingle(ElasticSearchResponse $response)
+    public function makeSingle(Response $response)
     {
         if (!$response->getSuccess()) {
             return null;
@@ -42,11 +44,11 @@ class ElasticSearchMaker
     }
 
     /**
-     * @param ElasticSearchResponse $response
+     * @param Response $response
      * @return array|Collection
      * @throws EntityNotFoundException
      */
-    public function makeArray(ElasticSearchResponse $response)
+    public function makeArray(Response $response)
     {
         if (!$response->getSuccess()) {
             if ($this->asCollection) {
@@ -57,76 +59,72 @@ class ElasticSearchMaker
         }
 
         $result = $this->getResultFromResponse($response);
+        $meta = $response->getMeta();
 
         if ($this->asCollection) {
-            return new Collection($result, $response->getMeta());
+            return new Collection($result, $meta);
         }
 
         return $result;
     }
 
+
     /**
-     * @param ElasticSearchResponse $response
+     * @param Response $response
      * @return array
      * @throws EntityNotFoundException
      */
-    protected function getResultFromResponse(ElasticSearchResponse $response)
+    protected function getResultFromResponse(Response $response)
     {
-        $result = [];
-        $data = $response->getData();
-        if ($response->getMulti()) {
-            foreach ($data AS $item) {
-                $result = array_merge($result, $this->getDataFromResponse($item));
-            }
-        } else {
-            $result = $this->getDataFromResponse($data);
-        }
+        $hits = $response->getData()['hits']['hits'];
 
-        return $result;
-    }
+        foreach ($hits as $hit) {
 
-    protected function getDataFromResponse(array $response)
-    {
-        $result = [];
-        foreach ($response['hits']['hits'] as $element) {
-            $mapperClass = $this->getMapperClass($element['_type']);
+            $data = json_decode($hit['_source']['scope'], true);
+            $element = $data['data'][0];
+            $included = $data['included'];
+
+            $included = $this->getIncludedArray($included);
+            $mapperClass = $this->getMapperClass($element['type']);
+
             if (is_null($mapperClass)) {
-                throw new EntityNotFoundException("Entity mapper class for {$element['_type']} was not found");
+                throw new EntityNotFoundException("Entity mapper class for {$element['type']} was not found");
             }
 
-            if (!$element = $element['_source']['scope'] ?? null) {
-                continue;
-            }
-            if (is_string($element)) {
-                $element = json_decode($element, true);
-            }
-            $result[] = $this->createObject($mapperClass, $element);
+            $element['attributes'] = array_merge($element['attributes'], $hit['_source']);
+            $result[] = $this->createObject($mapperClass, $element, $included);
         }
 
-        return $result;
+        return $result ?? [];
     }
 
     /**
-     * @param $type
-     * @return null|string
+     * Get relationships from array
+     *
+     * @param array $item
+     * @param array $included
+     *
+     * @return array
+     * @throws EntityNotFoundException
      */
-    protected function getMapperClass($type)
+    protected function getRelationships(array $item, array $included)
     {
-        $potentialEndpointClass = 'SphereMall\\MS\\Lib\\Mappers\\' . ucfirst($type) . 'Mapper';
-        if (class_exists($potentialEndpointClass)) {
-            return $potentialEndpointClass;
+        if (!isset($item['relationships']) || !is_array($item['relationships'])) {
+            return [];
         }
 
-        return null;
-    }
+        $result = [];
 
-    /**
-     * @param $mapperClass
-     * @param $element
-     * @return mixed
-     */
-    protected function createObject($mapperClass, $element)
-    {
-        return (new $mapperClass())->createObject($element);
+        foreach ($item['relationships'] as $relationKey => $relationValue) {
+            foreach ($relationValue['data'] as $relationData) {
+                if (!isset($included[$relationData['type']][$relationData['id']])) {
+                    throw new EntityNotFoundException("Data for type[{$relationData['type']}] and id[{$relationData['id']}] was not found in includes");
+                }
+
+                $result[$relationKey][$relationData['id']] = $included[$relationData['type']][$relationData['id']];
+            }
+        }
+
+        return array_merge($result, $included);
     }
 }

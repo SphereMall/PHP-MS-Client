@@ -8,10 +8,8 @@
 
 namespace SphereMall\MS\Lib\Filters\ElasticSearch;
 
-use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Lib\Filters\Interfaces\AutoCompleteInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\FacetedInterface;
-use SphereMall\MS\Lib\Filters\Interfaces\SearchFilterInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\SearchInterface;
 use SphereMall\MS\Lib\Helpers\FacetedHelper;
 
@@ -21,13 +19,15 @@ use SphereMall\MS\Lib\Helpers\FacetedHelper;
  *
  * @property array $indexes
  * @property FacetedInterface[] $facets
+ * @property array $fields
  * @property SearchInterface[] | AutoCompleteInterface[] $elements
  */
-class SearchFilter extends Filter implements SearchFilterInterface
+class SearchFilter extends ComplexFilter
 {
-    protected $indexes;
     protected $elements;
     protected $facets;
+
+    protected $filterKey = "filter";
 
     /**
      * @param array $elements
@@ -52,8 +52,9 @@ class SearchFilter extends Filter implements SearchFilterInterface
      */
     public function reset()
     {
+        parent::reset();
+
         $this->elements = null;
-        $this->indexes  = null;
 
         return $this;
     }
@@ -72,36 +73,32 @@ class SearchFilter extends Filter implements SearchFilterInterface
     }
 
     /**
-     * @param array $indexes
-     * @return $this
-     */
-    public function index(array $indexes)
-    {
-        /** @var ElasticSearchFilterElement $index */
-        foreach ($indexes as $index) {
-            $this->indexes = $index->getValues();
-        }
-
-        return $this;
-    }
-
-    /**
+     * @param array $body
      * @return array
      */
-    public function getSearchFilters(): array
+    public function getSearchFilters($body = []): array
     {
-        $set = $this->addIndexToFilters();
-        if (empty($this->elements)) {
-            return $set;
+        $body = $this->addIndexToFilters($body);
+
+        $body = $this->setFilterFields($body);
+
+        if (!isset($body['body']['query']['bool'])) {
+            $body['body']['query']['bool'] = [];
         }
+
+        if (empty($this->elements)) {
+            return $body;
+        }
+
         foreach ($this->elements as $element) {
-            $set['body']['query']['bool']['filter'][] = $element->getValues();
+
+            $body['body']['query']['bool'][$this->filterKey][] = $element->getValues();
             if (is_a($element, AutoCompleteInterface::class)) {
-                $set['body']['highlight'] = $element->getHighlight();
+                $body['body'] = $element->getHighlight();
             }
         }
 
-        return $set;
+        return $body;
     }
 
     /**
@@ -126,13 +123,5 @@ class SearchFilter extends Filter implements SearchFilterInterface
         }
 
         return $set;
-    }
-
-    /**
-     * @return array
-     */
-    protected function addIndexToFilters(): array
-    {
-        return ['index' => implode(',', $this->indexes)];
     }
 }

@@ -34,12 +34,14 @@ use SphereMall\MS\Resources\Products\OptionsResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsResource;
 use SphereMall\MS\Resources\Products\AttributesResource;
 use SphereMall\MS\Resources\Products\AttributeValuesResource;
+use SphereMall\MS\Resources\Products\ProductVariantsResource;
 use SphereMall\MS\Resources\Products\UnitOfMeasureResource;
 use SphereMall\MS\Resources\Products\BrandsResource;
 use SphereMall\MS\Resources\Products\FunctionalNamesResource;
 use SphereMall\MS\Resources\Products\MediaResource;
 use SphereMall\MS\Resources\Products\ProductAttributeValuesResource;
 use SphereMall\MS\Resources\Products\ProductsResource;
+use SphereMall\MS\Resources\Shop\DealersResource;
 use SphereMall\MS\Resources\Shop\DiscountTypesResource;
 use SphereMall\MS\Resources\Shop\InvoicesResource;
 use SphereMall\MS\Resources\Shop\OrderItemsResource;
@@ -110,6 +112,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new ProductsResource($this);
+    }
+
+    /**
+     * @return ProductVariantsResource
+     */
+    public function productVariants()
+    {
+        /** @var Client $this */
+        return new ProductVariantsResource($this);
     }
 
     /**
@@ -379,6 +390,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new DiscountTypesResource($this);
+    }
+
+    /**
+     * @return DealersResource
+     */
+    public function dealers()
+    {
+        /** @var Client $this */
+        return new DealersResource($this);
     }
     #endregion
 

@@ -2,6 +2,8 @@
 
 namespace SphereMall\MS\Lib\Makers;
 
+use SphereMall\MS\Entities\ElasticIndexer;
+use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Http\Response;
 
 /**
@@ -24,5 +26,24 @@ class ElasticIndexerResponseMaker extends ObjectMaker{
         }
 
         return $response->getData();
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return array
+     * @throws EntityNotFoundException
+     */
+    protected function getResultFromResponse(Response $response)
+    {
+        $result = [];
+
+        foreach ($response->getData() as $element) {
+            $item = $this->getAttributes($element);
+            $item['type'] = $element['type'];
+            $result[] = new ElasticIndexer($item);
+        }
+
+        return $result;
     }
 }

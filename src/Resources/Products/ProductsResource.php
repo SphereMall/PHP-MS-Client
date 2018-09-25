@@ -10,7 +10,6 @@
 namespace SphereMall\MS\Resources\Products;
 
 use SphereMall\MS\Entities\Product;
-use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Resources\Resource;
 use SphereMall\MS\Resources\Traits\DetailResource;
 use SphereMall\MS\Resources\Traits\FullResource;
@@ -51,11 +50,15 @@ class ProductsResource extends Resource
     /**
      * @param $ids
      * @return array|\SphereMall\MS\Lib\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getProductVariantsByIds($ids)
     {
-        $uriAppend = 'detail/variants?ids=' . implode(',', $ids);
-        $response = $this->handler->handle('GET', false, $uriAppend);
+        $this->ids($ids);
+        $params = $this->getQueryParams();
+
+        $uriAppend = 'detail/variants';
+        $response = $this->handler->handle('GET', false, $uriAppend, $params);
         return $this->make($response);
     }
     #endregiona

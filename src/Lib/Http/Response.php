@@ -120,6 +120,14 @@ class Response
     /**
      * @return string
      */
+    public function getFirstErrorMessage()
+    {
+        return $this->errors[0]['message'] ?? "";
+    }
+
+    /**
+     * @return string
+     */
     public function getVersion()
     {
         return $this->version;
