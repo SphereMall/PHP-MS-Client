@@ -19,20 +19,79 @@ trait InteractsWithProperties
     protected $properties = [];
 
     /**
-     * Get value by name from property of class or $properties if value is not exist in class
+     * Get value by name from $properties
      * @see $properties
-     *
-     * @param $name
-     *
+     * @param string $name Property name
      * @return bool
      */
-    public function getProperty($name)
+    public function getProperty(string $name)
     {
         if (isset($this->properties[$name])) {
             return $this->properties[$name];
         }
 
         return null;
+    }
+
+    /**
+     * Set value in $properties by name
+     * @see $properties
+     * @param string $name Property name
+     * @return bool True on success
+     */
+    public function setProperty(string $name, $value)
+    {
+        if (isset($this->properties[$name])) {
+            $this->properties[$name] = $value;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get value by name from property of class or $properties (if class property don't exist)
+     * @see $properties
+     * @param string $name Property name
+     * @return null|mixed
+     */
+    public function get(string $name)
+    {
+        if (empty($name)) {
+            return null;
+        }
+
+        if (isset($this->{$name})) {
+            return $this->{$name};
+        }
+
+        if (isset($this->properties[$name])) {
+            return $this->properties[$name];
+        }
+
+        return null;
+    }
+
+    /**
+     * Set $value for class property or $properties (if class property don't exist) by $name
+     * Value will be overridden
+     * @param string $name Property name
+     * @param mixed $value Property value
+     * @return bool True on success
+     */
+    public function set(string $name, $value)
+    {
+        if (empty($name)) {
+            return false;
+        }
+
+        if (isset($this->{$name})) {
+            $this->{$name} = $value;
+        } else {
+            $this->properties[$name] = $value;
+        }
+
+        return true;
     }
 
     /**
@@ -54,8 +113,8 @@ trait InteractsWithProperties
     }
 
     /**
-     * @param $name
-     *
+     * Magic method
+     * @param string $name
      * @return bool
      */
     public function __get($name)
@@ -66,7 +125,7 @@ trait InteractsWithProperties
     /**
      * @param array $data
      */
-    protected function setPropertiesField(array $data)
+    public function setPropertiesField(array $data)
     {
         foreach ($data as $optionKey => $optionValue) {
             $this->properties[$optionKey] = $optionValue;
@@ -76,7 +135,7 @@ trait InteractsWithProperties
     /**
      * @param array $data
      */
-    protected function setPropertyList(array $data)
+    public function setPropertyList(array $data)
     {
         foreach ($data as $optionKey => $optionValue) {
             if (property_exists($this, $optionKey)) {
