@@ -39,7 +39,7 @@ class Basket extends OrderFinalized
 
         if (!is_null($id)) {
             $this->id = $id;
-            $this->get($this->id);
+            $this->getBasket($this->id);
         }
     }
     #endregion
@@ -178,7 +178,7 @@ class Basket extends OrderFinalized
      * @param int $id
      * @throws EntityNotFoundException
      */
-    protected function get(int $id)
+    protected function getBasket(int $id)
     {
         /**
          * @var Order $order
