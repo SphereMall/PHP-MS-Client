@@ -45,6 +45,16 @@ class GridFilter extends Filter
     }
 
     /**
+     * @param GridFilterElement $element
+     * @return $this
+     */
+    public function addElement(GridFilterElement $element) {
+        $this->elements[0][$element->getName()] = $element->getValues();
+        return $this;
+    }
+
+
+    /**
      * @return $this
      */
     public function reset()
