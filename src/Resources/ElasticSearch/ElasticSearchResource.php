@@ -15,11 +15,13 @@ use SphereMall\MS\Lib\Http\ElasticSearchRequest;
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
 use SphereMall\MS\Lib\Makers\ElasticSearchAutoCompleteMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchFacetedMaker;
+use SphereMall\MS\Lib\Makers\ElasticSearchGroupByMaker;
 use SphereMall\MS\Lib\Makers\Maker;
 use SphereMall\MS\Resources\Resource;
 
 /**
  * Class ElasticSearchResource
+ *
  * @package SphereMall\MS\Resources\ElasticSearch
  *
  * @property SearchFilter $filter
@@ -37,6 +39,7 @@ class ElasticSearchResource extends Resource
 
     /**
      * ElasticSearchResource constructor.
+     *
      * @param Client $client
      * @param null   $version
      * @param null   $handler
@@ -68,13 +71,14 @@ class ElasticSearchResource extends Resource
      */
     public function all()
     {
-        $params = $this->getQueryParams($this->filter && method_exists( $this->filter, 'getSearchFilters') ? $this->filter->getSearchFilters() : []);
+        $params = $this->getQueryParams($this->filter && method_exists($this->filter, 'getSearchFilters') ? $this->filter->getSearchFilters() : []);
 
         return $this->make($this->getResponse($params));
     }
 
     /**
      * @param array $langs
+     *
      * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -82,7 +86,19 @@ class ElasticSearchResource extends Resource
     public function autoComplete(array $langs = [])
     {
         $this->maker = new ElasticSearchAutoCompleteMaker($langs);
-        $params = $this->getQueryParams($this->filter ? $this->filter->getSearchFilters() : []);
+        $params      = $this->getQueryParams($this->filter ? $this->filter->getSearchFilters() : []);
+
+        return $this->make($this->getResponse($params));
+    }
+
+    /**
+     * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function groupBy()
+    {
+        $this->maker = new ElasticSearchGroupByMaker();
+        $params      = $this->getQueryParams($this->filter && method_exists($this->filter, 'getSearchFilters') ? $this->filter->getSearchFilters() : []);
 
         return $this->make($this->getResponse($params));
     }
@@ -144,6 +160,7 @@ class ElasticSearchResource extends Resource
      * @param \GuzzleHttp\Promise\Promise|\SphereMall\MS\Lib\Http\Response $response
      * @param bool                                                         $makeArray
      * @param Maker|null                                                   $maker
+     *
      * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
      */
     protected function make($response, $makeArray = true, Maker $maker = null)
@@ -178,6 +195,7 @@ class ElasticSearchResource extends Resource
 
     /**
      * @param int $id
+     *
      * @return array|\SphereMall\MS\Entities\Entity|void
      * @throws MethodNotFoundException
      */
@@ -189,6 +207,7 @@ class ElasticSearchResource extends Resource
     /**
      * @param $id
      * @param $data
+     *
      * @return \SphereMall\MS\Entities\Entity|void
      * @throws MethodNotFoundException
      */
@@ -199,6 +218,7 @@ class ElasticSearchResource extends Resource
 
     /**
      * @param $data
+     *
      * @return \SphereMall\MS\Entities\Entity|void
      * @throws MethodNotFoundException
      */
@@ -209,6 +229,7 @@ class ElasticSearchResource extends Resource
 
     /**
      * @param $id
+     *
      * @return bool|void
      * @throws MethodNotFoundException
      */
@@ -222,6 +243,7 @@ class ElasticSearchResource extends Resource
     #region [privates methods]
     /**
      * @param $params
+     *
      * @return \GuzzleHttp\Promise\PromiseInterface|ElasticSearchResponse|\SphereMall\MS\Lib\Http\Response
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
