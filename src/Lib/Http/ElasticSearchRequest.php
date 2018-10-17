@@ -30,7 +30,7 @@ class ElasticSearchRequest extends Request
     public function handle(string $method, $body = false, $uriAppend = false, array $queryParams = [])
     {
         $clientBuilder = new ClientBuilder();
-        $url           = HttpHelper::setHttPortToUrl($this->client->getGatewayUrl()) . '/' . $this->resource->getVersion() . '/' . $this->resource->getURI();
+        $url           = HttpHelper::setHttPortToUrl($this->client->getGatewayUrl(), false) . '/' . $this->resource->getVersion() . '/' . $this->resource->getURI();
         $client = $clientBuilder->setConnectionParams(['client' => ['headers' => $this->setAuthorization()]])
                                 ->setHosts(['host' => $url])
                                 ->build();
