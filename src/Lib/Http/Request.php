@@ -101,6 +101,7 @@ class Request
         if($this->withChannel) {
             $options['headers']['Channel-id'] = $this->client->channelId;
         }
+        $options['headers']['Referer'] = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
         if ($body) {
             switch (strtolower($method)) {
