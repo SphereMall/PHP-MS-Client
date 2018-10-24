@@ -65,6 +65,7 @@ use SphereMall\MS\Resources\Shop\VatsResource;
 use SphereMall\MS\Resources\Grapher\GridResource;
 use SphereMall\MS\Resources\Users\WishListItemsResource;
 use SphereMall\MS\Resources\Shop\RulesResource;
+use SphereMall\MS\Resources\Users\WishListResource;
 
 /**
  * Trait ServiceInjector
@@ -567,6 +568,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new EntitiesAverageRating($this);
+    }
+
+    /**
+     * @return WishListResource
+     */
+    public function wishList()
+    {
+        /** @var Client $this */
+        return new WishListResource($this);
     }
     #endregion
 }
