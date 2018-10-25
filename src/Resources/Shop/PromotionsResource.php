@@ -33,18 +33,18 @@ class PromotionsResource extends Resource
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function applyCoupon($basketId, string $couponCode)
+    public function applyCoupon($basketId, string $couponCode) // !! DEPRECATED moved to basket
     {
         $params = [
-            "basketId"   => $basketId,
-            "couponCode" => $couponCode,
+          "basketId"   => $basketId,
+          "couponCode" => $couponCode,
         ];
 
         $response = $this->handler->handle('POST', $params, 'apply');
 
         //TODO: refactor to make method
         return $response;
-//        return $this->make($response, false);
+        //        return $this->make($response, false);
     }
 
     /**
@@ -56,19 +56,19 @@ class PromotionsResource extends Resource
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function cancelCoupon($basketId, string $couponCode, $userId)
+    public function cancelCoupon($basketId, string $couponCode, $userId)  // !! DEPRECATED moved to basket
     {
         $params = [
-            "basketId" => $basketId,
-            "couponCode" => $couponCode,
-            "userId" => $userId
+          "basketId" => $basketId,
+          "couponCode" => $couponCode,
+          "userId" => $userId
         ];
 
         $response = $this->handler->handle('POST', $params, 'discard');
 
         //TODO: refactor to make method
         return $response;
-//        return $this->make($response, false);
+        //        return $this->make($response, false);
     }
 
     /**

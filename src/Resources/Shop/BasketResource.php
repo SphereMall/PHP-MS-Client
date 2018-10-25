@@ -19,6 +19,7 @@ use SphereMall\MS\Resources\Resource;
  */
 class BasketResource extends Resource
 {
+
     #region [Override methods]
     public function getURI()
     {
@@ -29,9 +30,7 @@ class BasketResource extends Resource
     #region [Override CRUD]
     /**
      * Get entity by id
-     *
      * @param int $id
-     *
      * @param array $params
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -43,14 +42,13 @@ class BasketResource extends Resource
         }
 
         $uriAppend = 'byId/' . $id;
-        $response  = $this->handler->handle('GET', false, $uriAppend, $params);
+        $response = $this->handler->handle('GET', false, $uriAppend, $params);
 
         return $this->make($response, false);
     }
 
     /**
      * @param $data
-     *
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -63,7 +61,6 @@ class BasketResource extends Resource
 
     /**
      * @param array $params
-     *
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -77,7 +74,6 @@ class BasketResource extends Resource
     /**
      * @param $id
      * @param $data
-     *
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -90,7 +86,6 @@ class BasketResource extends Resource
 
     /**
      * @param $id
-     *
      * @return array|int|Entity|\SphereMall\MS\Lib\Collection|Order
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -102,5 +97,29 @@ class BasketResource extends Resource
 
         return $this->make($response, false);
     }
-    #endregion
+
+    /**
+     * @param $basketId
+     * @param string $couponCode
+     * @return \GuzzleHttp\Promise\PromiseInterface|\SphereMall\MS\Lib\Http\Response
+     */
+    public function applyCoupon($basketId, string $couponCode)
+    {
+        $params = [
+          "basketId" => $basketId,
+          "couponCode" => $couponCode,
+        ];
+
+        return $this->handler->handle('POST', $params, 'applycoupon');
+    }
+
+    /**
+     * @param $basketId
+     * @return \GuzzleHttp\Promise\PromiseInterface|\SphereMall\MS\Lib\Http\Response
+     */
+    public function cancelCoupon($basketId)
+    {
+        return $this->handler->handle('POST', ['basketId' => $basketId], 'discardcoupon');
+    }
+
 }
