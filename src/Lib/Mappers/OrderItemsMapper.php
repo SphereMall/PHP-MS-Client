@@ -26,7 +26,8 @@ class OrderItemsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        $orderItem = new OrderItem(is_array($array['attributes']) ? $array['attributes'] : $array);
+        $array = isset($array['attributes']) && is_array($array['attributes']) ? $array['attributes'] : $array;
+        $orderItem = new OrderItem($array);
 
         if (isset($array['products'][0])) {
             if (isset($array['images'])) {
