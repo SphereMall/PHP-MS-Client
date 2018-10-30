@@ -11,6 +11,7 @@ namespace SphereMall\MS\Resources\Grapher;
 
 
 use SphereMall\MS\Entities\Entity;
+use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Resources\Resource;
 
@@ -119,5 +120,40 @@ class EntityFactorsResource extends Resource
         return $this->make($response);
     }
 
+    /**
+     * @param $entityCode
+     * @param $entityId
+     * @return bool
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function deleteFactors($entityCode, $entityId)
+    {
+        $response = $this->handler->handle('DELETE', false, "{$entityCode}/{$entityId}");
+        if (!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getErrorMessage());
+        }
+
+        return $response->getSuccess();
+    }
+
+    /**
+     * @param $entityCode
+     * @param $entityId
+     * @param $factorValueId
+     * @return bool
+     * @throws EntityNotFoundException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function deleteFactor($entityCode, $entityId, $factorValueId)
+    {
+        $response = $this->handler->handle('DELETE', false, "{$entityCode}/{$entityId}/{$factorValueId}");
+        if (!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getErrorMessage());
+        }
+
+        return $response->getSuccess();
+    }
 
 }

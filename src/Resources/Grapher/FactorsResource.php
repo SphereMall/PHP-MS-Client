@@ -31,6 +31,7 @@ class FactorsResource extends Resource
      *
      * @return Entity|Entity[]
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @deprecated
      */
     public function full($param = null)
     {
@@ -42,6 +43,20 @@ class FactorsResource extends Resource
         }
 
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
+
+        return $this->make($response);
+    }
+
+    public function detail($factorId)
+    {
+        $response = $this->handler->handle('GET', false, "detail/code/{$factorId}");
+
+        return $this->make($response);
+    }
+
+    public function detailByCode($factorCode)
+    {
+        $response = $this->handler->handle('GET', false, "detail/code/{$factorCode}");
 
         return $this->make($response);
     }

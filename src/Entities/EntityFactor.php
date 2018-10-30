@@ -17,6 +17,8 @@ namespace SphereMall\MS\Entities;
 class EntityFactor extends Entity
 {
     #region [Properties]
+    public $id;
+    public $name;
     public $code;
     public $value;
     public $factor;
