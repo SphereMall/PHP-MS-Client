@@ -78,6 +78,16 @@ trait InteractsWithAttributes
 
         return $value;
     }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
+
+        $this->sortAttributes();
+    }
     #endregion
 
     #region [Protected methods]
@@ -124,5 +134,23 @@ trait InteractsWithAttributes
 
         return $attributes;
     }
+
+    protected function sortAttributes()
+    {
+        if($this->attributes){
+            usort($this->attributes, function ($a1, $a2) {
+                return $a1->orderNumber > $a2->orderNumber;
+            });
+
+            foreach ($this->attributes as $attribute){
+                if ($attribute->values) {
+                    usort($attribute->values, function ($a1, $a2) {
+                        return $a1->orderNumber > $a2->orderNumber;
+                    });
+                }
+            }
+        }
+    }
+
     #endregion
 }

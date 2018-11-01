@@ -79,7 +79,8 @@ class DocumentsMapper extends Mapper
             foreach ($array['attributes'] as $attribute) {
                 $attribute['attributeValues'] = $this->getAttributeValues($attribute, $array['attributeValues']);
 
-                $document->attributes[] = $mapper->createObject($attribute);
+                $attributes = $mapper->createObject($attribute);
+                $document->setAttributes($attributes);
             }
         }
 
@@ -122,7 +123,7 @@ class DocumentsMapper extends Mapper
             $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($av);
         }
 
-        $document->attributes = $attributes;
+        $document->setAttributes($attributes);
 
         $me = $array['mediaEntities'] ?? [];
         $m = $array['media'] ?? [];

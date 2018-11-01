@@ -60,7 +60,7 @@ class DealersMapper extends Mapper
             $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($avs[$av['attributeValueId']]);
         }
 
-        $dealer->attributes = $attributes;
+        $dealer->setAttributes($attributes);
 
         return $dealer;
     }

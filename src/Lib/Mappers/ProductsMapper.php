@@ -101,7 +101,8 @@ class ProductsMapper extends Mapper
     {
         if (isset($array['productAttributeValues'])) {
             $mapper              = new ProductAttributeValuesMapper();
-            $product->attributes = $mapper->createObject($array['productAttributeValues']);
+            $attributes = $mapper->createObject($array['productAttributeValues']);
+            $product->setAttributes($attributes);
         }
 
         if (isset($array['media'])) {
@@ -143,7 +144,7 @@ class ProductsMapper extends Mapper
             $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($av);
         }
 
-        $product->attributes = $attributes;
+        $product->setAttributes($attributes);
 
         $me = $array['mediaEntities'] ?? [];
         $m = $array['media'] ?? [];
