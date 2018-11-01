@@ -18,7 +18,7 @@ class ProductOptionValuesMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return new ProductOptionValue($array);
+        return new ProductOptionValue(is_array($array['attributes']) ? $array['attributes'] : $array);
     }
     #endregion
 }

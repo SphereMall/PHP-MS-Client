@@ -17,11 +17,18 @@ use SphereMall\MS\Entities\ProductOptionValue;
 
 /**
  * Class ProductsMapper
+ *
  * @package SphereMall\MS\Lib\Mappers
+ *
+ * @property Product $product
+ * @property array   $data
  */
 class ProductsMapper extends Mapper
 {
+    private $product;
+    private $data;
     #region [Protected methods]
+
     /**
      * @param array $array
      *
@@ -29,139 +36,154 @@ class ProductsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        $product = new Product($array);
+        $this->data    = $array;
+        $this->product = new Product($this->data);
+        $this->setBrands()
+             ->setFunctionalNames()
+             ->setPromotions()
+             ->setProductsToPromotions()
+             ->setOptions()
+             ->setAttributes()
+             ->setMedia();
 
-        if (isset($array['brands']) && $brand = reset($array['brands'])) {
-            $mapper         = new BrandsMapper();
-            $product->brand = $mapper->createObject($brand);
+        return $this->product;
+    }
+
+    #endregion
+
+    #region [Private methods]
+    /**
+     * @return $this
+     */
+    private function setBrands()
+    {
+        if (isset($this->data['brands']) && $brand = reset($this->data['brands'])) {
+            $this->product->brand = (new BrandsMapper)->createObject($brand);
         }
 
-        if (isset($array['functionalNames']) && $functionalName = reset($array['functionalNames'])) {
-            $mapper                  = new FunctionalNamesMapper();
-            $product->functionalName = $mapper->createObject($functionalName);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function setFunctionalNames()
+    {
+        if (isset($this->data['functionalNames']) && $functionalName = reset($this->data['functionalNames'])) {
+            $this->product->functionalName = (new FunctionalNamesMapper)->createObject($functionalName);
         }
 
-        if (isset($array['promotions']) && is_array($array['promotions'])) {
-            $mapper = new PromotionsMapper();
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function setPromotions()
+    {
+        if (isset($this->data['promotions']) && is_array($this->data['promotions'])) {
+            $mapper     = new PromotionsMapper();
             $promotions = [];
-            foreach ($array['promotions'] as $promotion) {
+            foreach ($this->data['promotions'] as $promotion) {
                 $promotions[] = $mapper->createObject($promotion);
             }
-
-            $product->promotions = $promotions;
+            $this->product->promotions = $promotions;
         }
 
-        if (isset($array['productsToPromotions']) && is_array($array['productsToPromotions'])) {
-            $mapper = new ProductsToPromotionsMapper();
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function setProductsToPromotions()
+    {
+        if (isset($this->data['productsToPromotions']) && is_array($this->data['productsToPromotions'])) {
+            $mapper               = new ProductsToPromotionsMapper();
             $productsToPromotions = [];
-            foreach ($array['productsToPromotions'] as $productsToPromotion) {
+            foreach ($this->data['productsToPromotions'] as $productsToPromotion) {
                 $productsToPromotions[] = $mapper->createObject($productsToPromotion);
             }
-
-            $product->productsToPromotions = $productsToPromotions;
+            $this->product->productsToPromotions = $productsToPromotions;
         }
 
-        if(isset($array['options']) && is_array($array['options'])){
-            $optionMapper = new OptionsMapper();
-            $productOptionValuesMapper = new ProductOptionValuesMapper();
-            $options = [];
+        return $this;
+    }
 
-            foreach ($array['options'] as $option){
-                $productOptionValues = array_filter($array['productOptionValues'] ?? [], function($productOptionValue) use ($option) {
+    /**
+     * @return $this
+     */
+    private function setOptions()
+    {
+        if (isset($this->data['options']) && is_array($this->data['options'])) {
+            $optionMapper              = new OptionsMapper();
+            $productOptionValuesMapper = new ProductOptionValuesMapper();
+            $options                   = [];
+            foreach ($this->data['options'] as $option) {
+                $productOptionValues = array_filter($this->data['productOptionValues'] ?? [], function ($productOptionValue) use ($option) {
                     return $option['id'] == $productOptionValue['optionId'];
                 });
-
-                foreach ($productOptionValues ?? [] as $productOptionValue){
+                foreach ($productOptionValues ?? [] as $productOptionValue) {
                     $option['values'][] = $productOptionValuesMapper->createObject($productOptionValue);
                 }
-
                 $options[] = $optionMapper->createObject($option);
             }
-
-            $product->options = $options;
-
+            $this->product->options = $options;
         }
 
-        /* Customize mapping */
-        $product = isset($array['attributes'])
-            ? $this->buildDetailResponse($product, $array)
-            : $this->buildFullResponse($product, $array);
-
-        return $product;
+        return $this;
     }
 
     /**
-     * map data with custom fields
-     *
-     * @param Product $product
-     * @param array $array
-     * @return Product
+     * @return $this
      */
-    private function buildFullResponse(Product $product, array $array)
+    private function setAttributes()
     {
-        if (isset($array['productAttributeValues'])) {
-            $mapper              = new ProductAttributeValuesMapper();
-            $product->attributes = $mapper->createObject($array['productAttributeValues']);
+        if (!isset($this->data['attributes']) && isset($this->data['productAttributeValues'])) { // old structure
+            $this->product->attributes = (new ProductAttributeValuesMapper)->createObject($this->data['productAttributeValues'] ?? []);
+        } else {
+            $attributes = [];
+            foreach ($this->data['attributeValues'] ?? [] as $av) {
+                $attributeId = $av['attributes']['attributeId'];
+                if (!isset($attributes[$attributeId])) {
+                    $attributes[$attributeId] = new Attribute($av['relationships']['attributes'][0]['attributes']);
+                }
+                $attributes[$attributeId]->values[$av['id']] = new AttributeValue($av['attributes']);
+            }
+
+            $this->product->attributes = $attributes;
         }
 
-        if (isset($array['media'])) {
-            $media = [];
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function setMedia()
+    {
+        $result = [];
+        if (isset($this->data['mediaEntities'])) {
+            foreach ($this->data['mediaEntities'] ?? [] as $mediaEntity) {
+                $media = new Media($mediaEntity['relationships']['media'][0]['attributes']);
+                if (!$this->product->mainMedia) {
+                    $this->product->mainMedia = $media;
+                }
+                $result[$mediaEntity['attributes']['mediaId']] = $media;
+            }
+        } elseif (isset($this->data['media'])) {  // old structure
             $mapper = new ImagesMapper();
-            foreach ($array['media'] as $image) {
-                $media[] = $mapper->createObject($image);
+            foreach ($this->data['media'] as $image) {
+                $result[] = $mapper->createObject($image);
             }
-
-            $product->media = $media;
-
-            if (!empty($product->media[0])) {
-                $product->mainMedia = $product->media[0];
+            if (!empty($this->product->media[0])) {
+                $this->product->mainMedia = $this->product->media[0];
             }
         }
 
-        return $product;
-    }
+        $this->product->media = $result;
 
-    /**
-     * map data without custom fields
-     *
-     * @param Product $product
-     * @param array $array
-     * @return Product
-     */
-    private function buildDetailResponse(Product $product, array $array)
-    {
-        $avs = $array['attributeValues'] ?? [];
-        $as = $array['attributes'] ?? [];
-
-        /** @var Attribute[] $attributes */
-        $attributes = [];
-
-        foreach ($avs as $av) {
-            if (!isset($attributes[$av['attributeId']])) {
-                $attributes[$av['attributeId']] = new Attribute($as[$av['attributeId']]);
-            }
-            $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($av);
-        }
-
-        $product->attributes = $attributes;
-
-        $me = $array['mediaEntities'] ?? [];
-        $m = $array['media'] ?? [];
-
-        /** @var Media[] $media */
-        $media = [];
-
-        foreach ($me as $item) {
-            $media[$item['id']] = new Media(array_merge($m[$item['mediaId']], $item));
-        }
-
-        $product->media = $media;
-
-        if (!empty($product->media[0])) {
-            $product->mainMedia = $product->media[0];
-        }
-
-        return $product;
+        return $this;
     }
     #endregion
 }

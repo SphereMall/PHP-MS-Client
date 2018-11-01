@@ -18,25 +18,32 @@ use SphereMall\MS\Exceptions\EntityNotFoundException;
 
 /**
  * Class Basket
+ *
  * @package SphereMall\MS\Lib\Shop
  */
 class Basket extends OrderFinalized
 {
     #region [Properties]
     private $updateParams = [];
+    private $version;
     #endregion
 
     #region [Constructor]
     /**
-     * Shop constructor.
-     * @param Client $client
-     * @param null|int $id
+     * Basket constructor.
+     *
+     * @param Client   $client
+     * @param int|null $id
+     *
+     * @param string   $version
+     *
      * @throws EntityNotFoundException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct(Client $client, int $id = null)
+    public function __construct(Client $client, int $id = null, string $version = 'v2')
     {
         parent::__construct($client);
-
+        $this->version = $version;
         if (!is_null($id)) {
             $this->id = $id;
             $this->getBasket($this->id);
@@ -47,6 +54,8 @@ class Basket extends OrderFinalized
     #region [Public methods]
     /**
      * @param array $params
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function add(array $params)
     {
@@ -55,9 +64,8 @@ class Basket extends OrderFinalized
         }
 
         $this->callResourceAction(function ($params) {
-            return $this->client
-                ->basketResource()
-                ->create($params);
+            return $this->client->basketResource()
+                                ->create($params);
         }, $params);
     }
 
@@ -71,14 +79,15 @@ class Basket extends OrderFinalized
         }
 
         $this->callResourceAction(function ($params) {
-            return $this->client
-                ->basketResource()
-                ->removeItems($params);
+            return $this->client->basketResource()
+                                ->removeItems($params);
         }, $params);
     }
 
     /**
      * @param array $params
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(array $params = [])
     {
@@ -89,9 +98,8 @@ class Basket extends OrderFinalized
         $params = array_merge($params, $this->updateParams);
 
         $this->callResourceAction(function ($params) {
-            return $this->client
-                ->basketResource()
-                ->update($this->getId(), $params);
+            return $this->client->basketResource()
+                                ->update($this->getId(), $params);
         }, $params);
 
         $this->updateParams = [];
@@ -101,16 +109,19 @@ class Basket extends OrderFinalized
     #region [Setters]
     /**
      * @param $paymentMethod
+     *
      * @return $this
      */
     public function setPaymentMethod($paymentMethod)
     {
         $this->updateParams['paymentMethodId'] = $paymentMethod;
+
         return $this;
     }
 
     /**
      * @param Delivery $delivery
+     *
      * @return $this
      */
     public function setDelivery(Delivery $delivery)
@@ -120,33 +131,40 @@ class Basket extends OrderFinalized
         }
 
         $this->updateParams['deliveryProviderId'] = $delivery->id;
-        $this->updateParams['deliveryCost'] = $delivery->getCost();
+        $this->updateParams['deliveryCost']       = $delivery->getCost();
 
         return $this;
     }
 
     /**
      * @param Address $address
+     *
      * @return $this
+     * @throws EntityNotFoundException
      */
     public function setShippingAddress(Address $address)
     {
         $this->setAddress($address, 'shippingAddress');
+
         return $this;
     }
 
     /**
      * @param Address $address
+     *
      * @return $this
+     * @throws EntityNotFoundException
      */
     public function setBillingAddress(Address $address)
     {
         $this->setAddress($address, 'billingAddress');
+
         return $this;
     }
 
     /**
      * @param User $user
+     *
      * @return $this
      */
     public function setUser(User $user)
@@ -162,44 +180,41 @@ class Basket extends OrderFinalized
     #endregion
 
     #region [Protected methods]
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     protected function createBasket()
     {
-        /**
-         * @var Order $order
-         */
-        $order = $this->client
-            ->basketResource()
-            ->new([]);
-
+        /**@var Order $order */
+        $order    = $this->client->basketResource()
+                                 ->new([]);
         $this->id = $order->id;
     }
 
     /**
      * @param int $id
+     *
      * @throws EntityNotFoundException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function getBasket(int $id)
     {
-        /**
-         * @var Order $order
-         */
-        $order = $this->client
-            ->basketResource()
-            ->get($id, ['recalculate' => true]);
-
+        /** @var Order $order */
+        $order = $this->client->basketResource($this->version)
+                              ->get($id, ['recalculate' => true]);
         if (is_null($order)) {
             throw new EntityNotFoundException("Can not found basket with id: $id");
         }
-    
         $this->id = (int)$order->id;
         $this->setProperties($order);
     }
 
     /**
      * @param Address $address
-     * @param string $addressKey
+     * @param         $addressKey
      *
      * @throws EntityNotFoundException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function setAddress(Address $address, $addressKey)
     {
@@ -218,7 +233,7 @@ class Basket extends OrderFinalized
 
     /**
      * @param callable $action
-     * @param array $params
+     * @param array    $params
      */
     protected function callResourceAction(callable $action, array $params)
     {

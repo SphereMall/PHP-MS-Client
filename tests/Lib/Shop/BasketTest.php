@@ -18,14 +18,18 @@ use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 class BasketTest extends SetUpResourceTest
 {
     #region [Test methods]
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
     public function testBasketCreate()
     {
+        /** @var Basket $basket */
         $basket = $this->client->basket();
         $this->assertInstanceOf(Basket::class, $basket);
 
         $products = $this->client->products()->limit(1)->all();
         $product = $products[0];
-
         $basket->add([
             'products' => [
                 [
@@ -38,14 +42,19 @@ class BasketTest extends SetUpResourceTest
         $this->assertCount(1, $basket->items);
     }
 
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
+     */
     public function testGetExistingBasket()
     {
         $client = clone $this->client;
-        $basket = $client->basket(570);
-        $this->assertInstanceOf(Basket::class, $basket);
+        /** @var Basket $basket */
+        $basket = $client->basket(8, 'v1');
 
+        $this->assertInstanceOf(Basket::class, $basket);
         $this->assertCount(1, $basket->items);
-        $this->assertEquals(570, $basket->getId());
+        $this->assertEquals(8, $basket->getId());
     }
 
     public function testItemRemoveFromBasket()

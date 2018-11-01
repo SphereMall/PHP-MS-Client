@@ -25,7 +25,7 @@ class AttributeTypesMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return new AttributeType($array);
+        return new AttributeType(is_array($array['attributes']) ? $array['attributes'] : $array);
     }
     #endregion
 }

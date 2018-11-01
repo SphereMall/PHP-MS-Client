@@ -26,28 +26,27 @@ class OrdersMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        $array = isset($array['attributes']) && is_array($array['attributes']) ? $array['attributes'] : $array;
-        $order = new Order($array);
+        $order = new Order(is_array($array['attributes']) ? $array['attributes'] : $array);
+        $relationShips = $array['relationships'] ?? [];
+        if (isset($relationShips['orderItems']) || isset($relationShips['items'])) {
+            $mapper = new OrderItemsMapper();
+            foreach ($relationShips['orderItems'] ?? $relationShips['items'] as $item) {
+                $order->items[$item['id']] = $mapper->createObject($item);
+            }
+        }
+        if (isset($relationShips['paymentMethods'])) {
+            $mapper = new PaymentMethodsMapper();
+            foreach ($relationShips['paymentMethods'] as $item) {
+                $order->paymentMethods[$item['id']] = $mapper->createObject($item['attributes']);
+            }
+        }
 
+        // old structure
         if (isset($array['items'])) {
             $orderItemMapper = new OrderItemsMapper();
             $order->items    = array_map(function ($item) use ($orderItemMapper) {
                 return $orderItemMapper->createObject($item);
             }, $array['items']);
-        }
-
-        if (isset($array['relationships']['orderItems']) && is_array($array['relationships']['orderItems'])) {
-            $mapper = new OrderItemsMapper();
-            foreach ($array['relationships']['orderItems'] as $item) {
-                $order->items[$item['id']] = $mapper->createObject($item);
-            }
-        }
-
-        if (isset($array['relationships']['paymentMethods']) && is_array($array['relationships']['paymentMethods'])) {
-            $mapper = new PaymentMethodsMapper();
-            foreach ($array['relationships']['paymentMethods'] as $item) {
-                $order->paymentMethods[$item['id']] = $mapper->createObject($item['attributes']);
-            }
         }
 
         return $order;

@@ -25,7 +25,7 @@ class FunctionalNamesMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return new FunctionalName($array);
+        return new FunctionalName(is_array($array['attributes']) ? $array['attributes'] : $array);
     }
     #endregion
 }
