@@ -21,7 +21,6 @@ use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorValuesResource;
-use SphereMall\MS\Resources\Prices\FindDetailPricesResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
@@ -253,23 +252,29 @@ trait ServiceInjector
     }
 
     /**
+     * @param string $version
+     *
      * @return BasketResource
      */
-    public function basketResource()
+    public function basketResource(string $version = 'v2')
     {
         /** @var Client $this */
-        return new BasketResource($this, "v2");
+        return new BasketResource($this, $version);
     }
 
     /**
      * @param int|null $id
-     * @return Basket
+     * @param string   $version
+     *
+     * @return null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
      */
-    public function basket(int $id = null)
+    public function basket(int $id = null, string $version = 'v2')
     {
         if (is_null(static::$basket)) {
             /** @var Client $this */
-            static::$basket = new Basket($this, $id);
+            static::$basket = new Basket($this, $id, $version);
         }
 
         return static::$basket;

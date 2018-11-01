@@ -22,6 +22,6 @@ class PromotionsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return new Promotion($array);
+        return new Promotion(is_array($array['attributes']) ? $array['attributes'] : $array);
     }
 }

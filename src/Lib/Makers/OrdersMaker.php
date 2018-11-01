@@ -11,14 +11,15 @@ namespace SphereMall\MS\Lib\Makers;
 
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Lib\Http\Response;
+use SphereMall\MS\Lib\Mappers\Mapper;
 use SphereMall\MS\Lib\Mappers\OrdersMapper;
 
 /**
- * Class OrderHistoryMaker
+ * Class OrdersMaker
  *
  * @package SphereMall\MS\Lib\Makers
  */
-class OrderHistoryMaker extends ObjectMaker
+class OrdersMaker extends ObjectMaker
 {
     #region [Protected methods]
     /**
@@ -76,7 +77,10 @@ class OrderHistoryMaker extends ObjectMaker
      */
     protected function createObject($mapperClass, $element, $included)
     {
-        return (new $mapperClass)->createObject($element);
+        /** @var Mapper $mapper */
+        $mapper = new $mapperClass;
+
+        return $mapper->createObject($element);
     }
 
     /**
@@ -84,7 +88,7 @@ class OrderHistoryMaker extends ObjectMaker
      *
      * @return array
      */
-    protected function getIncludedArray(array $included)
+    protected function getIncludedArray(array $included): array
     {
         $result = [];
         foreach ($included as $include) {
@@ -99,7 +103,7 @@ class OrderHistoryMaker extends ObjectMaker
      *
      * @return null|string
      */
-    protected function getMapperClass($type)
+    protected function getMapperClass($type): string
     {
         return OrdersMapper::class;
     }

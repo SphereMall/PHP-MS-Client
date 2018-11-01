@@ -25,7 +25,7 @@ class BrandsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return new Brand($array);
+        return new Brand(is_array($array['attributes']) ? $array['attributes'] : $array);
     }
     #endregion
 }
