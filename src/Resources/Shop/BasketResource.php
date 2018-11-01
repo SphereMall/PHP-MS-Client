@@ -9,29 +9,53 @@
 
 namespace SphereMall\MS\Resources\Shop;
 
+use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Entities\Order;
+use SphereMall\MS\Lib\Makers\ObjectMaker;
+use SphereMall\MS\Lib\Makers\OrdersMaker;
 use SphereMall\MS\Resources\Resource;
 
 /**
  * Class BasketResource
+ *
  * @package SphereMall\MS\Resources\Shop
  */
 class BasketResource extends Resource
 {
 
     #region [Override methods]
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return "basket";
+    }
+
+    /**
+     * BasketResource constructor.
+     *
+     * @param Client $client
+     * @param null   $version
+     * @param null   $handler
+     * @param null   $maker
+     * @param bool   $multi
+     */
+    public function __construct(Client $client, $version = null, $handler = null, $maker = null, bool $multi = false)
+    {
+        parent::__construct($client, $version, $handler, $maker, $multi);
+        $this->maker = $this->version == 'v1' ? new OrdersMaker() : new ObjectMaker();
     }
     #endregion
 
     #region [Override CRUD]
     /**
      * Get entity by id
-     * @param int $id
+     *
+     * @param int   $id
      * @param array $params
+     *
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -42,13 +66,14 @@ class BasketResource extends Resource
         }
 
         $uriAppend = 'byId/' . $id;
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+        $response  = $this->handler->handle('GET', false, $uriAppend, $params);
 
         return $this->make($response, false);
     }
 
     /**
      * @param $data
+     *
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -61,6 +86,7 @@ class BasketResource extends Resource
 
     /**
      * @param array $params
+     *
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -74,6 +100,7 @@ class BasketResource extends Resource
     /**
      * @param $id
      * @param $data
+     *
      * @return Entity
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -86,6 +113,7 @@ class BasketResource extends Resource
 
     /**
      * @param $id
+     *
      * @return array|int|Entity|\SphereMall\MS\Lib\Collection|Order
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -99,15 +127,17 @@ class BasketResource extends Resource
     }
 
     /**
-     * @param $basketId
+     * @param        $basketId
      * @param string $couponCode
+     *
      * @return \GuzzleHttp\Promise\PromiseInterface|\SphereMall\MS\Lib\Http\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function applyCoupon($basketId, string $couponCode)
     {
         $params = [
-          "basketId" => $basketId,
-          "couponCode" => $couponCode,
+            "basketId"   => $basketId,
+            "couponCode" => $couponCode,
         ];
 
         return $this->handler->handle('POST', $params, 'applycoupon');
@@ -115,11 +145,12 @@ class BasketResource extends Resource
 
     /**
      * @param $basketId
+     *
      * @return \GuzzleHttp\Promise\PromiseInterface|\SphereMall\MS\Lib\Http\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function cancelCoupon($basketId)
     {
         return $this->handler->handle('POST', ['basketId' => $basketId], 'discardcoupon');
     }
-
 }

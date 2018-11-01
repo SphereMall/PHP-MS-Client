@@ -10,7 +10,7 @@
 namespace SphereMall\MS\Resources\Shop;
 
 use SphereMall\MS\Entities\Order;
-use SphereMall\MS\Lib\Makers\OrderHistoryMaker;
+use SphereMall\MS\Lib\Makers\OrdersMaker;
 use SphereMall\MS\Lib\Shop\OrderFinalized;
 use SphereMall\MS\Resources\Resource;
 use SphereMall\MS\Resources\Traits\DetailResource;
@@ -75,7 +75,7 @@ class OrdersResource extends Resource
         $uriAppend = "history/{$userId}" . (!is_null($id) ? "/{$id}" : '');
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
 
-        return $this->make($response, true, new OrderHistoryMaker());
+        return $this->make($response, true, new OrdersMaker());
     }
     #endregion
 

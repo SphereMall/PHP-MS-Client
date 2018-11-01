@@ -26,23 +26,22 @@ class OrderItemsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        $array = isset($array['attributes']) && is_array($array['attributes']) ? $array['attributes'] : $array;
-        $orderItem = new OrderItem($array);
-
-        if (isset($array['products'][0])) {
-            if (isset($array['images'])) {
-                $array['products'][0]['images'] = $array['images'];
-            }
-            $productMapper = new ProductsMapper();
-            $orderItem->product = $productMapper->createObject($array['products'][0]);
-        }
-
-        if (isset($array['relationships']['products']) && is_array($array['relationships']['products'])) {
+        $orderItem = new OrderItem(is_array($array['attributes']) ? $array['attributes'] : $array);
+        if (isset($array['relationships']['products'])) {
             $mapper = new ProductsMapper();
             foreach ($array['relationships']['products'] as $item) {
                 $product            = array_merge($item['attributes'], $item['relationships']);
                 $orderItem->product = $mapper->createObject($product);
             }
+        }
+
+        // old structure
+        if (isset($array['products'][0])) {
+            if (isset($array['images'])) {
+                $array['products'][0]['images'] = $array['images'];
+            }
+            $productMapper      = new ProductsMapper();
+            $orderItem->product = $productMapper->createObject($array['products'][0]);
         }
 
         return $orderItem;
