@@ -164,10 +164,9 @@ class Basket extends OrderFinalized
 
     /**
      * @param User $user
-     *
      * @return $this
      */
-    public function setUser(User $user)
+    public function setUser($user)
     {
         if (!$user->id) {
             throw new InvalidArgumentException("Can set user. User id is empty.");
