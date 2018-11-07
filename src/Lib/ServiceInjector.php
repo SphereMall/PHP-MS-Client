@@ -49,6 +49,7 @@ use SphereMall\MS\Resources\StaticTexts\WebTextsResource;
 use SphereMall\MS\Resources\Users\AddressResource;
 use SphereMall\MS\Resources\Users\CompaniesResource;
 use SphereMall\MS\Resources\Users\MessagesResource;
+use SphereMall\MS\Resources\Users\UserAdditionalDataResource;
 use SphereMall\MS\Resources\Users\UsersResource;
 use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\Shop\OrdersResource;
@@ -582,6 +583,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new WishListResource($this);
+    }
+
+    /**
+     * @return UserAdditionalDataResource
+     */
+    public function userAdditionalData()
+    {
+        /** @var Client $this */
+        return new UserAdditionalDataResource($this);
     }
     #endregion
 }
