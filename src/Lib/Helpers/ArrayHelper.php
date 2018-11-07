@@ -17,7 +17,7 @@ class ArrayHelper
     /**
      * @param $data
      * @param bool $recursive
-     * @return array
+     * @return mixed|array
      */
     public static function convertToArray($data, $recursive = false)
     {
