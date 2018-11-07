@@ -11,7 +11,7 @@ namespace SphereMall\MS\Resources\Users;
 
 use SphereMall\MS\Resources\Resource;
 
-class UserAdditionalData extends Resource
+class UserAdditionalDataResource extends Resource
 {
 
     function getURI()
@@ -19,5 +19,8 @@ class UserAdditionalData extends Resource
         return 'useradditionaldata';
     }
 
-    
+    function save($userId, $data)
+    {
+        return $this->create(['id' => $userId, 'data' => $data]);
+    }
 }

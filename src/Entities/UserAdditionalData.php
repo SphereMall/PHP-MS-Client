@@ -8,8 +8,12 @@
 
 namespace SphereMall\MS\Entities;
 
-
-class UserAdditionalData
+/**
+ * Class UserAdditionalData
+ * @package SphereMall\MS\Entities
+ */
+class UserAdditionalData extends Entity
 {
-
+    public $id;
+    public $data;
 }

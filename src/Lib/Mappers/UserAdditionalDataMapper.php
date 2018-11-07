@@ -9,7 +9,13 @@
 namespace SphereMall\MS\Lib\Mappers;
 
 
-class UserAdditionalDataMapper
+use SphereMall\MS\Entities\UserAdditionalData;
+
+class UserAdditionalDataMapper extends Mapper
 {
 
+    protected function doCreateObject(array $array)
+    {
+        return new UserAdditionalData($array);
+    }
 }
