@@ -140,19 +140,20 @@ class ProductsMapper extends Mapper
     private function setAttributes()
     {
         if (!isset($this->data['attributes']) && isset($this->data['productAttributeValues'])) { // old structure
-            $attributes = (new ProductAttributeValuesMapper)->createObject($this->data['productAttributeValues'] ?? []);
-            $this->product->setAttributes($attributes);
+            $this->product->attributes = (new ProductAttributeValuesMapper)->createObject($this->data['productAttributeValues'] ?? []);
         } else {
             $attributes = [];
             foreach ($this->data['attributeValues'] ?? [] as $av) {
-                $attributeId = $av['attributes']['attributeId'];
+                $attributeId = $av['attributes']['attributeId'] ?? $av['attributeId'];
                 if (!isset($attributes[$attributeId])) {
-                    $attributes[$attributeId] = new Attribute($av['relationships']['attributes'][0]['attributes']);
+                    $attribute                = $av['relationships']['attributes'][0]['attributes'] ?? $this->data['attributes'][$attributeId];
+                    $attributes[$attributeId] = new Attribute($attribute);
                 }
-                $attributes[$attributeId]->values[$av['id']] = new AttributeValue($av['attributes']);
+                $attributeValue                              = isset($av['attributes']) && is_array($av['attributes']) ? $av['attributes'] : $av;
+                $attributes[$attributeId]->values[$av['id']] = new AttributeValue($attributeValue);
             }
 
-            $this->product->setAttributes($attributes);
+            $this->product->attributes = $attributes;
         }
 
         return $this;
@@ -166,11 +167,17 @@ class ProductsMapper extends Mapper
         $result = [];
         if (isset($this->data['mediaEntities'])) {
             foreach ($this->data['mediaEntities'] ?? [] as $mediaEntity) {
-                $media = new Media($mediaEntity['relationships']['media'][0]['attributes']);
+
+                if(isset($mediaEntity['relationships']['media'][0]['attributes'])){
+                    $mediaData = array_merge($mediaEntity['relationships']['media'][0]['attributes'], $mediaEntity['attributes']);
+                } else{
+                    $mediaData = array_merge($this->data['media'][$mediaEntity['mediaId']], $mediaEntity);
+                }
+                $media = new Media($mediaData);
                 if (!$this->product->mainMedia) {
                     $this->product->mainMedia = $media;
                 }
-                $result[$mediaEntity['attributes']['mediaId']] = $media;
+                $result[$mediaEntity['attributes']['mediaId'] ?? $mediaEntity['mediaId']] = $media;
             }
         } elseif (isset($this->data['media'])) {  // old structure
             $mapper = new ImagesMapper();
@@ -178,7 +185,7 @@ class ProductsMapper extends Mapper
                 $result[] = $mapper->createObject($image);
             }
             if (!empty($this->product->media[0])) {
-                $this->product->mainMedia = $this->product->media[0];
+                $this->product->mainMedia = $result[0];
             }
         }
 
