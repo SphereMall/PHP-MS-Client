@@ -76,12 +76,13 @@ class DocumentsMapper extends Mapper
             $document->attributes = [];
 
             $mapper = new AttributesMapper();
+            $attributes = [];
             foreach ($array['attributes'] as $attribute) {
                 $attribute['attributeValues'] = $this->getAttributeValues($attribute, $array['attributeValues']);
 
-                $attributes = $mapper->createObject($attribute);
-                $document->setAttributes($attributes);
+                $attributes[] = $mapper->createObject($attribute);
             }
+            $document->setAttributes($attributes);
         }
 
         if (isset($array['media'])) {
