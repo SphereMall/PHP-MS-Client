@@ -26,7 +26,7 @@ class AttributesMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        $attribute = new Attribute(is_array($array['attributes']) ? $array['attributes'] : $array);
+        $attribute = new Attribute(isset($array['attributes']) && is_array($array['attributes']) ? $array['attributes'] : $array);
         if (isset($array['attributeValues'])) {
             $mapper = new AttributeValuesMapper();
             foreach ($array['attributeValues'] as $item) {

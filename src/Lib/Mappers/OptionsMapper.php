@@ -25,7 +25,7 @@ class OptionsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return new Option(is_array($array['attributes']) ? $array['attributes'] : $array);
+        return new Option(isset($array['attributes']) && is_array($array['attributes']) ? $array['attributes'] : $array);
     }
     #endregion
 }

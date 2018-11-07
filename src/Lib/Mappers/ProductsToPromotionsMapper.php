@@ -23,6 +23,6 @@ class ProductsToPromotionsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return new ProductToPromotions(is_array($array['attributes']) ? $array['attributes'] : $array);
+        return new ProductToPromotions(isset($array['attributes']) && is_array($array['attributes']) ? $array['attributes'] : $array);
     }
 }

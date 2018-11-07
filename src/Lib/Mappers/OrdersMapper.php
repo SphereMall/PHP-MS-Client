@@ -26,7 +26,7 @@ class OrdersMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        $order = new Order(is_array($array['attributes']) ? $array['attributes'] : $array);
+        $order = new Order(isset($array['attributes']) && is_array($array['attributes']) ? $array['attributes'] : $array);
         $relationShips = $array['relationships'] ?? [];
         if (isset($relationShips['orderItems']) || isset($relationShips['items'])) {
             $mapper = new OrderItemsMapper();
