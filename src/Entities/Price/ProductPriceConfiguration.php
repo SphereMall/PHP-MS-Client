@@ -32,6 +32,9 @@ class ProductPriceConfiguration extends Entity
 
     public $priceWithVat;
     public $priceWithoutVat;
+    public $vatId;
+    public $productVatId;
+    public $vatPercent;
 
     #endregion
 }

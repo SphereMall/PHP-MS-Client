@@ -36,11 +36,29 @@ class PriceValuesMapper extends Mapper
                 $productPriceConfiguration->priceTable[$priceKey] = $price;
             }
         }
+        // deprecated - work with an old response structure
         if(isset($array['prices']['priceWithVat'])) {
             $productPriceConfiguration->priceWithVat = $array['prices']['priceWithVat'];
         }
         if(isset($array['prices']['priceWithoutVat'])) {
             $productPriceConfiguration->priceWithoutVat = $array['prices']['priceWithoutVat'];
+        }
+
+        //Work with a new response structure
+        if (isset($array['priceWithVat'])) {
+            $productPriceConfiguration->priceWithVat = $array['priceWithVat'];
+        }
+        if (isset($array['priceWithoutVat'])) {
+            $productPriceConfiguration->priceWithoutVat = $array['priceWithoutVat'];
+        }
+        if (isset($array['vatId'])) {
+            $productPriceConfiguration->vatId = $array['vatId'];
+        }
+        if (isset($array['productVatId'])) {
+            $productPriceConfiguration->productVatId = $array['productVatId'];
+        }
+        if (isset($array['vatPercent'])) {
+            $productPriceConfiguration->vatPercent = $array['vatPercent'];
         }
 
         $productPriceConfiguration->removeProperty('prices');
