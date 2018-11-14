@@ -4,6 +4,8 @@ namespace SphereMall\MS\Resources\ElasticSearch;
 use SphereMall\MS\Entities\ElasticIndexer;
 use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
+use SphereMall\MS\Lib\Filters\ElasticIndexer\EntitiesFilter;
+use SphereMall\MS\Lib\Filters\Filter;
 use SphereMall\MS\Resources\Resource;
 
 /**
@@ -64,6 +66,30 @@ class ElasticIndexerResource extends Resource{
     {
         $response = $this->handler->handle('DELETE', null, 'delete');
         return $this->make($response, false);
+    }
+
+    /**
+     * @param array $additionalParams
+     * @return array
+     */
+    protected function getQueryParams(array $additionalParams = [])
+    {
+        $params = [
+            'offset' => $this->offset,
+            'limit'  => $this->limit,
+        ];
+
+        if ($this->filter && $this->filter instanceof EntitiesFilter) {
+            if (($filters = $this->getFilters()) && !empty($filters)) {
+                foreach ($filters as $filter) {
+                    $params[$filter['entity']] = $filter['filter'];
+                }
+            }
+        }
+
+        $params = array_merge($params, $additionalParams);
+
+        return $params;
     }
 
     /**

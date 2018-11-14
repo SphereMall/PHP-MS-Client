@@ -31,7 +31,7 @@ class Filter
         FilterOperators::IS_NULL,
     ];
 
-    private $filters;
+    protected $filters;
     #endregion
 
     #region [Constructor]
