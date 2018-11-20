@@ -105,6 +105,9 @@ class Request
 
         if ($body) {
             switch (strtolower($method)) {
+                case 'get' :
+                    $options['body'] = json_encode($body);
+                    break;
                 case 'put':
                     $options['body'] = http_build_query($body);
                     break;
