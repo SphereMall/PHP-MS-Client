@@ -16,6 +16,7 @@ use SphereMall\MS\Resources\Comments\CommentsResource;
 use SphereMall\MS\Resources\Comments\EntitiesAverageRating;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
+use SphereMall\MS\Resources\ElasticSearch\ElasticResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
@@ -491,6 +492,12 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new GridResource($this);
+    }
+
+    public function elastic()
+    {
+        /** @var Client $this */
+        return new ElasticResource($this);
     }
 
     /**
