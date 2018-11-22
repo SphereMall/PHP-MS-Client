@@ -244,13 +244,12 @@ trait ServiceInjector
 
     #region [Shop service]
     /**
-     * @param string $version
      * @return OrdersResource
      */
-    public function orders(string $version = 'v2')
+    public function orders()
     {
         /** @var Client $this */
-        return new OrdersResource($this, $version);
+        return new OrdersResource($this);
     }
 
     /**
