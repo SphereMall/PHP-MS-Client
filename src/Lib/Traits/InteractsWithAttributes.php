@@ -92,7 +92,7 @@ trait InteractsWithAttributes
         $attributeValue = $this->getFirstValueByAttributeCode($code);
 
         if (!$attributeValue) {
-            return null;
+            return "";
         }
 
         $field = $asTitle ? 'title' : 'value';
