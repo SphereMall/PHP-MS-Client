@@ -45,7 +45,7 @@ class ElasticResource extends Resource
         return $this;
     }
 
-    public function setParams(ElasticFilterBuilder $params)
+    public function setFilter(ElasticFilterBuilder $params)
     {
         $this->params = $params->getParams();
 
