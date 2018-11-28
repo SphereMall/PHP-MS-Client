@@ -9,9 +9,10 @@
 namespace SphereMall\MS\Lib\Filters\Elastic\Config;
 
 
+use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigInterface;
 
-class ConfigBuilder
+class ConfigBuilder implements ElasticConfigInterface
 {
     private $config = [];
 
@@ -27,7 +28,7 @@ class ConfigBuilder
         return $this->config;
     }
 
-    public function setConfig(ElasticConfigInterface $config)
+    public function setConfig(ElasticConfigElementInterface $config)
     {
         $this->config += $config->getElements();
     }

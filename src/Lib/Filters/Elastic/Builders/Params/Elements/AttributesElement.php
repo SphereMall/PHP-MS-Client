@@ -9,12 +9,14 @@
 namespace SphereMall\MS\Lib\Filters\Elastic\Builders\Params\Elements;
 
 
+use SphereMall\MS\Lib\Filters\Interfaces\AttributeValuesInterface;
+
 class AttributesElement
 {
     private $attribute       = 0;
     private $attributeValues = [];
 
-    public function __construct(int $attribute, array $attributeValues)
+    public function __construct(string $attribute, AttributeValuesInterface $attributeValues)
     {
         $this->attribute       = $attribute;
         $this->attributeValues = $attributeValues;
@@ -23,7 +25,9 @@ class AttributesElement
     public function getAttributes()
     {
         return [
-            (string)$this->attribute => $this->attributeValues,
+            $this->attribute => [
+                $this->attributeValues->getFieldName() => $this->attributeValues->getFieldValues(),
+            ],
         ];
     }
 }

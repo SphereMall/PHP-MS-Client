@@ -8,9 +8,9 @@
 
 namespace SphereMall\MS\Lib\Filters\Elastic\Config;
 
-use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigInterface;
+use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 
-class AttributesConfig implements ElasticConfigInterface
+class AttributesConfig implements ElasticConfigElementInterface
 {
     private $attributes = [];
 
@@ -31,7 +31,7 @@ class AttributesConfig implements ElasticConfigInterface
         ];
     }
 
-    private function setAttributeItem(int $attribute)
+    private function setAttributeItem(string $attribute)
     {
         $this->attributes[] = $attribute;
 
