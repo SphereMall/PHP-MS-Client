@@ -11,7 +11,7 @@ namespace SphereMall\MS\Resources\ElasticSearch;
 use SphereMall\MS\Lib\Filters\Elastic\Builders\ElasticFilterBuilder;
 use SphereMall\MS\Lib\Filters\Elastic\Config\ConfigBuilder;
 use SphereMall\MS\Lib\Filters\Elastic\Params\ElasticFilterParams;
-use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigInterface;
+use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 use SphereMall\MS\Lib\Makers\FacetsMaker;
 use SphereMall\MS\Resources\Resource;
 

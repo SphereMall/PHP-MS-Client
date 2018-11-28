@@ -8,9 +8,9 @@
 
 namespace SphereMall\MS\Lib\Filters\Elastic\Config;
 
-use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigInterface;
+use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 
-class BrandsConfig implements ElasticConfigInterface
+class BrandsConfig implements ElasticConfigElementInterface
 {
     private $use = false;
 

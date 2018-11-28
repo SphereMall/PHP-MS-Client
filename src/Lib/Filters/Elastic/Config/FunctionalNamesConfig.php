@@ -8,9 +8,9 @@
 
 namespace SphereMall\MS\Lib\Filters\Elastic\Config;
 
-use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigInterface;
+use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 
-class FunctionalNamesConfig implements ElasticConfigInterface
+class FunctionalNamesConfig implements ElasticConfigElementInterface
 {
     private $use = false;
 
