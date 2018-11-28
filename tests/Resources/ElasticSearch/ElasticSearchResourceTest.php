@@ -13,6 +13,8 @@ use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Entities\Page;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\AttributeFilterParams;
+use SphereMall\MS\Lib\FilterParams\ElasticSearch\AttributeValuesFilterParams;
+use SphereMall\MS\Lib\FilterParams\ElasticSearch\AttributeValuesIdFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\IndexFilterParams;
 use SphereMall\MS\Lib\FilterParams\ElasticSearch\TermsFilterParams;
 use SphereMall\MS\Lib\Filters\ElasticSearch\BodyQueryFilter;
@@ -70,14 +72,15 @@ class ElasticSearchResourceTest extends SetUpResourceTest
     {
         $index = new ElasticSearchIndexFilter(new IndexFilterParams([Product::class]));
 
-        $attrId     = 1;
-        $attrValues = [1, 2];
+        $attrId        = "color";
+        $attrValuesIds = [1, 2];
+        $attrValues    = ["n", "y"];
 
-        $attrTerm = new TermsFilter(new AttributeFilterParams($attrId, $attrValues));
+        $attrTerm = new TermsFilter(new AttributeFilterParams($attrId, new AttributeValuesIdFilterParams($attrValuesIds)));
         $this->assertAttributeEquals("terms", "name", $attrTerm);
         $this->assertAttributeEquals(null, "langCodes", $attrTerm);
-        $this->assertAttributeEquals(["field" => "1_attr.valueId"], "facets", $attrTerm);
-        $this->assertAttributeEquals(["{$attrId}_attr.valueId" => $attrValues], "values", $attrTerm);
+        $this->assertAttributeEquals(["field" => "{$attrId}_attr.valueId"], "facets", $attrTerm);
+        $this->assertAttributeEquals(["{$attrId}_attr.valueId" => $attrValuesIds], "values", $attrTerm);
 
         $filter = (new SearchFilter())->index([$index])->elements([$attrTerm])->getSearchFilters();
 
@@ -90,7 +93,25 @@ class ElasticSearchResourceTest extends SetUpResourceTest
                     "filter" => [
                         [
                             "terms" => [
-                                "{$attrId}_attr.valueId" => $attrValues,
+                                "{$attrId}_attr.valueId" => $attrValuesIds,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ], $filter['body']);
+
+        $attrTerm = new TermsFilter(new AttributeFilterParams($attrId, new AttributeValuesFilterParams($attrValues)));
+
+        $filter = (new SearchFilter())->index([$index])->elements([$attrTerm])->getSearchFilters();
+
+        $this->assertEquals([
+            "query" => [
+                "bool" => [
+                    "filter" => [
+                        [
+                            "terms" => [
+                                "{$attrId}_attr.attributeValue" => $attrValues,
                             ],
                         ],
                     ],
@@ -141,7 +162,7 @@ class ElasticSearchResourceTest extends SetUpResourceTest
         $attrId     = 1;
         $attrValues = [1, 2];
 
-        $attrTerm = new TermsFilter(new AttributeFilterParams($attrId, $attrValues));
+        $attrTerm = new TermsFilter(new AttributeFilterParams($attrId, new AttributeValuesIdFilterParams($attrValues)));
 
         $field  = "brandId";
         $values = [333, 50];
