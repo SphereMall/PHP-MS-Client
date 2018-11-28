@@ -15,14 +15,20 @@ class ConfigBuilder
 {
     private $config = [];
 
-    public function __construct(ElasticConfigInterface ...$configs) {
+    public function __construct(array $configs)
+    {
         foreach ($configs as $configItem) {
-            $this->config += $configItem->getElements();
+            $this->setConfig($configItem);
         }
     }
 
     public function getConfig()
     {
         return $this->config;
+    }
+
+    public function setConfig(ElasticConfigInterface $config)
+    {
+        $this->config += $config->getElements();
     }
 }

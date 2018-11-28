@@ -82,10 +82,14 @@ class FullTextFilter extends Filter
 
     /**
      * @param array $fields
+     *
+     * @return $this
      */
     public function setFields(array $fields)
     {
         $this->fields = $fields;
+
+        return $this;
     }
 
     /**

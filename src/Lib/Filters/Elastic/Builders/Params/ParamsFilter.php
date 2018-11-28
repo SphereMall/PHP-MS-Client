@@ -16,15 +16,20 @@ class ParamsFilter implements ParamFilterInterface
 {
     private $elements = [];
 
-    public function __construct(ParamFilterElementInterface ...$elements)
+    public function __construct(array $params)
     {
-        foreach ($elements as $element) {
-            $this->elements += $element->getParams();
+        foreach ($params as $param) {
+            $this->setParam($param);
         }
     }
 
     public function getFilters(): array
     {
         return $this->elements;
+    }
+
+    public function setParam(ParamFilterElementInterface $param)
+    {
+        $this->elements += $param->getParams();
     }
 }
