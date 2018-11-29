@@ -8,9 +8,13 @@
 
 namespace SphereMall\MS\Lib\FilterParams\ElasticSearch;
 
-
 use SphereMall\MS\Lib\FilterParams\Interfaces\AttributesValuesParams;
 
+/**
+ * Class AttributeValuesIdFilterParams
+ *
+ * @package SphereMall\MS\Lib\FilterParams\ElasticSearch
+ */
 class AttributeValuesIdFilterParams implements AttributesValuesParams
 {
     private $values = [];
@@ -43,6 +47,9 @@ class AttributeValuesIdFilterParams implements AttributesValuesParams
         return "valueId";
     }
 
+    /**
+     * @param int $id
+     */
     private function setIds(int $id)
     {
         $this->values[] = $id;

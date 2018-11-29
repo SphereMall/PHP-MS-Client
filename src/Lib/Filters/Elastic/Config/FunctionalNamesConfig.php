@@ -10,10 +10,20 @@ namespace SphereMall\MS\Lib\Filters\Elastic\Config;
 
 use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 
+/**
+ * Class FunctionalNamesConfig
+ *
+ * @package SphereMall\MS\Lib\Filters\Elastic\Config
+ */
 class FunctionalNamesConfig implements ElasticConfigElementInterface
 {
     private $use = false;
 
+    /**
+     * FunctionalNamesConfig constructor.
+     *
+     * @param bool $use
+     */
     public function __construct(bool $use)
     {
         $this->use = $use;

@@ -15,11 +15,19 @@ use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 use SphereMall\MS\Lib\Makers\FacetsMaker;
 use SphereMall\MS\Resources\Resource;
 
+/**
+ * Class ElasticResource
+ *
+ * @package SphereMall\MS\Resources\ElasticSearch
+ */
 class ElasticResource extends Resource
 {
     private $config = [];
     private $params;
 
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return 'elasticsearch';
@@ -38,6 +46,11 @@ class ElasticResource extends Resource
         return $this->make($response, false, new FacetsMaker());
     }
 
+    /**
+     * @param ConfigBuilder $config
+     *
+     * @return $this
+     */
     public function setConfigs(ConfigBuilder $config)
     {
         $this->config = $config->getConfig();
@@ -45,6 +58,11 @@ class ElasticResource extends Resource
         return $this;
     }
 
+    /**
+     * @param ElasticFilterBuilder $params
+     *
+     * @return $this
+     */
     public function setFilter(ElasticFilterBuilder $params)
     {
         $this->params = $params->getParams();
@@ -52,6 +70,11 @@ class ElasticResource extends Resource
         return $this;
     }
 
+    /**
+     * @param array $additionalParams
+     *
+     * @return array
+     */
     protected function getQueryParams(array $additionalParams = [])
     {
         return array_merge($this->params, $additionalParams);

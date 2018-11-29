@@ -8,8 +8,15 @@
 
 namespace SphereMall\MS\Lib\Filters\Interfaces;
 
-
+/**
+ * Interface ElasticFilterInterface
+ *
+ * @package SphereMall\MS\Lib\Filters\Interfaces
+ */
 interface ElasticFilterInterface
 {
+    /**
+     * @return array
+     */
     public function getParams(): array;
 }

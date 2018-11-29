@@ -8,13 +8,22 @@
 
 namespace SphereMall\MS\Lib\Filters\Elastic\Builders\Params;
 
-
 use SphereMall\MS\Lib\Filters\Interfaces\ParamFilterElementInterface;
 
+/**
+ * Class BrandsFilter
+ *
+ * @package SphereMall\MS\Lib\Filters\Elastic\Builders\Params
+ */
 class BrandsFilter implements ParamFilterElementInterface
 {
     private $brands = [];
 
+    /**
+     * BrandsFilter constructor.
+     *
+     * @param array $brands
+     */
     public function __construct(array $brands)
     {
         foreach ($brands as $brand) {
@@ -22,11 +31,19 @@ class BrandsFilter implements ParamFilterElementInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public function getParams(): array
     {
         return ['brands' => $this->brands];
     }
 
+    /**
+     * @param int $brand
+     *
+     * @return $this
+     */
     public function setBrand(int $brand)
     {
         $this->brands[] = $brand;

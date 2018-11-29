@@ -10,10 +10,20 @@ namespace SphereMall\MS\Lib\Filters\Elastic\Config;
 
 use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 
+/**
+ * Class AttributesConfig
+ *
+ * @package SphereMall\MS\Lib\Filters\Elastic\Config
+ */
 class AttributesConfig implements ElasticConfigElementInterface
 {
     private $attributes = [];
 
+    /**
+     * AttributesConfig constructor.
+     *
+     * @param array $attributes
+     */
     public function __construct(array $attributes)
     {
         foreach ($attributes as $attribute) {
@@ -31,6 +41,11 @@ class AttributesConfig implements ElasticConfigElementInterface
         ];
     }
 
+    /**
+     * @param string $attribute
+     *
+     * @return $this
+     */
     private function setAttributeItem(string $attribute)
     {
         $this->attributes[] = $attribute;

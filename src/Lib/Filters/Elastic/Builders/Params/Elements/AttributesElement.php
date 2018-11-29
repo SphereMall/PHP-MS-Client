@@ -8,20 +8,33 @@
 
 namespace SphereMall\MS\Lib\Filters\Elastic\Builders\Params\Elements;
 
-
 use SphereMall\MS\Lib\Filters\Interfaces\AttributeValuesInterface;
 
+/**
+ * Class AttributesElement
+ *
+ * @package SphereMall\MS\Lib\Filters\Elastic\Builders\Params\Elements
+ */
 class AttributesElement
 {
     private $attribute       = 0;
     private $attributeValues = [];
 
+    /**
+     * AttributesElement constructor.
+     *
+     * @param string                   $attribute
+     * @param AttributeValuesInterface $attributeValues
+     */
     public function __construct(string $attribute, AttributeValuesInterface $attributeValues)
     {
         $this->attribute       = $attribute;
         $this->attributeValues = $attributeValues;
     }
 
+    /**
+     * @return array
+     */
     public function getAttributes()
     {
         return [
