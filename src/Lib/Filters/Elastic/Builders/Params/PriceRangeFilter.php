@@ -8,14 +8,23 @@
 
 namespace SphereMall\MS\Lib\Filters\Elastic\Builders\Params;
 
-
 use SphereMall\MS\Lib\Filters\Elastic\Builders\Params\Elements\PriceRangeElement;
 use SphereMall\MS\Lib\Filters\Interfaces\ParamFilterElementInterface;
 
+/**
+ * Class PriceRangeFilter
+ *
+ * @package SphereMall\MS\Lib\Filters\Elastic\Builders\Params
+ */
 class PriceRangeFilter implements ParamFilterElementInterface
 {
     private $priceRanges = [];
 
+    /**
+     * PriceRangeFilter constructor.
+     *
+     * @param PriceRangeElement ...$priceRanges
+     */
     public function __construct(PriceRangeElement ...$priceRanges)
     {
         $this->priceRanges = array_map(function ($range) {
@@ -24,6 +33,9 @@ class PriceRangeFilter implements ParamFilterElementInterface
         }, $priceRanges);
     }
 
+    /**
+     * @return array
+     */
     public function getParams(): array
     {
         return [

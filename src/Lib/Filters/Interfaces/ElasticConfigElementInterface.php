@@ -8,8 +8,15 @@
 
 namespace SphereMall\MS\Lib\Filters\Interfaces;
 
-
+/**
+ * Interface ElasticConfigElementInterface
+ *
+ * @package SphereMall\MS\Lib\Filters\Interfaces
+ */
 interface ElasticConfigElementInterface
 {
+    /**
+     * @return array
+     */
     public function getElements(): array;
 }

@@ -8,8 +8,15 @@
 
 namespace SphereMall\MS\Lib\Filters\Interfaces;
 
-
+/**
+ * Interface ElasticConfigInterface
+ *
+ * @package SphereMall\MS\Lib\Filters\Interfaces
+ */
 interface ElasticConfigInterface
 {
+    /**
+     * @return mixed
+     */
     public function getConfig();
 }

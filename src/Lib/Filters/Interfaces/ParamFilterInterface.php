@@ -8,8 +8,15 @@
 
 namespace SphereMall\MS\Lib\Filters\Interfaces;
 
-
+/**
+ * Interface ParamFilterInterface
+ *
+ * @package SphereMall\MS\Lib\Filters\Interfaces
+ */
 interface ParamFilterInterface
 {
-    public function getFilters(): array ;
+    /**
+     * @return array
+     */
+    public function getFilters(): array;
 }

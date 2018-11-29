@@ -8,10 +8,20 @@
 
 namespace SphereMall\MS\Lib\Filters\Interfaces;
 
-
+/**
+ * Interface AttributeValuesInterface
+ *
+ * @package SphereMall\MS\Lib\Filters\Interfaces
+ */
 interface AttributeValuesInterface
 {
+    /**
+     * @return string
+     */
     public function getFieldName();
 
+    /**
+     * @return array
+     */
     public function getFieldValues();
 }

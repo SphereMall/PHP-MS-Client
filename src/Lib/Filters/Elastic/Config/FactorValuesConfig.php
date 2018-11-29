@@ -8,13 +8,22 @@
 
 namespace SphereMall\MS\Lib\Filters\Elastic\Config;
 
-
 use SphereMall\MS\Lib\Filters\Interfaces\ElasticConfigElementInterface;
 
+/**
+ * Class FactorValuesConfig
+ *
+ * @package SphereMall\MS\Lib\Filters\Elastic\Config
+ */
 class FactorValuesConfig implements ElasticConfigElementInterface
 {
     private $factorValues = [];
 
+    /**
+     * FactorValuesConfig constructor.
+     *
+     * @param array $factorValues
+     */
     public function __construct(array $factorValues)
     {
         foreach ($factorValues as $factorValue) {
@@ -22,6 +31,9 @@ class FactorValuesConfig implements ElasticConfigElementInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public function getElements(): array
     {
         return [
@@ -29,6 +41,11 @@ class FactorValuesConfig implements ElasticConfigElementInterface
         ];
     }
 
+    /**
+     * @param int $factorValue
+     *
+     * @return $this
+     */
     private function setFactorValues(int $factorValue)
     {
         $this->factorValues[] = $factorValue;
