@@ -28,7 +28,7 @@ class ParamsFilterBuilder implements ElasticFilterInterface
     public function __construct(ParamFilterInterface ...$filters)
     {
         $this->params = array_map(function ($filter) {
-            /**@var $filter ParamFilterInterface**/
+            /**@var $filter ParamFilterInterface* */
             return $filter->getFilters();
         }, $filters);
     }
@@ -39,9 +39,13 @@ class ParamsFilterBuilder implements ElasticFilterInterface
     public function getParams(): array
     {
         return [
-            'params' => json_encode($this->params),
+            'params' => json_encode($this->getValues()),
         ];
     }
 
 
+    public function getValues()
+    {
+        return $this->params;
+    }
 }

@@ -19,4 +19,6 @@ interface ElasticFilterInterface
      * @return array
      */
     public function getParams(): array;
+
+    public function getValues();
 }

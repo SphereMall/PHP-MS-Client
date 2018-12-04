@@ -15,9 +15,10 @@ use SphereMall\MS\Lib\Filters\Interfaces\ParamFilterElementInterface;
  *
  * @package SphereMall\MS\Lib\Filters\Elastic\Builders\Params
  */
-class FunctionalNamesFilter implements ParamFilterElementInterface
+class FunctionalNamesFilter extends BasicQueryBuilder implements ParamFilterElementInterface
 {
-    private $functionalNames = [];
+    private   $functionalNames = [];
+    protected $fieldName       = 'functionalNameId';
 
     /**
      * FunctionalNamesFilter constructor.
@@ -40,11 +41,19 @@ class FunctionalNamesFilter implements ParamFilterElementInterface
     }
 
     /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->functionalNames;
+    }
+
+    /**
      * @param int $functionalNameId
      *
      * @return $this
      */
-    private function setFunctionalNameId (int $functionalNameId)
+    private function setFunctionalNameId(int $functionalNameId)
     {
         $this->functionalNames[] = $functionalNameId;
 

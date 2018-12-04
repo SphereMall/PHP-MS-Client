@@ -38,7 +38,12 @@ class EntitiesFilterBuilder implements ElasticFilterInterface
     public function getParams(): array
     {
         return [
-            'entities' => implode(',', $this->entities),
+            'entities' => $this->getValues(),
         ];
+    }
+
+    public function getValues()
+    {
+        return implode(',', $this->entities);
     }
 }

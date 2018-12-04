@@ -17,6 +17,7 @@ use SphereMall\MS\Lib\Filters\Interfaces\AttributeValuesInterface;
  */
 class AttributeValuesElement implements AttributeValuesInterface
 {
+    const FIELD_NAME = "attributeValue";
     private $values = [];
 
     /**

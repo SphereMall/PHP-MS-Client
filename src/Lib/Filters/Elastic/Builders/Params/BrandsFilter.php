@@ -15,9 +15,10 @@ use SphereMall\MS\Lib\Filters\Interfaces\ParamFilterElementInterface;
  *
  * @package SphereMall\MS\Lib\Filters\Elastic\Builders\Params
  */
-class BrandsFilter implements ParamFilterElementInterface
+class BrandsFilter extends BasicQueryBuilder implements ParamFilterElementInterface
 {
-    private $brands = [];
+    private   $brands    = [];
+    protected $fieldName = 'brandId';
 
     /**
      * BrandsFilter constructor.
@@ -49,5 +50,10 @@ class BrandsFilter implements ParamFilterElementInterface
         $this->brands[] = $brand;
 
         return $this;
+    }
+
+    public function getData()
+    {
+        return $this->brands;
     }
 }

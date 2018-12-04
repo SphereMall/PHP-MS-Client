@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Lib\Makers;
 
 use SphereMall\MS\Lib\Http\ElasticSearchResponse;
+use SphereMall\MS\Lib\Http\Response;
 
 /**
  * Class ElasticSearchFacetedMaker
@@ -22,7 +23,7 @@ class ElasticSearchFacetedMaker extends ElasticSearchMaker
      * @param ElasticSearchResponse $response
      * @return array
      */
-    protected function getResultFromResponse(ElasticSearchResponse $response): array
+    protected function getResultFromResponse(Response $response): array
     {
         $result = [];
         if (!isset($response->getData()['aggregations'])) {

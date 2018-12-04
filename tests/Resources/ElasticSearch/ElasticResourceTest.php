@@ -190,7 +190,7 @@ class ElasticResourceTest extends SetUpResourceTest
             ]
         ], $attrElId->getAttributes());
 
-        $attrParams = new AttributesFilter($attrEl);
+        $attrParams = new AttributesFilter([$attrEl]);
 
         $this->assertInstanceOf(ParamFilterElementInterface::class, $attrParams);
 
@@ -228,7 +228,7 @@ class ElasticResourceTest extends SetUpResourceTest
     public function testParamsFilter()
     {
         $priceRangeFilter      = new PriceRangeFilter(new PriceRangeElement(1, 100));
-        $attributesFilter      = new AttributesFilter(new AttributesElement("color", new AttributeValuesElement(['red', 'green'])), new AttributesElement("size", new AttributeValueIdElement([1,2])));
+        $attributesFilter      = new AttributesFilter([new AttributesElement("color", new AttributeValuesElement(['red', 'green'])), new AttributesElement("size", new AttributeValueIdElement([1,2]))]);
         $brandsFilter          = new BrandsFilter([156, 706]);
         $functionalNamesFilter = new FunctionalNamesFilter([188]);
 

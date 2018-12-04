@@ -38,10 +38,15 @@ class KeywordFilterBuilder implements ElasticFilterInterface
     public function getParams(): array
     {
         return [
-            'keyword' => json_encode([
-                'value'  => $this->value,
-                'fields' => $this->fields,
-            ]),
+            'keyword' => json_encode($this->getValues()),
+        ];
+    }
+
+    public function getValues()
+    {
+        return [
+            'value'  => $this->value,
+            'fields' => $this->fields,
         ];
     }
 }
