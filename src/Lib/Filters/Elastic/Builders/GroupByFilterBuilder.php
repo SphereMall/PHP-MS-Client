@@ -35,7 +35,12 @@ class GroupByFilterBuilder implements ElasticFilterInterface
     public function getParams(): array
     {
         return [
-            'groupBy' => $this->field,
+            'groupBy' => $this->getValues(),
         ];
+    }
+
+    public function getValues()
+    {
+        return $this->field;
     }
 }

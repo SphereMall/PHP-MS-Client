@@ -16,7 +16,7 @@ use SphereMall\MS\Lib\Filters\Interfaces\ParamFilterElementInterface;
  *
  * @package SphereMall\MS\Lib\Filters\Elastic\Builders\Params
  */
-class PriceRangeFilter implements ParamFilterElementInterface
+class PriceRangeFilter extends BasicQueryBuilder implements ParamFilterElementInterface
 {
     private $priceRanges = [];
 
@@ -25,11 +25,15 @@ class PriceRangeFilter implements ParamFilterElementInterface
      *
      * @param PriceRangeElement ...$priceRanges
      */
-    public function __construct(PriceRangeElement ...$priceRanges)
+    public function __construct(array $priceRanges)
     {
         $this->priceRanges = array_map(function ($range) {
-            /**@var $range PriceRangeElement* */
-            return $range->getPrices();
+            if (is_a($range, PriceRangeElement::class)) {
+                /**@var $range PriceRangeElement* */
+                return $range->getPrices();
+            }
+
+            return $range;
         }, $priceRanges);
     }
 
@@ -41,5 +45,46 @@ class PriceRangeFilter implements ParamFilterElementInterface
         return [
             'priceRange' => $this->priceRanges,
         ];
+    }
+
+    public function getData()
+    {
+        return $this->priceRanges;
+    }
+
+    public function buildQuery(array $elements): array
+    {
+        $ranges = [];
+
+        foreach ($this->getData() as $index => $datum) {
+
+            $price = [];
+
+            if (isset($datum['min']) && $datum['min']) {
+                $price['gte'] = $datum['min'];
+            }
+
+            if (isset($datum['max']) && $datum['max']) {
+                $price['lte'] = $datum['max'];
+            }
+
+            if ($price) {
+                $ranges[] = [
+                    'range' => [
+                        'price' => $price,
+                    ],
+                ];
+            }
+
+        }
+        if ($ranges) {
+            $elements[] = [
+                "bool" => [
+                    "should" => $ranges,
+                ],
+            ];
+        }
+
+        return $elements;
     }
 }
