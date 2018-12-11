@@ -15,6 +15,7 @@ use SphereMall\MS\Lib\Mappers\FacetAttributesMapper;
 use SphereMall\MS\Lib\Mappers\FactorValuesMapper;
 use SphereMall\MS\Lib\Mappers\FunctionalNamesMapper;
 use SphereMall\MS\Lib\Mappers\Mapper;
+use SphereMall\MS\Lib\Mappers\ProductGroupsMapper;
 
 /**
  * Class FacetsMaker
@@ -57,6 +58,11 @@ class FacetsMaker extends ObjectMaker
                     $mapper = new BrandsMapper();
                     $result[$type] = $this->createList($mapper, $items);
                     break;
+                case 'productGroups' :
+                    $mapper = new ProductGroupsMapper();
+                    $result[$type] = $this->createList($mapper, $items);
+                    break;
+
             }
         }
 
