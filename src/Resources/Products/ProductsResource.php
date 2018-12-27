@@ -34,32 +34,48 @@ use SphereMall\MS\Resources\Traits\WithActions;
  */
 class ProductsResource extends Resource
 {
-    use FullResource;
-    use DetailResource;
-    use WithActions;
-    #region [Override methods]
+	use FullResource;
+	use DetailResource;
+	use WithActions;
 
-    /**
-     * @return string
-     */
-    public function getURI()
-    {
-        return "products";
-    }
+	#region [Override methods]
 
-    /**
-     * @param $ids
-     * @return array|\SphereMall\MS\Lib\Collection
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getProductVariantsByIds($ids)
-    {
-        $this->ids($ids);
-        $params = $this->getQueryParams();
+	/**
+	 * @return string
+	 */
+	public function getURI()
+	{
+		return "products";
+	}
 
-        $uriAppend = 'detail/variants';
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
-        return $this->make($response);
-    }
-    #endregiona
+	/**
+	 * @param $ids
+	 * @return array|\SphereMall\MS\Lib\Collection
+	 * @throws \Exception
+	 */
+	public function getProductVariantsByIds($ids)
+	{
+		$this->ids($ids);
+		$params = $this->getQueryParams();
+
+		$uriAppend = 'detail/variants';
+		$response = $this->handler->handle('GET', false, $uriAppend, $params);
+
+		return $this->make($response);
+	}
+
+	/**
+	 * @param $id
+	 * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+	 * @throws \Exception
+	 */
+	public function getRelatedProducts($id)
+	{
+		$params = $this->getQueryParams();
+		$uriAppend = "related/$id";
+		$response = $this->handler->handle('GET', false, $uriAppend, $params);
+
+		return $this->make($response);
+	}
+	#endregion
 }
