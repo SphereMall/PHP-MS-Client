@@ -45,4 +45,25 @@ class OrderItem extends Entity
     public $product;
     public $options;
     #endregion
+
+	#region [Public methods]
+	/**
+	 * @return array
+	 */
+	public function getSelectedOptions()
+	{
+		$optionValueIds = json_decode($this->optionsDetail);
+		foreach ($optionValueIds ?? [] as $optionValueId) {
+			foreach ($this->product->options as $option) {
+				foreach ($option->values as $optionValue) {
+					if ($optionValue->id == $optionValueId && floatval($optionValue->price)) {
+						$option->totalPriceWithVat = $optionValue->totalPriceWithVat;
+						$selectedOptions[] = $option;
+					}
+				}
+			}
+		}
+		return $selectedOptions ?? [];
+	}
+	#endregion
 }
