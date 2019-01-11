@@ -20,5 +20,6 @@ class ElasticIndexer extends Entity
     public $inIndex;
     public $total;
     public $type;
+    public $hash;
     #endregion
 }

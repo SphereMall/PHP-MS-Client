@@ -44,6 +44,7 @@ class ElasticSearchResource extends Resource
      * @param null   $version
      * @param null   $handler
      * @param null   $maker
+     * @param bool   $multi
      */
     public function __construct(Client $client, $version = null, $handler = null, $maker = null, $multi = false)
     {

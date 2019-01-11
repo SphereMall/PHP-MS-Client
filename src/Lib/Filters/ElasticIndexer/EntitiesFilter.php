@@ -17,22 +17,14 @@ use SphereMall\MS\Lib\Filters\Filter;
  */
 class EntitiesFilter extends Filter
 {
-    public function __construct($entitiesFilters = [])
-    {
-        if (!empty($entitiesFilters)) {
-            $this->setFilters($entitiesFilters);
-        }
-
-        return $this;
-    }
+    protected $filters = [];
 
     public function setFilters($entitiesFilters = [])
     {
         foreach ($entitiesFilters as $entityFilter) {
             if ($entityFilter instanceof EntityFilterParams) {
-                $this->filters[] = $entityFilter->getParams();
+                $this->filters += $entityFilter->getParams();
             }
         }
     }
-
 }

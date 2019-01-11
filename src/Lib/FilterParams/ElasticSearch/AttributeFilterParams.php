@@ -9,30 +9,33 @@
 namespace SphereMall\MS\Lib\FilterParams\ElasticSearch;
 
 use SphereMall\MS\Lib\FilterParams\FilterParams;
+use SphereMall\MS\Lib\FilterParams\Interfaces\AttributesValuesParams;
 use SphereMall\MS\Lib\FilterParams\Interfaces\SearchFacetedInterface;
 use SphereMall\MS\Lib\FilterParams\Interfaces\SearchQueryInterface;
 
 /**
  * Class AttributeFilterParams
+ *
  * @package SphereMall\MS\Lib\FilterParams\ElasticSearch
  *
- * @property int   $attributeId
- * @property array $attributeValueIds
+ * @property int                    $attributeId
+ * @property AttributesValuesParams $attributeValues
  */
 class AttributeFilterParams extends FilterParams implements SearchQueryInterface, SearchFacetedInterface
 {
     protected $attributeId;
-    protected $attributeValueIds;
+    protected $attributeValues;
 
     /**
      * AttributeFilterParams constructor.
-     * @param int $attributeId
-     * @param array $attributeValueIds
+     *
+     * @param string                 $attributeId
+     * @param AttributesValuesParams $attributeValues
      */
-    public function __construct(int $attributeId, array $attributeValueIds)
+    public function __construct(string $attributeId, AttributesValuesParams $attributeValues)
     {
-        $this->attributeId       = $attributeId;
-        $this->attributeValueIds = $attributeValueIds;
+        $this->attributeId     = $attributeId;
+        $this->attributeValues = $attributeValues;
     }
 
     /**
@@ -41,7 +44,7 @@ class AttributeFilterParams extends FilterParams implements SearchQueryInterface
      */
     public function getParams()
     {
-        return ["{$this->attributeId}_attr.valueId" => $this->attributeValueIds];
+        return ["{$this->attributeId}_attr." . $this->attributeValues->getParamName() => $this->attributeValues->getValues()];
     }
 
     /**
