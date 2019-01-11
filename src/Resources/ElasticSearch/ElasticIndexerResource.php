@@ -58,6 +58,22 @@ class ElasticIndexerResource extends Resource{
     }
 
     /**
+     * @return ElasticIndexer[]
+     * @throws EntityNotFoundException
+     */
+    public function import()
+    {
+        $params = $this->getQueryParams();
+        $response = $this->handler->handle('GET', null, 'import', $params);
+
+        if (!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getFirstErrorMessage());
+        }
+
+        return $this->make($response);
+    }
+
+    /**
      * @return array
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -80,11 +96,7 @@ class ElasticIndexerResource extends Resource{
         ];
 
         if ($this->filter && $this->filter instanceof EntitiesFilter) {
-            if (($filters = $this->getFilters()) && !empty($filters)) {
-                foreach ($filters as $filter) {
-                    $params[$filter['entity']] = $filter['filter'];
-                }
-            }
+            $params += $this->getFilters() ?? [];
         }
 
         $params = array_merge($params, $additionalParams);

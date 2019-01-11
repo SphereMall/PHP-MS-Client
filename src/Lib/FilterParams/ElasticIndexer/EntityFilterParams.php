@@ -35,6 +35,6 @@ class EntityFilterParams extends FilterParams
             $filter = (string)(new Filter($this->filter->asFilter()));
         }
 
-        return ['entity' => $this->entity, 'filter' => $filter ?? ''];
+        return [$this->entity => $filter ?? ''];
     }
 }
