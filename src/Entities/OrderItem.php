@@ -59,11 +59,11 @@ class OrderItem extends Entity
 					if ($optionValue->id == $optionValueId && floatval($optionValue->price)) {
 						$option->totalPriceWithVat = $optionValue->totalPriceWithVat;
 						$selectedOptions[] = $option;
+						return $selectedOptions;
 					}
 				}
 			}
 		}
-		return $selectedOptions ?? [];
 	}
 	#endregion
 }
