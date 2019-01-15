@@ -20,7 +20,7 @@ abstract class ComplexFilter extends BaseFilter
 
     /**
      * @param array $fields
-     * @return ComplexFilter
+     * @return $this
      */
     public function fields(array $fields)
     {

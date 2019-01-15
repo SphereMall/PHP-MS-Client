@@ -79,6 +79,20 @@ class ElasticResource extends Resource
     }
 
     /**
+     * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function first()
+    {
+        $this->limit(1, 0);
+        $params   = $this->getAllQueryParams();
+        $response = (new ElasticSearchRequest($this->client, $this))->handle("GET", false, false, $params);
+
+        return $this->make($response, false);
+    }
+
+    /**
      * @param ConfigBuilder $config
      *`
      *
