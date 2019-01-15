@@ -78,6 +78,19 @@ class ElasticSearchResource extends Resource
     }
 
     /**
+     * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function first()
+    {
+        $this->limit(1, 0);
+        $params = $this->getQueryParams($this->filter && method_exists($this->filter, 'getSearchFilters') ? $this->filter->getSearchFilters() : []);
+
+        return $this->make($this->getResponse($params), false);
+    }
+
+    /**
      * @param array $langs
      *
      * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
