@@ -41,7 +41,7 @@ class Collection implements Iterator
             $this->total = count($objects);
         }
 
-        $this->meta = $meta;
+        $this->meta = $meta ?? new Meta();
     }
 
     #endregion
