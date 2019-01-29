@@ -111,6 +111,7 @@ class Request
 
                 case 'put':
                     $options['body'] = http_build_query($body);
+                    $options['headers']['Content-Type'] = 'application/x-www-form-urlencoded';
                     break;
 
                 case 'patch':
@@ -127,7 +128,6 @@ class Request
                 case 'delete':
                     $options['body'] = http_build_query($body);
                     break;
-
             }
         }
 
