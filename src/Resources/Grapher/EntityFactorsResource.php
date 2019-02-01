@@ -115,7 +115,7 @@ class EntityFactorsResource extends Resource
             'factorValueIds'    => implode(',', $factorValueIds)
         ]);
 
-        $response = $this->handler->handle('POST', false, $uriAppend, $params);
+        $response = $this->handler->handle('POST', $params, $uriAppend);
 
         return $this->make($response);
     }
