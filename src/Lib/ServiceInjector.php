@@ -18,6 +18,7 @@ use SphereMall\MS\Resources\Documents\DocumentsResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
+use SphereMall\MS\Resources\ExternalSystems\ExternalSystemResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorsResource;
@@ -599,6 +600,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new UserAdditionalDataResource($this);
+    }
+
+    /**
+     * @return ExternalSystemResource
+     */
+    public function externalSystem()
+    {
+        /** @var Client $this */
+        return new ExternalSystemResource($this);
     }
     #endregion
 }
