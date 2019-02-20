@@ -22,6 +22,7 @@ use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorValuesResource;
+use SphereMall\MS\Resources\Prices\PriceConfigurationsResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Products\AttributeGroupsEntitiesResource;
@@ -540,6 +541,17 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new ProductPriceConfigurationsResource($this);
+    }
+    #endregion
+
+    #region [Price service]
+    /**
+     * @return PriceConfigurationsResource
+     */
+    public function priceConfigurations()
+    {
+        /** @var Client $this */
+        return new PriceConfigurationsResource($this);
     }
     #endregion
 
