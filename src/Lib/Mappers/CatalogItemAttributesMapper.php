@@ -14,7 +14,7 @@ class CatalogItemAttributesMapper extends Mapper
 
     /**
      * @param array $array
-     * @return Comment
+     * @return \SphereMall\MS\Entities\CatalogItemAttribute
      */
     protected function doCreateObject(array $array)
     {
