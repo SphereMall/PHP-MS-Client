@@ -12,6 +12,7 @@ namespace SphereMall\MS\Lib;
 use SphereMall\MS\Client;
 use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
+use SphereMall\MS\Resources\Catalog\CatalogItemAttributesResource;
 use SphereMall\MS\Resources\Comments\CommentsResource;
 use SphereMall\MS\Resources\Comments\EntitiesAverageRating;
 use SphereMall\MS\Resources\Documents\DocumentsResource;
@@ -75,6 +76,7 @@ use SphereMall\MS\Resources\Users\WishListResource;
  */
 trait ServiceInjector
 {
+
     #region [Properties]
     protected static $basket = null;
     #endregion
@@ -255,7 +257,6 @@ trait ServiceInjector
 
     /**
      * @param string $version
-     *
      * @return BasketResource
      */
     public function basketResource(string $version = 'v2')
@@ -266,8 +267,7 @@ trait ServiceInjector
 
     /**
      * @param int|null $id
-     * @param string   $version
-     *
+     * @param string $version
      * @return null
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \SphereMall\MS\Exceptions\EntityNotFoundException
@@ -600,5 +600,14 @@ trait ServiceInjector
         /** @var Client $this */
         return new UserAdditionalDataResource($this);
     }
+
+    /**
+     * @return \SphereMall\MS\Resources\Catalog\CatalogItemAttributesResource
+     */
+    public function catalogItemAttributes()
+    {
+        return new CatalogItemAttributesResource($this);
+    }
+
     #endregion
 }
