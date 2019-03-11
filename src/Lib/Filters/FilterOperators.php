@@ -21,4 +21,6 @@ class FilterOperators
     const GREATER_THAN_OR_EQUAL = 'gte';
     const LESS_THAN_OR_EQUAL    = 'lte';
     const IS_NULL               = 'is';
+    const IN                    = 'in';
+    const NOT_IN                = 'ni';
 }

@@ -29,6 +29,8 @@ class Filter
         FilterOperators::GREATER_THAN_OR_EQUAL,
         FilterOperators::LESS_THAN_OR_EQUAL,
         FilterOperators::IS_NULL,
+        FilterOperators::IN,
+        FilterOperators::NOT_IN,
     ];
 
     protected $filters;
