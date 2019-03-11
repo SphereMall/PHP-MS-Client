@@ -8,18 +8,12 @@
 
 namespace SphereMall\MS\Resources\ElasticSearch;
 
-use SphereMall\MS\Lib\Filters\Elastic\Builders\EntitiesFilterBuilder;
-use SphereMall\MS\Lib\Filters\Elastic\Builders\GroupByFilterBuilder;
-use SphereMall\MS\Lib\Filters\Elastic\Builders\KeywordFilterBuilder;
-use SphereMall\MS\Lib\Filters\Elastic\Builders\Params\QueryFactory;
-use SphereMall\MS\Lib\Filters\Elastic\Builders\ParamsFilterBuilder;
-use SphereMall\MS\Lib\Filters\Elastic\Config\ConfigBuilder;
-use SphereMall\MS\Lib\Filters\Interfaces\ElasticFilterInterface;
-use SphereMall\MS\Lib\Http\ElasticSearchRequest;
-use SphereMall\MS\Lib\Makers\ElasticSearchGroupByMaker;
+use SphereMall\MS\Client;
+use SphereMall\MS\Lib\Elastic\Builders\BodyBuilder;
+use SphereMall\MS\Lib\Elastic\Builders\FilterBuilder;
+use SphereMall\MS\Lib\Elastic\Builders\MSearch;
+use SphereMall\MS\Lib\Elastic\Builders\Search;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
-use SphereMall\MS\Lib\Makers\FacetsMaker;
-use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\BasicAlgorithm;
 use SphereMall\MS\Resources\Resource;
 
 /**
@@ -29,241 +23,76 @@ use SphereMall\MS\Resources\Resource;
  */
 class ElasticResource extends Resource
 {
-    private $config       = [];
-    private $params       = [];
-    private $factorValues = [];
+    private $search = null;
 
-    /**
-     * @return string
-     */
+    public function __construct(Client $client, $version = null, $handler = null, $maker = null)
+    {
+        parent::__construct($client, $version, $handler, $maker);
+        $this->handler = $handler ?? null;
+    }
+
     public function getURI()
     {
         return 'elasticsearch';
     }
 
     /**
-     * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function facets()
-    {
-        $params = $this->getFacetQueryParams();
-
-        $response = $this->handler->handle('GET', $this->config, 'filter', $params);
-
-        return $this->make($response, false, new FacetsMaker());
-    }
-
-    /**
-     * @param BasicAlgorithm $algorithm
+     * @param BodyBuilder $builder
      *
      * @return $this
      */
-    public function setFactors(BasicAlgorithm $algorithm)
+    public function search(BodyBuilder $builder)
     {
-        $this->factorValues = $algorithm->getAlgorithm();
+        $this->search = new Search($builder);
 
         return $this;
     }
 
     /**
-     * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @param array $builders
+     *
+     * @return $this
      */
-    public function all()
+    public function msearch(array $builders)
     {
-        $params   = $this->getAllQueryParams();
-        $response = (new ElasticSearchRequest($this->client, $this))->handle("GET", false, false, $params);
+        $this->search = new MSearch($builders);
+
+        return $this;
+    }
+
+    /**
+     * @param array|\SphereMall\MS\Lib\Filters\Filter|\SphereMall\MS\Lib\Specifications\Basic\FilterSpecification $filter
+     *
+     * @return $this|Resource
+     * @throws \Exception
+     */
+    public function filter($filter)
+    {
+        if (!is_a($filter, FilterBuilder::class)) {
+            throw new \Exception ("Filter must be extend class 'FilterBuilder'");
+        }
+
+        $this->filter = $filter;
+
+        return $this;
+    }
+
+
+    public function facets()
+    {
+        $handler = new \SphereMall\MS\Lib\Http\Request($this->client, $this);
+        $response = $handler->handle('GET', $this->filter->getConfigs(), 'filter', $this->filter->getQuery());
 
         return $this->make($response);
     }
 
-    /**
-     * @return array|int|null|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function first()
-    {
-        $this->limit(1, 0);
-        $params   = $this->getAllQueryParams();
-        $response = (new ElasticSearchRequest($this->client, $this))->handle("GET", false, false, $params);
 
-        return $this->make($response, false);
+    public function all()
+    {
+        $handler  = new \SphereMall\MS\Lib\Http\ElasticSearch\Request($this->client, $this);
+        $response = $handler->handle('GET', false, false, [$this->search]);
+
+        return $this->make($response, true, new ElasticSearchMaker());
     }
 
-    /**
-     * @param ConfigBuilder $config
-     *`
-     *
-     * @return $this
-     */
-    public function setConfigs(ConfigBuilder $config)
-    {
-        $this->config = $config->getConfig();
-
-        return $this;
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return $this
-     */
-    public function setFilter(array $params)
-    {
-        foreach ($params as $param) {
-            if (!is_a($param, ElasticFilterInterface::class)) {
-                continue;
-            }
-
-            $this->params[] = $param;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array $additionalParams
-     *
-     * @return array
-     */
-    protected function getFacetQueryParams(array $additionalParams = [])
-    {
-        $query = [];
-        foreach ($this->params as $param) {
-            /**@var $param ElasticFilterInterface* */
-            $query += $param->getParams();
-        }
-
-        return array_merge($query, $additionalParams);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAllQueryParams()
-    {
-        $this->maker = new ElasticSearchMaker();
-
-        $result = [];
-
-        foreach ($this->params as $param) {
-            $result = $this->buildParams($param, $result);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param $field
-     *
-     * @return array
-     */
-    protected function groupByAggs($field)
-    {
-        $result = [
-            'variant' => [
-                'terms' => [
-                    'field' => $field,
-                    'size'  => ($this->limit + $this->offset),
-                ],
-                'aggs'  => [
-                    'value' => [
-                        'top_hits' => [
-                            'size'    => 1,
-                            '_source' => 'scope',
-                            'from'    => 0,
-                        ],
-                    ],
-                    'sort'  => [
-                        'bucket_sort' => [
-                            'from' => $this->offset,
-                            'size' => $this->limit,
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        if ($this->factorValues) {
-            $result['variant']['terms']['order'] = [
-                'factorSort' => 'desc',
-            ];
-
-            $result['variant']['aggs']['factorSort']['max']['script'] = $this->factorValues;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param $param
-     * @param $result
-     *
-     * @return array
-     */
-    protected function buildParams($param, $result): array
-    {
-        $className = get_class($param);
-
-        switch ($className) {
-            case EntitiesFilterBuilder::class;
-                $result['index'] = $param->getValues();
-                break;
-
-            case ParamsFilterBuilder::class;
-
-                foreach ($param->getValues() as $value) {
-                    $should[] = $this->buildQuery($value);
-                }
-
-                $result['body']['query']['bool']['must'][]['bool']['should'] = $should;
-                break;
-
-            case GroupByFilterBuilder::class;
-                $this->maker = new ElasticSearchGroupByMaker();
-
-                $result['body']['aggs'] = $this->groupByAggs($param->getValues());
-                break;
-
-            case KeywordFilterBuilder::class;
-                $result['body']['query']['bool']['must'][] = $this->keywordBuilder($param->getValues());
-                break;
-
-        }
-
-        return $result;
-    }
-
-    protected function keywordBuilder($data)
-    {
-        return [
-            'multi_match' => [
-                'query'  => $data['value'],
-                'fields' => $data['fields'],
-            ],
-        ];
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return array
-     */
-    protected function buildQuery(array $params): array
-    {
-        $queryElements = [];
-
-        foreach ($params as $type => $values) {
-            /**@var $obj \SphereMall\MS\Lib\Filters\Interfaces\ElasticQueryInterface * */
-            $queryElements = QueryFactory::createInstance($type, $values)->buildQuery($queryElements);
-        }
-
-        return [
-            'bool' => [
-                'must' => $queryElements,
-            ],
-        ];
-    }
 }
