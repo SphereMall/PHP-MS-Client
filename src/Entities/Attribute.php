@@ -30,6 +30,7 @@ class Attribute extends Entity
 {
     #region [Properties]
     public $id;
+    public $attributeTypeId;
     public $code;
     public $title;
     public $displayType;
