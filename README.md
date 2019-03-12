@@ -2,8 +2,8 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
-### [Version 2.7.20](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
-## Add Price Configuration entity
+### [Version 2.7.21](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
+## Extend attribute entity with attributeTypeId
 
 ### [Version 2.7.19.2](https://github.com/SphereMall/PHP-MS-Client/wiki/0.-SDK-Changelogs#version-1016)
 ## Add CRUD wrapping for CatalogItemAttributes
