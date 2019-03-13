@@ -63,7 +63,8 @@ class SimpleFilterTest extends SetUpResourceTest
             )
         )->limit(1)->offset(1);
 
-        $data = $this->client->elastic()->search($body)->withMeta()->all();
+        $data = $this->client->elastic()->msearch([$body])->all();
+//        $data = $this->client->elastic()->search($body)->all();
         $r    = 1;
     }
 }
