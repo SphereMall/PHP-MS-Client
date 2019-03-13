@@ -23,6 +23,7 @@ use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorValuesResource;
+use SphereMall\MS\Resources\LayoutContent\MenuItemsResource;
 use SphereMall\MS\Resources\Prices\PriceConfigurationsResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Products\AttributeDisplayTypesResource;
@@ -621,5 +622,13 @@ trait ServiceInjector
         return new CatalogItemAttributesResource($this);
     }
 
+    /**
+     * @return MenuItemsResource
+     */
+    public function menuItems()
+    {
+        /** @var Client $this */
+        return new MenuItemsResource($this);
+    }
     #endregion
 }
