@@ -92,6 +92,14 @@ class ElasticResource extends Resource
         $handler  = new \SphereMall\MS\Lib\Http\ElasticSearch\Request($this->client, $this);
         $response = $handler->handle('GET', false, false, [$this->search]);
 
+        if (is_array($response)) {
+            foreach ($response as $responseItem) {
+                $result[] =  $this->make($responseItem, true, new ElasticSearchMaker());
+            }
+
+            return $result ?? [];
+        }
+
         return $this->make($response, true, new ElasticSearchMaker());
     }
 

@@ -15,12 +15,12 @@ class Response extends \SphereMall\MS\Lib\Http\Response
 {
     public function __construct(array $response, $limit = 0, $offset = 0)
     {
-        $this->statusCode = (!$response['timed_out'] ? 200 : 404);
+        $this->statusCode = $response['status'] ?? 200;
         $this->headers = [];
 
         try {
-            $this->data = $responses ?? $response;
-            $this->status = !$response['timed_out'] ? 'OK' : 'ERROR';
+            $this->data = $response;
+            $this->status = isset($response['error']) ? 'ERROR' : 'OK';
             $this->errors = $response['error'] ?? null;
             $this->debug = $contents['debug'] ?? null;
             $this->version = 1;
