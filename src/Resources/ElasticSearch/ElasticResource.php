@@ -14,6 +14,7 @@ use SphereMall\MS\Lib\Elastic\Builders\FilterBuilder;
 use SphereMall\MS\Lib\Elastic\Builders\MSearch;
 use SphereMall\MS\Lib\Elastic\Builders\Search;
 use SphereMall\MS\Lib\Makers\ElasticFacetedMaker;
+use SphereMall\MS\Lib\Makers\ElasticSearchGroupByMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Resources\Resource;
 
@@ -103,7 +104,7 @@ class ElasticResource extends Resource
             return $result ?? [];
         }
 
-        return $this->make($response, true, new ElasticSearchMaker());
+        return $this->make($response, true, $this->search->getGroupBy() ? new ElasticSearchGroupByMaker() : new ElasticSearchMaker());
     }
 
 }

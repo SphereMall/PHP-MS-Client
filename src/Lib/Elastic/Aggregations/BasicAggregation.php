@@ -49,7 +49,7 @@ class BasicAggregation implements ElasticAggregationInterface
      */
     public function subAggregation(AggregationBuilder $aggregation): ElasticAggregationInterface
     {
-        $this->subAggregations = $aggregation->toArray();
+        $this->subAggregations += $aggregation->toArray();
 
         return $this;
     }

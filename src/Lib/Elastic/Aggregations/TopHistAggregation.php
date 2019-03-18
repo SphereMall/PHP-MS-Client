@@ -19,7 +19,15 @@ class TopHistAggregation extends BasicAggregation implements ElasticBodyElementI
     private $sort   = [];
     private $source = null;
 
-    public function __construct(int $size = 10, int $from = 0, array $sort = [], $source = [])
+    /**
+     * TopHistAggregation constructor.
+     *
+     * @param array $source
+     * @param int   $size
+     * @param int   $from
+     * @param array $sort
+     */
+    public function __construct(array $source = [], int $size = 10, int $from = 0, array $sort = [])
     {
         $this->size = $size;
         $this->from = $from;

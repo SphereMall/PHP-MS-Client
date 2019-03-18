@@ -40,18 +40,18 @@ class BodyBuilder
      * @param $name
      * @param $arguments
      *
-     * @return bool
+     * @return array
      */
     public function __call($name, $arguments)
     {
         if (stripos($name, 'get') === false) {
-            return false;
+            return [];
         }
 
         $propName = strtolower(str_replace("get", "", $name));
 
         if (!isset($this->{$propName})) {
-            return false;
+            return [];
         }
 
         return $this->{$propName};

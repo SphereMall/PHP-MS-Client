@@ -9,6 +9,9 @@
 namespace SphereMall\MS\Lib\Elastic\Builders;
 
 
+use SphereMall\MS\Lib\Elastic\Aggregations\BucketSortAggregation;
+use SphereMall\MS\Lib\Elastic\Aggregations\TermsAggregation;
+use SphereMall\MS\Lib\Elastic\Aggregations\TopHistAggregation;
 use SphereMall\MS\Lib\Elastic\Interfaces\SearchInterface;
 use SphereMall\MS\Lib\Elastic\Queries\MultiMatchQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
@@ -20,7 +23,11 @@ use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
  */
 class Search implements SearchInterface
 {
-    private $body = null;
+    const DEFAULT_SIZE = 10;
+
+    private $body    = null;
+    private $groupBy = false;
+    private $params  = [];
 
     /**
      * Search constructor.
@@ -29,7 +36,24 @@ class Search implements SearchInterface
      */
     public function __construct(BodyBuilder $builder)
     {
-        $this->body = $builder;
+        $this->body = [
+            'filter'  => $builder->getFilter(),
+            'query'   => $builder->getQuery(),
+            'size'    => $builder->getLimit(),
+            'from'    => $builder->getOffset(),
+            '_source' => $builder->getSource(),
+            'index'   => $builder->getIndexes(),
+            'aggs'    => $builder->getAggregations(),
+            'sort'    => $builder->getSort(),
+        ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function getGroupBy()
+    {
+        return $this->groupBy;
     }
 
     /**
@@ -37,41 +61,25 @@ class Search implements SearchInterface
      */
     public function getParams()
     {
-        $params = [];
+        $this->params = $this->getParamsFromFilter();
 
-        if ($filter = $this->body->getFilter()) {
-            $params = $this->getParamsFromFilter($filter);
-        }
+        $this->query()
+             ->size()
+             ->from()
+             ->source()
+             ->indexes()
+             ->aggregations()
+             ->sort();
 
-        if ($q = $this->body->getQuery()) {
-            $params['body']["query"] = array_merge_recursive($q, ($params['body']["query"] ?? []));
-        }
+        return $this->params;
+    }
 
-        if ($size = $this->body->getLimit()) {
-            $params['body']['size'] = $size;
-        }
-
-        if ($from = $this->body->getOffset()) {
-            $params['body']['from'] = $from;
-        }
-
-        if ($source = $this->body->getSource()) {
-            $params['body']['_source'] = $source;
-        }
-
-        if ($indexes = $this->body->getIndexes()) {
-            $params['index'] = $indexes;
-        }
-
-        if ($aggregations = $this->body->getAggregations()) {
-            $params['body']['aggs'] = $aggregations;
-        }
-
-        if ($sort = $this->body->getSort()) {
-            $params['body']['sort'] = $sort;
-        }
-
-        return $params;
+    /**
+     * @return bool
+     */
+    public function isGroup()
+    {
+        return $this->groupBy ? true : false;
     }
 
     /**
@@ -79,11 +87,19 @@ class Search implements SearchInterface
      *
      * @return array
      */
-    private function getParamsFromFilter(FilterBuilder $filter)
+    private function getParamsFromFilter()
     {
+        if (!$this->body['filter']) {
+            return [];
+        }
+
         $result = [];
         $query  = [];
-        $params = $filter->getParams();
+        $params = $this->body['filter']->getParams();
+
+        if (isset($params['groupBy']) && $params['groupBy']) {
+            $result = $this->initGroupBy();
+        }
 
         if ($params['entities']) {
             $result['index'] = $params['entities'];
@@ -94,7 +110,7 @@ class Search implements SearchInterface
         }
 
         foreach ($params['params'] ?? [] as $param) {
-            /**@var \SphereMall\MS\Lib\Elastic\Interfaces\ElasticParamBuilderInterface $param**/
+            /**@var \SphereMall\MS\Lib\Elastic\Interfaces\ElasticParamBuilderInterface $param * */
             $query[] = $param->createFilter();
         }
 
@@ -104,4 +120,110 @@ class Search implements SearchInterface
 
         return $result;
     }
+
+    private function initGroupBy()
+    {
+        $this->groupBy = true;
+
+        $params['body']['size'] = 0;
+
+        $size = $this->body['size'] ? $this->body['size'] : self::DEFAULT_SIZE;
+        $from = $this->body['from'] ? $this->body['from'] : 0;
+
+        $terms   = new TermsAggregation("variantsCompound", $size + $from);
+        $topHist = new TopHistAggregation(['scope'], 1);
+        $bucket  = new BucketSortAggregation($size, $from);
+
+        $terms->subAggregation(new AggregationBuilder('value', $topHist))
+              ->subAggregation(new AggregationBuilder('bucket', $bucket));
+
+        $params['body']['aggs'] = (new AggregationBuilder("variant", $terms))->toArray();
+
+        return $params;
+    }
+
+    /**
+     * @return $this
+     */
+    private function query()
+    {
+        if ($this->body['query']) {
+            $this->params['body']["query"] = array_merge_recursive($this->body['query'], ($this->params['body']["query"] ?? []));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function size()
+    {
+        if (!$this->groupBy && $this->body['size']) {
+            $this->params['body']['size'] = $this->body['size'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function from()
+    {
+        if (!$this->groupBy && $this->body['from']) {
+            $this->params['body']['from'] = $this->body['from'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function source()
+    {
+        if ($this->body['_source']) {
+            $this->params['body']['_source'] = $this->body['_source'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function indexes()
+    {
+        if ($this->body['index']) {
+            $this->params['index'] = $this->body['index'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function aggregations()
+    {
+        if ($this->body['aggs']) {
+            $this->params['body']['aggs'] = $this->body['aggs'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function sort()
+    {
+        if ($this->body['sort']) {
+            $this->params['body']['sort'] = $this->body['sort'];
+        }
+
+        return $this;
+    }
+
 }
