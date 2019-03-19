@@ -48,6 +48,6 @@ class BrandsParams implements ElasticParamElementInterface, ElasticParamBuilderI
      */
     public function createFilter(): ElasticBodyElementInterface
     {
-        new TermsQuery("brandId", $this->values);
+        return new TermsQuery("brandId", $this->values);
     }
 }

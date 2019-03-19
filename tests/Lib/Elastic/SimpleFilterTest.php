@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Tests\Lib\Elastic;
 
 
+use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\Elastic\Builders\BodyBuilder;
 use SphereMall\MS\Lib\Elastic\Builders\FilterBuilder;
 use SphereMall\MS\Lib\Elastic\Builders\QueryBuilder;
@@ -16,12 +17,15 @@ use SphereMall\MS\Lib\Elastic\Filter\Config\AttributesConfig;
 use SphereMall\MS\Lib\Elastic\Filter\Config\BrandsConfig;
 use SphereMall\MS\Lib\Elastic\Filter\Config\FunctionalNamesConfig;
 use SphereMall\MS\Lib\Elastic\Filter\Params\AttributesParams;
+use SphereMall\MS\Lib\Elastic\Filter\Params\BrandsParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\FunctionalNamesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\RangeParams;
 use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
+use SphereMall\MS\Lib\Filters\Grid\GridFilter;
+use SphereMall\MS\Lib\Helpers\ElasticSearchIndexHelper;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class SimpleFilterTest extends SetUpResourceTest
@@ -42,13 +46,13 @@ class SimpleFilterTest extends SetUpResourceTest
             new BrandsConfig(true),
         ]);
         $filter->setParams([
-            new RangeParams('fields', 'price', ['gte' => 100]),
-            //            new RangeParams('attributes', 'color', ['lt' => 1]),
-            //            new FunctionalNamesParams([1, 2]),
-            //            new AttributesParams('color', [1]),
-            //            new AttributesParams('size', [2]),
+//            new RangeParams('fields', 'price', ['gte' => 100]),
+//            new RangeParams('attributes', 'color', ['lt' => 1]),
+//            new FunctionalNamesParams([1, 2]),
+//                        new AttributesParams('color', [1]),
+//                        new AttributesParams('size', [2]),
         ]);
-         //$filter->setKeyword("DryCare", ['title_fr']);
+        //$filter->setKeyword("DryCare", ['title_fr']);
 //        $filter->setGroupBy("variantsCompound");
 //        $filter->setFactorsId([1]);
 
@@ -65,6 +69,59 @@ class SimpleFilterTest extends SetUpResourceTest
 
         $data = $this->client->elastic()->msearch([$body])->all();
 //        $data = $this->client->elastic()->search($body)->all();
-        $r    = 1;
+        $r = 1;
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testOldGrid()
+    {
+        $filter = new GridFilter();
+
+        $data = $this->client->grid()->filter($filter)->facets();
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testFilter()
+    {
+        $filter = new FilterBuilder();
+
+        $filter->setConfigs([
+            new AttributesConfig(['aantal pasjes', 'afmeeting']),
+            new BrandsConfig(true),
+            new FunctionalNamesConfig(true),
+        ]);
+
+        $filter->setEntities(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]));
+        $filter->setParams([
+            new BrandsParams(['2']),
+        ]);
+        $filter->setGroupBy("variantsCompound");
+
+//        $filterData = $this->client->elastic()->filter($filter)->facets();
+
+        $body = new BodyBuilder();
+        $body->filter($filter)->limit(1)->offset(1);
+
+        $resultData = $this->client->elastic()->search($body)->all();
+
+        $r = 1;
+    }
+
+    public function testSomeS()
+    {
+        $body  = new BodyBuilder();
+        $query = (new QueryBuilder())->setMust(new MustQuery([
+            new TermQuery('brandId', 2),
+        ]));
+
+        $body->query($query)->indexes(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]));
+
+        $data = $this->client->elastic()->search($body)->all();
+
+
     }
 }
