@@ -121,6 +121,9 @@ class Search implements SearchInterface
         return $result;
     }
 
+    /**
+     * @return mixed
+     */
     private function initGroupBy()
     {
         $this->groupBy = true;

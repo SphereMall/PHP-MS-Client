@@ -41,17 +41,18 @@ class BodyBuilder
      * @param $arguments
      *
      * @return array
+     * @throws \Exception
      */
     public function __call($name, $arguments)
     {
         if (stripos($name, 'get') === false) {
-            return [];
+            throw new \Exception("Method '{$name}' not exist");
         }
 
         $propName = strtolower(str_replace("get", "", $name));
 
         if (!isset($this->{$propName})) {
-            return [];
+           throw new \Exception("Property with name '{$propName}' not exist");
         }
 
         return $this->{$propName};
