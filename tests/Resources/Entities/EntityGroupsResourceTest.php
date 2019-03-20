@@ -8,7 +8,7 @@
 
 namespace SphereMall\MS\Tests\Resources\Entities;
 
-use SphereMall\MS\Entities\EntityGroups;
+use SphereMall\MS\Entities\EntityGroup;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class EntityGroupsResourceTest extends SetUpResourceTest
@@ -23,7 +23,7 @@ class EntityGroupsResourceTest extends SetUpResourceTest
         $list = $categories->all();
 
         foreach ($list as $item) {
-            $this->assertInstanceOf(EntityGroups::class, $item);
+            $this->assertInstanceOf(EntityGroup::class, $item);
         }
     }
 
@@ -44,7 +44,7 @@ class EntityGroupsResourceTest extends SetUpResourceTest
     public function testFirst()
     {
         $entityGroup = $this->client->entityGroups()->first();
-        $this->assertInstanceOf(EntityGroups::class, $entityGroup);
+        $this->assertInstanceOf(EntityGroup::class, $entityGroup);
     }
 
     /**
@@ -56,7 +56,7 @@ class EntityGroupsResourceTest extends SetUpResourceTest
 
         $this->assertInternalType('array', $entityGroups);
         $this->assertGreaterThan(0, count($entityGroups));
-        $this->assertInstanceOf(EntityGroups::class, $entityGroups[0]);
+        $this->assertInstanceOf(EntityGroup::class, $entityGroups[0]);
     }
 
     /**
@@ -68,7 +68,7 @@ class EntityGroupsResourceTest extends SetUpResourceTest
         $entityGroup = $this->client->entityGroups()->detailById(1);
 
         $this->assertTrue(is_array($entityGroup->attributes));
-        $this->assertInstanceOf(EntityGroups::class, $entityGroup);
+        $this->assertInstanceOf(EntityGroup::class, $entityGroup);
     }
 
     /**
@@ -80,7 +80,7 @@ class EntityGroupsResourceTest extends SetUpResourceTest
         $entityGroup = $this->client->entityGroups()->detailByCode('http');
 
         $this->assertTrue(is_array($entityGroup->attributes));
-        $this->assertInstanceOf(EntityGroups::class, $entityGroup);
+        $this->assertInstanceOf(EntityGroup::class, $entityGroup);
     }
     #endregion
 }

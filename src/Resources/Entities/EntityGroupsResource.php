@@ -8,7 +8,7 @@
 
 namespace SphereMall\MS\Resources\Entities;
 
-use SphereMall\MS\Entities\EntityGroups;
+use SphereMall\MS\Entities\EntityGroup;
 use SphereMall\MS\Resources\Resource;
 use SphereMall\MS\Resources\Traits\DetailResource;
 
@@ -16,15 +16,15 @@ use SphereMall\MS\Resources\Traits\DetailResource;
  * Class EntityGroupsResource
  *
  * @package SphereMall\MS\Resources\Entities
- * @method EntityGroups get(int $id)
- * @method EntityGroups first()
- * @method EntityGroups[] all()
- * @method EntityGroups update($id, $data)
- * @method EntityGroups create($data)
- * @method EntityGroups|EntityGroups[] detail($param = null)
- * @method EntityGroups[] detailAll()
- * @method EntityGroups detailById(int $id)
- * @method EntityGroups detailByCode(string $code)
+ * @method EntityGroup get(int $id)
+ * @method EntityGroup first()
+ * @method EntityGroup[] all()
+ * @method EntityGroup update($id, $data)
+ * @method EntityGroup create($data)
+ * @method EntityGroup|EntityGroup[] detail($param = null)
+ * @method EntityGroup[] detailAll()
+ * @method EntityGroup detailById(int $id)
+ * @method EntityGroup detailByCode(string $code)
  */
 class EntityGroupsResource extends Resource
 {

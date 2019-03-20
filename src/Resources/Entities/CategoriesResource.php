@@ -8,7 +8,7 @@
 
 namespace SphereMall\MS\Resources\Entities;
 
-use SphereMall\MS\Entities\Categories;
+use SphereMall\MS\Entities\Category;
 use SphereMall\MS\Resources\Resource;
 use SphereMall\MS\Resources\Traits\DetailResource;
 
@@ -16,15 +16,15 @@ use SphereMall\MS\Resources\Traits\DetailResource;
  * Class CategoriesResource
  *
  * @package SphereMall\MS\Resources\Entities
- * @method Categories get(int $id)
- * @method Categories first()
- * @method Categories[] all()
- * @method Categories update($id, $data)
- * @method Categories create($data)
- * @method Categories|Categories[] detail($param = null)
- * @method Categories[] detailAll()
- * @method Categories detailById(int $id)
- * @method Categories detailByCode(string $code)
+ * @method Category get(int $id)
+ * @method Category first()
+ * @method Category[] all()
+ * @method Category update($id, $data)
+ * @method Category create($data)
+ * @method Category|Category[] detail($param = null)
+ * @method Category[] detailAll()
+ * @method Category detailById(int $id)
+ * @method Category detailByCode(string $code)
  */
 class CategoriesResource extends Resource
 {

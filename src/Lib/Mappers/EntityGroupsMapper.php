@@ -10,7 +10,7 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Entities\AttributeValue;
-use SphereMall\MS\Entities\EntityGroups;
+use SphereMall\MS\Entities\EntityGroup;
 use SphereMall\MS\Entities\Media;
 
 /**
@@ -18,8 +18,8 @@ use SphereMall\MS\Entities\Media;
  *
  * @package SphereMall\MS\Lib\Mappers
  *
- * @property EntityGroups $entityGroup
- * @property array      $data
+ * @property EntityGroup $entityGroup
+ * @property array       $data
  */
 class EntityGroupsMapper extends Mapper
 {
@@ -34,7 +34,7 @@ class EntityGroupsMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $this->data        = $array;
-        $this->entityGroup = new EntityGroups($this->data);
+        $this->entityGroup = new EntityGroup($this->data);
         $this->setMedia()
              ->setAttributes();
 
