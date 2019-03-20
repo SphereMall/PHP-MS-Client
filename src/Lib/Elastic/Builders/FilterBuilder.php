@@ -156,6 +156,8 @@ class FilterBuilder extends Filter
 
     /**
      * @param ElasticParamElementInterface $param
+     *
+     * @return $this
      */
     private function setParam(ElasticParamElementInterface $param)
     {

@@ -10,6 +10,8 @@ namespace SphereMall\MS\Tests\Lib\Elastic;
 
 
 use SphereMall\MS\Entities\Product;
+use SphereMall\MS\Lib\Elastic\Aggregations\MaxAggregation;
+use SphereMall\MS\Lib\Elastic\Builders\AggregationBuilder;
 use SphereMall\MS\Lib\Elastic\Builders\BodyBuilder;
 use SphereMall\MS\Lib\Elastic\Builders\FilterBuilder;
 use SphereMall\MS\Lib\Elastic\Builders\QueryBuilder;
@@ -24,8 +26,11 @@ use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
+use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
+use SphereMall\MS\Lib\Elastic\Sort\SortElement;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Helpers\ElasticSearchIndexHelper;
+use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\MathSum;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class SimpleFilterTest extends SetUpResourceTest
@@ -96,15 +101,18 @@ class SimpleFilterTest extends SetUpResourceTest
         ]);
 
         $filter->setEntities(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]));
-        $filter->setParams([
-            new BrandsParams(['2']),
-        ]);
-        $filter->setGroupBy("variantsCompound");
+//        $filter->setParams([
+//            new BrandsParams(['2']),
+//        ]);
+        //$filter->setGroupBy("variantsCompound");
 
 //        $filterData = $this->client->elastic()->filter($filter)->facets();
 
         $body = new BodyBuilder();
-        $body->filter($filter)->limit(1)->offset(1);
+
+        $filter->setFactorsId([10]);
+
+        $body->filter($filter)->limit(1)->offset(0);
 
         $resultData = $this->client->elastic()->search($body)->all();
 
@@ -121,7 +129,20 @@ class SimpleFilterTest extends SetUpResourceTest
         $body->query($query)->indexes(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]));
 
         $data = $this->client->elastic()->search($body)->all();
+    }
 
+    public function testFactorSort()
+    {
+        $script = (new MathSum([1, 2]))->getAlgorithm();
+        $max    = (new MaxAggregation('_script'))->setScript($script);
 
+        $aggs = new AggregationBuilder("factorSort", $max);
+
+        $sortEl[] = new SortElement("_script", "asc", [
+            'type'   => "number",
+            'script' => $script,
+        ]);
+
+        $sort = new SortBuilder($sortEl);
     }
 }

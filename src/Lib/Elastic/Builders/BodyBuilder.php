@@ -27,14 +27,14 @@ use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
  */
 class BodyBuilder
 {
-    private $query       = null;
-    private $aggregation = [];
-    private $sort        = null;
-    private $source      = null;
-    private $indexes     = null;
-    private $limit       = null;
-    private $offset      = null;
-    private $filter      = null;
+    private $query        = [];
+    private $aggregations = [];
+    private $sort         = [];
+    private $source       = [];
+    private $indexes      = [];
+    private $limit        = 0;
+    private $offset       = 0;
+    private $filter       = [];
 
     /**
      * @param $name
@@ -52,7 +52,7 @@ class BodyBuilder
         $propName = strtolower(str_replace("get", "", $name));
 
         if (!isset($this->{$propName})) {
-           throw new \Exception("Property with name '{$propName}' not exist");
+            throw new \Exception("Property with name '{$propName}' not exist");
         }
 
         return $this->{$propName};
@@ -77,7 +77,7 @@ class BodyBuilder
      */
     public function aggregations(AggregationBuilder $aggregation)
     {
-        $this->aggregation[] = $aggregation->toArray();
+        $this->aggregations[] = $aggregation->toArray();
 
         return $this;
     }

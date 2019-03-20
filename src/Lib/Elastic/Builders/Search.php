@@ -10,11 +10,15 @@ namespace SphereMall\MS\Lib\Elastic\Builders;
 
 
 use SphereMall\MS\Lib\Elastic\Aggregations\BucketSortAggregation;
+use SphereMall\MS\Lib\Elastic\Aggregations\MaxAggregation;
 use SphereMall\MS\Lib\Elastic\Aggregations\TermsAggregation;
 use SphereMall\MS\Lib\Elastic\Aggregations\TopHistAggregation;
 use SphereMall\MS\Lib\Elastic\Interfaces\SearchInterface;
 use SphereMall\MS\Lib\Elastic\Queries\MultiMatchQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
+use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
+use SphereMall\MS\Lib\Elastic\Sort\SortElement;
+use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\MathSum;
 
 /**
  * Class Search
@@ -98,7 +102,16 @@ class Search implements SearchInterface
         $params = $this->body['filter']->getParams();
 
         if (isset($params['groupBy']) && $params['groupBy']) {
-            $result = $this->initGroupBy();
+            $result = $this->initGroupBy($params['factorValues'] ?? []);
+        }
+
+        if (isset($params['factorValues']) && $params['factorValues'] && !$this->groupBy) {
+            $sortEl[] = new SortElement("_script", "desc", [
+                'type'   => "number",
+                'script' => (new MathSum($params['factorValues']))->getAlgorithm(),
+            ]);
+
+            $this->body['sort'] = (new SortBuilder($sortEl))->toArray()['sort'];
         }
 
         if ($params['entities']) {
@@ -122,9 +135,11 @@ class Search implements SearchInterface
     }
 
     /**
+     * @param array $factorValues
+     *
      * @return mixed
      */
-    private function initGroupBy()
+    private function initGroupBy($factorValues = [])
     {
         $this->groupBy = true;
 
@@ -139,6 +154,11 @@ class Search implements SearchInterface
 
         $terms->subAggregation(new AggregationBuilder('value', $topHist))
               ->subAggregation(new AggregationBuilder('bucket', $bucket));
+
+        if ($factorValues) {
+            $max    = (new MaxAggregation('_script'))->setScript((new MathSum($factorValues))->getAlgorithm());
+            $terms->subAggregation(new AggregationBuilder("factorSort", $max));
+        }
 
         $params['body']['aggs'] = (new AggregationBuilder("variant", $terms))->toArray();
 
