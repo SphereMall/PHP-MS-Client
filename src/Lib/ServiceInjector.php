@@ -10,69 +10,68 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
-use SphereMall\MS\Entities\Categories;
-use SphereMall\MS\Entities\EntityGroups;
 use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
+use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\Catalog\CatalogItemAttributesResource;
 use SphereMall\MS\Resources\Comments\CommentsResource;
 use SphereMall\MS\Resources\Comments\EntitiesAverageRating;
 use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
+use SphereMall\MS\Resources\Entities\AttributeDisplayTypesResource;
+use SphereMall\MS\Resources\Entities\AttributeGroupsEntitiesResource;
+use SphereMall\MS\Resources\Entities\AttributeGroupsResource;
+use SphereMall\MS\Resources\Entities\AttributesResource;
+use SphereMall\MS\Resources\Entities\AttributeTypesResource;
+use SphereMall\MS\Resources\Entities\AttributeValuesResource;
+use SphereMall\MS\Resources\Entities\BrandsResource;
+use SphereMall\MS\Resources\Entities\CatalogItemsResource;
 use SphereMall\MS\Resources\Entities\CategoriesResource;
+use SphereMall\MS\Resources\Entities\DocumentsResource;
+use SphereMall\MS\Resources\Entities\EntitiesResource;
+use SphereMall\MS\Resources\Entities\EntityAttributesResource;
 use SphereMall\MS\Resources\Entities\EntityGroupsResource;
+use SphereMall\MS\Resources\Entities\FunctionalNamesResource;
+use SphereMall\MS\Resources\Entities\MediaResource;
+use SphereMall\MS\Resources\Entities\MediaTypesResource;
+use SphereMall\MS\Resources\Entities\OptionsResource;
+use SphereMall\MS\Resources\Entities\ProductAttributeValuesResource;
+use SphereMall\MS\Resources\Entities\ProductsResource;
+use SphereMall\MS\Resources\Entities\ProductVariantsResource;
+use SphereMall\MS\Resources\Entities\UnitOfMeasureResource;
+use SphereMall\MS\Resources\Grapher\ConsumerFactorsResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorValuesResource;
+use SphereMall\MS\Resources\Grapher\GridResource;
 use SphereMall\MS\Resources\LayoutContent\MenuItemsResource;
 use SphereMall\MS\Resources\Prices\PriceConfigurationsResource;
 use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
-use SphereMall\MS\Resources\Entities\AttributeDisplayTypesResource;
-use SphereMall\MS\Resources\Entities\AttributeGroupsEntitiesResource;
-use SphereMall\MS\Resources\Entities\AttributeTypesResource;
-use SphereMall\MS\Resources\Entities\CatalogItemsResource;
-use SphereMall\MS\Resources\Entities\DocumentsResource;
-use SphereMall\MS\Resources\Entities\EntitiesResource;
-use SphereMall\MS\Resources\Entities\EntityAttributesResource;
-use SphereMall\MS\Resources\Entities\MediaTypesResource;
-use SphereMall\MS\Resources\Entities\OptionsResource;
-use SphereMall\MS\Resources\Entities\AttributeGroupsResource;
-use SphereMall\MS\Resources\Entities\AttributesResource;
-use SphereMall\MS\Resources\Entities\AttributeValuesResource;
-use SphereMall\MS\Resources\Entities\ProductVariantsResource;
-use SphereMall\MS\Resources\Entities\UnitOfMeasureResource;
-use SphereMall\MS\Resources\Entities\BrandsResource;
-use SphereMall\MS\Resources\Entities\FunctionalNamesResource;
-use SphereMall\MS\Resources\Entities\MediaResource;
-use SphereMall\MS\Resources\Entities\ProductAttributeValuesResource;
-use SphereMall\MS\Resources\Entities\ProductsResource;
+use SphereMall\MS\Resources\Shop\BasketResource;
+use SphereMall\MS\Resources\Shop\CurrenciesRateResource;
+use SphereMall\MS\Resources\Shop\CurrenciesResource;
 use SphereMall\MS\Resources\Shop\DealersResource;
+use SphereMall\MS\Resources\Shop\DeliveryPaymentsResource;
+use SphereMall\MS\Resources\Shop\DeliveryProvidersResource;
 use SphereMall\MS\Resources\Shop\DiscountTypesResource;
 use SphereMall\MS\Resources\Shop\InvoicesResource;
 use SphereMall\MS\Resources\Shop\OrderItemsResource;
+use SphereMall\MS\Resources\Shop\OrdersResource;
+use SphereMall\MS\Resources\Shop\OrderStatusesResource;
+use SphereMall\MS\Resources\Shop\PaymentMethodsResource;
+use SphereMall\MS\Resources\Shop\PaymentProvidersResource;
 use SphereMall\MS\Resources\Shop\PromotionsResource;
+use SphereMall\MS\Resources\Shop\RulesResource;
+use SphereMall\MS\Resources\Shop\VatsResource;
 use SphereMall\MS\Resources\StaticTexts\WebTextsResource;
 use SphereMall\MS\Resources\Users\AddressResource;
 use SphereMall\MS\Resources\Users\CompaniesResource;
 use SphereMall\MS\Resources\Users\MessagesResource;
 use SphereMall\MS\Resources\Users\UserAdditionalDataResource;
 use SphereMall\MS\Resources\Users\UsersResource;
-use SphereMall\MS\Lib\Shop\Basket;
-use SphereMall\MS\Resources\Shop\OrdersResource;
-use SphereMall\MS\Resources\Shop\PaymentMethodsResource;
-use SphereMall\MS\Resources\Shop\DeliveryPaymentsResource;
-use SphereMall\MS\Resources\Shop\DeliveryProvidersResource;
-use SphereMall\MS\Resources\Shop\OrderStatusesResource;
-use SphereMall\MS\Resources\Shop\PaymentProvidersResource;
-use SphereMall\MS\Resources\Shop\BasketResource;
-use SphereMall\MS\Resources\Shop\CurrenciesRateResource;
-use SphereMall\MS\Resources\Shop\CurrenciesResource;
-use SphereMall\MS\Resources\Shop\VatsResource;
-use SphereMall\MS\Resources\Grapher\GridResource;
 use SphereMall\MS\Resources\Users\WishListItemsResource;
-use SphereMall\MS\Resources\Shop\RulesResource;
 use SphereMall\MS\Resources\Users\WishListResource;
 
 /**
@@ -507,6 +506,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new EntityFactorsResource($this);
+    }
+
+    /**
+     * @return ConsumerFactorsResource
+     */
+    public function consumerFactors()
+    {
+        /** @var Client $this */
+        return new ConsumerFactorsResource($this);
     }
 
     /**
