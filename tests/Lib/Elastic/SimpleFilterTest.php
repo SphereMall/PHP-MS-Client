@@ -18,6 +18,7 @@ use SphereMall\MS\Lib\Elastic\Builders\QueryBuilder;
 use SphereMall\MS\Lib\Elastic\Filter\Config\AttributesConfig;
 use SphereMall\MS\Lib\Elastic\Filter\Config\BrandsConfig;
 use SphereMall\MS\Lib\Elastic\Filter\Config\FunctionalNamesConfig;
+use SphereMall\MS\Lib\Elastic\Filter\Factors\FilterFactorValue;
 use SphereMall\MS\Lib\Elastic\Filter\Params\AttributesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\BrandsParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\FunctionalNamesParams;
@@ -104,13 +105,16 @@ class SimpleFilterTest extends SetUpResourceTest
 //        $filter->setParams([
 //            new BrandsParams(['2']),
 //        ]);
-        //$filter->setGroupBy("variantsCompound");
+//        $filter->setGroupBy("variantsCompound");
 
 //        $filterData = $this->client->elastic()->filter($filter)->facets();
 
         $body = new BodyBuilder();
 
-        $filter->setFactorsId([10]);
+        $filter->setFactors([
+            new FilterFactorValue(10),
+            new FilterFactorValue(3, 10)
+        ]);
 
         $body->filter($filter)->limit(1)->offset(0);
 

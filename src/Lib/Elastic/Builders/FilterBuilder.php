@@ -20,10 +20,10 @@ use SphereMall\MS\Lib\Filters\Filter;
  */
 class FilterBuilder extends Filter
 {
-    private $configs    = [];
-    private $query      = [];
-    private $factorsIds = [];
-    private $params     = [];
+    private $configs = [];
+    private $query   = [];
+    private $factors = [];
+    private $params  = [];
 
     /**
      * @param array $configs
@@ -127,9 +127,9 @@ class FilterBuilder extends Filter
         return $result;
     }
 
-    public function setFactorsId(array $ids)
+    public function setFactors(array $factors)
     {
-        $this->factorsIds = $ids;
+        $this->factors = $factors;
 
         return $this;
     }
@@ -139,7 +139,7 @@ class FilterBuilder extends Filter
      */
     public function getParams()
     {
-        return array_merge($this->query, ['factorValues' => $this->factorsIds], ['params' => $this->params]);
+        return array_merge($this->query, ['factorValues' => $this->factors], ['params' => $this->params]);
     }
 
     /**
