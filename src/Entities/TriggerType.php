@@ -8,9 +8,6 @@
 
 namespace SphereMall\MS\Entities;
 
-
-use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
-
 /**
  * Class TriggerType
  *
@@ -20,8 +17,6 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  */
 class TriggerType extends Entity
 {
-    use InteractsWithAttributes;
-
     public $id;
     public $name;
 }

@@ -8,9 +8,6 @@
 
 namespace SphereMall\MS\Entities;
 
-
-use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
-
 /**
  * Class UserTrigger
  *
@@ -22,8 +19,6 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  */
 class UserTrigger extends Entity
 {
-    use InteractsWithAttributes;
-
     public $id;
     public $userId;
     public $triggerId;

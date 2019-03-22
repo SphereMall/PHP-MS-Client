@@ -8,9 +8,6 @@
 
 namespace SphereMall\MS\Entities;
 
-
-use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
-
 /**
  * Class Action
  *
@@ -22,8 +19,6 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  */
 class Action extends Entity
 {
-    use InteractsWithAttributes;
-
     public $id;
     public $name;
     public $properties;

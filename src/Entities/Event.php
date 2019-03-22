@@ -8,9 +8,6 @@
 
 namespace SphereMall\MS\Entities;
 
-
-use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
-
 /**
  * Class Event
  *
@@ -20,8 +17,6 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  */
 class Event extends Entity
 {
-    use InteractsWithAttributes;
-
     public $id;
     public $name;
 

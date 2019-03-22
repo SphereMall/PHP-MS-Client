@@ -8,9 +8,6 @@
 
 namespace SphereMall\MS\Entities;
 
-
-use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
-
 /**
  * Class ActionType
  *
@@ -21,8 +18,6 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  */
 class ActionType extends Entity
 {
-    use InteractsWithAttributes;
-
     public $id;
     public $name;
     public $class;

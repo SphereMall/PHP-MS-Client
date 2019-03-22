@@ -8,9 +8,6 @@
 
 namespace SphereMall\MS\Entities;
 
-
-use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
-
 /**
  * Class EventActionCampaign
  *
@@ -22,8 +19,6 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  */
 class EventActionCampaign extends Entity
 {
-    use InteractsWithAttributes;
-
     public $id;
     public $eventId;
     public $actionId;

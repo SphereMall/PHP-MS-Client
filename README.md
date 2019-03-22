@@ -3,7 +3,6 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
-<<<<<<< HEAD
 ### [Version 2.7.23](https://spheremall.atlassian.net/browse/M20-80)
 ## Add CRUD wrapping for Marketing microservice
 
@@ -20,7 +19,6 @@ Official PHP SDK for integrating with **SphereMall Product**.
 ## !!! Indexer Microservice version: 2.4.0 +
 
 =======
->>>>>>> 91389d188bd9eb96fc82268cc68f8d7681365dfb
 ## Installation
 
 You can install the package manually or by adding it to your `composer.json`:

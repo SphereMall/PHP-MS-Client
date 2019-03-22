@@ -8,9 +8,6 @@
 
 namespace SphereMall\MS\Entities;
 
-
-use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
-
 /**
  * Class CampaignTree
  *
@@ -22,8 +19,6 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  */
 class CampaignTree extends Entity
 {
-    use InteractsWithAttributes;
-
     public $campaignId;
     public $eventId;
     public $triggerId;

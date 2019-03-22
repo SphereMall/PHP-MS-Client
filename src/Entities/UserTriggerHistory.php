@@ -8,9 +8,6 @@
 
 namespace SphereMall\MS\Entities;
 
-
-use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
-
 /**
  * Class UserTriggerHistory
  *
@@ -24,8 +21,6 @@ use SphereMall\MS\Lib\Traits\InteractsWithAttributes;
  */
 class UserTriggerHistory extends Entity
 {
-    use InteractsWithAttributes;
-
     public $id;
     public $eventId;
     public $campaignId;
