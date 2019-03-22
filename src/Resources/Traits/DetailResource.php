@@ -18,13 +18,18 @@ use SphereMall\MS\Lib\Http\Request;
 trait DetailResource
 {
     /**
+     * @param array $ids
+     *
      * @return Entity[]
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function detailAll()
+    public function detailAll(array $ids = [])
     {
         $uriAppend = 'detail/list';
         $params    = $this->getQueryParams();
+        if ($ids){
+            $params['ids'] = implode(',', $ids);
+        }
 
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
 
