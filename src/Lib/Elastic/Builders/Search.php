@@ -19,6 +19,7 @@ use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
 use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
 use SphereMall\MS\Lib\Elastic\Sort\SortElement;
 use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\MathSum;
+use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\MathSumWithFactor;
 
 /**
  * Class Search
@@ -108,7 +109,7 @@ class Search implements SearchInterface
         if (isset($params['factorValues']) && $params['factorValues'] && !$this->groupBy) {
             $sortEl[] = new SortElement("_script", "desc", [
                 'type'   => "number",
-                'script' => (new MathSum($params['factorValues']))->getAlgorithm(),
+                'script' => (new MathSumWithFactor($params['factorValues']))->getAlgorithm(),
             ]);
 
             $this->body['sort'] = (new SortBuilder($sortEl))->toArray()['sort'];
@@ -156,7 +157,7 @@ class Search implements SearchInterface
               ->subAggregation(new AggregationBuilder('bucket', $bucket));
 
         if ($factorValues) {
-            $max    = (new MaxAggregation('_script'))->setScript((new MathSum($factorValues))->getAlgorithm());
+            $max = (new MaxAggregation('_script'))->setScript((new MathSumWithFactor($factorValues))->getAlgorithm());
             $terms->subAggregation(new AggregationBuilder("factorSort", $max));
         }
 
