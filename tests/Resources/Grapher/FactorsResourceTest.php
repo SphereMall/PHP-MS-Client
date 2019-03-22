@@ -6,8 +6,7 @@
 
 namespace SphereMall\MS\Tests\Resources\Grapher;
 
-
-use SphereMall\MS\Resources\Grapher\FactorsResource;
+use SphereMall\MS\Entities\Factor;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class FactorsResourceTest extends SetUpResourceTest
@@ -17,20 +16,28 @@ class FactorsResourceTest extends SetUpResourceTest
     /**
      * @test
      */
-    public function is_factor_resource()
+    public function testFactorsDetailAll()
     {
-        $factors = $this->client->factors();
-        $this->assertInstanceOf(FactorsResource::class, $factors);
+        $factors = $this->client->factors()->detailAll([38, 50]);
+        $this->assertInstanceOf(Factor::class, $factors[0]);
     }
 
     /**
      * @test
      */
-    public function available_factors_resource()
+    public function testFactorsDetailById()
     {
-        $factors = $this->client->factors()->full('test');
-        $this->assertNotEmpty($factors);
+        $factors = $this->client->factors()->detailById(50);
+        $this->assertInstanceOf(Factor::class, $factors);
+    }
+
+    /**
+     * @test
+     */
+    public function testFactorsDetailByCode()
+    {
+        $factors = $this->client->factors()->detailByCode("test_qa_1");
+        $this->assertInstanceOf(Factor::class, $factors[0]);
     }
     #endregion
-
 }
