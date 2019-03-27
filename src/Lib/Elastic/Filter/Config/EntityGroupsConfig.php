@@ -10,7 +10,7 @@ namespace SphereMall\MS\Lib\Elastic\Filter\Config;
 
 use SphereMall\MS\Lib\Elastic\Interfaces\ElasticConfigElementInterface;
 
-class ProductGroupsConfig implements ElasticConfigElementInterface
+class EntityGroupsConfig implements ElasticConfigElementInterface
 {
     private $use = false;
 
@@ -30,7 +30,7 @@ class ProductGroupsConfig implements ElasticConfigElementInterface
     public function getElements(): array
     {
         return [
-            'productGroups' => $this->use,
+            'entityGroups' => $this->use,
         ];
     }
 }

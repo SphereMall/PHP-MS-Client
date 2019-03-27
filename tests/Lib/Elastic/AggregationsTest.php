@@ -294,15 +294,16 @@ class AggregationsTest extends SetUpResourceTest
             ],
         ], $aggregation->toArray());
 
-        $aggregation = new TopHistAggregation(20, 5);
+        $aggregation = new TopHistAggregation(["title"], 20, 5);
         $this->assertEquals([
             'top_hits' => [
-                'size' => 20,
-                'from' => 5,
+                'size'    => 20,
+                'from'    => 5,
+                '_source' => ['title'],
             ],
         ], $aggregation->toArray());
 
-        $aggregation = new TopHistAggregation(10, 0, [
+        $aggregation = new TopHistAggregation(["title"], 10, 0, [
             new SortElement("sort_field_1"),
             new SortElement("sort_field_2", "desc"),
         ]);
@@ -310,6 +311,7 @@ class AggregationsTest extends SetUpResourceTest
             'top_hits' => [
                 'size' => 10,
                 'from' => 0,
+                '_source' => ['title'],
                 'sort' => [
                     [
                         "sort_field_1" => [
@@ -325,12 +327,12 @@ class AggregationsTest extends SetUpResourceTest
             ],
         ], $aggregation->toArray());
 
-        $aggregation = new TopHistAggregation(10, 0, [], "price");
+        $aggregation = new TopHistAggregation(["price"], 10, 0);
         $this->assertEquals([
             'top_hits' => [
                 'size'    => 10,
                 'from'    => 0,
-                '_source' => "price",
+                '_source' => ["price"],
             ],
         ], $aggregation->toArray());
 
