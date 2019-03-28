@@ -1,4 +1,5 @@
 <?php
+
 namespace SphereMall\MS\Resources\ElasticSearch;
 
 use SphereMall\MS\Entities\ElasticIndexer;
@@ -6,6 +7,7 @@ use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Lib\Filters\ElasticIndexer\EntitiesFilter;
 use SphereMall\MS\Lib\Filters\Filter;
+use SphereMall\MS\Lib\Helpers\ClassReflectionHelper;
 use SphereMall\MS\Resources\Resource;
 
 /**
@@ -14,8 +16,8 @@ use SphereMall\MS\Resources\Resource;
  * Date: 30.03.2018
  * Time: 10:00
  */
-
-class ElasticIndexerResource extends Resource{
+class ElasticIndexerResource extends Resource
+{
 
     /**
      * @return string
@@ -65,6 +67,27 @@ class ElasticIndexerResource extends Resource{
     {
         $params = $this->getQueryParams();
         $response = $this->handler->handle('GET', null, 'import', $params);
+
+        if (!$response->getSuccess()) {
+            throw new EntityNotFoundException($response->getFirstErrorMessage());
+        }
+
+        return $this->make($response);
+    }
+
+    /**
+     * @param $className
+     * @param $id
+     * @return ElasticIndexer[]
+     * @throws EntityNotFoundException
+     */
+    public function importEntity($className, $id)
+    {
+        $type = (new ClassReflectionHelper($className))->getShortLowerCaseName();
+        $type = "{$type}s";
+
+        $params = $this->getQueryParams();
+        $response = $this->handler->handle('GET', null, "import/$type/$id", $params);
 
         if (!$response->getSuccess()) {
             throw new EntityNotFoundException($response->getFirstErrorMessage());
