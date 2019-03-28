@@ -33,5 +33,7 @@ class FilterTest extends SetUpResourceTest
                ])]);
 
         $result = $this->client->elastic()->filter($filter)->facets();
+
+        $this->assertTrue(true);
     }
 }
