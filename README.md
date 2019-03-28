@@ -3,6 +3,9 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### [Version 2.7.24](https://spheremall.atlassian.net/browse/M20-96)
+## Add CRUD wrapping for Marketing microservice
+
 ### [Version 2.7.23](https://spheremall.atlassian.net/browse/M20-80)
 ## Add CRUD wrapping for Marketing microservice
 
