@@ -9,6 +9,8 @@
 
 namespace SphereMall\MS\Entities;
 
+use SphereMall\MS\Lib\Traits\InteractsWithAttributeValues;
+
 /**
  * Class Attribute
  * @package SphereMall\MS\Entities
@@ -28,6 +30,7 @@ namespace SphereMall\MS\Entities;
  */
 class Attribute extends Entity
 {
+    use InteractsWithAttributeValues;
     #region [Properties]
     public $id;
     public $attributeTypeId;
@@ -57,5 +60,4 @@ class Attribute extends Entity
         $firstValue = reset($this->values);
         return $firstValue->value;
     }
-
 }
