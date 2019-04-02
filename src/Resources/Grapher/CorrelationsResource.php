@@ -13,13 +13,8 @@ use Exception;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Lib\Collection;
-use SphereMall\MS\Lib\Filters\Grid\GridFilter;
-use SphereMall\MS\Lib\Helpers\ClassReflectionHelper;
 use SphereMall\MS\Lib\Helpers\CorrelationTypeHelper;
-use SphereMall\MS\Lib\Makers\CountMaker;
-use SphereMall\MS\Lib\Makers\FacetsMaker;
-use SphereMall\MS\Lib\Specifications\Basic\FilterSpecification;
-use SphereMall\MS\Resources\Resource;
+use SphereMall\MS\Lib\Makers\EntitiesCorrelationMaker;
 
 /**
  * Class GridResource
@@ -28,30 +23,12 @@ use SphereMall\MS\Resources\Resource;
 class CorrelationsResource extends GrapherResource
 {
     #region [Override methods]
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return "correlations";
-    }
-    #endregion
-
-    #region [Override methods]
-    /**
-     * @param int $id
-     * @param string $forClassName
-     *
-     * @return array|Collection
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getById(int $id, string $forClassName)
-    {
-        $params = $this->getQueryParams();
-
-        $type      = CorrelationTypeHelper::getGraphTypeByClass($forClassName);
-        $uriAppend = "{$type}/{$id}";
-
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
-
-        return $this->make($response);
     }
 
     /**
@@ -96,4 +73,40 @@ class CorrelationsResource extends GrapherResource
         throw new MethodNotFoundException("Method delete() can not be use with correlations");
     }
     #endregion
+
+    /**
+     * @param string $entityFrom
+     * @param array  $entityIds
+     *
+     * @return array|int|Entity|Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getFromEntityByIds(string $entityFrom, array $entityIds)
+    {
+        $uriAppend = "from/{$entityFrom}";
+        $params    = ['entityIds' => implode(",", $entityIds)];
+
+        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+
+        return $this->make($response, true, new EntitiesCorrelationMaker);
+    }
+
+    /**
+     * @param int $id
+     * @param string $forClassName
+     *
+     * @return array|Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getById(int $id, string $forClassName)
+    {
+        $params = $this->getQueryParams();
+
+        $type      = CorrelationTypeHelper::getGraphTypeByClass($forClassName);
+        $uriAppend = "{$type}/{$id}";
+
+        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+
+        return $this->make($response);
+    }
 }

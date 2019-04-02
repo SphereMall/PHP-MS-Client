@@ -11,11 +11,8 @@ namespace SphereMall\MS\Tests\Resources\Grapher;
 
 use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Entities\Entity;
-use SphereMall\MS\Entities\FunctionalName;
 use SphereMall\MS\Entities\Product;
-use SphereMall\MS\Exceptions\EntityNotFoundException;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
-use SphereMall\MS\Lib\Filters\FilterOperators;
 use SphereMall\MS\Lib\Filters\Grid\EntityFilter;
 use SphereMall\MS\Lib\Filters\Grid\FunctionalNameFilter;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
@@ -124,6 +121,16 @@ class CorrelationsResourceTest extends SetUpResourceTest
             $this->assertInstanceOf(Product::class, $correlation);
             $this->assertEquals($funcNameId, $correlation->functionalName->id);
         }
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testCorrelationsFromEntityByIds()
+    {
+        $correlations = $this->client->correlations()->getFromEntityByIds('documents', [1, 2, 3]);
+
+        $this->assertNotEmpty($correlations);
     }
     #endregion
 }
