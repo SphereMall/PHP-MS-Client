@@ -75,24 +75,7 @@ class CorrelationsResource extends GrapherResource
     #endregion
 
     /**
-     * @param string $entityFrom
-     * @param array  $entityIds
-     *
-     * @return array|int|Entity|Collection
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function getFromEntityByIds(string $entityFrom, array $entityIds)
-    {
-        $uriAppend = "from/{$entityFrom}";
-        $params    = ['entityIds' => implode(",", $entityIds)];
-
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
-
-        return $this->make($response, true, new EntitiesCorrelationMaker);
-    }
-
-    /**
-     * @param int $id
+     * @param int    $id
      * @param string $forClassName
      *
      * @return array|Collection
@@ -108,5 +91,27 @@ class CorrelationsResource extends GrapherResource
         $response = $this->handler->handle('GET', false, $uriAppend, $params);
 
         return $this->make($response);
+    }
+
+    /**
+     * @param string $entityFrom
+     * @param array  $entityIds
+     *
+     * @param array  $filterParams
+     *
+     * @return array|int|Entity|Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getFromEntityByIds(string $entityFrom, array $entityIds, array $filterParams = [])
+    {
+        $uriAppend = "from/{$entityFrom}";
+        $params    = ['entityIds' => implode(",", $entityIds)];
+        if ($filterParams) {
+            $params['params'] = json_encode([$filterParams]);
+        }
+
+        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+
+        return $this->make($response, true, new EntitiesCorrelationMaker);
     }
 }

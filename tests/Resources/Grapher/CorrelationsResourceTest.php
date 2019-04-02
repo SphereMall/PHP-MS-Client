@@ -128,7 +128,14 @@ class CorrelationsResourceTest extends SetUpResourceTest
      */
     public function testCorrelationsFromEntityByIds()
     {
-        $correlations = $this->client->correlations()->getFromEntityByIds('documents', [1, 2, 3]);
+        $entityIds    = [1, 2, 3];
+        $filterParams = [
+            'entity'          => ['products'],
+            'functionalNames' => [4],
+        ];
+
+        $correlations = $this->client->correlations()
+                                     ->getFromEntityByIds('documents', $entityIds, $filterParams);
 
         $this->assertNotEmpty($correlations);
     }
