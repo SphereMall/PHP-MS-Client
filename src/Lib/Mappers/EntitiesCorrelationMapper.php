@@ -18,7 +18,7 @@ class EntitiesCorrelationMapper extends Mapper
     /**
      * @param array $array
      *
-     * @return mixed
+     * @return null
      */
     protected function doCreateObject(array $array)
     {

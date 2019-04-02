@@ -139,7 +139,7 @@ class ObjectMaker extends Maker
      *
      * @return array
      */
-    protected function getIncludedArray(array $included, $getAttributes = true)
+    protected function getIncludedArray(array $included, bool $getAttributes = true)
     {
         $result = [];
         foreach ($included as $include) {
