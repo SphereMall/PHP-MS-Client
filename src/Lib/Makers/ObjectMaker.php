@@ -135,14 +135,15 @@ class ObjectMaker extends Maker
      * result example: ['brands'][706] = {attributes}
      *
      * @param array $included
+     * @param bool  $getAttributes
      *
      * @return array
      */
-    protected function getIncludedArray(array $included)
+    protected function getIncludedArray(array $included, bool $getAttributes = true)
     {
         $result = [];
         foreach ($included as $include) {
-            $result[$include['type']][$include['id']] = $include['attributes'];
+            $result[$include['type']][$include['id']] = $getAttributes ? $include['attributes'] : $include;
         }
 
         return $result;
