@@ -43,8 +43,13 @@ class Request extends \SphereMall\MS\Lib\Http\Request
         try {
             $elasticData = $client->{$endPoint}($queryParams);
 
+            if ($client->transport->getLastConnection()) {
+                $elasticData['debug'] = $client->transport->getLastConnection()->getLastRequestInfo();
+            }
+
             if ($endPoint == 'msearch') {
                 foreach ($elasticData['responses'] as $key => $responseItem) {
+                    $responseItem['debug'] = $elasticData['debug'];
                     $response[] = new Response($responseItem);
                 }
             } else {

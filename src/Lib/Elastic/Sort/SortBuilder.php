@@ -39,11 +39,11 @@ class SortBuilder implements ElasticBodyElementInterface
      */
     public function toArray(): array
     {
-        return [
-            'sort' => array_map(function (ElasticBodyElementInterface $sort) {
-                return $sort->toArray();
-            }, $this->elements),
-        ];
+        $array = array_map(function (ElasticBodyElementInterface $sort) {
+            return $sort->toArray();
+        }, $this->elements);
+
+        return $array;
     }
 
     /**
@@ -51,7 +51,7 @@ class SortBuilder implements ElasticBodyElementInterface
      *
      * @return $this
      */
-    private function setSort(ElasticBodyElementInterface $element)
+    public function setSort(ElasticBodyElementInterface $element)
     {
         $this->elements[] = $element;
 

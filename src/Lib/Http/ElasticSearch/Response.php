@@ -22,7 +22,7 @@ class Response extends \SphereMall\MS\Lib\Http\Response
             $this->data = $response;
             $this->status = isset($response['error']) ? 'ERROR' : 'OK';
             $this->errors = $response['error'] ?? null;
-            $this->debug = $contents['debug'] ?? null;
+            $this->debug = $response['debug'] ?? null;
             $this->version = 1;
             $this->included = [];
             $this->meta = new Meta($this->data['hits']['total'] ?? 0, $limit, $offset);
