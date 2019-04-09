@@ -8,7 +8,7 @@
 
 namespace SphereMall\MS\Tests\Resources\Entities;
 
-use SphereMall\MS\Entities\Categories;
+use SphereMall\MS\Entities\Category;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class CategoriesResourceTest extends SetUpResourceTest
@@ -23,7 +23,7 @@ class CategoriesResourceTest extends SetUpResourceTest
         $list = $categories->all();
 
         foreach ($list as $item) {
-            $this->assertInstanceOf(Categories::class, $item);
+            $this->assertInstanceOf(Category::class, $item);
         }
     }
 
@@ -44,7 +44,7 @@ class CategoriesResourceTest extends SetUpResourceTest
     public function testFirst()
     {
         $category = $this->client->categories()->first();
-        $this->assertInstanceOf(Categories::class, $category);
+        $this->assertInstanceOf(Category::class, $category);
     }
 
     /**
@@ -56,7 +56,7 @@ class CategoriesResourceTest extends SetUpResourceTest
 
         $this->assertInternalType('array', $categories);
         $this->assertGreaterThan(0, count($categories));
-        $this->assertInstanceOf(Categories::class, $categories[0]);
+        $this->assertInstanceOf(Category::class, $categories[0]);
     }
 
     /**
@@ -68,7 +68,7 @@ class CategoriesResourceTest extends SetUpResourceTest
         $category = $this->client->categories()->detailById(1);
 
         $this->assertTrue(is_array($category->attributes));
-        $this->assertInstanceOf(Categories::class, $category);
+        $this->assertInstanceOf(Category::class, $category);
     }
 
     /**
@@ -80,7 +80,7 @@ class CategoriesResourceTest extends SetUpResourceTest
         $category = $this->client->categories()->detailByCode('urlCodeTest');
 
         $this->assertTrue(is_array($category->attributes));
-        $this->assertInstanceOf(Categories::class, $category);
+        $this->assertInstanceOf(Category::class, $category);
     }
     #endregion
 }

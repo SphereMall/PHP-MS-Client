@@ -10,7 +10,7 @@ namespace SphereMall\MS\Lib\Mappers;
 
 use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Entities\AttributeValue;
-use SphereMall\MS\Entities\Categories;
+use SphereMall\MS\Entities\Category;
 use SphereMall\MS\Entities\Media;
 
 /**
@@ -18,8 +18,8 @@ use SphereMall\MS\Entities\Media;
  *
  * @package SphereMall\MS\Lib\Mappers
  *
- * @property Categories $category
- * @property array      $data
+ * @property Category $category
+ * @property array    $data
  */
 class CategoriesMapper extends Mapper
 {
@@ -29,12 +29,12 @@ class CategoriesMapper extends Mapper
     /**
      * @param array $array
      *
-     * @return Categories
+     * @return Category
      */
     protected function doCreateObject(array $array)
     {
         $this->data     = $array;
-        $this->category = new Categories($this->data);
+        $this->category = new Category($this->data);
         $this->setMedia()
              ->setAttributes();
 

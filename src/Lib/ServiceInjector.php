@@ -19,6 +19,25 @@ use SphereMall\MS\Resources\Comments\EntitiesAverageRating;
 use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticResource;
 use SphereMall\MS\Resources\ElasticSearch\ElasticSearchResource;
+use SphereMall\MS\Resources\Entities\CategoriesResource;
+use SphereMall\MS\Resources\Entities\EntityGroupsResource;
+use SphereMall\MS\Resources\Grapher\CorrelationsResource;
+use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
+use SphereMall\MS\Resources\Grapher\FactorsResource;
+use SphereMall\MS\Resources\Grapher\FactorValuesResource;
+use SphereMall\MS\Resources\LayoutContent\MenuItemsResource;
+use SphereMall\MS\Resources\Marketing\ActionsResource;
+use SphereMall\MS\Resources\Marketing\ActionsTypesResource;
+use SphereMall\MS\Resources\Marketing\CampaignsResource;
+use SphereMall\MS\Resources\Marketing\CampaignsTreeResource;
+use SphereMall\MS\Resources\Marketing\EventActionCampaignResource;
+use SphereMall\MS\Resources\Marketing\EventsResource;
+use SphereMall\MS\Resources\Marketing\TriggersResource;
+use SphereMall\MS\Resources\Marketing\TriggersTypesResource;
+use SphereMall\MS\Resources\Marketing\UserTriggerHistoryResource;
+use SphereMall\MS\Resources\Marketing\UserTriggersResource;
+use SphereMall\MS\Resources\Prices\PriceConfigurationsResource;
+use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Entities\AttributeDisplayTypesResource;
 use SphereMall\MS\Resources\Entities\AttributeGroupsEntitiesResource;
 use SphereMall\MS\Resources\Entities\AttributeGroupsResource;
@@ -27,11 +46,9 @@ use SphereMall\MS\Resources\Entities\AttributeTypesResource;
 use SphereMall\MS\Resources\Entities\AttributeValuesResource;
 use SphereMall\MS\Resources\Entities\BrandsResource;
 use SphereMall\MS\Resources\Entities\CatalogItemsResource;
-use SphereMall\MS\Resources\Entities\CategoriesResource;
 use SphereMall\MS\Resources\Entities\DocumentsResource;
 use SphereMall\MS\Resources\Entities\EntitiesResource;
 use SphereMall\MS\Resources\Entities\EntityAttributesResource;
-use SphereMall\MS\Resources\Entities\EntityGroupsResource;
 use SphereMall\MS\Resources\Entities\FunctionalNamesResource;
 use SphereMall\MS\Resources\Entities\MediaResource;
 use SphereMall\MS\Resources\Entities\MediaTypesResource;
@@ -41,14 +58,7 @@ use SphereMall\MS\Resources\Entities\ProductsResource;
 use SphereMall\MS\Resources\Entities\ProductVariantsResource;
 use SphereMall\MS\Resources\Entities\UnitOfMeasureResource;
 use SphereMall\MS\Resources\Grapher\ConsumerFactorsResource;
-use SphereMall\MS\Resources\Grapher\CorrelationsResource;
-use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
-use SphereMall\MS\Resources\Grapher\FactorsResource;
-use SphereMall\MS\Resources\Grapher\FactorValuesResource;
 use SphereMall\MS\Resources\Grapher\GridResource;
-use SphereMall\MS\Resources\LayoutContent\MenuItemsResource;
-use SphereMall\MS\Resources\Prices\PriceConfigurationsResource;
-use SphereMall\MS\Resources\Prices\ProductPriceConfigurationsResource;
 use SphereMall\MS\Resources\Shop\BasketResource;
 use SphereMall\MS\Resources\Shop\CurrenciesRateResource;
 use SphereMall\MS\Resources\Shop\CurrenciesResource;
@@ -265,6 +275,98 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new EntityGroupsResource($this);
+    }
+    #endregion
+
+    #region [Marketing service]
+    /**
+     * @return ActionsResource
+     */
+    public function actions()
+    {
+        /** @var Client $this */
+        return new ActionsResource($this);
+    }
+
+    /**
+     * @return ActionsTypesResource
+     */
+    public function actionsTypes()
+    {
+        /** @var Client $this */
+        return new ActionsTypesResource($this);
+    }
+
+    /**
+     * @return CampaignsResource
+     */
+    public function campaigns()
+    {
+        /** @var Client $this */
+        return new CampaignsResource($this);
+    }
+
+    /**
+     * @return CampaignsTreeResource
+     */
+    public function campaignsTree()
+    {
+        /** @var Client $this */
+        return new CampaignsTreeResource($this);
+    }
+
+    /**
+     * @return EventActionCampaignResource
+     */
+    public function eventActionCampaign()
+    {
+        /** @var Client $this */
+        return new EventActionCampaignResource($this);
+    }
+
+    /**
+     * @return EventsResource
+     */
+    public function events()
+    {
+        /** @var Client $this */
+        return new EventsResource($this);
+    }
+
+    /**
+     * @return TriggersResource
+     */
+    public function triggers()
+    {
+        /** @var Client $this */
+        return new TriggersResource($this);
+    }
+
+    /**
+     * @return TriggersTypesResource
+     */
+    public function triggersTypes()
+    {
+        /** @var Client $this */
+        return new TriggersTypesResource($this);
+    }
+
+    /**
+     * @return UserTriggerHistoryResource
+     */
+    public function userTriggerHistory()
+    {
+        /** @var Client $this */
+        return new UserTriggerHistoryResource($this);
+    }
+
+    /**
+     * @return UserTriggersResource
+     */
+    public function userTriggers()
+    {
+        /** @var Client $this */
+        return new UserTriggersResource($this);
     }
     #endregion
 
@@ -649,6 +751,7 @@ trait ServiceInjector
      */
     public function catalogItemAttributes()
     {
+        /** @var Client $this */
         return new CatalogItemAttributesResource($this);
     }
 
