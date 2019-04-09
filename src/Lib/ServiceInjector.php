@@ -14,6 +14,7 @@ use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\Catalog\CatalogItemAttributesResource;
+use SphereMall\MS\Resources\ChangesHistory\HistoryResource;
 use SphereMall\MS\Resources\Comments\CommentsResource;
 use SphereMall\MS\Resources\Comments\EntitiesAverageRating;
 use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
@@ -747,7 +748,7 @@ trait ServiceInjector
     }
 
     /**
-     * @return \SphereMall\MS\Resources\Catalog\CatalogItemAttributesResource
+     * @return CatalogItemAttributesResource
      */
     public function catalogItemAttributes()
     {
@@ -762,6 +763,17 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new MenuItemsResource($this);
+    }
+    #endregion
+
+    #region [Changes history service]
+    /**
+     * @return HistoryResource
+     */
+    public function history()
+    {
+        /** @var Client $this */
+        return new HistoryResource($this);
     }
     #endregion
 }
