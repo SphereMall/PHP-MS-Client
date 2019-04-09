@@ -78,7 +78,7 @@ class DocumentsMapper extends Mapper
 
             $mapper = new AttributesMapper();
             $attributes = [];
-            foreach ($this->data['attributes'] as $attribute) {
+            foreach ($this->data['attributes'] ?? [] as $attribute) {
                 $attribute['attributeValues'] = $this->getAttributeValues($attribute, $this->data['attributeValues']);
 
                 $attributes[] = $mapper->createObject($attribute);
