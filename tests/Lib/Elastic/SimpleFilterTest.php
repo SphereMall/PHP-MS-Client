@@ -9,6 +9,7 @@
 namespace SphereMall\MS\Tests\Lib\Elastic;
 
 
+use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Lib\Elastic\Aggregations\MaxAggregation;
 use SphereMall\MS\Lib\Elastic\Builders\AggregationBuilder;
@@ -25,12 +26,16 @@ use SphereMall\MS\Lib\Elastic\Filter\Params\FunctionalNamesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\RangeParams;
 use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
+use SphereMall\MS\Lib\Elastic\Queries\ShouldQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
 use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
 use SphereMall\MS\Lib\Elastic\Sort\SortElement;
+use SphereMall\MS\Lib\Filters\Grid\EntityFilter;
+use SphereMall\MS\Lib\Filters\Grid\FunctionalNameFilter;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Helpers\ElasticSearchIndexHelper;
+use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\DynamicFactors;
 use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\MathSum;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
@@ -141,6 +146,90 @@ class SimpleFilterTest extends SetUpResourceTest
         ]);
 
         $sort = new SortBuilder($sortEl);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testCorrelationsSearchByIds()
+    {
+        $query = new MustQuery([
+            new TermQuery("visible", 1),
+            new ShouldQuery([
+                new MustQuery([
+                    new TermQuery("_type", "products"),
+                    new TermsQuery("_id", [1, 2]),
+                ]),
+                new MustQuery([
+                    new TermQuery("_type", "documents"),
+                    new TermsQuery("_id", [1, 2, 3]),
+                ]),
+            ]),
+        ]);
+
+        $body  = new BodyBuilder();
+        $query = (new QueryBuilder())->setMust($query);
+
+        $script = (new DynamicFactors([
+            'products'  => [
+                '2' => 0.2,
+            ],
+            'documents' => [
+                '2' => 0.3,
+                '1' => 0.4
+            ]
+        ]))->getAlgorithm();
+
+        $sort[] = new SortElement("_script", "desc", [
+            'type'   => "number",
+            'script' => $script,
+        ]);
+
+        $body->query($query)
+             ->limit(1)
+             ->offset(1)
+             ->sort(new SortBuilder($sort))
+             ->indexes(ElasticSearchIndexHelper::getIndexesByClasses([Product::class, Document::class]));
+
+        $data = $this->client->elastic()->search($body)->withMeta()->all();
+
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetCorrelationsById()
+    {
+        $correlations = $this->client->correlations();
+        $correlations->limit(1);
+
+        $filter = new GridFilter();
+        $filter->elements([
+            new EntityFilter([Document::class]),
+            new FunctionalNameFilter([26])
+        ]);
+        $correlations->filter($filter);
+
+        $data = $correlations->getById(1, Product::class);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetCorrelationsByIds()
+    {
+        $correlations = $this->client->correlations();
+        $correlations->limit(1, 1);
+
+        $filterParams = [
+            'entity'          => ['documents'],
+            'functionalNames' => [26,27],
+        ];
+
+        $data = $correlations->getFromEntityByIds('products', [1], $filterParams);
         $this->assertTrue(true);
     }
 }

@@ -82,7 +82,11 @@ class CorrelationsResourceTest extends SetUpResourceTest
     public function is_product_correlations()
     {
         $correlations = $this->client->correlations()->withMeta()->getById(4, Product::class);
-        $this->assertNotEquals(0, $correlations->count());
+        if (is_object($correlations)) {
+            $this->assertNotEquals(0, $correlations->count());
+        } else {
+            $this->assertEquals([], $correlations);
+        }
         foreach ($correlations as $correlation) {
             $this->assertInstanceOf(Entity::class, $correlation);
         }
@@ -113,7 +117,11 @@ class CorrelationsResourceTest extends SetUpResourceTest
                                      ->filter($filter)
                                      ->withMeta()
                                      ->getById(4, Document::class);
-        $this->assertNotEquals(0, $correlations->count());
+        if (is_object($correlations)) {
+            $this->assertNotEquals(0, $correlations->count());
+        } else {
+            $this->assertEquals([], $correlations);
+        }
         /**
          * @var $correlation Product
          */

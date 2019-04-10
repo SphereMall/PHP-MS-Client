@@ -14,7 +14,16 @@ use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Lib\Collection;
 use SphereMall\MS\Lib\Helpers\CorrelationTypeHelper;
-use SphereMall\MS\Lib\Makers\EntitiesCorrelationMaker;
+use SphereMall\MS\Lib\Elastic\Builders\BodyBuilder;
+use SphereMall\MS\Lib\Elastic\Builders\QueryBuilder;
+use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
+use SphereMall\MS\Lib\Elastic\Queries\ShouldQuery;
+use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
+use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
+use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
+use SphereMall\MS\Lib\Elastic\Sort\SortElement;
+use SphereMall\MS\Lib\Helpers\ElasticSearchIndexHelper;
+use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\DynamicFactors;
 
 /**
  * Class GridResource
@@ -83,14 +92,25 @@ class CorrelationsResource extends GrapherResource
      */
     public function getById(int $id, string $forClassName)
     {
-        $params = $this->getQueryParams();
-
+        $params    = $this->getQueryParams();
         $type      = CorrelationTypeHelper::getGraphTypeByClass($forClassName);
         $uriAppend = "{$type}/{$id}";
 
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+        unset($params['limit'], $params['offset']);
 
-        return $this->make($response);
+        $response = $this->handler->handle('GET', false, $uriAppend, $params)->getData();
+        if (!$response) {
+            return [];
+        }
+
+        $functionalNames = [];
+        if ($filter = $this->getFilter()) {
+            $functionalNames = current($filter->getElements())['functionalNames'] ?? null;
+        }
+
+        return $this->client->elastic()
+                            ->search($this->prepareElasticSearchBody($response, ['functionalNameId' => $functionalNames]))
+                            ->all();
     }
 
     /**
@@ -110,8 +130,76 @@ class CorrelationsResource extends GrapherResource
             $params['params'] = json_encode([$filterParams]);
         }
 
-        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+        $response = $this->handler->handle('GET', false, $uriAppend, $params)->getData();
+        if (!$response) {
+            return [];
+        }
 
-        return $this->make($response, true, new EntitiesCorrelationMaker);
+        $functionalNames = [];
+        if (isset($filterParams['functionalNames']) && $filterParams['functionalNames']) {
+            $functionalNames = $filterParams['functionalNames'];
+        }
+
+        return $this->client->elastic()
+                            ->search($this->prepareElasticSearchBody($response, ['functionalNameId' => $functionalNames]))
+                            ->all();
     }
+
+    #region [Private methods]
+
+    /**
+     * @param array $data
+     * @param array $params
+     *
+     * @return BodyBuilder
+     */
+    private function prepareElasticSearchBody(array $data, array $params = []): BodyBuilder
+    {
+        $entityWeights = [];
+        $indexes       = [];
+        foreach (array_column($data, 'attributes') as $correlation) {
+            $entityCodeInSingular = $correlation['type'];
+            if (substr($entityCodeInSingular, -1, 1) == 's') {
+                $entityCodeInSingular = substr($correlation['type'], 0, -1);
+            }
+
+            $className = "SphereMall\\MS\\Entities\\" . ucfirst($entityCodeInSingular);
+            if (class_exists($className)) {
+                $indexes[$entityCodeInSingular] = $className;
+            }
+
+            $entityWeights[$correlation['type']][$correlation[$entityCodeInSingular . 'Id']] = doubleval($correlation['value']);
+        }
+
+        $mustQueries = [];
+        foreach ($entityWeights as $entity => $weights) {
+            $mustQueries[] = new MustQuery([
+                new TermQuery('_type', $entity),
+                new TermsQuery('_id', array_keys($weights)),
+            ]);
+        }
+        $mustQuery = [
+            new TermQuery('visible', 1),
+            new ShouldQuery($mustQueries),
+        ];
+        if (isset($params['functionalNameId']) && $params['functionalNameId']) {
+            $mustQuery[] = new TermsQuery('functionalNameId', $params['functionalNameId']);
+        }
+        $mustQuery = new MustQuery($mustQuery);
+
+        $body   = new BodyBuilder();
+        $query  = (new QueryBuilder())->setMust($mustQuery);
+        $script = (new DynamicFactors($entityWeights))->getAlgorithm();
+        $sort[] = new SortElement('_script', 'desc', [
+            'type'   => 'number',
+            'script' => $script,
+        ]);
+
+        return $body->query($query)
+                    ->limit($this->limit)
+                    ->offset($this->offset)
+                    ->sort(new SortBuilder($sort))
+                    ->indexes(ElasticSearchIndexHelper::getIndexesByClasses($indexes));
+    }
+    #endregion
 }
