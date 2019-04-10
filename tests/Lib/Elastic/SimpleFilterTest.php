@@ -31,6 +31,8 @@ use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
 use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
 use SphereMall\MS\Lib\Elastic\Sort\SortElement;
+use SphereMall\MS\Lib\Filters\Grid\EntityFilter;
+use SphereMall\MS\Lib\Filters\Grid\FunctionalNameFilter;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Helpers\ElasticSearchIndexHelper;
 use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\DynamicFactors;
@@ -147,8 +149,10 @@ class SimpleFilterTest extends SetUpResourceTest
         $this->assertTrue(true);
     }
 
-
-    public function testCorrelations()
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testCorrelationsSearchByIds()
     {
         $query = new MustQuery([
             new TermQuery("visible", 1),
@@ -168,7 +172,7 @@ class SimpleFilterTest extends SetUpResourceTest
         $query = (new QueryBuilder())->setMust($query);
 
         $script = (new DynamicFactors([
-            'products' => [
+            'products'  => [
                 '2' => 0.2,
             ],
             'documents' => [
@@ -183,12 +187,49 @@ class SimpleFilterTest extends SetUpResourceTest
         ]);
 
         $body->query($query)
+             ->limit(1)
+             ->offset(1)
              ->sort(new SortBuilder($sort))
              ->indexes(ElasticSearchIndexHelper::getIndexesByClasses([Product::class, Document::class]));
 
-        $data = $this->client->elastic()->search($body)->all();
+        $data = $this->client->elastic()->search($body)->withMeta()->all();
 
-        $r = 1;
+        $this->assertTrue(true);
     }
 
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetCorrelationsById()
+    {
+        $correlations = $this->client->correlations();
+        $correlations->limit(1);
+
+        $filter = new GridFilter();
+        $filter->elements([
+            new EntityFilter([Document::class]),
+            new FunctionalNameFilter([26])
+        ]);
+        $correlations->filter($filter);
+
+        $data = $correlations->getById(1, Product::class);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetCorrelationsByIds()
+    {
+        $correlations = $this->client->correlations();
+        $correlations->limit(1, 1);
+
+        $filterParams = [
+            'entity'          => ['documents'],
+            'functionalNames' => [26,27],
+        ];
+
+        $data = $correlations->getFromEntityByIds('products', [1], $filterParams);
+        $this->assertTrue(true);
+    }
 }
