@@ -43,7 +43,10 @@ class FunctionalNamesParams extends BasicParams implements ElasticParamElementIn
     public function getParams(): array
     {
         return [
-            'functionalNames' => $this->values,
+            'functionalNames' => [
+                'values'   => $this->values,
+                'operator' => $this->operator,
+            ],
         ];
     }
 

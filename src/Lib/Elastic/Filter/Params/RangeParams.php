@@ -51,7 +51,10 @@ class RangeParams extends BasicParams implements ElasticParamElementInterface, E
         return [
             'range' => [
                 $this->type => [
-                    $this->field => $this->params,
+                    $this->field => [
+                        'values'   => $this->params,
+                        'operator' => $this->operator,
+                    ],
                 ],
             ],
         ];

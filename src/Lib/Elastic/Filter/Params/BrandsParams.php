@@ -43,7 +43,10 @@ class BrandsParams extends BasicParams implements ElasticParamElementInterface, 
     public function getParams(): array
     {
         return [
-            'brands' => $this->values,
+            'brands' => [
+                'values'   => $this->values,
+                'operator' => $this->operator,
+            ],
         ];
     }
 

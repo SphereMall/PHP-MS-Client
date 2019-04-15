@@ -24,7 +24,6 @@ use SphereMall\MS\Lib\Elastic\Filter\Params\AttributesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\BrandsParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\FunctionalNamesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\RangeParams;
-use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
 use SphereMall\MS\Lib\Elastic\Queries\ShouldQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
@@ -78,8 +77,8 @@ class SimpleFilterTest extends SetUpResourceTest
                 ])
             )
         )->limit(1)->offset(1);
-
-        $data = $this->client->elastic()->msearch([$body])->all();
+        $filter = $this->client->elastic()->filter($filter)->facets();
+        $data   = $this->client->elastic()->msearch([$body])->all();
 //        $data = $this->client->elastic()->search($body)->all();
 
 
@@ -241,14 +240,19 @@ class SimpleFilterTest extends SetUpResourceTest
     {
         $body   = new BodyBuilder();
         $filter = new FilterBuilder();
+        $filter->setConfigs([
+            new BrandsConfig(true),
+            new FunctionalNamesConfig(true),
+        ]);
         $filter->setParams([
-            new BrandsParams([1], FilterOperators::NOT_IN),
-            new FunctionalNamesParams([10], FilterOperators::NOT_IN)
+            new BrandsParams([1], FilterOperators::IN),
+            new FunctionalNamesParams([10], FilterOperators::NOT_IN),
         ]);
 
         $body->indexes(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]))->filter($filter);
 
-        $data = $this->client->elastic()->search($body)->all();
+        $filter = $this->client->elastic()->search($body)->filter($filter)->facets();
+        $data   = $this->client->elastic()->search($body)->withMeta()->all();
 
         $this->assertTrue(true);
     }

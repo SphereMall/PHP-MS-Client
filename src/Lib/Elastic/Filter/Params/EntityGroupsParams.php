@@ -43,7 +43,10 @@ class EntityGroupsParams extends BasicParams implements ElasticParamElementInter
     public function getParams(): array
     {
         return [
-            'entityGroups' => $this->values,
+            'entityGroups' => [
+                'values'   => $this->values,
+                'operator' => $this->operator,
+            ],
         ];
     }
 
