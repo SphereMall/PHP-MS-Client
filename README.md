@@ -3,6 +3,10 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### [Version 2.8.1](https://spheremall.atlassian.net/browse/M20-109)
+## Update work with filter params for elasticfilter
+## ! This version is compatible with MS Indexer >= 2.5.4 !
+
 ### [Version 2.8.0](https://spheremall.atlassian.net/browse/MIC-1227)
 ## Update correlation resource for working with elasticsearch
 ## ! This version is compatible with MS Grapher >= 2.3.4.5 !
