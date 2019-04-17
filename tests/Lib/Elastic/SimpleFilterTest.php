@@ -24,13 +24,13 @@ use SphereMall\MS\Lib\Elastic\Filter\Params\AttributesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\BrandsParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\FunctionalNamesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\RangeParams;
-use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
 use SphereMall\MS\Lib\Elastic\Queries\ShouldQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
 use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
 use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
 use SphereMall\MS\Lib\Elastic\Sort\SortElement;
+use SphereMall\MS\Lib\Filters\FilterOperators;
 use SphereMall\MS\Lib\Filters\Grid\EntityFilter;
 use SphereMall\MS\Lib\Filters\Grid\FunctionalNameFilter;
 use SphereMall\MS\Lib\Filters\Grid\GridFilter;
@@ -77,8 +77,8 @@ class SimpleFilterTest extends SetUpResourceTest
                 ])
             )
         )->limit(1)->offset(1);
-
-        $data = $this->client->elastic()->msearch([$body])->all();
+        $filter = $this->client->elastic()->filter($filter)->facets();
+        $data   = $this->client->elastic()->msearch([$body])->all();
 //        $data = $this->client->elastic()->search($body)->all();
 
 
@@ -177,8 +177,8 @@ class SimpleFilterTest extends SetUpResourceTest
             ],
             'documents' => [
                 '2' => 0.3,
-                '1' => 0.4
-            ]
+                '1' => 0.4,
+            ],
         ]))->getAlgorithm();
 
         $sort[] = new SortElement("_script", "desc", [
@@ -208,7 +208,7 @@ class SimpleFilterTest extends SetUpResourceTest
         $filter = new GridFilter();
         $filter->elements([
             new EntityFilter([Document::class]),
-            new FunctionalNameFilter([26])
+            new FunctionalNameFilter([26]),
         ]);
         $correlations->filter($filter);
 
@@ -226,10 +226,34 @@ class SimpleFilterTest extends SetUpResourceTest
 
         $filterParams = [
             'entity'          => ['documents'],
-            'functionalNames' => [26,27],
+            'functionalNames' => [26, 27],
         ];
 
         $data = $correlations->getFromEntityByIds('products', [1], $filterParams);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testWithOperators()
+    {
+        $body   = new BodyBuilder();
+        $filter = new FilterBuilder();
+        $filter->setConfigs([
+            new BrandsConfig(true),
+            new FunctionalNamesConfig(true),
+        ]);
+        $filter->setParams([
+            new BrandsParams([1], FilterOperators::IN),
+            new FunctionalNamesParams([10], FilterOperators::NOT_IN),
+        ]);
+
+        $body->indexes(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]))->filter($filter);
+
+        $filter = $this->client->elastic()->search($body)->filter($filter)->facets();
+        $data   = $this->client->elastic()->search($body)->withMeta()->all();
+
         $this->assertTrue(true);
     }
 }
