@@ -35,7 +35,7 @@ class ElasticResource extends Resource
 
     public function getURI()
     {
-        return 'elasticsearch';
+        return 'elasticindexer';
     }
 
     /**
