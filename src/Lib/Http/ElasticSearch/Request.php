@@ -1,4 +1,7 @@
 <?php
+
+use SphereMall\MS\Resources\Resource as ServiceResource;
+
 /**
  * Created by PhpStorm.
  * User: ddis
@@ -14,6 +17,12 @@ use SphereMall\MS\Lib\Elastic\Builders\MSearch;
 use SphereMall\MS\Lib\Elastic\Builders\Search;
 use SphereMall\MS\Lib\Helpers\HttpHelper;
 
+/**
+ * Class Request
+ *
+ * @package SphereMall\MS\Lib\Http\ElasticSearch
+ * @property \SphereMall\MS\Resources\ElasticSearch\ElasticResource $resource
+ */
 class Request extends \SphereMall\MS\Lib\Http\Request
 {
     /**
@@ -50,7 +59,7 @@ class Request extends \SphereMall\MS\Lib\Http\Request
             if ($endPoint == 'msearch') {
                 foreach ($elasticData['responses'] as $key => $responseItem) {
                     $responseItem['debug'] = $elasticData['debug'];
-                    $response[] = new Response($responseItem);
+                    $response[]            = new Response($responseItem);
                 }
             } else {
                 $response = new Response($elasticData, $queryParams['body']['size'] ?? 0, $queryParams['body']['from'] ?? 0);
@@ -70,7 +79,7 @@ class Request extends \SphereMall\MS\Lib\Http\Request
     private function createElasticClient()
     {
         $clientBuilder = new ClientBuilder();
-        $url           = HttpHelper::setHttPortToUrl($this->client->getGatewayUrl(), false) . '/' . $this->resource->getVersion() . '/' . $this->resource->getURI();
+        $url           = HttpHelper::setHttPortToUrl($this->client->getGatewayUrl(), false) . '/' . $this->resource->getVersion() . '/' . $this->resource->getElasticUrl();
 
         return $clientBuilder->setConnectionParams(['client' => ['headers' => $this->setAuthorization()]])
                              ->setHosts(['host' => $url])
