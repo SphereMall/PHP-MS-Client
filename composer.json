@@ -27,7 +27,7 @@
       "email": "sergey@spheremall.com"
     }
   ],
-  "version": "2.8.1",
+  "version": "2.8.2",
   "require-dev": {
     "phpunit/phpunit": "6.2"
   }

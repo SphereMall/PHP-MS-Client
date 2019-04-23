@@ -38,6 +38,11 @@ class ElasticResource extends Resource
         return 'elasticindexer';
     }
 
+    public function getElasticUrl()
+    {
+        return 'elasticsearch';
+    }
+
     /**
      * @param BodyBuilder $builder
      *
@@ -82,7 +87,7 @@ class ElasticResource extends Resource
 
     public function facets()
     {
-        $handler = new \SphereMall\MS\Lib\Http\Request($this->client, $this);
+        $handler  = new \SphereMall\MS\Lib\Http\Request($this->client, $this);
         $response = $handler->handle('GET', $this->filter->getConfigs(), 'filter', $this->filter->getQuery());
 
         $this->maker = new ElasticFacetedMaker();
@@ -98,16 +103,16 @@ class ElasticResource extends Resource
 
         if ($debugInfo = $response->getDebug()) {
             $this->client->setCallStatistic([
-                'url' => $debugInfo['response']['effective_url'] ?? '',
-                'method' => $debugInfo['request']['http_method'] ?? '',
+                'url'     => $debugInfo['response']['effective_url'] ?? '',
+                'method'  => $debugInfo['request']['http_method'] ?? '',
                 'options' => ['body' => $debugInfo['request']['body'] ?? ''],
-                'time' => $debugInfo['response']['transfer_stats']['total_time'] ?? '',
+                'time'    => $debugInfo['response']['transfer_stats']['total_time'] ?? '',
             ]);
         }
 
         if (is_array($response)) {
             foreach ($response as $responseItem) {
-                $result[] =  $this->make($responseItem, true, new ElasticSearchMaker());
+                $result[] = $this->make($responseItem, true, new ElasticSearchMaker());
             }
 
             return $result ?? [];
