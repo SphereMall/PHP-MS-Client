@@ -10,16 +10,16 @@
 namespace SphereMall\MS\Lib\Http;
 
 /**
- * @property int $statusCode
- * @property array $headers
- * @property array $data
- * @property bool $success
- * @property bool $status
+ * @property int    $statusCode
+ * @property array  $headers
+ * @property array  $data
+ * @property bool   $success
+ * @property bool   $status
  * @property string $version
- * @property array $errors
- * @property array $debug
- * @property Meta $meta
- * @property array $included
+ * @property array  $errors
+ * @property array  $debug
+ * @property Meta   $meta
+ * @property array  $included
  */
 class Response
 {
@@ -34,6 +34,18 @@ class Response
     protected $meta;
     protected $included;
     #endregion
+
+    public static $successStatuses = [
+        200 => 'OK',
+        201 => 'CREATED',
+        202 => 'ACCEPTED',
+        203 => 'NON_AUTHORITATIVE_INFORMATION',
+        204 => 'NO_CONTENT',
+        205 => 'RESET_CONTENT',
+        206 => 'PARTIAL_CONTENT',
+        207 => 'MULTI_STATUS',
+        208 => 'ALREADY_REPORTED',
+    ];
 
     #region [Constructor]
     /**
@@ -53,16 +65,16 @@ class Response
 
         try {
             $this->data     = $contents['data'];
-            $this->status  = $contents['status'];
+            $this->status   = $contents['status'];
             $this->errors   = $contents['errors'] ?? null;
-            $this->debug   = $contents['debug'] ?? null;
+            $this->debug    = $contents['debug'] ?? null;
             $this->version  = $contents['ver'] ?? $contents['version'] ?? null;
             $this->included = $contents['included'] ?? [];
             if (!empty($contents['meta'])) {
                 $this->meta = new Meta(...array_values($contents['meta']));
             }
         } catch (\Exception $ex) {
-            $this->errors  = $ex->getMessage();
+            $this->errors = $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
     }
@@ -74,7 +86,7 @@ class Response
      */
     public function getSuccess()
     {
-        return $this->status == 'OK';
+        return in_array($this->status, self::$successStatuses);
     }
 
     /**
