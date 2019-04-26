@@ -3,6 +3,11 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### [Version 2.8.3](https://spheremall.atlassian.net/browse/MIC-1245)
+## Check success response refactored
+## HttpHelper refactored for checking port in url
+## ObjectMaker refactored (temporary solution) to get all included, not only from relations
+
 ### [Version 2.8.2](https://spheremall.atlassian.net/browse/M20-156)
 ## Fix url-s for elastic resource 
 ## Implement JsonSerializable for Entity
