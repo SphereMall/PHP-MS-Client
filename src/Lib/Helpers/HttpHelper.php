@@ -10,6 +10,7 @@ namespace SphereMall\MS\Lib\Helpers;
 
 /**
  * Class HttpHelper
+ *
  * @package SphereMall\MS\Lib\Helpers
  */
 class HttpHelper
@@ -23,17 +24,17 @@ class HttpHelper
     #region [public static method]
     /**
      * @param string $url
-     * @param bool $https
+     * @param bool   $https
      *
      * @return string
      */
     public static function setHttPortToUrl(string $url, bool $https = null): string
     {
-        if (preg_match("/\.([a-z0-9]{2,9})\:([0-9]+)/Ui", $url)) {
+        if (preg_match("/([a-z0-9]{2,9})\:([0-9]+)/Ui", $url)) {
             return $url;
         }
         $urlArray = explode(self::DELIMITER, $url);
-        $port = self::DEFAULT_PORT_HTTP;
+        $port     = self::DEFAULT_PORT_HTTP;
         if (($https === true || $urlArray[0] == 'https' || static::isSecure($https, $urlArray[0])) && $https !== false) {
             $port = self::DEFAULT_PORT_HTTPS;
         }
@@ -43,13 +44,13 @@ class HttpHelper
 
     /**
      * @param string $url
-     * @param int $port
+     * @param int    $port
      *
      * @return string
      */
     public static function addPort(string $url, int $port)
     {
-        $url = explode('/', $url);
+        $url    = explode('/', $url);
         $url[0] .= ':' . $port;
 
         return join('/', $url);
@@ -57,7 +58,7 @@ class HttpHelper
 
     /**
      * @param bool|null $https
-     * @param string $urlHttp
+     * @param string    $urlHttp
      *
      * @return bool
      */

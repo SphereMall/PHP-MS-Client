@@ -178,16 +178,13 @@ class ObjectMaker extends Maker
      * @param $included
      *
      * @return mixed
-     * @throws EntityNotFoundException
      */
     protected function createObject($mapperClass, $element, $included)
     {
-        $item      = $this->getAttributes($element);
-        $relations = $this->getRelationships($element, $included);
         /** @var Mapper $mapper */
-        $mapper = new $mapperClass();
+        $mapper = new $mapperClass;
 
-        return $mapper->createObject(array_merge($item, $relations));
+        return $mapper->createObject(array_merge($this->getAttributes($element), $included));
     }
     #endregion
 }
