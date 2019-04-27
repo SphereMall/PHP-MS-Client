@@ -21,9 +21,9 @@ use SphereMall\MS\Lib\Filters\Filter;
 class FilterBuilder extends Filter
 {
     private $configs = [];
-    private $query   = [];
+    private $query = [];
     private $factors = [];
-    private $params  = [];
+    private $params = [];
 
     /**
      * @param array $configs
@@ -62,7 +62,7 @@ class FilterBuilder extends Filter
 
     /**
      * @param string $query
-     * @param array  $fields
+     * @param array $fields
      *
      * @return $this
      */
@@ -97,7 +97,15 @@ class FilterBuilder extends Filter
 
         foreach ($this->configs as $config) {
             /**@var ElasticConfigElementInterface $config * */
-            $elements += $config->getElements();
+
+            $configElements = $config->getElements();
+
+            if (isset($elements[key($configElements)])) {
+                $elements[key($configElements)][] = $configElements[key($configElements)][0] ?? [];
+                continue;
+            }
+
+            $elements += $configElements;
         }
 
         return $elements;
