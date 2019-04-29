@@ -2,7 +2,7 @@
 
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
-### Version 2.8.4
+### Version 2.8.4.1
 ## Change filter builder config bug
 
 ### [Version 2.8.3](https://spheremall.atlassian.net/browse/MIC-1245)
