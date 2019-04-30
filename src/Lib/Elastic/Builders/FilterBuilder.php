@@ -9,6 +9,8 @@
 namespace SphereMall\MS\Lib\Elastic\Builders;
 
 
+use SphereMall\MS\Lib\Elastic\Filter\Config\AttributesConfig;
+use SphereMall\MS\Lib\Elastic\Filter\Config\RangeConfig;
 use SphereMall\MS\Lib\Elastic\Interfaces\ElasticConfigElementInterface;
 use SphereMall\MS\Lib\Elastic\Interfaces\ElasticParamElementInterface;
 use SphereMall\MS\Lib\Filters\Filter;
@@ -100,12 +102,24 @@ class FilterBuilder extends Filter
 
             $configElements = $config->getElements();
 
-            if (isset($elements[key($configElements)])) {
-                $elements[key($configElements)][] = $configElements[key($configElements)][0] ?? [];
-                continue;
+            switch (get_class($config)) {
+                case AttributesConfig::class:
+                    $configName = key($configElements);
+                    if (isset($elements[$configName])) {
+                        $elements[$configName][] = $configElements[$configName][0] ?? [];
+                    } else {
+                        $elements += $configElements;
+                    }
+                    break;
+                case RangeConfig::class:
+                    $configName = key($configElements);
+                    foreach ($configElements[$configName] ?? [] as $rangeKey => $rangevalue) {
+                        $elements[$configName][$rangeKey] = $rangevalue;
+                    }
+                    break;
+                default:
+                    $elements += $configElements;
             }
-
-            $elements += $configElements;
         }
 
         return $elements;
