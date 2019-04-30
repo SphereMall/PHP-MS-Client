@@ -85,10 +85,10 @@ class OrdersMaker extends ObjectMaker
 
     /**
      * @param array $included
-     *
+     * @param bool $getAttributes
      * @return array
      */
-    protected function getIncludedArray(array $included): array
+    protected function getIncludedArray(array $included, bool $getAttributes = true): array
     {
         $result = [];
         foreach ($included as $include) {
