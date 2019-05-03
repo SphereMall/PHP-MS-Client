@@ -100,19 +100,21 @@ class EntityFactorsResource extends Resource
      * @param string $entityToCode
      * @param int $entityId
      * @param int|array $factorValueIds
+     * @param int $factorId
      *
      * @return Entity|Entity[]
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
-    public function set($entityToCode , $entityId, array $factorValueIds)
+    public function set($entityToCode , $entityId, array $factorValueIds, $factorId)
     {
         $uriAppend = 'set';
 
         $params = array_merge($this->getQueryParams(), [
-            'entityToCode'      => $entityToCode,
-            'entityId'          => $entityId,
-            'factorValueIds'    => implode(',', $factorValueIds)
+            'entityId'       => $entityId,
+            'entityToCode'   => $entityToCode,
+            'factorValueIds' => implode(',', $factorValueIds),
+            'factorId'       => $factorId
         ]);
 
         $response = $this->handler->handle('POST', $params, $uriAppend);
