@@ -114,7 +114,10 @@ class FilterBuilder extends Filter
                 case RangeConfig::class:
                     $configName = key($configElements);
                     foreach ($configElements[$configName] ?? [] as $rangeKey => $rangevalue) {
-                        $elements[$configName][$rangeKey] = $rangevalue;
+                        if (!isset($elements[$configName][$rangeKey])) {
+                            $elements[$configName][$rangeKey] = [];
+                        }
+                        $elements[$configName][$rangeKey] = array_merge($elements[$configName][$rangeKey], $rangevalue);
                     }
                     break;
                 default:
