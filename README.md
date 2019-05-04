@@ -2,6 +2,9 @@
 
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
+### Version 2.8.4.4
+## Fix for multi price range params
+
 ### Version 2.8.4.3
 ## Add AttributeRangeConfig
 
