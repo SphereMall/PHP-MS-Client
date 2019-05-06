@@ -108,9 +108,11 @@ class CorrelationsResource extends GrapherResource
             $functionalNames = current($filter->getElements())['functionalNames'] ?? null;
         }
 
-        return $this->client->elastic()
-                            ->search($this->prepareElasticSearchBody($response, ['functionalNameId' => $functionalNames]))
-                            ->all();
+        $request = $this->client->elastic()
+                                ->search($this->prepareElasticSearchBody($response, ['functionalNameId' => $functionalNames]));
+
+        return $this->meta ? $request->withMeta()->all() : $request->all();
+
     }
 
     /**
