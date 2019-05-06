@@ -12,6 +12,7 @@ use SphereMall\MS\Lib\Http\Request;
 
 /**
  * Class DetailResource
+ *
  * @package SphereMall\MS\Resources\Traits
  * @property Request $handler
  */
