@@ -2,6 +2,9 @@
 
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
+### Version 2.8.4.6
+## Fix correlation resource when use withMeta
+
 ### Version 2.8.4.5
 ## Fix entity factors set() method
 
