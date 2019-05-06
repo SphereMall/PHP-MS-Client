@@ -101,12 +101,13 @@ class EntityFactorsResource extends Resource
      * @param int $entityId
      * @param int|array $factorValueIds
      * @param int $factorId
+     * @param int $factorsDefaultValue
      *
      * @return Entity|Entity[]
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
-    public function set($entityToCode , $entityId, array $factorValueIds, $factorId)
+    public function set($entityToCode , $entityId, array $factorValueIds, $factorId = null, $factorsDefaultValue = 1)
     {
         $uriAppend = 'set';
 
@@ -114,6 +115,7 @@ class EntityFactorsResource extends Resource
             'entityId'       => $entityId,
             'entityToCode'   => $entityToCode,
             'factorValueIds' => implode(',', $factorValueIds),
+            'factorsDefaultValue' => $factorsDefaultValue,
             'factorId'       => $factorId
         ]);
 
