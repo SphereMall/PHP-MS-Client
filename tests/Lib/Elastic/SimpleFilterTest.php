@@ -18,10 +18,14 @@ use SphereMall\MS\Lib\Elastic\Builders\FilterBuilder;
 use SphereMall\MS\Lib\Elastic\Builders\QueryBuilder;
 use SphereMall\MS\Lib\Elastic\Filter\Config\AttributesConfig;
 use SphereMall\MS\Lib\Elastic\Filter\Config\BrandsConfig;
+use SphereMall\MS\Lib\Elastic\Filter\Config\CategoriesConfig;
+use SphereMall\MS\Lib\Elastic\Filter\Config\EntityGroupsConfig;
 use SphereMall\MS\Lib\Elastic\Filter\Config\FunctionalNamesConfig;
 use SphereMall\MS\Lib\Elastic\Filter\Factors\FilterFactorValue;
 use SphereMall\MS\Lib\Elastic\Filter\Params\AttributesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\BrandsParams;
+use SphereMall\MS\Lib\Elastic\Filter\Params\CategoriesParams;
+use SphereMall\MS\Lib\Elastic\Filter\Params\EntityGroupsParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\FunctionalNamesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\RangeParams;
 use SphereMall\MS\Lib\Elastic\Queries\FilterQuery;
@@ -279,6 +283,32 @@ class SimpleFilterTest extends SetUpResourceTest
         $filter->setConfigs([
             new AttributesConfig(['sugar']),
         ]);
+        $filter->setEntities(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]));
+
+        $body->filter($filter);
+
+        $data = $this->client->elastic()->filter($filter)->facets();
+
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCategories()
+    {
+        $body = new BodyBuilder();
+
+        $filter = new FilterBuilder();
+        $filter->setConfigs([
+            new CategoriesConfig(true),
+            new EntityGroupsConfig(true),
+        ]);
+
+        $filter->setParams([
+            new CategoriesParams([2], FilterOperators::IN),
+        ]);
+
         $filter->setEntities(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]));
 
         $body->filter($filter);
