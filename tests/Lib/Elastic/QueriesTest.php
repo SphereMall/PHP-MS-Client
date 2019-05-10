@@ -26,7 +26,7 @@ class QueriesTest extends SetUpResourceTest
 {
     public function testDistanceQuery()
     {
-        $query = new DistanceQuery(10, 11, 10);
+        $query = new DistanceQuery("pin.location", ['lon' => 11, 'lat' => 10], 10);
         $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
 
         $this->assertEquals($query->toArray(), [

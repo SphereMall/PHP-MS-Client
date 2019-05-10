@@ -20,23 +20,25 @@ use SphereMall\MS\Lib\Filters\GeoDistanceUnits;
  */
 class DistanceQuery extends BasicQuery implements ElasticQueryInterface, ElasticBodyElementInterface
 {
+    private $field        = null;
     private $lat          = null;
     private $lon          = null;
     private $distance     = null;
     private $distanceUnit = null;
 
     /**
-     * DistanceFilter constructor.
+     * DistanceQuery constructor.
      *
-     * @param        $lat
-     * @param        $lon
+     * @param string $field
+     * @param array  $coordinates
      * @param        $distance
      * @param string $distanceUnit
      */
-    public function __construct($lat, $lon, $distance, $distanceUnit = GeoDistanceUnits::KILOMETER)
+    public function __construct(string $field, array $coordinates, $distance, $distanceUnit = GeoDistanceUnits::KILOMETER)
     {
-        $this->lat          = $lat;
-        $this->lon          = $lon;
+        $this->field        = $field;
+        $this->lat          = $coordinates['lat'];
+        $this->lon          = $coordinates['lon'];
         $this->distance     = $distance;
         $this->distanceUnit = $distanceUnit;
     }
@@ -49,7 +51,7 @@ class DistanceQuery extends BasicQuery implements ElasticQueryInterface, Elastic
         return [
             'geo_distance' => [
                 'distance'     => $this->distance . $this->distanceUnit,
-                'pin.location' => [
+                $this->field => [
                     'lat' => $this->lat,
                     'lon' => $this->lon,
                 ],
