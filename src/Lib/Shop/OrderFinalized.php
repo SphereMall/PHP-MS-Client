@@ -42,6 +42,7 @@ use SphereMall\MS\Lib\Traits\InteractsWithProperties;
  * @property string $updateDate
  * @property array $additionalInfo
  * @property string $orderComment
+ * @property string $deliveryTime
  */
 class OrderFinalized
 {
@@ -58,6 +59,7 @@ class OrderFinalized
     public $createDate;
     public $additionalInfo;
     public $orderComment;
+    public $deliveryTime;
 
     protected $id;
     protected $orderId;
@@ -250,6 +252,7 @@ class OrderFinalized
         $this->updateDate = $order->updateDate;
         $this->additionalInfo = json_decode($order->additionalInfo, true);
         $this->orderComment = $order->orderComment;
+        $this->deliveryTime = $order->deliveryTime;
 
         $this->setPropertiesField($order->getPropertiesField());
 
