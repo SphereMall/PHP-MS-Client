@@ -1,6 +1,9 @@
 # SphereMall Gateway PHP SDK
 
 Official PHP SDK for integrating with **SphereMall Product**.
+### Version 2.8.4.8
+## Extend OrderFinalized with deliveryTime
+
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 ### Version 2.8.4.7
 ## Fix DistanceQuery (added possibility to set field name)
