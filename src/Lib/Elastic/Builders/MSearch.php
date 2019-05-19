@@ -13,6 +13,7 @@ use SphereMall\MS\Lib\Elastic\Interfaces\SearchInterface;
 use SphereMall\MS\Lib\Elastic\Queries\MultiMatchQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
+use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
 use SphereMall\MS\Lib\Filters\FilterOperators;
 
 /**
@@ -65,7 +66,12 @@ class MSearch implements SearchInterface
             ];
 
             if ($q = $builder->getQuery()) {
-                $res['query'] = array_merge_recursive($q, $params['query'] ?? []);
+                if ($channels = $builder->getChannels()) {
+                    $channelQuery = (new MustQuery([
+                        new TermsQuery("channelIds", $channels),
+                    ]))->toArray();
+                }
+                $res['query'] = array_merge_recursive($q, $params['query'] ?? [], $channelQuery ?? []);
             }
 
             if ($size = $builder->getLimit()) {

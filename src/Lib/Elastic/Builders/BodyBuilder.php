@@ -24,6 +24,7 @@ use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
  * @method getLimit()
  * @method getOffset()
  * @method getFilter()
+ * @method getChannels()
  */
 class BodyBuilder
 {
@@ -35,6 +36,7 @@ class BodyBuilder
     private $limit        = 0;
     private $offset       = 0;
     private $filter       = [];
+    private $channels     = [];
 
     /**
      * @param $name
@@ -142,9 +144,26 @@ class BodyBuilder
         return $this;
     }
 
+    /**
+     * @param FilterBuilder $filter
+     *
+     * @return $this
+     */
     public function filter(FilterBuilder $filter)
     {
         $this->filter = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @param array $channelIds
+     *
+     * @return $this
+     */
+    public function channels(array $channelIds)
+    {
+        $this->channels = $channelIds;
 
         return $this;
     }

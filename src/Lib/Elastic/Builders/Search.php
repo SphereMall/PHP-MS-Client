@@ -17,6 +17,7 @@ use SphereMall\MS\Lib\Elastic\Interfaces\SearchInterface;
 use SphereMall\MS\Lib\Elastic\Queries\MultiMatchQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
+use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
 use SphereMall\MS\Lib\Elastic\Sort\SortBuilder;
 use SphereMall\MS\Lib\Elastic\Sort\SortElement;
 use SphereMall\MS\Lib\Filters\FilterOperators;
@@ -44,14 +45,15 @@ class Search implements SearchInterface
     public function __construct(BodyBuilder $builder)
     {
         $this->body = [
-            'filter'  => $builder->getFilter(),
-            'query'   => $builder->getQuery(),
-            'size'    => $builder->getLimit(),
-            'from'    => $builder->getOffset(),
-            '_source' => $builder->getSource(),
-            'index'   => $builder->getIndexes(),
-            'aggs'    => $builder->getAggregations(),
-            'sort'    => $builder->getSort(),
+            'filter'   => $builder->getFilter(),
+            'query'    => $builder->getQuery(),
+            'size'     => $builder->getLimit(),
+            'from'     => $builder->getOffset(),
+            '_source'  => $builder->getSource(),
+            'index'    => $builder->getIndexes(),
+            'aggs'     => $builder->getAggregations(),
+            'sort'     => $builder->getSort(),
+            'channels' => $builder->getChannels(),
         ];
     }
 
@@ -189,9 +191,13 @@ class Search implements SearchInterface
      */
     private function query()
     {
-        if ($this->body['query']) {
-            $this->params['body']["query"] = array_merge_recursive($this->body['query'], ($this->params['body']["query"] ?? []));
+        if ($this->body['channels']) {
+            $channelQuery = (new MustQuery([
+                new TermsQuery("channelIds", $this->body['channels']),
+            ]))->toArray();
         }
+
+        $this->params['body']["query"] = array_merge_recursive($this->body['query'], ($this->params['body']["query"] ?? []), $channelQuery ?? []);
 
         return $this;
     }
