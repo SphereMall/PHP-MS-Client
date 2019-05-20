@@ -1,5 +1,10 @@
 # SphereMall Gateway PHP SDK
 
+### Version 2.8.5
+## Implementation of:
+* https://spheremall.atlassian.net/wiki/spaces/MIC/pages/1291485243/Grapher+2.3.6+Release+Notes
+* https://spheremall.atlassian.net/wiki/spaces/MIC/pages/1304592428/Grapher+2.3.7+Release+Notes
+
 Official PHP SDK for integrating with **SphereMall Product**.
 ### Version 2.8.4.8
 ## Extend OrderFinalized with deliveryTime
