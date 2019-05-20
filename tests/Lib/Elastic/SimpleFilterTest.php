@@ -54,7 +54,8 @@ class SimpleFilterTest extends SetUpResourceTest
         $_SERVER['HTTP_HOST']   = 1;
         $_SERVER['REQUEST_URI'] = 2;
 
-        $body   = new BodyBuilder();
+        $body = new BodyBuilder();
+        $body->channels([1]);
         $filter = new FilterBuilder();
 
         $filter->setEntities(['sm-products']);
@@ -62,15 +63,15 @@ class SimpleFilterTest extends SetUpResourceTest
             new BrandsConfig(true),
         ]);
         $filter->setParams([
-//            new RangeParams('fields', 'price', ['gte' => 100]),
-//            new RangeParams('attributes', 'color', ['lt' => 1]),
-//            new FunctionalNamesParams([1, 2]),
-//                        new AttributesParams('color', [1]),
-//                        new AttributesParams('size', [2]),
+            new RangeParams('fields', 'price', ['gte' => 100]),
+            new RangeParams('attributes', 'color', ['lt' => 1]),
+            new FunctionalNamesParams([1, 2]),
+            //                        new AttributesParams('color', [1]),
+            //                        new AttributesParams('size', [2]),
         ]);
         //$filter->setKeyword("DryCare", ['title_fr']);
 //        $filter->setGroupBy("variantsCompound");
-//        $filter->setFactorsId([1]);
+//        $filter->setFactorsId([1]);   
 
         //$filter = $this->client->elastic()->filter($filter)->facets();
 
@@ -82,9 +83,9 @@ class SimpleFilterTest extends SetUpResourceTest
                 ])
             )
         )->limit(1)->offset(1);
-        $filter = $this->client->elastic()->filter($filter)->facets();
-        $data   = $this->client->elastic()->msearch([$body])->all();
-//        $data = $this->client->elastic()->search($body)->all();
+        //$filter = $this->client->elastic()->filter($filter)->facets();
+//        $data = $this->client->elastic()->search([$body])->all();
+        $data = $this->client->elastic()->search($body)->all();
 
 
         $this->assertTrue(true);
