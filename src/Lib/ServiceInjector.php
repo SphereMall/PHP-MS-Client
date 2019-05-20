@@ -24,8 +24,11 @@ use SphereMall\MS\Resources\Entities\CategoriesResource;
 use SphereMall\MS\Resources\Entities\EntityGroupsResource;
 use SphereMall\MS\Resources\Grapher\CorrelationsResource;
 use SphereMall\MS\Resources\Grapher\EntityFactorsResource;
+use SphereMall\MS\Resources\Grapher\EntityRelevanceResource;
 use SphereMall\MS\Resources\Grapher\FactorsResource;
 use SphereMall\MS\Resources\Grapher\FactorValuesResource;
+use SphereMall\MS\Resources\Grapher\UserFingerprintsResource;
+use SphereMall\MS\Resources\Grapher\UserUidHashResource;
 use SphereMall\MS\Resources\LayoutContent\MenuItemsResource;
 use SphereMall\MS\Resources\Marketing\ActionsResource;
 use SphereMall\MS\Resources\Marketing\ActionsTypesResource;
@@ -92,7 +95,6 @@ use SphereMall\MS\Resources\Users\WishListResource;
  */
 trait ServiceInjector
 {
-
     #region [Properties]
     protected static $basket = null;
     #endregion
@@ -629,12 +631,6 @@ trait ServiceInjector
         return new GridResource($this);
     }
 
-    public function elastic()
-    {
-        /** @var Client $this */
-        return new ElasticResource($this);
-    }
-
     /**
      * @return CorrelationsResource
      */
@@ -642,6 +638,24 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new CorrelationsResource($this);
+    }
+
+    public function entityRelevance()
+    {
+        /** @var Client $this */
+        return new EntityRelevanceResource($this);
+    }
+
+    public function userFingerprints()
+    {
+        /** @var Client $this */
+        return new UserFingerprintsResource($this);
+    }
+
+    public function userUidHash()
+    {
+        /** @var Client $this */
+        return new UserUidHashResource($this);
     }
     #endregion
 
@@ -690,6 +704,12 @@ trait ServiceInjector
     #endregion
 
     #region [ElasticSearch service]
+    public function elastic()
+    {
+        /** @var Client $this */
+        return new ElasticResource($this);
+    }
+
     /**
      * @param bool $multi
      * @return ElasticSearchResource

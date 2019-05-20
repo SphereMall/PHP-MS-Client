@@ -16,6 +16,8 @@ use SphereMall\MS\Lib\Mappers\Mapper;
  * Class EntitiesCorrelationMaker
  *
  * @package SphereMall\MS\Lib\Makers
+ *
+ * @deprecated Not using after applying elasticsearch for entityCorrelations
  */
 class EntitiesCorrelationMaker extends ObjectMaker
 {

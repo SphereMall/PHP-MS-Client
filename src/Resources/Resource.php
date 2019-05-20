@@ -9,6 +9,7 @@
 
 namespace SphereMall\MS\Resources;
 
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Promise\Promise;
 use SphereMall\MS\Client;
 use SphereMall\MS\Entities\Entity;
@@ -423,6 +424,27 @@ abstract class Resource
         return $this;
     }
     #endregion
+
+    /**
+     * @param int|null    $userId
+     * @param string|null $fingerprint
+     *
+     * @return array|int|Entity|Collection
+     * @throws GuzzleException
+     */
+    public function getByUser(int $userId = null, string $fingerprint = null)
+    {
+        $params = [];
+        if ($userId) {
+            $params['userId'] = $userId;
+        }
+        if ($fingerprint) {
+            $params['fingerprint'] = $fingerprint;
+        }
+        $response = $this->handler->handle('GET', false, "byuser", $params);
+
+        return $this->make($response);
+    }
 
     #region [Protected methods]
     /**
