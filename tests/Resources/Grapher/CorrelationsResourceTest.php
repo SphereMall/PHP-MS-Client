@@ -9,7 +9,10 @@
 
 namespace SphereMall\MS\Tests\Resources\Grapher;
 
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use SphereMall\MS\Entities\Document;
+use SphereMall\MS\Entities\EntitiesCorrelation;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
@@ -34,7 +37,7 @@ class CorrelationsResourceTest extends SetUpResourceTest
 
     /**
      * @test
-     * @throws \Exception
+     * @throws Exception
      */
     public function not_available_correlations_get()
     {
@@ -45,7 +48,7 @@ class CorrelationsResourceTest extends SetUpResourceTest
 
     /**
      * @test
-     * @throws \Exception
+     * @throws Exception
      */
     public function not_available_correlations_create()
     {
@@ -56,7 +59,7 @@ class CorrelationsResourceTest extends SetUpResourceTest
 
     /**
      * @test
-     * @throws \Exception
+     * @throws Exception
      */
     public function not_available_correlations_update()
     {
@@ -67,7 +70,7 @@ class CorrelationsResourceTest extends SetUpResourceTest
 
     /**
      * @test
-     * @throws \Exception
+     * @throws Exception
      */
     public function not_available_correlations_delete()
     {
@@ -107,10 +110,10 @@ class CorrelationsResourceTest extends SetUpResourceTest
     public function test__correlations_with_filter()
     {
         $funcNameId = 1;
-        $filter = new GridFilter();
+        $filter     = new GridFilter();
         $filter->elements([
             new EntityFilter([Product::class]),
-            new FunctionalNameFilter([$funcNameId])
+            new FunctionalNameFilter([$funcNameId]),
         ]);
 
         $correlations = $this->client->correlations()
@@ -132,7 +135,7 @@ class CorrelationsResourceTest extends SetUpResourceTest
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function testCorrelationsFromEntityByIds()
     {
@@ -146,6 +149,17 @@ class CorrelationsResourceTest extends SetUpResourceTest
                                      ->getFromEntityByIds('documents', $entityIds, $filterParams);
 
         $this->assertNotEmpty($correlations);
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function testBidirectional()
+    {
+        $result = $this->client->correlations()->getBidirectional('products', 'entitygroups', [7]);
+        foreach ($result as $item) {
+            $this->assertInstanceOf(EntitiesCorrelation::class, $item);
+        }
     }
     #endregion
 }

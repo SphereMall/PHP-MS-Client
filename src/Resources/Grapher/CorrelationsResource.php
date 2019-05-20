@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Resources\Grapher;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use SphereMall\MS\Entities\Entity;
 use SphereMall\MS\Exceptions\MethodNotFoundException;
 use SphereMall\MS\Lib\Collection;
@@ -27,6 +28,7 @@ use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\Dynamic
 
 /**
  * Class GridResource
+ *
  * @package SphereMall\MS\Resources\Users
  */
 class CorrelationsResource extends GrapherResource
@@ -43,7 +45,7 @@ class CorrelationsResource extends GrapherResource
     /**
      * @param int $id
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function get(int $id)
     {
@@ -88,7 +90,7 @@ class CorrelationsResource extends GrapherResource
      * @param string $forClassName
      *
      * @return array|Collection
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function getById(int $id, string $forClassName)
     {
@@ -122,7 +124,7 @@ class CorrelationsResource extends GrapherResource
      * @param array  $filterParams
      *
      * @return array|int|Entity|Collection
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function getFromEntityByIds(string $entityFrom, array $entityIds, array $filterParams = [])
     {
@@ -145,6 +147,24 @@ class CorrelationsResource extends GrapherResource
         return $this->client->elastic()
                             ->search($this->prepareElasticSearchBody($response, ['functionalNameId' => $functionalNames]))
                             ->all();
+    }
+
+    /**
+     * @param string $entity1
+     * @param string $entity2
+     * @param array  $objectIds - ids of entity1
+     *
+     * @return array|int|Entity|Collection
+     * @throws GuzzleException
+     */
+    public function getBidirectional(string $entity1, string $entity2, array $objectIds)
+    {
+        $uriAppend = "bidirectional/{$entity1}/{$entity2}";
+        $params    = ['objectIds' => implode(',', $objectIds)];
+
+        $response = $this->handler->handle('GET', false, $uriAppend, $params);
+
+        return $this->make($response);
     }
 
     #region [Private methods]

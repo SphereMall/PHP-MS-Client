@@ -8,6 +8,8 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
+use SphereMall\MS\Entities\EntitiesCorrelation;
+
 /**
  * Class EntityCorrelationMapper
  *
@@ -22,6 +24,6 @@ class EntitiesCorrelationMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        return null;
+        return new EntitiesCorrelation($array);
     }
 }
