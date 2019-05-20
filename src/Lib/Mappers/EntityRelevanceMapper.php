@@ -1,8 +1,4 @@
 <?php
-/**
- * Created by Yurii Koida.
- * 11.04.2018 12:21
- */
 
 namespace SphereMall\MS\Lib\Mappers;
 
