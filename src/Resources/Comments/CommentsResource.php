@@ -24,13 +24,16 @@ use SphereMall\MS\Resources\Resource;
  */
 class CommentsResource extends Resource
 {
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return 'comments';
     }
 
     /**
-     * @param array $objects - list of needed objects if the following format:
+     * @param array $objects - list of needed objects in the following format:
      * [
      *     [
      *        'entityId' => 1,
