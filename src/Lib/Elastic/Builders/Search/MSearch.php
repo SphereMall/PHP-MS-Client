@@ -6,9 +6,12 @@
  * Time: 23:37
  */
 
-namespace SphereMall\MS\Lib\Elastic\Builders;
+namespace SphereMall\MS\Lib\Elastic\Builders\Search;
 
 
+use SphereMall\MS\Lib\Elastic\Builders\BodyBuilder;
+use SphereMall\MS\Lib\Elastic\Builders\FilterBuilder;
+use SphereMall\MS\Lib\Elastic\Builders\QueryBuilder;
 use SphereMall\MS\Lib\Elastic\Interfaces\SearchInterface;
 use SphereMall\MS\Lib\Elastic\Queries\MultiMatchQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
@@ -21,7 +24,7 @@ use SphereMall\MS\Lib\Filters\FilterOperators;
  *
  * @package SphereMall\MS\Lib\Elastic\Builders
  */
-class MSearch implements SearchInterface
+class MSearch extends BasicSearch implements SearchInterface
 {
     private $builders = [];
 
@@ -62,7 +65,7 @@ class MSearch implements SearchInterface
 
             /**@var \SphereMall\MS\Lib\Elastic\Builders\BodyBuilder $builder * */
             $result[] = [
-                "index" => $params['index'] ?? $builder->getIndexes(),
+                "index" => $this->validateEntities($params['index'] ?? $builder->getIndexes()),
             ];
 
             if ($q = $builder->getQuery()) {

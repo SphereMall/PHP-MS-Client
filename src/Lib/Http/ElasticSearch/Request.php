@@ -13,8 +13,8 @@ namespace SphereMall\MS\Lib\Http\ElasticSearch;
 
 
 use Elasticsearch\ClientBuilder;
-use SphereMall\MS\Lib\Elastic\Builders\MSearch;
-use SphereMall\MS\Lib\Elastic\Builders\Search;
+use SphereMall\MS\Lib\Elastic\Builders\Search\MSearch;
+use SphereMall\MS\Lib\Elastic\Builders\Search\Search;
 use SphereMall\MS\Lib\Helpers\HttpHelper;
 
 /**

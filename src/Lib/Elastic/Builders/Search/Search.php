@@ -6,13 +6,16 @@
  * Time: 23:37
  */
 
-namespace SphereMall\MS\Lib\Elastic\Builders;
+namespace SphereMall\MS\Lib\Elastic\Builders\Search;
 
 
 use SphereMall\MS\Lib\Elastic\Aggregations\BucketSortAggregation;
 use SphereMall\MS\Lib\Elastic\Aggregations\MaxAggregation;
 use SphereMall\MS\Lib\Elastic\Aggregations\TermsAggregation;
 use SphereMall\MS\Lib\Elastic\Aggregations\TopHistAggregation;
+use SphereMall\MS\Lib\Elastic\Builders\AggregationBuilder;
+use SphereMall\MS\Lib\Elastic\Builders\BodyBuilder;
+use SphereMall\MS\Lib\Elastic\Builders\QueryBuilder;
 use SphereMall\MS\Lib\Elastic\Interfaces\SearchInterface;
 use SphereMall\MS\Lib\Elastic\Queries\MultiMatchQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustNotQuery;
@@ -29,7 +32,7 @@ use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\MathSum
  *
  * @package SphereMall\MS\Lib\Elastic\Builders
  */
-class Search implements SearchInterface
+class Search extends BasicSearch implements SearchInterface
 {
     const DEFAULT_SIZE = 10;
 
@@ -197,7 +200,9 @@ class Search implements SearchInterface
             ]))->toArray();
         }
 
-        $this->params['body']["query"] = array_merge_recursive($this->body['query'], ($this->params['body']["query"] ?? []), $channelQuery ?? []);
+        if ($this->body['query'] || isset($this->params['body']["query"]) || isset($channelQuery)) {
+            $this->params['body']["query"] = array_merge_recursive($this->body['query'], ($this->params['body']["query"] ?? []), ($channelQuery ?? []));
+        }
 
         return $this;
     }
@@ -244,7 +249,7 @@ class Search implements SearchInterface
     private function indexes()
     {
         if ($this->body['index']) {
-            $this->params['index'] = $this->body['index'];
+            $this->params['index'] = $this->validateEntities($this->body['index']);
         }
 
         return $this;
