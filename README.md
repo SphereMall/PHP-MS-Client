@@ -1,15 +1,19 @@
 # SphereMall Gateway PHP SDK
+Official PHP SDK for integrating with **SphereMall Product**.
+[Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
+
+### Version 2.8.6
+## Implementation of updates for `comments` entity:
+* https://spheremall.atlassian.net/wiki/spaces/MIC/pages/1394049130/Comments+3.0.0+Release+Notes
 
 ### Version 2.8.5
 ## Implementation of:
 * https://spheremall.atlassian.net/wiki/spaces/MIC/pages/1291485243/Grapher+2.3.6+Release+Notes
 * https://spheremall.atlassian.net/wiki/spaces/MIC/pages/1304592428/Grapher+2.3.7+Release+Notes
 
-Official PHP SDK for integrating with **SphereMall Product**.
 ### Version 2.8.4.8
 ## Extend OrderFinalized with deliveryTime
 
-[Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 ### Version 2.8.4.7
 ## Fix DistanceQuery (added possibility to set field name)
 
