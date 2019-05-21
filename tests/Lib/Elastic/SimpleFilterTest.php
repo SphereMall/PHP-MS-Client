@@ -114,10 +114,10 @@ class SimpleFilterTest extends SetUpResourceTest
 
         $body = new BodyBuilder();
 
-        $filter->setFactors([
-            new FilterFactorValue(10),
-            new FilterFactorValue(3, 10),
-        ]);
+//        $filter->setFactors([
+//            new FilterFactorValue(10),
+//            new FilterFactorValue(3, 10),
+//        ]);
 
         $body->filter($filter)->limit(1)->offset(0);
 
