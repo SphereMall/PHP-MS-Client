@@ -65,7 +65,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function query(QueryBuilder $query)
+    public function query(QueryBuilder $query): BodyBuilder
     {
         $this->query = $query->toArray();
 
@@ -77,7 +77,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function aggregations(AggregationBuilder $aggregation)
+    public function aggregations(AggregationBuilder $aggregation): BodyBuilder
     {
         $this->aggregations[] = $aggregation->toArray();
 
@@ -89,7 +89,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function sort(SortBuilder $sort)
+    public function sort(SortBuilder $sort): BodyBuilder
     {
         $this->sort = $sort->toArray();
 
@@ -101,7 +101,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function source(array $source)
+    public function source(array $source): BodyBuilder
     {
         $this->source = $source;
 
@@ -113,7 +113,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function indexes(array $indexes)
+    public function indexes(array $indexes): BodyBuilder
     {
         $this->indexes = implode(',', $indexes);
 
@@ -125,7 +125,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function limit(int $limit)
+    public function limit(int $limit): BodyBuilder
     {
         $this->limit = $limit;
 
@@ -137,7 +137,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function offset(int $offset)
+    public function offset(int $offset): BodyBuilder
     {
         $this->offset = $offset;
 
@@ -149,7 +149,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function filter(FilterBuilder $filter)
+    public function filter(FilterBuilder $filter): BodyBuilder
     {
         $this->filter = $filter;
 
@@ -161,7 +161,7 @@ class BodyBuilder
      *
      * @return $this
      */
-    public function channels(array $channelIds)
+    public function channels(array $channelIds): BodyBuilder
     {
         $this->channels = $channelIds;
 
