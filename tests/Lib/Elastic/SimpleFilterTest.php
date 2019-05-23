@@ -42,6 +42,7 @@ use SphereMall\MS\Lib\Filters\Grid\GridFilter;
 use SphereMall\MS\Lib\Helpers\ElasticSearchIndexHelper;
 use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\DynamicFactors;
 use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\MathSum;
+use SphereMall\MS\Lib\SortParams\ElasticSearch\ByFactorValues\Algorithms\Relevant;
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class SimpleFilterTest extends SetUpResourceTest
@@ -317,5 +318,22 @@ class SimpleFilterTest extends SetUpResourceTest
         $data = $this->client->elastic()->filter($filter)->facets();
 
         $this->assertTrue(true);
+    }
+
+    public function testRelevant()
+    {
+        $body = new BodyBuilder();
+
+        $script = (new Relevant(["products" => ["1187" => 1]], []))->getAlgorithm();
+
+        $sortEl[] = new SortElement("_script", "asc", [
+            'type'   => "number",
+            'script' => $script,
+        ]);
+
+        $body->sort(new SortBuilder($sortEl))->indexes(ElasticSearchIndexHelper::getIndexesByClasses([Product::class]));
+
+
+        $data = $this->client->elastic()->search($body)->all();
     }
 }
