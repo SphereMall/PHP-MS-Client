@@ -91,7 +91,7 @@ class Filter
      *
      * @param string $operator the filter operator (eq,ne etc)
      * @param string $field the field to filter on
-     * @param string $value the value of the attribute to operate on
+     * @param string|mixed $value the value of the attribute to operate on
      *
      * @return $this
      */
