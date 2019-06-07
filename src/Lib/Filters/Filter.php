@@ -89,9 +89,9 @@ class Filter
     /**
      *  Adds a filter to the resource request
      *
-     * @param string $operator the filter operator (eq,ne etc)
      * @param string $field the field to filter on
-     * @param string|mixed $value the value of the attribute to operate on
+     * @param string|array $value the value of the attribute to operate on
+     * @param string $operator the filter operator (eq,ne etc)
      *
      * @return $this
      */
