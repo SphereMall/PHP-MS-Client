@@ -10,11 +10,15 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Entities\WebSite;
+use SphereMall\MS\Entities\WebSiteSetting;
 use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\Catalog\CatalogItemAttributesResource;
 use SphereMall\MS\Resources\ChangesHistory\HistoryResource;
+use SphereMall\MS\Resources\Channels\WebSiteSettingsResource;
+use SphereMall\MS\Resources\Channels\WebSitesResource;
 use SphereMall\MS\Resources\Comments\CommentsResource;
 use SphereMall\MS\Resources\Comments\EntitiesAverageRating;
 use SphereMall\MS\Resources\ElasticSearch\ElasticIndexerResource;
@@ -794,6 +798,26 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new HistoryResource($this);
+    }
+    #endregion
+
+    #region [Channels service]
+    /**
+     * @return WebSitesResource
+     */
+    public function webSites()
+    {
+        /** @var Client $this */
+        return new WebSitesResource($this);
+    }
+
+    /**
+     * @return WebSiteSettingsResource
+     */
+    public function webSiteSettings()
+    {
+        /** @var Client $this */
+        return new WebSiteSettingsResource($this);
     }
     #endregion
 }
