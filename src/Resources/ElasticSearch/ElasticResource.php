@@ -11,6 +11,7 @@ namespace SphereMall\MS\Resources\ElasticSearch;
 use SphereMall\MS\Client;
 use SphereMall\MS\Lib\Elastic\Builders\{BodyBuilder, FilterBuilder, Search\MSearch, Search\Search};
 use SphereMall\MS\Lib\Makers\{ElasticFacetedMaker, ElasticSearchGroupByMaker, ElasticSearchMaker};
+use SphereMall\MS\Lib\Helpers\ClassReflectionHelper;
 use SphereMall\MS\Lib\Http\ElasticSearch\Request as ElasticSearchRequest;
 use SphereMall\MS\Resources\Resource;
 
@@ -148,21 +149,23 @@ class ElasticResource extends Resource
     /**
      * Delete one document from elasticsearch index by id
      *
-     * @param string $index
+     * @param string $className
      * @param int    $id
      *
      * @return bool
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function deleteDocumentFromIndex(string $index, int $id): bool
+    public function deleteDocumentFromIndex(string $className, int $id): bool
     {
         $client  = (new ElasticSearchRequest($this->client, $this))->createElasticClient();
 
+        $type = (new ClassReflectionHelper($className))->getShortLowerCaseName();
+
         try {
             $response = $client->delete([
-                'index' => $index,
-                'type'  => ltrim($index, 'sm-'),
+                'index' => "sm-{$type}s",
+                'type'  => "{$type}s",
                 'id'    => $id
             ]);
 

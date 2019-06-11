@@ -342,7 +342,7 @@ class SimpleFilterTest extends SetUpResourceTest
      */
     public function testDeleteDocumentFromIndex()
     {
-        $result = $this->client->elastic()->deleteDocumentFromIndex(ElasticSearchIndexHelper::getIndexByClass(Product::class), 654321);
+        $result = $this->client->elastic()->deleteDocumentFromIndex(Product::class, 654321);
 
         $this->assertTrue(true);
     }
