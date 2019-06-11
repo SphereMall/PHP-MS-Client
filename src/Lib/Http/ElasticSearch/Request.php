@@ -1,7 +1,4 @@
 <?php
-
-use SphereMall\MS\Resources\Resource as ServiceResource;
-
 /**
  * Created by PhpStorm.
  * User: ddis
@@ -76,7 +73,7 @@ class Request extends \SphereMall\MS\Lib\Http\Request
      * @return \Elasticsearch\Client
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function createElasticClient()
+    public function createElasticClient()
     {
         $clientBuilder = new ClientBuilder();
         $url           = HttpHelper::setHttPortToUrl($this->client->getGatewayUrl(), false) . '/' . $this->resource->getVersion() . '/' . $this->resource->getElasticUrl();
