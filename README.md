@@ -2,6 +2,9 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### Version 2.8.10
+* Add ```deleteDocumentFromIndex``` method to ```ElasticResource``` resource
+
 ### Version 2.8.9
 * Add ```WebSites``` and ```WebSiteSettings``` resources
 

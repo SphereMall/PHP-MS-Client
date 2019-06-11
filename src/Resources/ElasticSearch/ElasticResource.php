@@ -9,13 +9,9 @@
 namespace SphereMall\MS\Resources\ElasticSearch;
 
 use SphereMall\MS\Client;
-use SphereMall\MS\Lib\Elastic\Builders\BodyBuilder;
-use SphereMall\MS\Lib\Elastic\Builders\FilterBuilder;
-use SphereMall\MS\Lib\Elastic\Builders\Search\MSearch;
-use SphereMall\MS\Lib\Elastic\Builders\Search\Search;
-use SphereMall\MS\Lib\Makers\ElasticFacetedMaker;
-use SphereMall\MS\Lib\Makers\ElasticSearchGroupByMaker;
-use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
+use SphereMall\MS\Lib\Elastic\Builders\{BodyBuilder, FilterBuilder, Search\MSearch, Search\Search};
+use SphereMall\MS\Lib\Makers\{ElasticFacetedMaker, ElasticSearchGroupByMaker, ElasticSearchMaker};
+use SphereMall\MS\Lib\Http\ElasticSearch\Request as ElasticSearchRequest;
 use SphereMall\MS\Resources\Resource;
 
 /**
@@ -27,17 +23,31 @@ class ElasticResource extends Resource
 {
     private $search = null;
 
+    /**
+     * ElasticResource constructor
+     *
+     * @param Client $client
+     * @param null   $version
+     * @param null   $handler
+     * @param null   $maker
+     */
     public function __construct(Client $client, $version = null, $handler = null, $maker = null)
     {
         parent::__construct($client, $version, $handler, $maker);
         $this->handler = $handler ?? null;
     }
 
+    /**
+     * @return string
+     */
     public function getURI()
     {
         return 'elasticindexer';
     }
 
+    /**
+     * @return string
+     */
     public function getElasticUrl()
     {
         return 'elasticsearch';
@@ -84,10 +94,13 @@ class ElasticResource extends Resource
         return $this;
     }
 
-
+    /**
+     * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function facets()
     {
-        $handler  = new \SphereMall\MS\Lib\Http\Request($this->client, $this);
+        $handler  = new ElasticSearchRequest($this->client, $this);
         $response = $handler->handle('GET', $this->filter->getConfigs(), 'filter', $this->filter->getQuery());
 
         $this->maker = new ElasticFacetedMaker();
@@ -95,7 +108,10 @@ class ElasticResource extends Resource
         return $this->make($response);
     }
 
-
+    /**
+     * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function all()
     {
         $handler  = new \SphereMall\MS\Lib\Http\ElasticSearch\Request($this->client, $this);
@@ -129,4 +145,30 @@ class ElasticResource extends Resource
         return $this->make($response, true, $this->search->getGroupBy() ? new ElasticSearchGroupByMaker() : new ElasticSearchMaker());
     }
 
+    /**
+     * Delete one document from elasticsearch index by id
+     *
+     * @param string $index
+     * @param int    $id
+     *
+     * @return bool
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function deleteDocumentFromIndex(string $index, int $id): bool
+    {
+        $client  = (new ElasticSearchRequest($this->client, $this))->createElasticClient();
+
+        try {
+            $response = $client->delete([
+                'index' => $index,
+                'type'  => ltrim($index, 'sm-'),
+                'id'    => $id
+            ]);
+
+            return (isset($response['result'], $response['_shards']['successful']) && $response['result'] == 'deleted' && $response['_shards']['successful']);
+        } catch (\Exception $ex) {
+            return false;
+        }
+    }
 }
