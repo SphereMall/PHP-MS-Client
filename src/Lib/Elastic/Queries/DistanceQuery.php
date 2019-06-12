@@ -8,9 +8,7 @@
 
 namespace SphereMall\MS\Lib\Elastic\Queries;
 
-
-use SphereMall\MS\Lib\Elastic\Interfaces\ElasticBodyElementInterface;
-use SphereMall\MS\Lib\Elastic\Interfaces\ElasticQueryInterface;
+use SphereMall\MS\Lib\Elastic\Interfaces\{ElasticQueryInterface, ElasticBodyElementInterface};
 use SphereMall\MS\Lib\Filters\GeoDistanceUnits;
 
 /**
@@ -49,13 +47,13 @@ class DistanceQuery extends BasicQuery implements ElasticQueryInterface, Elastic
     public function toArray(): array
     {
         return [
-            'geo_distance' => [
-                'distance'     => $this->distance . $this->distanceUnit,
+            'geo_distance' => array_merge([
+                'distance'   => $this->distance . $this->distanceUnit,
                 $this->field => [
                     'lat' => $this->lat,
                     'lon' => $this->lon,
                 ],
-            ],
+            ], $this->additionalParams),
         ];
     }
 }

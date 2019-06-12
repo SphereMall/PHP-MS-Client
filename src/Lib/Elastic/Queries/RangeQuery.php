@@ -8,9 +8,7 @@
 
 namespace SphereMall\MS\Lib\Elastic\Queries;
 
-
-use SphereMall\MS\Lib\Elastic\Interfaces\ElasticBodyElementInterface;
-use SphereMall\MS\Lib\Elastic\Interfaces\ElasticQueryInterface;
+use SphereMall\MS\Lib\Elastic\Interfaces\{ElasticQueryInterface, ElasticBodyElementInterface};
 
 /**
  * Class RangeQuery
@@ -41,7 +39,7 @@ class RangeQuery extends BasicQuery implements ElasticQueryInterface, ElasticBod
     {
         return [
             'range' => [
-                $this->field => $this->range,
+                $this->field => array_merge($this->range, $this->additionalParams),
             ],
         ];
     }

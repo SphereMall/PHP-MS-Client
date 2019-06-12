@@ -8,27 +8,62 @@
 
 namespace SphereMall\MS\Tests\Lib\Elastic;
 
-
 use SphereMall\MS\Lib\Elastic\Interfaces\ElasticBodyElementInterface;
-use SphereMall\MS\Lib\Elastic\Queries\DistanceQuery;
-use SphereMall\MS\Lib\Elastic\Queries\ExistsQuery;
-use SphereMall\MS\Lib\Elastic\Queries\MatchPhraseQuery;
-use SphereMall\MS\Lib\Elastic\Queries\MatchQuery;
-use SphereMall\MS\Lib\Elastic\Queries\MultiMatchQuery;
-use SphereMall\MS\Lib\Elastic\Queries\RangeQuery;
-use SphereMall\MS\Lib\Elastic\Queries\RegexpQuery;
-use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
-use SphereMall\MS\Lib\Elastic\Queries\WildCardQuery;
-use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
+use SphereMall\MS\Lib\Elastic\Queries\{DistanceQuery, ExistsQuery, MatchPhraseQuery, MatchQuery, MultiMatchQuery, RangeQuery, RegexpQuery, TermsQuery, WildCardQuery, TermQuery};
 use SphereMall\MS\Tests\Resources\SetUpResourceTest;
 
 class QueriesTest extends SetUpResourceTest
 {
+    #region [with boost]
+    public function testWildCardQuery()
+    {
+        $query = new WildCardQuery('name', 'na*e');
+
+        $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
+        $this->assertEquals($query->toArray(), [
+            'wildcard' => [
+                'name' => [
+                    'value' => 'na*e',
+                ],
+            ],
+        ]);
+
+        $query->setAdditionalParams(['boost' => 2.0]);
+        $this->assertEquals($query->toArray(), [
+            'wildcard' => [
+                'name' => [
+                    'value' => 'na*e',
+                    'boost' => 2.0,
+                ],
+            ],
+        ]);
+    }
+
+    public function testTermsQuery()
+    {
+        $query = new TermsQuery('name', ['Vasia', 'Petiya']);
+
+        $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
+        $this->assertEquals($query->toArray(), [
+            'terms' => [
+                'name' => ['Vasia', 'Petiya'],
+            ],
+        ]);
+
+        $query->setAdditionalParams(['boost' => 2.0]);
+        $this->assertEquals($query->toArray(), [
+            'terms' => [
+                'name'  => ['Vasia', 'Petiya'],
+                'boost' => 2.0,
+            ],
+        ]);
+    }
+
     public function testDistanceQuery()
     {
         $query = new DistanceQuery("pin.location", ['lon' => 11, 'lat' => 10], 10);
-        $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
 
+        $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
         $this->assertEquals($query->toArray(), [
             'geo_distance' => [
                 'distance'     => "10km",
@@ -38,7 +73,46 @@ class QueriesTest extends SetUpResourceTest
                 ],
             ],
         ]);
+
+        $query->setAdditionalParams(['boost' => 2.0]);
+        $this->assertEquals($query->toArray(), [
+            'geo_distance' => [
+                'distance'     => "10km",
+                'pin.location' => [
+                    'lon' => 11,
+                    'lat' => 10,
+                ],
+                'boost'        => 2.0,
+            ],
+        ]);
     }
+
+    public function testRangeQuery()
+    {
+        $query = new RangeQuery('price', ['lte' => 100, 'gte' => 10]);
+
+        $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
+        $this->assertEquals($query->toArray(), [
+            'range' => [
+                'price' => [
+                    'lte' => 100,
+                    'gte' => 10,
+                ],
+            ],
+        ]);
+
+        $query->setAdditionalParams(['boost' => 2.0]);
+        $this->assertEquals($query->toArray(), [
+            'range' => [
+                'price' => [
+                    'lte'   => 100,
+                    'gte'   => 10,
+                    'boost' => 2.0,
+                ],
+            ],
+        ]);
+    }
+    #endregion
 
     public function testRegexpQuery()
     {
@@ -77,18 +151,6 @@ class QueriesTest extends SetUpResourceTest
         ]);
     }
 
-    public function testTermsQuery()
-    {
-        $query = new TermsQuery('name', ['Vasia', 'Petiya']);
-
-        $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
-        $this->assertEquals($query->toArray(), [
-            'terms' => [
-                'name' => ['Vasia', 'Petiya'],
-            ],
-        ]);
-    }
-
     public function testTermQuery()
     {
         $query = new TermQuery('name', 'Vasia');
@@ -97,49 +159,6 @@ class QueriesTest extends SetUpResourceTest
         $this->assertEquals($query->toArray(), [
             'terms' => [
                 'name' => ["Vasia"],
-            ],
-        ]);
-    }
-
-    public function testRangeQuery()
-    {
-        $query = new RangeQuery('price', [
-            'lte' => 100,
-            'gte' => 10,
-        ]);
-
-        $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
-        $this->assertEquals($query->toArray(), [
-            'range' => [
-                'price' => [
-                    'lte' => 100,
-                    'gte' => 10,
-                ],
-            ],
-        ]);
-    }
-
-    public function testWildCardQuery()
-    {
-        $query = new WildCardQuery('name', 'na*e');
-
-        $this->assertInstanceOf(ElasticBodyElementInterface::class, $query);
-        $this->assertEquals($query->toArray(), [
-            'wildcard' => [
-                'name' => [
-                    'value' => 'na*e',
-                ],
-            ],
-        ]);
-
-        $query->setAdditionalParams(['boost' => 2.0]);
-
-        $this->assertEquals($query->toArray(), [
-            'wildcard' => [
-                'name' => [
-                    'value' => 'na*e',
-                    'boost' => 2.0,
-                ],
             ],
         ]);
     }
