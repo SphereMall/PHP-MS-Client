@@ -101,7 +101,7 @@ class ElasticResource extends Resource
      */
     public function facets()
     {
-        $handler  = new ElasticSearchRequest($this->client, $this);
+        $handler  = new \SphereMall\MS\Lib\Http\Request($this->client, $this);
         $response = $handler->handle('GET', $this->filter->getConfigs(), 'filter', $this->filter->getQuery());
 
         $this->maker = new ElasticFacetedMaker();
@@ -115,7 +115,7 @@ class ElasticResource extends Resource
      */
     public function all()
     {
-        $handler  = new \SphereMall\MS\Lib\Http\ElasticSearch\Request($this->client, $this);
+        $handler  = new ElasticSearchRequest($this->client, $this);
         $response = $handler->handle('GET', false, false, [$this->search]);
 
         if (is_array($response)) {
