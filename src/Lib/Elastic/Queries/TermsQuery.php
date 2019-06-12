@@ -8,9 +8,7 @@
 
 namespace SphereMall\MS\Lib\Elastic\Queries;
 
-
-use SphereMall\MS\Lib\Elastic\Interfaces\ElasticBodyElementInterface;
-use SphereMall\MS\Lib\Elastic\Interfaces\ElasticQueryInterface;
+use SphereMall\MS\Lib\Elastic\Interfaces\{ElasticQueryInterface, ElasticBodyElementInterface};
 
 /**
  * Class TermsQuery
@@ -19,7 +17,6 @@ use SphereMall\MS\Lib\Elastic\Interfaces\ElasticQueryInterface;
  */
 class TermsQuery extends BasicQuery implements ElasticQueryInterface, ElasticBodyElementInterface
 {
-
     private $field  = null;
     private $values = [];
 
@@ -41,9 +38,7 @@ class TermsQuery extends BasicQuery implements ElasticQueryInterface, ElasticBod
     public function toArray(): array
     {
         return [
-            'terms' => [
-                $this->field => $this->values,
-            ],
+            'terms' => array_merge([$this->field => $this->values], $this->additionalParams),
         ];
     }
 }

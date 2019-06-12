@@ -2,6 +2,9 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### Version 2.8.11
+* Add `boost` support for ElasticSearch queries: `WildCardQuery`, `TermsQuery`, `DistanceQuery`, `RangeQuery`
+
 ### Version 2.8.10.1
 * Add ```deleteDocumentFromIndex``` method to ```ElasticResource``` resource
 

@@ -8,9 +8,7 @@
 
 namespace SphereMall\MS\Lib\Elastic\Queries;
 
-
-use SphereMall\MS\Lib\Elastic\Interfaces\ElasticBodyElementInterface;
-use SphereMall\MS\Lib\Elastic\Interfaces\ElasticQueryInterface;
+use SphereMall\MS\Lib\Elastic\Interfaces\{ElasticQueryInterface, ElasticBodyElementInterface};
 
 /**
  * Class WildCardQuery
@@ -41,9 +39,7 @@ class WildCardQuery extends BasicQuery implements ElasticQueryInterface, Elastic
     {
         return [
             'wildcard' => [
-                $this->field => array_merge([
-                    'value' => $this->value,
-                ], $this->additionalParams),
+                $this->field => array_merge(['value' => $this->value], $this->additionalParams),
             ],
         ];
     }
