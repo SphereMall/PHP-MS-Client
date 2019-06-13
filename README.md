@@ -2,6 +2,9 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### Version 2.8.12
+* ObjectMaker extended with `included` to be able to find nested relationships (for example MediaEntities -> Media)
+
 ### Version 2.8.11
 * Add `boost` support for ElasticSearch queries: `WildCardQuery`, `TermsQuery`, `DistanceQuery`, `RangeQuery`
 
