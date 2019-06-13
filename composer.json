@@ -1,7 +1,7 @@
 {
   "name": "spheremall/ms-client",
   "description": "SphereMall API client for SphereMall GateWay",
-  "version": "2.8.11",
+  "version": "2.8.12",
   "type": "library",
   "config": {
     "vendor-dir": "vendor"

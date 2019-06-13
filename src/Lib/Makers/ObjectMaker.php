@@ -127,7 +127,7 @@ class ObjectMaker extends Maker
             }
         }
 
-        return $result;
+        return array_merge($result, $included);
     }
 
     /**

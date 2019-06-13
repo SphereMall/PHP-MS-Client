@@ -168,7 +168,13 @@ class ProductsResourceTest extends SetUpResourceTest
         $product = $this->client->products()->getProductVariantsByIds([1]);
         $this->assertNotNull($product);
         $this->assertEquals(count($product), 2);
+    }
 
+    public function testGetProductsDetailByCode()
+    {
+        $product = $this->client->products()->detailByCode('white-chocolate-bar');
+
+        $this->assertNotEmpty($product);
     }
     #endregion
 }
