@@ -50,17 +50,20 @@ class EntityGroupsMapper extends Mapper
         if (isset($this->data['mediaEntities'])) {
             foreach ($this->data['mediaEntities'] ?? [] as $mediaEntity) {
 
-                if (isset($mediaEntity['relationships']['media'][0]['attributes'])) {
-                    $mediaData = array_merge($mediaEntity['relationships']['media'][0]['attributes'], $mediaEntity['attributes']);
-                } else {
-                    $mediaData = array_merge($this->data['media'][$mediaEntity['mediaId']], $mediaEntity);
+                if (isset($mediaEntity['media'][0])) {
+
+                    $media = new Media($mediaEntity['media'][0]);
+                    if (!$this->entityGroup->mainMedia) {
+                        $this->entityGroup->mainMedia = $media;
+                    }
+                    $result[$mediaEntity['id']] = $media;
                 }
-                $media = new Media($mediaData);
-                if (!$this->entityGroup->mainMedia) {
-                    $this->entityGroup->mainMedia = $media;
-                }
-                $result[$mediaEntity['attributes']['mediaId'] ?? $mediaEntity['mediaId']] = $media;
             }
+
+            $this->entityGroup->media = $result;
+
+            return $this;
+
         }
 
         $this->entityGroup->media = $result;
