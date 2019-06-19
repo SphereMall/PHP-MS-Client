@@ -2,7 +2,7 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
-### Version 2.8.13
+### Version 2.8.13.1
 * Changes in ObjectMaker for `included`
 * Changes in `ProductsMapper`, `DocumentsMapper`, `EntityGroupsMapper` and `CategoriesMapper`
 
