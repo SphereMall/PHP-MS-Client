@@ -77,13 +77,13 @@ class EntityGroupsMapper extends Mapper
     private function setAttributes()
     {
         $attributes = [];
-        foreach ($this->data['attributeValues'] ?? [] as $av) {
+        foreach ($this->data['entityAttributeValues'] ?? [] as $av) {
             $attributeId = $av['attributes']['attributeId'] ?? $av['attributeId'];
             if (!isset($attributes[$attributeId])) {
-                $attribute                = $av['relationships']['attributes'][0]['attributes'] ?? $this->data['attributes'][$attributeId];
+                $attribute = $av['attributes'][0] ?? $this->data['attributes'][$attributeId];
                 $attributes[$attributeId] = new Attribute($attribute);
             }
-            $attributeValue                              = isset($av['attributes']) && is_array($av['attributes']) ? $av['attributes'] : $av;
+            $attributeValue = isset($av['attributeValues'][0]) && is_array($av['attributeValues'][0]) ? $av['attributeValues'][0] : $av;
             $attributes[$attributeId]->values[$av['id']] = new AttributeValue($attributeValue);
         }
 
