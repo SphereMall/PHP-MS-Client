@@ -2,6 +2,22 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### Version 2.8.13.1
+* Changes in ObjectMaker for `included`
+* Changes in `ProductsMapper`, `DocumentsMapper`, `EntityGroupsMapper` and `CategoriesMapper`
+
+### Version 2.8.12
+* ObjectMaker extended with `included` to be able to find nested relationships (for example MediaEntities -> Media)
+
+### Version 2.8.11
+* Add `boost` support for ElasticSearch queries: `WildCardQuery`, `TermsQuery`, `DistanceQuery`, `RangeQuery`
+
+### Version 2.8.10.1
+* Add ```deleteDocumentFromIndex``` method to ```ElasticResource``` resource
+
+### Version 2.8.9
+* Add ```WebSites``` and ```WebSiteSettings``` resources
+
 ### Version 2.8.6
 ## Implementation of updates for `comments` entity:
 * https://spheremall.atlassian.net/wiki/spaces/MIC/pages/1394049130/Comments+3.0.0+Release+Notes

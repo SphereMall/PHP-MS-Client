@@ -33,7 +33,7 @@ class ElasticSearchResponse extends Response
      * @param int $size
      * @throws \Exception
      */
-    public function __construct(array $response, $multi = false, $from = 0, $size = 0)
+    public function __construct(array $response, $multi = false, $size = 0, $from = 0)
     {
         $this->multi = $multi;
 

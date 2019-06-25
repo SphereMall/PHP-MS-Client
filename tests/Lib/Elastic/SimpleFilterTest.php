@@ -336,4 +336,14 @@ class SimpleFilterTest extends SetUpResourceTest
 
         $data = $this->client->elastic()->search($body)->all();
     }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testDeleteDocumentFromIndex()
+    {
+        $result = $this->client->elastic()->deleteDocumentFromIndex(Product::class, 654321);
+
+        $this->assertTrue(true);
+    }
 }

@@ -13,7 +13,7 @@ namespace SphereMall\MS\Entities;
  * @property string $userUidHash
  * @property string $createDate
  */
-class UserFingerprints extends Entity
+class UserFingerPrints extends Entity
 {
     #region [Properties]
     public $id;

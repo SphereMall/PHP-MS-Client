@@ -124,6 +124,16 @@ class ObjectMaker extends Maker
                 }
 
                 $result[$relationKey][$relationData['id']] = $included[$relationData['type']][$relationData['id']];
+
+                foreach ($included[$relationData['type']][$relationData['id']]['relationships'] ?? [] as $internalRelation) {
+
+                    $type = $internalRelation['data'][0]['type'] ?? null;
+                    $id = $internalRelation['data'][0]['id'] ?? null;
+
+                    $result[$relationKey][$relationData['id']][$type][] = $included[$type][$id];
+                }
+
+                unset($result[$relationKey][$relationData['id']]['relationships']);
             }
         }
 
@@ -135,7 +145,7 @@ class ObjectMaker extends Maker
      * result example: ['brands'][706] = {attributes}
      *
      * @param array $included
-     * @param bool  $getAttributes
+     * @param bool $getAttributes
      *
      * @return array
      */
@@ -144,6 +154,10 @@ class ObjectMaker extends Maker
         $result = [];
         foreach ($included as $include) {
             $result[$include['type']][$include['id']] = $getAttributes ? $include['attributes'] : $include;
+
+            if (!empty($include['relationships'])) {
+                $result[$include['type']][$include['id']]['relationships'] = $include['relationships'];
+            }
         }
 
         return $result;
@@ -157,7 +171,7 @@ class ObjectMaker extends Maker
      */
     protected function getResultFromResponse(Response $response)
     {
-        $result   = [];
+        $result = [];
         $included = $this->getIncludedArray($response->getIncluded());
 
         foreach ($response->getData() as $element) {

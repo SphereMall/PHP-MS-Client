@@ -2,7 +2,7 @@
 
 namespace SphereMall\MS\Resources\Grapher;
 
-use SphereMall\MS\Entities\UserFingerprints;
+use SphereMall\MS\Entities\UserFingerPrints;
 use SphereMall\MS\Resources\Resource;
 
 /**
@@ -10,11 +10,11 @@ use SphereMall\MS\Resources\Resource;
  *
  * @package SphereMall\MS\Resources\Grapher
  *
- * @method UserFingerprints get(int $id)
- * @method UserFingerprints first()
- * @method UserFingerprints[] all()
- * @method UserFingerprints update($id, $data)
- * @method UserFingerprints create($data)
+ * @method UserFingerPrints get(int $id)
+ * @method UserFingerPrints first()
+ * @method UserFingerPrints[] all()
+ * @method UserFingerPrints update($id, $data)
+ * @method UserFingerPrints create($data)
  */
 class UserFingerprintsResource extends Resource
 {

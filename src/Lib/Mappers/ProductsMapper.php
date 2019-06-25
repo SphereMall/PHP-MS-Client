@@ -149,13 +149,13 @@ class ProductsMapper extends Mapper
             $this->product->attributes = (new ProductAttributeValuesMapper)->createObject($this->data['productAttributeValues'] ?? []);
         } else {
             $attributes = [];
-            foreach ($this->data['attributeValues'] ?? [] as $av) {
+            foreach ($this->data['entityAttributeValues'] ?? [] as $av) {
                 $attributeId = $av['attributes']['attributeId'] ?? $av['attributeId'];
                 if (!isset($attributes[$attributeId])) {
-                    $attribute                = $av['relationships']['attributes'][0]['attributes'] ?? $this->data['attributes'][$attributeId];
+                    $attribute = $av['attributes'][0] ?? $this->data['attributes'][$attributeId];
                     $attributes[$attributeId] = new Attribute($attribute);
                 }
-                $attributeValue                              = isset($av['attributes']) && is_array($av['attributes']) ? $av['attributes'] : $av;
+                $attributeValue = isset($av['attributeValues'][0]) && is_array($av['attributeValues'][0]) ? $av['attributeValues'][0] : $av;
                 $attributes[$attributeId]->values[$av['id']] = new AttributeValue($attributeValue);
             }
 
@@ -174,18 +174,23 @@ class ProductsMapper extends Mapper
         if (isset($this->data['mediaEntities'])) {
             foreach ($this->data['mediaEntities'] ?? [] as $mediaEntity) {
 
-                if(isset($mediaEntity['relationships']['media'][0]['attributes'])){
-                    $mediaData = array_merge($mediaEntity['relationships']['media'][0]['attributes'], $mediaEntity['attributes']);
-                } else{
-                    $mediaData = array_merge($this->data['media'][$mediaEntity['mediaId']], $mediaEntity);
+                if (isset($mediaEntity['media'][0])) {
+
+                    $media = new Media($mediaEntity['media'][0]);
+                    if (!$this->product->mainMedia) {
+                        $this->product->mainMedia = $media;
+                    }
+                    $result[$mediaEntity['id']] = $media;
                 }
-                $media = new Media($mediaData);
-                if (!$this->product->mainMedia) {
-                    $this->product->mainMedia = $media;
-                }
-                $result[$mediaEntity['attributes']['mediaId'] ?? $mediaEntity['mediaId']] = $media;
             }
-        } elseif (isset($this->data['media'])) {  // old structure
+
+            $this->product->media = $result;
+
+            return $this;
+
+        }
+
+        if (isset($this->data['media'])) {  // old structure
             $mapper = new ImagesMapper();
             foreach ($this->data['media'] as $image) {
                 $result[] = $mapper->createObject($image);

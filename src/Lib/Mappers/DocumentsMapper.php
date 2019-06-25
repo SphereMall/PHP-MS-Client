@@ -94,34 +94,37 @@ class DocumentsMapper extends Mapper
      */
     private function setMedia()
     {
-        if (isset($this->data['mediaEntities'])) { // detail structure
-            $m = $this->data['media'] ?? [];
+        $result = [];
+        if (isset($this->data['mediaEntities'])) {
+            foreach ($this->data['mediaEntities'] ?? [] as $mediaEntity) {
 
-            /** @var Media[] $media */
-            $media = [];
+                if (isset($mediaEntity['media'][0])) {
 
-            foreach ($this->data['mediaEntities'] as $item) {
-                $media[$item['id']] = new Media(array_merge($m[$item['mediaId']], $item));
+                    $media = new Media($mediaEntity['media'][0]);
+                    if (!$this->document->mainMedia) {
+                        $this->document->mainMedia = $media;
+                    }
+                    $result[$mediaEntity['id']] = $media;
+                }
             }
 
-            $this->document->media = $media;
+            $this->document->media = $result;
 
-            if (!empty($this->document->media[0])) {
-                $this->document->mainMedia = $this->document->media[0];
-            }
-        } else if (isset($this->data['media'])) { // backward compatibility
-            $media = [];
+            return $this;
+
+        }
+
+        if (isset($this->data['media'])) {  // old structure
             $mapper = new ImagesMapper();
             foreach ($this->data['media'] as $image) {
-                $media[] = $mapper->createObject($image);
+                $result[] = $mapper->createObject($image);
             }
-
-            $this->document->media = $media;
-
             if (!empty($this->document->media[0])) {
-                $this->document->mainMedia = $this->document->media[0];
+                $this->document->mainMedia = $result[0];
             }
         }
+
+        $this->document->media = $result;
 
         return $this;
     }

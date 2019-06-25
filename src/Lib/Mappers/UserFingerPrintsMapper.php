@@ -2,24 +2,24 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
-use SphereMall\MS\Entities\UserFingerprints;
+use SphereMall\MS\Entities\UserFingerPrints;
 
 /**
  * Class UserFingerprintsMapper
  *
  * @package SphereMall\MS\Lib\Mappers
  */
-class UserFingerprintsMapper extends Mapper
+class UserFingerPrintsMapper extends Mapper
 {
     #region [Protected methods]
     /**
      * @param array $array
      *
-     * @return UserFingerprints
+     * @return UserFingerPrints
      */
     protected function doCreateObject(array $array)
     {
-        return new UserFingerprints($array);
+        return new UserFingerPrints($array);
     }
     #endregion
 }

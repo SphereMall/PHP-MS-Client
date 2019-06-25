@@ -97,34 +97,4 @@ class ElasticSearchMaker extends ObjectMaker
 
         return $result ?? [];
     }
-
-    /**
-     * Get relationships from array
-     *
-     * @param array $item
-     * @param array $included
-     *
-     * @return array
-     * @throws EntityNotFoundException
-     */
-    protected function getRelationships(array $item, array $included)
-    {
-        if (!isset($item['relationships']) || !is_array($item['relationships'])) {
-            return [];
-        }
-
-        $result = [];
-
-        foreach ($item['relationships'] as $relationKey => $relationValue) {
-            foreach ($relationValue['data'] as $relationData) {
-                if (!isset($included[$relationData['type']][$relationData['id']])) {
-                    throw new EntityNotFoundException("Data for type[{$relationData['type']}] and id[{$relationData['id']}] was not found in includes");
-                }
-
-                $result[$relationKey][$relationData['id']] = $included[$relationData['type']][$relationData['id']];
-            }
-        }
-
-        return array_merge($result, $included);
-    }
 }
