@@ -7,11 +7,6 @@ namespace SphereMall\MS\Lib\Http;
  */
 class LayoutObjectsRequest extends Request
 {
-    public function get(&$options, array $body = [])
-    {
-        $options['body'] = json_encode($body);
-    }
-
     public function post(&$options, array $body = [])
     {
         $options['headers']['Content-Type'] = 'application/json';
