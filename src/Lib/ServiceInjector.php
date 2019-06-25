@@ -10,6 +10,7 @@
 namespace SphereMall\MS\Lib;
 
 use SphereMall\MS\Client;
+use SphereMall\MS\Lib\Http\LayoutObjectsRequest;
 use SphereMall\MS\Lib\Makers\ElasticIndexerResponseMaker;
 use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Lib\Shop\Basket;
@@ -60,6 +61,7 @@ use SphereMall\MS\Resources\Entities\OptionsResource;
 use SphereMall\MS\Resources\Entities\ProductAttributeValuesResource;
 use SphereMall\MS\Resources\Entities\ProductsResource;
 use SphereMall\MS\Resources\Entities\ProductVariantsResource;
+use SphereMall\MS\Resources\Entities\LayoutObjectsResource;
 use SphereMall\MS\Resources\Entities\UnitOfMeasureResource;
 use SphereMall\MS\Resources\Grapher\ConsumerFactorsResource;
 use SphereMall\MS\Resources\Grapher\GridResource;
@@ -135,6 +137,14 @@ trait ServiceInjector
         /** @var Client $this */
         return new ProductsResource($this);
     }
+
+
+    public function layoutObjects()
+    {
+        /** @var Client $this */
+        return new LayoutObjectsResource($this);
+    }
+
 
     /**
      * @return ProductVariantsResource
