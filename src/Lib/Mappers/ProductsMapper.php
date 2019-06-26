@@ -9,11 +9,11 @@
 
 namespace SphereMall\MS\Lib\Mappers;
 
-use SphereMall\MS\Entities\Attribute;
-use SphereMall\MS\Entities\AttributeValue;
 use SphereMall\MS\Entities\Media;
 use SphereMall\MS\Entities\Product;
-use SphereMall\MS\Entities\ProductOptionValue;
+use SphereMall\MS\Entities\Attribute;
+use SphereMall\MS\Entities\AttributeValue;
+
 
 /**
  * Class ProductsMapper
@@ -21,7 +21,7 @@ use SphereMall\MS\Entities\ProductOptionValue;
  * @package SphereMall\MS\Lib\Mappers
  *
  * @property Product $product
- * @property array   $data
+ * @property array $data
  */
 class ProductsMapper extends Mapper
 {
@@ -36,15 +36,15 @@ class ProductsMapper extends Mapper
      */
     protected function doCreateObject(array $array)
     {
-        $this->data    = $array;
+        $this->data = $array;
         $this->product = new Product($this->data);
         $this->setBrands()
-             ->setFunctionalNames()
-             ->setPromotions()
-             ->setProductsToPromotions()
-             ->setOptions()
-             ->setAttributes()
-             ->setMedia();
+            ->setFunctionalNames()
+            ->setPromotions()
+            ->setProductsToPromotions()
+            ->setOptions()
+            ->setAttributes()
+            ->setMedia();
 
         return $this->product;
     }
@@ -82,7 +82,7 @@ class ProductsMapper extends Mapper
     private function setPromotions()
     {
         if (isset($this->data['promotions']) && is_array($this->data['promotions'])) {
-            $mapper     = new PromotionsMapper();
+            $mapper = new PromotionsMapper();
             $promotions = [];
             foreach ($this->data['promotions'] as $promotion) {
                 $promotions[] = $mapper->createObject($promotion);
@@ -99,7 +99,7 @@ class ProductsMapper extends Mapper
     private function setProductsToPromotions()
     {
         if (isset($this->data['productsToPromotions']) && is_array($this->data['productsToPromotions'])) {
-            $mapper               = new ProductsToPromotionsMapper();
+            $mapper = new ProductsToPromotionsMapper();
             $productsToPromotions = [];
             foreach ($this->data['productsToPromotions'] as $productsToPromotion) {
                 $productsToPromotions[] = $mapper->createObject($productsToPromotion);
@@ -119,16 +119,17 @@ class ProductsMapper extends Mapper
             return $this;
         }
 
-        $optionMapper              = new OptionsMapper();
+        $optionMapper = new OptionsMapper();
         $productOptionValuesMapper = new ProductOptionValuesMapper();
-        $options                   = [];
+        $options = [];
         foreach ($this->data['options'] as $option) {
             $option = $option['attributes'] ?? $option;
 
-            $productOptionValues = array_filter($this->data['productOptionValues'] ?? [], function ($productOptionValue) use ($option) {
-                $optionId = $productOptionValue['optionId'] ?? $productOptionValue['attributes']['optionId'];
-                return $option['id'] == $optionId;
-            });
+            $productOptionValues = array_filter($this->data['productOptionValues'] ?? [],
+                function ($productOptionValue) use ($option) {
+                    $optionId = $productOptionValue['optionId'] ?? $productOptionValue['attributes']['optionId'];
+                    return $option['id'] == $optionId;
+                });
 
             foreach ($productOptionValues ?? [] as $productOptionValue) {
                 $option['values'][] = $productOptionValuesMapper->createObject($productOptionValue);
@@ -174,9 +175,10 @@ class ProductsMapper extends Mapper
         if (isset($this->data['mediaEntities'])) {
             foreach ($this->data['mediaEntities'] ?? [] as $mediaEntity) {
 
-                if (isset($mediaEntity['media'][0])) {
+                if (isset($mediaEntity['media'][0]) || isset($mediaEntity['relationships']['media'][0])) {
 
-                    $media = new Media($mediaEntity['media'][0]);
+                    $media = new Media($mediaEntity['media'][0] ?? $mediaEntity['relationships']['media'][0]);
+
                     if (!$this->product->mainMedia) {
                         $this->product->mainMedia = $media;
                     }
