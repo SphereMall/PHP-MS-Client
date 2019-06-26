@@ -57,7 +57,7 @@ class OrdersMaker extends ObjectMaker
                     continue;
                 }
                 $item = $included[$type][$relation['id']];
-                if (count($item['relationships']) > 0) {
+                if (count($item['relationships']?? []) > 0) {
                     $item = $this->getRelations($item, $included);
                 }
                 unset($element['relationships'][$type]['data']);
@@ -81,21 +81,6 @@ class OrdersMaker extends ObjectMaker
         $mapper = new $mapperClass;
 
         return $mapper->createObject($element);
-    }
-
-    /**
-     * @param array $included
-     * @param bool $getAttributes
-     * @return array
-     */
-    protected function getIncludedArray(array $included, bool $getAttributes = true): array
-    {
-        $result = [];
-        foreach ($included as $include) {
-            $result[$include['type']][$include['id']] = $include;
-        }
-
-        return $result;
     }
 
     /**

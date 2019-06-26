@@ -30,7 +30,7 @@ class OrderItemsMapper extends Mapper
         if (isset($array['relationships']['products'])) {
             $mapper = new ProductsMapper();
             foreach ($array['relationships']['products'] as $item) {
-                $product            = array_merge($item['attributes'], $item['relationships']);
+                $product = array_merge($item, $item['relationships']);
                 $orderItem->product = $mapper->createObject($product);
             }
         }
@@ -40,7 +40,7 @@ class OrderItemsMapper extends Mapper
             if (isset($array['images'])) {
                 $array['products'][0]['images'] = $array['images'];
             }
-            $productMapper      = new ProductsMapper();
+            $productMapper = new ProductsMapper();
             $orderItem->product = $productMapper->createObject($array['products'][0]);
         }
 

@@ -152,7 +152,7 @@ class ProductsMapper extends Mapper
             foreach ($this->data['entityAttributeValues'] ?? [] as $av) {
                 $attributeId = $av['attributes']['attributeId'] ?? $av['attributeId'];
                 if (!isset($attributes[$attributeId])) {
-                    $attribute = $av['attributes'][0] ?? $this->data['attributes'][$attributeId];
+                    $attribute = $av['attributes'][0] ?? $av['relationships']['attributes'][0] ?? $this->data['attributes'][$attributeId];
                     $attributes[$attributeId] = new Attribute($attribute);
                 }
                 $attributeValue = isset($av['attributeValues'][0]) && is_array($av['attributeValues'][0]) ? $av['attributeValues'][0] : $av;
