@@ -13,6 +13,9 @@ namespace SphereMall\MS\Entities;
  * @property string $name
  * @property string $protocol
  * @property string $URL
+ * @property int $masterPageId
+ * @property WebSiteSetting[] $settings
+ * @property WebSiteLanguage[] $languages
  */
 class WebSite extends Entity
 {
@@ -21,5 +24,8 @@ class WebSite extends Entity
     public $name;
     public $protocol;
     public $URL;
+    public $masterPageId;
+    public $settings;
+    public $languages;
     #endregion
 }

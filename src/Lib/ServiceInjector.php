@@ -17,6 +17,7 @@ use SphereMall\MS\Lib\Makers\ElasticSearchMaker;
 use SphereMall\MS\Lib\Shop\Basket;
 use SphereMall\MS\Resources\Catalog\CatalogItemAttributesResource;
 use SphereMall\MS\Resources\ChangesHistory\HistoryResource;
+use SphereMall\MS\Resources\Channels\ChannelsResource;
 use SphereMall\MS\Resources\Channels\WebSiteSettingsResource;
 use SphereMall\MS\Resources\Channels\WebSitesResource;
 use SphereMall\MS\Resources\Comments\CommentsResource;
@@ -809,6 +810,15 @@ trait ServiceInjector
     {
         /** @var Client $this */
         return new WebSitesResource($this);
+    }
+
+    /**
+     * @return ChannelsResource
+     */
+    public function channels()
+    {
+        /** @var Client $this */
+        return new ChannelsResource($this);
     }
 
     /**
