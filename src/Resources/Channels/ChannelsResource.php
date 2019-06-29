@@ -36,7 +36,7 @@ class ChannelsResource extends Resource
      * @return array|int|\SphereMall\MS\Entities\Entity|\SphereMall\MS\Lib\Collection
      * @throws \Exception
      */
-    public function getBuURL(string $url)
+    public function getByURL(string $url)
     {
         $uriAppend = "detail/url/{$url}";
         $params = $this->getQueryParams();

@@ -29,6 +29,6 @@ class WebSitesMapper extends Mapper
             }
         }
 
-        return new $webSite;
+        return $webSite;
     }
 }
