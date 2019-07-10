@@ -196,7 +196,7 @@ class CorrelationsResource extends GrapherResource
         $mustQueries = [];
         foreach ($entityWeights as $entity => $weights) {
             $mustQueries[] = new MustQuery([
-                new TermQuery('_type', $entity),
+                new TermQuery('_type', strtolower($entity)),
                 new TermsQuery('_id', array_keys($weights)),
             ]);
         }
