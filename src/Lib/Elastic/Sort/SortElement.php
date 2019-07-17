@@ -49,4 +49,28 @@ class SortElement implements ElasticBodyElementInterface
             ], $this->additional),
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function getScriptNegativeFactors(): array
+    {
+        if ($this->field !== '_script') {
+            return [];
+        }
+
+        $negativeFactors = [];
+        foreach ($this->additional['script']['params'] ?? [] as $entity => $factors) {
+            if ($factors && is_array($factors)) {
+                $factors = array_filter($factors, function ($value) {
+                    return $value < 0;
+                });
+                if ($factors) {
+                    $negativeFactors[$entity] = array_keys($factors);
+                }
+            }
+        }
+
+        return $negativeFactors;
+    }
 }

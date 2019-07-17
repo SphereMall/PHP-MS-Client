@@ -91,7 +91,8 @@ class BodyBuilder
      */
     public function sort(SortBuilder $sort): BodyBuilder
     {
-        $this->sort = $sort->toArray();
+        $this->sort  = $sort->toArray();
+        $this->query = $sort->excludeNegativeFactorItems($this->query);
 
         return $this;
     }
