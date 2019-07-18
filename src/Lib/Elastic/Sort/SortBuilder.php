@@ -10,6 +10,8 @@ namespace SphereMall\MS\Lib\Elastic\Sort;
 
 
 use SphereMall\MS\Lib\Elastic\Interfaces\ElasticBodyElementInterface;
+use SphereMall\MS\Lib\Elastic\Builders\QueryBuilder;
+use SphereMall\MS\Lib\Elastic\Queries\{MustNotQuery, MustQuery, ShouldQuery, TermQuery, TermsQuery};
 
 /**
  * Class SortBuilder
@@ -56,5 +58,39 @@ class SortBuilder implements ElasticBodyElementInterface
         $this->elements[] = $element;
 
         return $this;
+    }
+
+    /**
+     * @param array $query
+     *
+     * @return array
+     */
+    public function excludeNegativeFactorItems(array $query): array
+    {
+        $additionalQuery   = [];
+        $entitiesToExclude = [];
+
+        foreach ($this->elements as $sort) {
+            /** @var SortElement $sort */
+            if (!$factors = $sort->getScriptNegativeFactors()) {
+                continue;
+            }
+            foreach ($factors as $entity => $objectIds) {
+                $entitiesToExclude[$entity] = array_merge($entitiesToExclude[$entity] ?? [], $objectIds);
+            }
+        }
+
+        foreach ($entitiesToExclude as $entity => $objectIds) {
+            $additionalQuery[] = new MustQuery([
+                new MustQuery([new TermQuery('_type', $entity)]),
+                new MustNotQuery([new TermsQuery('_id', $objectIds)]),
+            ]);
+        }
+
+        if ($additionalQuery && isset($query['bool']['must'])) {
+            $query['bool']['must'][] = (new QueryBuilder)->setShould(new ShouldQuery($additionalQuery))->toArray();
+        }
+
+        return $query;
     }
 }

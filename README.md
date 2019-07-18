@@ -1,6 +1,10 @@
 # SphereMall Gateway PHP SDK
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
+
+### Version 2.8.15
+* Exclude negative factor items from elasticsearch response (using SortBuilder)
+
 ### Version 2.8.14.1
 * Minor changes in CorrelationsResourse for preparing elsaticsearch query
 
