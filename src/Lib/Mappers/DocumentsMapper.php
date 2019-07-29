@@ -13,17 +13,20 @@ use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Entities\AttributeValue;
 use SphereMall\MS\Entities\Document;
 use SphereMall\MS\Entities\Media;
+use SphereMall\MS\Lib\Mappers\Traits\AttributesSetter;
 
 /**
  * Class DocumentsMapper
  * @package SphereMall\MS\Lib\Mappers
  *
- * @property Document $document
+ * @property Document $entity
  * @property array    $data
  */
 class DocumentsMapper extends Mapper
 {
-    private $document;
+    use AttributesSetter;
+
+    private $entity;
     private $data;
     #region [Protected methods]
     /**
@@ -34,12 +37,12 @@ class DocumentsMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $this->data = $array;
-        $this->document = new Document($this->data);
+        $this->entity = new Document($this->data);
         $this->setFunctionalNames()
              ->setAttributes()
              ->setMedia();
 
-        return $this->document;
+        return $this->entity;
     }
 
     /**
@@ -48,42 +51,7 @@ class DocumentsMapper extends Mapper
     private function setFunctionalNames()
     {
         if (isset($this->data['functionalNames']) && $functionalName = reset($this->data['functionalNames'])) {
-            $this->document->functionalName = (new FunctionalNamesMapper)->createObject($functionalName);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    private function setAttributes()
-    {
-        if (isset($this->data['entityAttributeValues'])) { // detail structure
-            $avs = $this->data['attributeValues'] ?? [];
-            $as = $this->data['attributes'] ?? [];
-
-            /** @var Attribute[] $attributes */
-            $attributes = [];
-
-            foreach ($avs as $av) {
-                if (!isset($attributes[$av['attributeId']])) {
-                    $attributes[$av['attributeId']] = new Attribute($as[$av['attributeId']]);
-                }
-                $attributes[$av['attributeId']]->values[$av['id']] = new AttributeValue($av);
-            }
-            $this->document->setAttributes($attributes);
-        } else { // backward compatibility
-            $this->document->attributes = [];
-
-            $mapper = new AttributesMapper();
-            $attributes = [];
-            foreach ($this->data['attributes'] ?? [] as $attribute) {
-                $attribute['attributeValues'] = $this->getAttributeValues($attribute, $this->data['attributeValues']);
-
-                $attributes[] = $mapper->createObject($attribute);
-            }
-            $this->document->setAttributes($attributes);
+            $this->entity->functionalName = (new FunctionalNamesMapper)->createObject($functionalName);
         }
 
         return $this;
@@ -101,14 +69,14 @@ class DocumentsMapper extends Mapper
                 if (isset($mediaEntity['media'][0])) {
 
                     $media = new Media($mediaEntity['media'][0]);
-                    if (!$this->document->mainMedia) {
-                        $this->document->mainMedia = $media;
+                    if (!$this->entity->mainMedia) {
+                        $this->entity->mainMedia = $media;
                     }
                     $result[$mediaEntity['id']] = $media;
                 }
             }
 
-            $this->document->media = $result;
+            $this->entity->media = $result;
 
             return $this;
 
@@ -119,33 +87,14 @@ class DocumentsMapper extends Mapper
             foreach ($this->data['media'] as $image) {
                 $result[] = $mapper->createObject($image);
             }
-            if (!empty($this->document->media[0])) {
-                $this->document->mainMedia = $result[0];
+            if (!empty($this->entity->media[0])) {
+                $this->entity->mainMedia = $result[0];
             }
         }
 
-        $this->document->media = $result;
+        $this->entity->media = $result;
 
         return $this;
-    }
-
-
-    /**
-     * @param $attribute
-     * @param $attributeValues
-     *
-     * @return array
-     */
-    private function getAttributeValues($attribute, $attributeValues)
-    {
-        $values = [];
-        foreach ($attributeValues as $attributeValue) {
-            if ($attribute['id'] == $attributeValue['attributeId']) {
-                $values[] = $attributeValue;
-            }
-        }
-
-        return $values;
     }
     #endregion
 }
