@@ -2,6 +2,9 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### Version 2.8.17
+* Added filter builder for "isMain" parameters to elasticserch facets
+
 ### Version 2.8.15
 * Exclude negative factor items from elasticsearch response (using SortBuilder)
 

@@ -27,6 +27,7 @@ use SphereMall\MS\Lib\Elastic\Filter\Params\BrandsParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\CategoriesParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\EntityGroupsParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\FunctionalNamesParams;
+use SphereMall\MS\Lib\Elastic\Filter\Params\IsMainParams;
 use SphereMall\MS\Lib\Elastic\Filter\Params\RangeParams;
 use SphereMall\MS\Lib\Elastic\Queries\FilterQuery;
 use SphereMall\MS\Lib\Elastic\Queries\MustQuery;
@@ -67,12 +68,13 @@ class SimpleFilterTest extends SetUpResourceTest
             new RangeParams('fields', 'price', ['gte' => 100]),
             new RangeParams('attributes', 'color', ['lt' => 1]),
             new FunctionalNamesParams([1, 2]),
-            //                        new AttributesParams('color', [1]),
-            //                        new AttributesParams('size', [2]),
+            new IsMainParams(1)
         ]);
+        $filter = $this->client->elastic()->filter($filter)->facets();
+
         //$filter->setKeyword("DryCare", ['title_fr']);
-//        $filter->setGroupBy("variantsCompound");
-//        $filter->setFactorsId([1]);   
+        //$filter->setGroupBy("variantsCompound");
+        //$filter->setFactorsId([1]);
 
         //$filter = $this->client->elastic()->filter($filter)->facets();
 
@@ -84,10 +86,9 @@ class SimpleFilterTest extends SetUpResourceTest
                 ])
             )
         )->limit(1)->offset(1);
-        //$filter = $this->client->elastic()->filter($filter)->facets();
-//        $data = $this->client->elastic()->search([$body])->all();
-        $data = $this->client->elastic()->search($body)->all();
 
+        //$data = $this->client->elastic()->search([$body])->all();
+        $data = $this->client->elastic()->search($body)->all();
 
         $this->assertTrue(true);
     }
