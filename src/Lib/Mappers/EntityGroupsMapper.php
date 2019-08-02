@@ -12,19 +12,22 @@ use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Entities\AttributeValue;
 use SphereMall\MS\Entities\EntityGroup;
 use SphereMall\MS\Entities\Media;
+use SphereMall\MS\Lib\Mappers\Traits\AttributesSetter;
 
 /**
  * Class EntityGroupsMapper
  *
  * @package SphereMall\MS\Lib\Mappers
  *
- * @property EntityGroup $entityGroup
+ * @property EntityGroup $entity
  * @property array       $data
  */
 class EntityGroupsMapper extends Mapper
 {
+    use AttributesSetter;
+
     private $data        = [];
-    private $entityGroup = null;
+    private $entity = null;
 
     /**
      * @param array $array
@@ -34,11 +37,11 @@ class EntityGroupsMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $this->data        = $array;
-        $this->entityGroup = new EntityGroup($this->data);
+        $this->entity = new EntityGroup($this->data);
         $this->setMedia()
              ->setAttributes();
 
-        return $this->entityGroup;
+        return $this->entity;
     }
 
     /**
@@ -53,41 +56,20 @@ class EntityGroupsMapper extends Mapper
                 if (isset($mediaEntity['media'][0])) {
 
                     $media = new Media($mediaEntity['media'][0]);
-                    if (!$this->entityGroup->mainMedia) {
-                        $this->entityGroup->mainMedia = $media;
+                    if (!$this->entity->mainMedia) {
+                        $this->entity->mainMedia = $media;
                     }
                     $result[$mediaEntity['id']] = $media;
                 }
             }
 
-            $this->entityGroup->media = $result;
+            $this->entity->media = $result;
 
             return $this;
 
         }
 
-        $this->entityGroup->media = $result;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    private function setAttributes()
-    {
-        $attributes = [];
-        foreach ($this->data['entityAttributeValues'] ?? [] as $av) {
-            $attributeId = $av['attributes']['attributeId'] ?? $av['attributeId'];
-            if (!isset($attributes[$attributeId])) {
-                $attribute = $av['attributes'][0] ?? $this->data['attributes'][$attributeId];
-                $attributes[$attributeId] = new Attribute($attribute);
-            }
-            $attributeValue = isset($av['attributeValues'][0]) && is_array($av['attributeValues'][0]) ? $av['attributeValues'][0] : $av;
-            $attributes[$attributeId]->values[$av['id']] = new AttributeValue($attributeValue);
-        }
-
-        $this->entityGroup->attributes = $attributes;
+        $this->entity->media = $result;
 
         return $this;
     }

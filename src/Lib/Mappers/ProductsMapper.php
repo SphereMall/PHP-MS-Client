@@ -13,6 +13,7 @@ use SphereMall\MS\Entities\Media;
 use SphereMall\MS\Entities\Product;
 use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Entities\AttributeValue;
+use SphereMall\MS\Lib\Mappers\Traits\AttributesSetter;
 
 
 /**
@@ -20,12 +21,14 @@ use SphereMall\MS\Entities\AttributeValue;
  *
  * @package SphereMall\MS\Lib\Mappers
  *
- * @property Product $product
+ * @property Product $entity
  * @property array $data
  */
 class ProductsMapper extends Mapper
 {
-    private $product;
+    use AttributesSetter;
+
+    private $entity;
     private $data;
     #region [Protected methods]
 
@@ -37,7 +40,7 @@ class ProductsMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $this->data = $array;
-        $this->product = new Product($this->data);
+        $this->entity = new Product($this->data);
         $this->setBrands()
             ->setFunctionalNames()
             ->setPromotions()
@@ -46,7 +49,7 @@ class ProductsMapper extends Mapper
             ->setAttributes()
             ->setMedia();
 
-        return $this->product;
+        return $this->entity;
     }
 
     #endregion
@@ -58,7 +61,7 @@ class ProductsMapper extends Mapper
     private function setBrands()
     {
         if (isset($this->data['brands']) && $brand = reset($this->data['brands'])) {
-            $this->product->brand = (new BrandsMapper)->createObject($brand);
+            $this->entity->brand = (new BrandsMapper)->createObject($brand);
         }
 
         return $this;
@@ -70,7 +73,7 @@ class ProductsMapper extends Mapper
     private function setFunctionalNames()
     {
         if (isset($this->data['functionalNames']) && $functionalName = reset($this->data['functionalNames'])) {
-            $this->product->functionalName = (new FunctionalNamesMapper)->createObject($functionalName);
+            $this->entity->functionalName = (new FunctionalNamesMapper)->createObject($functionalName);
         }
 
         return $this;
@@ -87,7 +90,7 @@ class ProductsMapper extends Mapper
             foreach ($this->data['promotions'] as $promotion) {
                 $promotions[] = $mapper->createObject($promotion);
             }
-            $this->product->promotions = $promotions;
+            $this->entity->promotions = $promotions;
         }
 
         return $this;
@@ -104,7 +107,7 @@ class ProductsMapper extends Mapper
             foreach ($this->data['productsToPromotions'] as $productsToPromotion) {
                 $productsToPromotions[] = $mapper->createObject($productsToPromotion);
             }
-            $this->product->productsToPromotions = $productsToPromotions;
+            $this->entity->productsToPromotions = $productsToPromotions;
         }
 
         return $this;
@@ -136,32 +139,7 @@ class ProductsMapper extends Mapper
             }
             $options[] = $optionMapper->createObject($option);
         }
-        $this->product->options = $options;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    private function setAttributes()
-    {
-        if (!isset($this->data['attributes']) && isset($this->data['productAttributeValues'])) { // old structure
-            $this->product->attributes = (new ProductAttributeValuesMapper)->createObject($this->data['productAttributeValues'] ?? []);
-        } else {
-            $attributes = [];
-            foreach ($this->data['entityAttributeValues'] ?? [] as $av) {
-                $attributeId = $av['attributes']['attributeId'] ?? $av['attributeId'];
-                if (!isset($attributes[$attributeId])) {
-                    $attribute = $av['attributes'][0] ?? $av['relationships']['attributes'][0] ?? $this->data['attributes'][$attributeId];
-                    $attributes[$attributeId] = new Attribute($attribute);
-                }
-                $attributeValue = isset($av['attributeValues'][0]) && is_array($av['attributeValues'][0]) ? $av['attributeValues'][0] : $av;
-                $attributes[$attributeId]->values[$av['id']] = new AttributeValue($attributeValue);
-            }
-
-            $this->product->attributes = $attributes;
-        }
+        $this->entity->options = $options;
 
         return $this;
     }
@@ -179,14 +157,14 @@ class ProductsMapper extends Mapper
 
                     $media = new Media($mediaEntity['media'][0] ?? $mediaEntity['relationships']['media'][0]);
 
-                    if (!$this->product->mainMedia) {
-                        $this->product->mainMedia = $media;
+                    if (!$this->entity->mainMedia) {
+                        $this->entity->mainMedia = $media;
                     }
                     $result[$mediaEntity['id']] = $media;
                 }
             }
 
-            $this->product->media = $result;
+            $this->entity->media = $result;
 
             return $this;
 
@@ -197,12 +175,12 @@ class ProductsMapper extends Mapper
             foreach ($this->data['media'] as $image) {
                 $result[] = $mapper->createObject($image);
             }
-            if (!empty($this->product->media[0])) {
-                $this->product->mainMedia = $result[0];
+            if (!empty($this->entity->media[0])) {
+                $this->entity->mainMedia = $result[0];
             }
         }
 
-        $this->product->media = $result;
+        $this->entity->media = $result;
 
         return $this;
     }

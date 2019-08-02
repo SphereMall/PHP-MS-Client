@@ -12,19 +12,22 @@ use SphereMall\MS\Entities\Attribute;
 use SphereMall\MS\Entities\AttributeValue;
 use SphereMall\MS\Entities\Category;
 use SphereMall\MS\Entities\Media;
+use SphereMall\MS\Lib\Mappers\Traits\AttributesSetter;
 
 /**
  * Class CategoriesMapper
  *
  * @package SphereMall\MS\Lib\Mappers
  *
- * @property Category $category
+ * @property Category $entity
  * @property array    $data
  */
 class CategoriesMapper extends Mapper
 {
+    use AttributesSetter;
+
     private $data     = [];
-    private $category = null;
+    private $entity = null;
 
     /**
      * @param array $array
@@ -34,11 +37,11 @@ class CategoriesMapper extends Mapper
     protected function doCreateObject(array $array)
     {
         $this->data     = $array;
-        $this->category = new Category($this->data);
+        $this->entity = new Category($this->data);
         $this->setMedia()
              ->setAttributes();
 
-        return $this->category;
+        return $this->entity;
     }
 
     /**
@@ -53,41 +56,20 @@ class CategoriesMapper extends Mapper
                 if (isset($mediaEntity['media'][0])) {
 
                     $media = new Media($mediaEntity['media'][0]);
-                    if (!$this->category->mainMedia) {
-                        $this->category->mainMedia = $media;
+                    if (!$this->entity->mainMedia) {
+                        $this->entity->mainMedia = $media;
                     }
                     $result[$mediaEntity['id']] = $media;
                 }
             }
 
-            $this->category->media = $result;
+            $this->entity->media = $result;
 
             return $this;
 
         }
 
-        $this->category->media = $result;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    private function setAttributes()
-    {
-        $attributes = [];
-        foreach ($this->data['attributeValues'] ?? [] as $av) {
-            $attributeId = $av['attributes']['attributeId'] ?? $av['attributeId'];
-            if (!isset($attributes[$attributeId])) {
-                $attribute                = $av['relationships']['attributes'][0]['attributes'] ?? $this->data['attributes'][$attributeId];
-                $attributes[$attributeId] = new Attribute($attribute);
-            }
-            $attributeValue                              = isset($av['attributes']) && is_array($av['attributes']) ? $av['attributes'] : $av;
-            $attributes[$attributeId]->values[$av['id']] = new AttributeValue($attributeValue);
-        }
-
-        $this->category->attributes = $attributes;
+        $this->entity->media = $result;
 
         return $this;
     }
