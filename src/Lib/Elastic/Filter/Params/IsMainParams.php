@@ -10,6 +10,7 @@ namespace SphereMall\MS\Lib\Elastic\Filter\Params;
 
 use SphereMall\MS\Lib\Elastic\Interfaces\{ElasticParamBuilderInterface, ElasticParamElementInterface};
 use SphereMall\MS\Lib\Elastic\Queries\TermQuery;
+use SphereMall\MS\Lib\Filters\FilterOperators;
 
 /**
  * Class IsMainParams
@@ -48,7 +49,8 @@ class IsMainParams implements ElasticParamElementInterface, ElasticParamBuilderI
     public function createFilter(): array
     {
         return [
-            new TermQuery('isMain', $this->value)
+            new TermQuery('isMain', $this->value),
+            FilterOperators::IN,
         ];
     }
 }
