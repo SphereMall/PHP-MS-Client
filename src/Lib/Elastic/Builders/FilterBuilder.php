@@ -41,10 +41,29 @@ class FilterBuilder extends Filter
         return $this;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return $this
+     */
     public function setParams(array $params = [])
     {
         foreach ($params as $param) {
             $this->setParam($param);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return $this
+     */
+    public function deleteParams(array $params = [])
+    {
+        foreach ($params as $param) {
+            $this->deleteParam($param);
         }
 
         return $this;
@@ -187,6 +206,20 @@ class FilterBuilder extends Filter
     private function setParam(ElasticParamElementInterface $param)
     {
         $this->params[] = $param;
+
+        return $this;
+    }
+
+    /**
+     * @param ElasticParamElementInterface $param
+     *
+     * @return $this
+     */
+    private function deleteParam(ElasticParamElementInterface $param)
+    {
+        if (($key = array_search($param, $this->params)) !== false) {
+            unset($this->params[$key]);
+        }
 
         return $this;
     }

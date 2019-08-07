@@ -2,6 +2,12 @@
 Official PHP SDK for integrating with **SphereMall Product**.
 [Official documentation](https://spheremall.atlassian.net/wiki/spaces/MIC/pages)
 
+### Version 2.8.18.2
+* Added possibility to delete some parameters from Elastic FilterBuilder
+
+### Version 2.8.18.1
+* Fixed filter builder for "isMain" parameters to elasticserch facets
+
 ### Version 2.8.17
 * Added filter builder for "isMain" parameters to elasticserch facets
 
