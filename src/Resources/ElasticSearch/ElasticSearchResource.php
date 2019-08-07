@@ -144,7 +144,7 @@ class ElasticSearchResource extends Resource
                 }
                 unset($params['body']['from'], $params['body']['size']);
             } else {
-                $where = json_decode($params['where'], true);
+                $where = json_decode($params['where'] ?? '', true);
             }
         }
 
