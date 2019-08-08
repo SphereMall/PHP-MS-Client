@@ -21,7 +21,8 @@ use SphereMall\MS\Lib\Elastic\Queries\TermsQuery;
  */
 class AttributesParams extends BasicParams implements ElasticParamElementInterface, ElasticParamBuilderInterface
 {
-    private $code   = null;
+    private $code   = '';
+    private $filed  = '';
     private $values = [];
 
     /**
@@ -33,10 +34,16 @@ class AttributesParams extends BasicParams implements ElasticParamElementInterfa
      *
      * @throws \Exception
      */
-    public function __construct($code, array $values, string $operator = null)
+    public function __construct(
+        $code, 
+        array $values, 
+        string $operator = null, 
+        string $field = '_attr.valueId'
+    )
     {
         $this->code   = $code;
         $this->values = $values;
+        $this->filed = $field;
         $this->setOperator($operator);
     }
 
@@ -61,7 +68,7 @@ class AttributesParams extends BasicParams implements ElasticParamElementInterfa
     public function createFilter(): array
     {
         return [
-            new TermsQuery($this->code . "_attr.valueId", $this->values),
+            new TermsQuery($this->code . $this->filed, $this->values),
             $this->operator,
         ];
     }
