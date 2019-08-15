@@ -133,7 +133,7 @@ class Filter
     public function __toString()
     {
         $set = [];
-        foreach ($this->filters ?? [] as $field => $rules) {
+        foreach ($this->filters as $field => $rules) {
             if (($compounded = $this->compound($field, $rules))) {
                 $set = array_merge($set, $compounded);
             }
