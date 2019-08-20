@@ -55,7 +55,7 @@ class AttributesParams extends BasicParams implements ElasticParamElementInterfa
         return [
             'attributes' => [
                 $this->code => [
-                    'id'       => $this->values,
+                    'value'    => $this->values,
                     'operator' => $this->operator,
                 ],
             ],
