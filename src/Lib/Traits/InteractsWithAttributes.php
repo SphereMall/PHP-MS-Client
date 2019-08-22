@@ -125,6 +125,29 @@ trait InteractsWithAttributes
         return $attributeValues ?? [];
     }
 
+    /**
+     * @param string $code
+     * @param array|string $value
+     * @return Attribute|null
+     */
+    public function getAttributeByCodeWithValue(string $code, $value)
+    {
+        if (!$attribute = $this->getAttributeByCode($code)) {
+            return null;
+        }
+
+        foreach ($attribute->values as $attributeValue) {
+            if (is_array($value) && in_array($attributeValue->value, $value, true)) {
+                return $attribute;
+            }
+
+            if ($attributeValue->value === $value) {
+                return $attribute;
+            }
+        }
+
+        return null;
+    }
     #endregion
 
     #region [Protected methods]

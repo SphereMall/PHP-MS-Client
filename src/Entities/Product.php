@@ -31,6 +31,8 @@ use SphereMall\MS\Lib\Traits\InteractsWithMedia;
  * @property Attribute[] $attributes
  * @property Brand $brand
  * @property FunctionalName $functionalName
+ * @property Category[] $categories
+ * @property EntityGroup[] $entityGroups
  * @property Media[] $media
  * @property Media $mainMedia
  * @property Promotion[] $promotions
@@ -58,6 +60,8 @@ class Product extends AutoCompleteEntity
     public $attributes;
     public $brand;
     public $functionalName;
+    public $categories;
+    public $entityGroups;
 
     public $media;
     public $mainMedia;

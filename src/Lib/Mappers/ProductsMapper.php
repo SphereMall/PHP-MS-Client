@@ -47,7 +47,8 @@ class ProductsMapper extends Mapper
             ->setProductsToPromotions()
             ->setOptions()
             ->setAttributes()
-            ->setMedia();
+            ->setMedia()
+            ->setEntityGroupsAndCategories();
 
         return $this->entity;
     }
@@ -181,6 +182,24 @@ class ProductsMapper extends Mapper
         }
 
         $this->entity->media = $result;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function setEntityGroupsAndCategories()
+    {
+        if (!isset($this->data['entitiesCorrelation'])) {
+            return $this;
+        }
+
+        foreach ($this->data['entitiesCorrelation'] as $correlation) {
+            if ($correlation['type'] == 'entityGroups' and isset($correlation['entityGroups'][0])) {
+                $this->entity->entityGroups[] = (new EntityGroupsMapper())->createObject($correlation['entityGroups'][0]);
+            }
+        }
 
         return $this;
     }
